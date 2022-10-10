@@ -59,7 +59,11 @@ try:
 
 		new_emails = set(re.findall(r'[a-z0-9\. \-+_]+@[a-z0-9\. \-+_]+\.[a-z]+', response.text,re.I))
 		emails.update(new_emails)
-
+                
+		#windows
+		#soup = BeautifulSoup(response.text, features="html.parser")
+		
+		#kali linux
 		soup = BeautifulSoup(response.text, features="lxml")
 
 		for anchor in soup.find_all("a"):
@@ -81,5 +85,5 @@ print("")
 for mail in emails:
 	print(mail)
 
-input("\033[32m\n APERTE ENTER FECHE PROGRAMA")
+input("\033[32m\n APERTE ENTER FECHE PROGRAMA !")
 
