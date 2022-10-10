@@ -20,4 +20,4 @@ def get_robots_txt(url):
 x = input("Digite URL :")
 print("\n")
 print(get_robots_txt(x))
-input("APERTE ENTER PRA SAIR!")
+input("\nAPERTE ENTER PRA SAIR!")
