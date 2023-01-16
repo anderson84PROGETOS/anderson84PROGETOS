@@ -20,7 +20,7 @@ int main(int argc, char *argv[])
 	printf("|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|\n");
 	printf("|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|\n");
 	printf("|-|-|-|-|-|-|-|-|Uso:./dnsrecon exemplo.com recon.txt |-|-|-|-|-|-|-|\n");
-	printf("|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|\n");
+	printf("|-|-|-|-|-|-|-|-|-|-|Compilar: gcc dnsrecon.c -o dnsrecon |-|-|-|-|-|\n");
 	printf("|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|\n");
 	return(0);
 	}
@@ -36,4 +36,6 @@ int main(int argc, char *argv[])
 		printf("HOST ENCONTRADO: %s ====> IP: %s \n", result, inet_ntoa(*((struct in_addr *)host->h_addr)));
 		}
 }
+
+
 
