@@ -1,6 +1,6 @@
 import nmap
 
-# install:pip install python-nmap
+# install: pip install python-nmap
 
 nm = nmap.PortScanner()
 
