@@ -40,5 +40,5 @@ if response.status_code == 200:
 else:
     print("\n Ocorreu um erro ao acessar o site.")
     
-input("\n FIM [ENTER] SAIR \n")     
+input("\n FIM [ENTER] SAIR \n")   
 
