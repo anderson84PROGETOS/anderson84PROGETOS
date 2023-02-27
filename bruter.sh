@@ -1,5 +1,4 @@
 #!/bin/bash
-
 #executar o programa exemplo: ./bruter.sh exemplo.com wl.txt
 
 dominio=$1
