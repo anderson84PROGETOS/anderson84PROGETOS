@@ -28,4 +28,4 @@ url = input("\nDigite o nome do site para verificar capturas da url: ")
 # Chamar a função wayback_machine
 wayback_machine(url)
 
-input("\n🔎 Escaneamento Terminado Wayback Machine 🔍\n")
+input("\n🔎 Escaneamento Terminado archive 🔍\n")
