@@ -2,7 +2,6 @@ import requests
 import sys
 import json
 
-
 def waybackurls(host, with_subs):
     if with_subs:
         url = 'http://web.archive.org/cdx/search/cdx?url=*.%s/*&output=json&fl=original&collapse=urlkey' % host
@@ -11,7 +10,6 @@ def waybackurls(host, with_subs):
     r = requests.get(url)
     results = r.json()
     return results[1:]
-
 
 if __name__ == '__main__':
     argc = len(sys.argv)
