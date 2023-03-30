@@ -19,9 +19,7 @@ processor = f'Processor: {uname.processor}'
 username = f'Username: {getpass.getuser()}'
 computername = f'Computer Name: {socket.gethostname()}'
 
-
 tk.Label(root, text=system).pack(pady=5)
-
 tk.Label(root, text=release).pack(pady=5)
 tk.Label(root, text=version).pack(pady=5)
 tk.Label(root, text=machine).pack(pady=5)
