@@ -8,7 +8,7 @@ import socket
 import psutil
 
 root = tk.Tk()
-root.geometry('500x800')
+root.geometry('600x1000')
 root.title('System Information')
 
 # System information
@@ -77,5 +77,21 @@ board_product = f'Product: {board.Product}'
 tk.Label(root, text='\nMotherboard Information').pack(pady=10)
 tk.Label(root, text=board_manufacturer).pack(pady=5)
 tk.Label(root, text=board_product).pack(pady=5)
+
+# Get video controller information
+w = wmi.WMI()
+video_controllers = w.Win32_VideoController()
+
+# Display information for each video controller
+tk.Label(root, text='\nVideo Controller Information').pack(pady=10)
+for i, controller in enumerate(video_controllers):
+    name = f'Name ({i+1}): {controller.Name}'
+    status = f'Status ({i+1}): {controller.Status}'
+    adapter_ram = f'Adapter RAM ({i+1}): {controller.AdapterRAM//(2**20)} MB'
+    driver_version = f'Driver Version ({i+1}): {controller.DriverVersion}'
+    tk.Label(root, text=name).pack(pady=5)
+    tk.Label(root, text=status).pack(pady=5)
+    tk.Label(root, text=adapter_ram).pack(pady=5)
+    tk.Label(root, text=driver_version).pack(pady=5)
 
 root.mainloop()
