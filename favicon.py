@@ -2,7 +2,7 @@ import mmh3
 import requests
 import codecs
 
-# instalar: python3 -m pip install -r requirements.txt
+# instalar: pip install -r requirements.txt
 
 # Solicita ao usuário que digite a URL do site
 favicon_url = input('\nDigite a URL completa do favicon: ')
