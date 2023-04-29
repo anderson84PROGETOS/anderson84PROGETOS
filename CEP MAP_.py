@@ -46,7 +46,7 @@ def copy_lat_long():
 # Criando a interface gráfica
 root = tk.Tk()
 root.title("Localizador de CEP")
-root.geometry('900x570')
+root.geometry('1200x800')
 
 # Criando a entrada de texto para o CEP
 cep_label = tk.Label(root, text="Digite o CEP")
@@ -74,6 +74,17 @@ longitude_label.pack()
 
 # Criando o botão para copiar a latitude e longitude para a área de transferência
 copy_button = tk.Button(root, text="Copiar latitude e longitude", command=copy_lat_long)
-copy_button.pack(pady=200)
+copy_button.pack(pady=280)
+
+# Criando o botão para copiar todas as informações para a área de transferência
+def copy_all():
+    endereco = address_label.cget("text")
+    latitude = latitude_label.cget("text")
+    longitude = longitude_label.cget("text")
+    all_info = f"{endereco}\n{latitude}\n{longitude}"
+    pyperclip.copy(all_info)
+
+all_button = tk.Button(root, text="Copiar todas as informações", command=copy_all)
+all_button.pack(pady=0)
 
 root.mainloop()
