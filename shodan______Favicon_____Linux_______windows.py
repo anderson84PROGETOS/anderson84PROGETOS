@@ -81,4 +81,4 @@ hash_input = input("\nDigite a hash do favicon: ")
 button = input("\nClique Para Acessar o Site do Shodan\n")
 open_shodan(hash_input)        
 
-input("\nShodan Favicon [FIM ENTER SAIR]\n")    
+input("\nShodan Favicon [FIM ENTER SAIR]\n")   
