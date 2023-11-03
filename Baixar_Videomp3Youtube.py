@@ -1,7 +1,6 @@
 from tkinter import *
 from tkinter.ttk import Progressbar
 from pytube import YouTube
-from moviepy.audio.fx.audio_fadein import audio_fadein
 import pyperclip
 import os
 
@@ -54,7 +53,7 @@ def update_progress(stream, chunk, file_handle, bytes_remaining):
 # Criar a janela principal
 root = Tk()
 root.geometry('450x420')
-root.title("Baixar Vídeos e Musica do YouTube")
+root.title("Baixar Vídeos e Músicas do YouTube")
 
 # Criar o rótulo e o campo de entrada para a URL
 url_label = Label(root, text="URL do vídeo:")
