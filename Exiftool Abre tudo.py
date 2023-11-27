@@ -30,7 +30,7 @@ def abrir_no_google_maps():
             text_box.insert(tk.END, f"\nGPS Latitude: {lat_str}\nGPS Longitude: {lon_str}")
         except Exception as e:
             error_message = f"Error: {str(e)}, latitude: {latitude}, longitude: {longitude}"
-            text_box.insert(tk.END, f"\nFailed to open Google Maps. {error_message}")   
+            text_box.insert(tk.END, f"\nFailed to open Google Maps. {error_message}")
 
 def open_file():
     global latitude, longitude
@@ -38,14 +38,14 @@ def open_file():
     file_path = filedialog.askopenfilename(filetypes=[("Image Files", "*.jpg;*.jpeg;*.png;*.gif;*.ico"),
                                                      ("CSV Files", "*.csv"),
                                                      ("Text Files", "*.txt"),
-                                                     ("Word Documents", "*.doc"),
+                                                     ("Word Documents", "*.docx"),
                                                      ("Image Files", "*.jpg;*.jpeg;*.png;*.gif;*.ico"),
                                                      ("PDF Files", "*.pdf"),
                                                      ("Executable Files", "*.exe")])
     if file_path:
         try:
             if file_path.lower().endswith((".csv", ".txt")):
-                with open(file_path, 'r') as file:
+                with open(file_path, 'r', encoding='utf-8') as file:  # Especifica a codificação como utf-8
                     content = file.read()
                 text_box.delete(1.0, tk.END)
                 text_box.insert(tk.END, content)
@@ -74,7 +74,7 @@ def open_file():
                     text_box.insert(tk.END, exif_info)
 
                     if latitude is not None and longitude is not None:
-                        text_box.insert(tk.END, f"\nGPS Latitude: {latitude}\nGPS Longitude: {longitude}\n\n")  # Adicione caracteres de nova linha                      
+                        text_box.insert(tk.END, f"\nGPS Latitude: {latitude}\nGPS Longitude: {longitude}\n\n")  # Adicione caracteres de nova linha
                         abrir_mapa_button.config(state=tk.NORMAL)
                 else:
                     text_box.delete(1.0, tk.END)
@@ -93,7 +93,7 @@ def open_file():
                     text_content = "Hexadecimal representation of the executable file:\n" + content
                 text_box.delete(1.0, tk.END)
                 text_box.insert(tk.END, text_content)
-            elif file_path.lower().endswith(".doc"):
+            elif file_path.lower().endswith(".docx"):
                 text_content = docx2txt.process(file_path)
                 text_box.delete(1.0, tk.END)
                 text_box.insert(tk.END, text_content)
