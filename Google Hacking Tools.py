@@ -60,8 +60,8 @@ def obter_dados_google_hacking():
         soup = BeautifulSoup(response.text, 'html.parser')
         resultado = soup.get_text()
 
-        # Adicionar uma nova linha antes de exibir o resultado
-        resultado_completo = f"site:{site_nome} {dork_selecionada}\n\n\n{resultado}"
+        # Adicionar uma nova linha antes de exibir o resultado       
+        resultado_completo = f"site:{site_nome} {dork_selecionada}\n\n\n{consulta}\n\n\n\n\n\n\n{resultado}"
         result_text.delete(1.0, tk.END)  # Limpar o conteúdo atual no widget ScrolledText
         result_text.insert(tk.END, resultado_completo)  # Inserir o novo conteúdo
     except requests.exceptions.RequestException as e:
