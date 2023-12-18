@@ -1,0 +1,97 @@
+import requests
+import re
+import socket
+import tkinter as tk
+from tkinter import ttk, font, filedialog, scrolledtext
+from urllib.parse import urlparse
+
+def save_to_file():
+    file_path = filedialog.asksaveasfilename(defaultextension=".txt", filetypes=[("Text files", "*.txt")])
+    if file_path:
+        subdomains_text = result_text.get("1.0", tk.END)
+        with open(file_path, 'w', encoding='utf-8') as file:
+            file.write(subdomains_text)
+
+def get_main_site_ip(url):
+    parsed_url = urlparse(url)
+    main_site_domain = parsed_url.netloc
+    try:
+        ip_address = socket.gethostbyname(main_site_domain)
+    except socket.gaierror:
+        ip_address = 'Unknown'
+    return ip_address
+
+def search_subdomains():
+    url = url_entry.get()
+    if not url.startswith('http'):
+        url = f'http://{url}'
+    response = requests.get(url)
+    subdomains = set(re.findall(r'(https?://(?:[\w-]+\.)+[\w]+)', response.text))
+    result_text.delete('1.0', tk.END)  # Clear previous content
+    num_subdomains = len(subdomains)
+    main_site_ip = get_main_site_ip(url)
+    progress_var.set(0)
+    window.update_idletasks()
+    
+    for i, subdomain in enumerate(subdomains):
+        try:
+            ip_address = socket.gethostbyname(subdomain.split('//')[1])
+        except socket.gaierror:
+            ip_address = main_site_ip
+        result_text.insert(tk.END, f'{subdomain}  ➡️{ip_address}\n\n')        
+        result_text.tag_configure("left", justify="left", font=('TkDefaultFont', 12, 'bold'))  # Change "center" to "left"
+        result_text.tag_add("left", "1.0", "end")  # Change "center" to "left"
+        progress_percent = min(100, int((i + 1) / num_subdomains * 100))
+        progress_var.set(progress_percent)
+        window.update_idletasks()
+
+def copy_all():
+    subdomains_text = result_text.get("1.0", tk.END)
+    window.clipboard_clear()
+    window.clipboard_append(subdomains_text)
+
+def clear_text():
+    result_text.delete('1.0', tk.END)
+    progress_var.set(0)
+
+window = tk.Tk()
+window.wm_state('zoomed')
+window.title("Agente Deep Web")
+
+title_label = ttk.Label(window, text='Agente Deep Web ', font=('TkDefaultFont', 14, 'bold'))
+title_label.pack(side=tk.TOP, anchor='w', padx=10, pady=10)
+
+clear_all_button = tk.Button(window, text='Clean All', command=clear_text, padx=5, pady=5, bg='#FF1493', fg='black', font=('TkDefaultFont', 11, 'bold'))
+clear_all_button.pack(side=tk.RIGHT, padx=5, pady=(0, 850))
+
+copy_button = tk.Button(window, text='Copy All', command=copy_all, padx=5, pady=5, bg='#00FFFF', fg='black', font=('TkDefaultFont', 11, 'bold'))
+copy_button.pack(side=tk.RIGHT, padx=10, pady=(0, 850))
+
+save_button = tk.Button(window, text='Save to File', command=save_to_file, padx=5, pady=5, bg='#32CD32', fg='black', font=('TkDefaultFont', 11, 'bold'))
+save_button.pack(side=tk.RIGHT, padx=5, pady=(0, 850))
+
+bold_font = font.Font(weight='bold')
+
+url_label = tk.Label(window, text='Digite o Nome do site ou a URL do website (ex:google.com  ou  https://google.com)', padx=10, font=bold_font)
+url_label.pack(side=tk.TOP)
+
+url_entry = tk.Entry(window, font=bold_font)
+url_entry.pack(side=tk.TOP, padx=5, pady=5, ipadx=95, ipady=5)
+
+search_button = tk.Button(window, text='Search', command=search_subdomains, padx=15, pady=1, bg='#FFA500', fg='black', font=('TkDefaultFont', 11, 'bold'))
+search_button.pack(side=tk.TOP, pady=5)
+
+result_frame = tk.Frame(window, pady=10)
+result_frame.pack()
+
+result_text = scrolledtext.ScrolledText(result_frame, wrap=tk.WORD, width=90, height=40, font=("Arial", 12))
+result_text.grid(column=0, row=0, sticky=tk.W, pady=15)
+
+progress_var = tk.DoubleVar()
+style = ttk.Style()
+style.theme_use('default')
+style.configure('green.Horizontal.TProgressbar', background='#00FF00')
+progress_bar = ttk.Progressbar(window, orient=tk.HORIZONTAL, mode='determinate', variable=progress_var, style='green.Horizontal.TProgressbar', length=815)
+progress_bar.place(x=70, y=155)
+
+window.mainloop()
