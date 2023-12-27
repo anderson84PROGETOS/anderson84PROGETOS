@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Google  Bing  Hacking Information</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+    }
+
+    #container {
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    button {
+      padding: 10px;
+      font-size: 16px;
+      cursor: pointer;
+      background-color: #00FFFF;
+      border: none;
+      border-radius: 5px;
+    }
+
+    #headerImage {
+      width: 100%;
+      max-height: 300px;
+      /* Adjust the height as needed */
+    }
+
+    #headerImage {
+      width: 730px;
+      /* Set the width to 400 pixels */
+      height: 400px;
+      /* Set the height to 400 pixels */
+      object-fit: cover;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="container" class="container">
+    <img id="headerImage" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTZGWqSzeK_MbsIItJ28JwVUwMyAikyeQzaRA&usqp=CAU"
+      alt="Header Image">
+      <h1 class="font-weight-bold" style="font-size: 46px;">Google Bing Hacking Information</h1>
+
+    <label for="siteName" class="font-weight-bold" style="font-size: 24px;">Por favor,insira o nome do site</label>
+
+    <div class="input-group mb-3">
+      <input type="text" id="siteName" class="form-control" placeholder="Digite o nome do site">
+    </div>
+
+    <label for="siteName" class="font-weight-bold" style="font-size: 24px;">Selecione uma Dork do Google</label>
+
+    <div class="input-group mb-3">
+      <select id="dorkSelect" class="form-control">
+        <!-- Opções de Dorks do Google -->
+        <script>
+          var dorks = [
+          "Publicly exposed documents",
+            "Directory listing vulns",
+            "Configuration files exposed",
+            "Database files exposed",
+            "Log files exposed",
+            "Backup and old files",
+            "Login pages",
+            "SQL errors",
+            "PHP errors/warnings",
+            "phpinfo()",
+            "Search pastebin.com / pasting sites",
+            "Search github.com and gitlab.com",
+            "Search stackoverflow.com",
+            "Signup pages",
+            "Find Subdomains",
+            "Find Sub-Subdomains",
+            "Search in Wayback Machine",
+            "Show only IP addresses (opens multiple tabs)",
+            "Para encontrar documentos Apresentações e desenhos vazados",
+            "Para encontrar presentation",
+            "Para encontrar drawings",
+            "Já para encontrar qualquer tipo de arquivo como imagens vídeos zip e pdf",
+            "Agora se você quer encontrar uma pasta completa do Google Drive exposta",
+            "esses para achar itens secretos",
+            "Achar inurl e index.php",
+            "Achar Arquivo pdf",
+            "Achar Arquivo xml",
+            "Achar Arquivo docx",
+            // ... (outras dorks)
+          ];
+          var dorkSelect = document.getElementById("dorkSelect");
+          for (var i = 0; i < dorks.length; i++) {
+            var option = document.createElement("option");
+            option.value = dorks[i];
+            option.text = dorks[i];
+            dorkSelect.appendChild(option);
+          }
+        </script>
+      </select>
+    </div>
+
+    <button class="btn btn-primary" onclick="obterDados('Google')">Search Google</button>
+    <button class="btn btn-info" onclick="obterDados('Bing')">Search Bing</button>
+
+    <div id="result" style="margin-top: 20px;"></div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  <script>
+    function obterDados(motorPesquisa) {
+    // Obter valores do site e da Dork selecionada
+    var siteNome = document.getElementById("siteName").value;
+    var dorkSelecionada = document.getElementById("dorkSelect").value;
+    // Construir a consulta com base na Dork selecionada
+    
+      var consultas = {
+        "Publicly exposed documents": `site:${siteNome} ext:doc | ext:docx | ext:odt | ext:rtf | ext:sxw | ext:psw | ext:ppt | ext:pptx | ext:pps | ext:csv`,
+        "Directory listing vulns": `site:${siteNome} intitle:index.of`,
+        "Configuration files exposed": `site:${siteNome} ext:xml | ext:conf | ext:cnf | ext:reg | ext:inf | ext:rdp | ext:cfg | ext:txt | ext:ora | ext:ini | ext:env`,
+        "Database files exposed": `site:${siteNome} ext:sql | ext:dbf | ext:mdb`,
+        "Log files exposed": `site:${siteNome} ext:log`,
+        "Backup and old files": `site:${siteNome} ext:bkf | ext:bkp | ext:bak | ext:old | ext:backup`,
+        "Login pages": `site:${siteNome} inurl:login | inurl:signin | intitle:Login | intitle:"sign in" | inurl:auth`,
+        "SQL errors": `site:${siteNome} intext:"sql syntax near" | intext:"syntax error has occurred" | intext:"incorrect syntax near" | intext:"unexpected end of SQL command" | intext:"Warning: mysql_connect()" | intext:"Warning: mysql_query()" | intext:"Warning: pg_connect()"`,
+        "PHP errors/warnings": `site:${siteNome} "PHP Parse error" | "PHP Warning" | "PHP Error"`,
+        "phpinfo()": `site:${siteNome} ext:php intitle:phpinfo "published by the PHP Group"`,
+        "Search pastebin.com / pasting sites": `site:pastebin.com | site:paste2.org | site:pastehtml.com | site:slexy.org | site:snipplr.com | site:snipt.net | site:textsnip.com | site:bitpaste.app | site:justpaste.it | site:heypasteit.com | site:hastebin.com | site:dpaste.org | site:dpaste.com | site:codepad.org | site:jsitor.com | site:codepen.io | site:jsfiddle.net | site:dotnetfiddle.net | site:phpfiddle.org | site:ide.geeksforgeeks.org | site:repl.it | site:ideone.com | site:paste.debian.net | site:paste.org | site:paste.org.ru | site:codebeautify.org  | site:codeshare.io | site:trello.com ${siteNome}`,
+        "Search github.com and gitlab.com": `site:github.com | site:gitlab.com ${siteNome}`,
+        "Search stackoverflow.com": `site:stackoverflow.com ${siteNome}`,
+        "Signup pages": `site:${siteNome} inurl:signup | inurl:register | intitle:Signup`,
+        "Find Subdomains": `site:*.${siteNome}`,
+        "Find Sub-Subdomains": `site:*.*.${siteNome}`,
+        "Search in Wayback Machine": `https://web.archive.org/web/*/${siteNome}/*`,
+        "Show only IP addresses (opens multiple tabs)": `(${siteNome}) (site:*.*.29.* | site:*.*.28.* | site:*.*.27.* | site:*.*.26.* | site:*.*.25.* | site:*.*.24.* | site:*.*.23.* | site:*.*.22.* | site:*.*.21.* | site:*.*.20.* | site:*.*.19.* | site:*.*.18.* | site:*.*.17.* | site:*.*.16.* | site:*.*.15.* | site:*.*.14.* | site:*.*.13.* | site:*.*.12.* | site:*.*.11.* | site:*.*.10.* | site:*.*.9.* | site:*.*.8.* | site:*.*.7.* | site:*.*.6.* | site:*.*.5.* | site:*.*.4.* | site:*.*.3.* | site:*.*.2.* | site:*.*.1.* | site:*.*.0.*)`,
+        "Para encontrar documentos Apresentaçoes e desenhos vazados": `site:docs.${siteNome}/document/d`,
+        "Para encontrar presentation": `site:docs.${siteNome}/presentation/d`,
+        "Para encontrar drawings": `site:docs.${siteNome}/drawings/d`,
+        "Já para encontrar qualquer tipo de arquivo como imagens vídeos zip e pdf": `site:docs.${siteNome}/file/d`,
+        "Agora se você quer encontrar uma pasta completa do Google Drive exposta": `site:docs.${siteNome}/folder/d`,
+        "esses para achar itens secretos": `site:docs.${siteNome}/open intext:secreto`,
+        "Achar inurl e index.php": ` "${siteNome}" + inurl= index.php?id=1`,
+        "Achar Arquivo pdf": `site:${siteNome} ext:pdf`,
+        "Achar Arquivo xml": `site:${siteNome} ext:xml`,
+        "Achar Arquivo docx": `site:${siteNome} ext:docx`,
+        // ... (outras consultas)
+      };
+      // Obter a consulta com base na Dork selecionada      
+    var consulta = consultas[dorkSelecionada];
+    // Abrir o motor de pesquisa em uma nova aba
+    var url = motorPesquisa === 'Google' ?
+      `https://www.google.com/search?q=${consulta}` :
+      `https://www.bing.com/search?q=${consulta}`;
+    window.open(url, "_blank");
+    // Exibir resultados (apenas um exemplo, substitua conforme necessário)
+    var resultContainer = document.getElementById("result");
+    resultContainer.innerHTML = `
+          <p><span style="color: #c40c2b;">Resultados para:</span> ${siteNome} - ${dorkSelecionada}</p>
+          <p style="color:#0a33c7;">Exemplo de resultado...</p>
+          <p><span style="color: #c40c2b;">Consulta utilizada:</span> ${consulta}</p>
+          <p><span style="color: #c40c2b;">Pesquisado em:</span> ${motorPesquisa}</p>
+          `;
+    }
+  </script>
+</body>
+
+</html>
