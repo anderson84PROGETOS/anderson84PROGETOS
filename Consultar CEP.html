@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consultar CEP</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 50vh;
+            margin: 0;
+        }
+
+        #container {
+            text-align: center;
+            max-width: 800px;
+            padding: 10px;            
+            border-radius: 10px;
+            
+        }
+
+        #resultadoCep {
+            font-size: 14px;
+            white-space: pre-wrap;
+            text-align: left; /* Alinha o texto à esquerda */            
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 10vh;
+            
+            
+        }
+    </style>
+</head>
+<body>
+    <div id="container" class="container">
+        <img id="headerImage" src="https://aciah.org.br/material/busca-cep.png" alt="Header Image">
+        <h1 class="font-weight-bold" style="font-size: 50px;"></h1>
+
+        <label for="cep">Digite o CEP da rua para consultar:</label>
+        <input type="text" id="cepInput" style="font-size: 14px; padding: 5px; width: 200px;" />
+        <button onclick="consultarCep()" style="font-size: 14px; padding: 5px; margin-top: 10px;">Consultar CEP</button>
+        <button onclick="abrirNoGoogleMaps()" style="font-size: 14px; padding: 5px; margin-top: 10px;">Abrir no Google Maps</button>
+
+        <div style="margin-top: 20px;">
+            <pre id="resultadoCep"></pre>
+        </div>
+    </div>
+
+    <script>
+        // ... seu script JavaScript aqui ...
+        function obterInformacoesCep(cep) {
+        var url = "https://viacep.com.br/ws/" + cep + "/json/";
+
+        return fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                // Adiciona latitude e longitude ao objeto de informações de CEP
+                if (!data.erro) {
+                    return obterLatitudeLongitude(data);
+                }
+                return data;
+            })
+            .catch(error => console.error('Erro:', error));
+    }
+
+    function obterLatitudeLongitude(informacoesCep) {
+        // Usa OpenStreetMap Nominatim para obter latitude e longitude
+        var enderecoCompleto = `${informacoesCep.logradouro}, ${informacoesCep.bairro}, ${informacoesCep.localidade}, ${informacoesCep.uf}`;
+        var nominatimUrl = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(enderecoCompleto)}`;
+
+        return fetch(nominatimUrl)
+            .then(response => response.json())
+            .then(data => {
+                if (data.length > 0) {
+                    informacoesCep.latitude = data[0].lat;
+                    informacoesCep.longitude = data[0].lon;
+                }
+                return informacoesCep;
+            });
+    }
+
+    function exibirResultado(informacoesCep) {
+        var resultadoCepElement = document.getElementById('resultadoCep');
+
+        if (informacoesCep.erro) {
+            resultadoCepElement.innerText = "CEP não encontrado.";
+        } else {
+            resultadoCepElement.innerHTML = `
+                
+                CEP ${informacoesCep.cep}<br>
+                Rua: ${informacoesCep.logradouro}<br>
+                Bairro: ${informacoesCep.bairro}<br>
+                Cidade: ${informacoesCep.localidade}<br>
+                Estado: ${informacoesCep.uf}<br>
+                DDD: ${informacoesCep.ddd}<br>
+            `;
+
+            if (informacoesCep.ibge) {            
+                resultadoCepElement.innerHTML += `    City IBGE: ${informacoesCep.ibge}<h2>`;
+            }
+           
+            if (informacoesCep.latitude) {
+                resultadoCepElement.innerHTML += `                Latitude: ${informacoesCep.latitude}<br>`;
+            }
+
+            if (informacoesCep.longitude) {
+                resultadoCepElement.innerHTML += `                Longitude: ${informacoesCep.longitude}`;
+            }
+        }
+    }
+
+    function consultarCep() {
+        var cep = document.getElementById('cepInput').value;
+        obterInformacoesCep(cep).then(data => exibirResultado(data));
+    }
+
+    function abrirNoGoogleMaps() {
+        var resultadoCep = document.getElementById('resultadoCep').innerText;
+        if (resultadoCep.includes("Latitude") && resultadoCep.includes("Longitude")) {
+            var partes = resultadoCep.split("\n");
+            var latitude = partes[partes.length - 2].split(":")[1].trim();
+            var longitude = partes[partes.length - 1].split(":")[1].trim();
+            var url = `https://www.google.com/maps/place/${latitude},${longitude}`;
+            window.open(url, '_blank');
+        } else {
+            alert("As informações do CEP não incluem coordenadas para o Google Maps.");
+        }
+    }
+    </script>
+</body>
+</html>
