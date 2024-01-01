@@ -1,8 +1,9 @@
 import tkinter as tk
-from tkinter import scrolledtext
+from tkinter import ttk, scrolledtext
 import requests
 from PIL import Image, ImageTk
 from io import BytesIO
+from ttkthemes import ThemedStyle
 
 def format_headers(headers):
     formatted_headers = ""
@@ -40,15 +41,15 @@ def make_request(method, url, data=None, headers=None):
             response = requests.patch(url, data=data, headers=headers)
             description = "O método PATCH é utilizado para aplicar modificações parciais em um recurso."
         else:
-            return "Invalid method"
+            return "Método inválido"
 
         response.raise_for_status()
         headers_info = format_headers(response.headers)        
         return f"\n{headers_info}\n\nDescrição:\n{description}"        
     except requests.exceptions.HTTPError as errh:
-        return f"HTTP Error: {errh}"
+        return f"Erro HTTP: {errh}"
     except requests.exceptions.RequestException as err:
-        return f"Request Error: {errh}"        
+        return f"Erro de Requisição: {errh}"
 
 def on_submit():
     url = url_entry.get()
@@ -62,13 +63,13 @@ def on_submit():
     result_text.insert(tk.END, f"Cabeçalho da Página ({method})\n{result}\n")
     result_text.config(state=tk.DISABLED)
 
-# GUI Setup
+# Configurar a janela principal
 app = tk.Tk()
 app.wm_state('zoomed')
-app.title("HTTP Request Viewer")
+app.title("Visualizador de Requisições HTTP")
 
 # URL do ícone
-icon_url = "https://blog-static.infra.grancursosonline.com.br/wp-content/uploads/2023/02/22170811/imagem3.artigo.22.02-300x187.png"  # Substitua pela URL do seu ícone
+icon_url = "https://s.lorientlejour.com/storage/attachments/1340/288429_164190.png/r/800/288429_164190.png"  # Substitua pela URL do seu ícone
 
 # Função para baixar o ícone da web
 def download_icon(url):
@@ -79,7 +80,7 @@ def download_icon(url):
 # Baixar o ícone da web
 icon_image = download_icon(icon_url)
 
-# Converter a imagem para o formato TKinter
+# Converter a imagem para o formato Tkinter
 tk_icon = ImageTk.PhotoImage(icon_image)
 
 # Definir o ícone da janela
@@ -96,15 +97,26 @@ url_entry.pack(pady=5)
 method_var = tk.StringVar()
 method_var.set("GET")
 
-method_label = tk.Label(app, text="Selecione o método", font=("Arial", 12))
+method_label = tk.Label(app, text="Selecione o método", font=("Arial", 13))
 method_label.pack()
 
-method_menu = tk.OptionMenu(app, method_var, "GET", "HEAD", "POST", "PUT", "DELETE", "CONNECT", "OPTIONS", "TRACE", "PATCH")
+# Use ttk.OptionMenu em vez de tk.OptionMenu
+method_menu_style = ThemedStyle(app)
+method_menu_style.set_theme("ubuntu")
+method_menu = ttk.OptionMenu(app, method_var, "GET", "HEAD", "POST", "PUT", "DELETE", "CONNECT", "OPTIONS", "TRACE", "PATCH")
 method_menu.pack(pady=10)
 
+# Configurar a fonte para o estilo TButton
+method_menu["menu"].configure(font=("Arial", 12))
+
 # Submit Button
-submit_button = tk.Button(app, text="Enviar", command=on_submit, font=("Arial", 12), bg="#42f5ec")
+submit_button = ttk.Button(app, text="Enviar", command=on_submit, style="TButton")
 submit_button.pack(pady=10)
+
+# Configurar a cor para o estilo TButton
+submit_button_style = ThemedStyle(app)
+submit_button_style.set_theme("ubuntu")
+submit_button_style.configure("TButton", font=("Arial", 13), foreground="#042047", background="#11e7f2")
 
 # Result Text
 result_text = scrolledtext.ScrolledText(app, width=152, height=43, state=tk.DISABLED, font=("Arial", 11))
