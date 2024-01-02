@@ -1,8 +1,11 @@
 import tkinter as tk
-from tkinter import scrolledtext, Entry, StringVar, OptionMenu, Label
+from tkinter import scrolledtext, Entry, StringVar, OptionMenu, Label, ttk
 import webbrowser
 import requests
 from bs4 import BeautifulSoup
+from ttkthemes import ThemedStyle
+from PIL import Image, ImageTk
+from io import BytesIO
 
 def construir_consulta_dork(site_nome, dork_selecionada):
     consultas = {
@@ -24,16 +27,17 @@ def construir_consulta_dork(site_nome, dork_selecionada):
         "Find Sub-Subdomains": f"site:*.*.{site_nome}",
         "Search in Wayback Machine": f"https://web.archive.org/web/*/{site_nome}/*",
         "Show only IP addresses (opens multiple tabs)": f"({site_nome}) (site:*.*.29.* | site:*.*.28.* | site:*.*.27.* | site:*.*.26.* | site:*.*.25.* | site:*.*.24.* | site:*.*.23.* | site:*.*.22.* | site:*.*.21.* | site:*.*.20.* | site:*.*.19.* | site:*.*.18.* | site:*.*.17.* | site:*.*.16.* | site:*.*.15.* | site:*.*.14.* | site:*.*.13.* | site:*.*.12.* | site:*.*.11.* | site:*.*.10.* | site:*.*.9.* | site:*.*.8.* | site:*.*.7.* | site:*.*.6.* | site:*.*.5.* | site:*.*.4.* | site:*.*.3.* | site:*.*.2.* | site:*.*.1.* | site:*.*.0.*)",
-        "Para encontrar documentos Apresentaçoes e desenhos vazados": f"site:docs.{site_nome}/document/d",         
+        "Para encontrar documentos Apresentaçoes e desenhos vazados": f"site:docs.{site_nome}/document/d",
         "Para encontrar presentation": f"site:docs.{site_nome}/presentation/d",
-        "Para encontrar drawings": f"site:docs.{site_nome}/drawings/d",        
-        "Já para encontrar qualquer tipo de arquivo como imagens videos zip e pdf": f"site:docs.{site_nome}/file/d",
-        "Agora se voce quer encontrar uma pasta completa do google driver exposta": f"site:docs.{site_nome}/folder/d",
-        "esses para achar itens secreto": f"site:docs.{site_nome}/open intext:secreto",
+        "Para encontrar drawings": f"site:docs.{site_nome}/drawings/d",
+        "Já para encontrar qualquer tipo de arquivo como imagens vídeos zip e PDF": f"site:docs.{site_nome}/file/d",
+        "Agora se você quer encontrar uma pasta completa do Google Drive exposta": f"site:docs.{site_nome}/folder/d",
+        "Esses para achar itens secreto": f"site:docs.{site_nome}/open intext:secreto",
         "Achar inurl e index.php": f'"{site_nome}" + inurl=index.php?id=1',
         "Achar Arquivo pdf": f"site:{site_nome} ext:pdf",
         "Achar Arquivo xml": f"site:{site_nome} ext:xml",
-        "Achar Arquivo docx": f"site:{site_nome} ext:docx",       
+        "Achar Arquivo docx": f"site:{site_nome} ext:docx",
+        "Achar Arquivo intext":f"intext:{site_nome}",
     }
 
     return consultas.get(dork_selecionada, "")
@@ -91,6 +95,28 @@ window = tk.Tk()
 window.wm_state('zoomed')
 window.title("Google Bing Hacker Information")
 
+# Configurando o estilo temático
+style = ThemedStyle(window)
+style.set_theme("itft1")  # Escolha o tema desejado
+
+# URL do ícone
+icon_url = "https://images.frandroid.com/wp-content/uploads/2021/10/google-bing.jpg"  # Substitua pela URL do seu ícone
+
+# Função para baixar o ícone da web
+def download_icon(url):
+    response = requests.get(url)
+    icon_data = BytesIO(response.content)
+    return Image.open(icon_data)
+
+# Baixar o ícone da web
+icon_image = download_icon(icon_url)
+
+# Converter a imagem para o formato TKinter
+tk_icon = ImageTk.PhotoImage(icon_image)
+
+# Definir o ícone da janela
+window.iconphoto(True, tk_icon)
+
 # Criar o frame para a lista de Dorks do Google
 dorks_frame = tk.Frame(window)
 dorks_frame.grid(column=0, row=0, padx=10, pady=10)
@@ -116,15 +142,16 @@ dorks = [
     "Search in Wayback Machine",
     "Show only IP addresses (opens multiple tabs)",
     "Para encontrar documentos Apresentaçoes e desenhos vazados",
-    "Para encontrar presentation", 
+    "Para encontrar presentation",
     "Para encontrar drawings",
-    "Já para encontrar qualquer tipo de arquivo como imagens videos zip e pdf", 
-    "Agora se voce quer encontrar uma pasta completa do google driver exposta", 
-    "esses para achar itens secreto",
+    "Já para encontrar qualquer tipo de arquivo como imagens vídeos zip e PDF",
+    "Agora se você quer encontrar uma pasta completa do Google Drive exposta",
+    "Esses para achar itens secreto",
     "Achar inurl e index.php",
     "Achar Arquivo pdf",
     "Achar Arquivo xml",
-    "Achar Arquivo docx", 
+    "Achar Arquivo docx",
+    "Achar Arquivo intext",
 ]
 
 # Variável para armazenar a Dork selecionada
@@ -133,30 +160,30 @@ dork_var.set(dorks[0])  # Inicialmente, selecione a primeira Dork
 
 # Rótulo para instruções
 instrucoes_label = Label(dorks_frame, text="Por favor, selecione uma Dork", font=("Arial", 12))
-instrucoes_label.grid(padx=530, pady=5)
+instrucoes_label.grid(padx=530, pady=0)
 
 # Dropdown para selecionar a Dork do Google
 dork_menu = OptionMenu(dorks_frame, dork_var, *dorks)
-dork_menu.grid(column=0, row=3)
+dork_menu.grid(column=0, row=1)
 
 # Criar o frame para a entrada do nome do site
 site_frame = tk.Frame(window)
 site_frame.grid(column=0, row=1, padx=5)
 
 # Rótulo para instruções
-site_label = Label(site_frame, text="Por favor, insira o nome do site ou url do site", font=("Arial", 12))
+site_label = Label(site_frame, text="Por favor, insira o nome do site ou URL do site", font=("Arial", 12))
 site_label.grid(column=0, row=0)
 
 # Entrada do nome do site
-site_entry = Entry(site_frame, width=40, font=("Arial", 12))
+site_entry = Entry(site_frame, width=34, font=("Arial", 12))
 site_entry.grid(column=0, row=1, padx=5, pady=2)
 
-# Criar os botões para obter dados
-obter_dados_google_button = tk.Button(window, text="Search Google", command=lambda: obter_dados_hacking("Google"), font=("Arial", 12), bg="#05f7f3")
+# Criar os botões para obter dados usando ttkButton
+obter_dados_google_button = ttk.Button(window, text="Search Google", command=lambda: obter_dados_hacking("Google"))
 obter_dados_google_button.grid(column=0, row=1, pady=(100, 5))
 
-obter_dados_bing_button = tk.Button(window, text="Search Bing", command=lambda: obter_dados_hacking("Bing"), font=("Arial", 12), bg="#03fcbe")
-obter_dados_bing_button.grid(column=0, row=2, pady=5)
+obter_dados_bing_button = ttk.Button(window, text="Search Bing", command=lambda: obter_dados_hacking("Bing"))
+obter_dados_bing_button.grid(column=0, row=2, pady=8)
 
 # Criar o frame para os resultados
 result_frame = tk.Frame(window)
