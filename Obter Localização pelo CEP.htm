@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Obter Localização pelo CEP</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 30%;
+            padding: 8px;
+            margin-bottom: 16px;
+        }
+
+        button {
+            padding: 10px;
+            cursor: pointer;
+            background-color: #03fc17; /* Set the background color to green */
+            color: rgb(8, 8, 8);
+            border: none;
+            border-radius: 100px;
+        }
+
+        #location,
+        #addressDetails {
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <p><span style="font-size: 14pt;"><img id="headerImage" src="https://buscadecep.com/logo.png" alt="Header Image" width="500" height="100" /></span></p>
+
+    <h1>Obter Localização pelo CEP</h1>
+
+    
+    <input type="text" id="cepInput" placeholder="Digite o CEP">
+
+    <button id="getLocation">Obter Localização</button>
+
+    <p></p> 
+    
+
+    <button id="openMap">Abrir no Google Maps</button>
+
+    <p id="location">Aguardando localização...</p>
+    <p id="addressDetails"></p>
+
+    <script>
+        var latitude, longitude, rua, bairro, cidade, estado, ddd;
+
+        function getLocationFromCEP(cep, callback) {
+            var apiUrl = 'https://cep.awesomeapi.com.br/json/' + cep;
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', apiUrl, true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    var response = JSON.parse(xhr.responseText);
+
+                    if (response && response.lat && response.lng) {
+                        latitude = response.lat;
+                        longitude = response.lng;
+                        rua = response.address;
+                        bairro = response.district;
+                        cidade = response.city;
+                        estado = response.state;
+                        ddd = response.ddd;
+
+                        callback(latitude, longitude, rua, bairro, cidade, estado, ddd);
+                    } else {
+                        console.error('Erro ao obter localização do CEP.');
+                    }
+                }
+            };
+            xhr.send();
+        }
+
+        document.getElementById('getLocation').addEventListener('click', function () {
+            var cep = document.getElementById('cepInput').value;
+
+            if (cep) {
+                getLocationFromCEP(cep, function (lat, lng, street, neighborhood, city, state, ddd) {
+                    latitude = lat;
+                    longitude = lng;
+                    rua = street;
+                    bairro = neighborhood;
+                    cidade = city;
+                    estado = state;
+                    ddd = ddd;
+
+                    document.getElementById('location').innerHTML = 'Latitude: ' + latitude + '<br>Longitude: ' + longitude;
+                    document.getElementById('addressDetails').innerHTML = 'Rua: ' + rua + '<br>Bairro: ' + bairro + '<br>Cidade: ' + cidade + '<br>Estado: ' + estado + '<br>DDD: ' + ddd;
+                });
+            } else {
+                alert('Por favor, insira um CEP válido.');
+            }
+        });
+
+        document.getElementById('openMap').addEventListener('click', function () {
+            if (latitude !== undefined && longitude !== undefined) {
+                window.open('https://www.google.com/maps?q=' + latitude + ',' + longitude);
+            } else {
+                alert('Por favor, obtenha a localização primeiro.');
+            }
+        });
+    </script>
+
+</body>
+</html>
