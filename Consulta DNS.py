@@ -6,7 +6,9 @@ def run_all_queries():
     result_text.delete(1.0, tk.END)  # Limpar o texto existente
     site_or_url = entry.get()
 
-    query_types = ["A", "AAAA", "ANY", "CAA", "CNAME", "DNSKEY", "DS", "MX", "NS", "PTR", "SOA", "SRV", "TLSA", "TSIG", "TXT", "HINFO", "NSEC3"]
+    query_types = ["A", "AAAA", "ANY", "CAA", "CNAME", "DNSKEY", "DS", "MX", "NS", "PTR", "SOA", "SRV", "TLSA","TSIG", "TXT", "HINFO", "NSEC3", 
+    "SSHFP", "APL", "CDNSKEY", "CERT", "DCHID", "DNAME", "HIP", "IPSECKEY", "LOC", "NAPTR", "NSEC", "RRSIG", "RP"]
+
     query_descriptions = {
         "A": "Retorna um endereço IPv4: O registro A do DNS aponta para o endereço de IP de um determinado nome de domínio.\n",
         "AAAA": "Retorna um endereço IPv6: O registro de DNS AAAA combina um nome de domínio com um endereço IPv6.\n",
@@ -25,6 +27,19 @@ def run_all_queries():
         "TXT": "O registro TXT permite que um administrador de domínio deixe notas em um servidor de DNS.\n",
         "HINFO": "Armazena informações sobre o tipo de hardware e sistema operacional de um host.\n",
         "NSEC3": "É um registro de negação de autenticação usado para reforçar a segurança no DNSSEC.\n",
+        "SSHFP":"esse registro armazena as impressões digitais da chave pública SSH,SSH significa,Secure Shell,é um protocolo de rede criptográfico para comunicação segura em uma rede não segura.\n",
+        "APL": "a lista de prefixos de endereços, é um registro experimental que especifica listas de intervalos de endereços.\n",
+        "CDNSKEY": " trata-se de uma cópia filha do registro DNSKEY, criada para ser transferida para um registro mãe.\n",
+        "CERT": "registro do certificado armazena os certificados de chave pública.\n",
+        "DCHID": "Identificador DHCP armazena informações DHCP Protocolo de Configuração Dinâmica de Host um protocolo de rede padronizado usado em redes IP.\n",
+        "DNAME": "cria um alias do domínio, exatamente como o CNAME, mas esse alias também irá redirecionar todos os subdomínios. Por exemplo, se o proprietário do domínio,example.com, comprou o domínio,website.net, e lhe atribuiu um registro DNAMEque aponta para,example.com, esse encaminhamento também se estenderá,blog.website.net, e quaisquer outros subdomínios.\n",
+        "HIP": "o protocolo de identidade de host uma maneira de separar as funções de um endereço IP esse registro é usado com mais frequência na computação móvel.\n",
+        "IPSECKEY": "o registro Chave IPSEC funciona com o Protocolo de Segurança da Internet,IPSEC, uma estrutura de protocolo de segurança de ponta a ponta que faz parte do Conjunto de Protocolos da Internet TCP/IP.\n",
+        "LOC": "o registro localização contém dados geográficos de um domínio na forma de coordenadas de longitude e latitude.\n",
+        "NAPTR": "o registro apontador de autoridade de nome pode ser combinado a um registro SRV para criar dinamicamente URIs para os quais apontar com base em uma expressão regular.\n",
+        "NSEC": "o próximo registro seguro faz parte do DNSSEC e é usado para provar que um registro de recurso DNS solicitado não existe.\n",
+        "RRSIG": "o registro assinatura do registro do recurso serve para armazenar as assinaturas digitais usadas para autenticar registros de acordo com o DNSSEC.\n",
+        "RP": "trata-se do registro da pessoa responsável e armazena o endereço de e-mail da pessoa responsável pelo domínio.\n",
     }
 
     for query_type in query_types:
