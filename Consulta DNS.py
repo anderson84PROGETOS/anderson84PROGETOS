@@ -6,7 +6,7 @@ def run_all_queries():
     result_text.delete(1.0, tk.END)  # Limpar o texto existente
     site_or_url = entry.get()
 
-    query_types = ["A", "AAAA", "ANY", "CAA", "CNAME", "DNSKEY", "DS", "MX", "NS", "PTR", "SOA", "SRV", "TLSA", "TSIG", "TXT"]
+    query_types = ["A", "AAAA", "ANY", "CAA", "CNAME", "DNSKEY", "DS", "MX", "NS", "PTR", "SOA", "SRV", "TLSA", "TSIG", "TXT", "HINFO", "NSEC3"]
     query_descriptions = {
         "A": "Retorna um endereço IPv4: O registro A do DNS aponta para o endereço de IP de um determinado nome de domínio.\n",
         "AAAA": "Retorna um endereço IPv6: O registro de DNS AAAA combina um nome de domínio com um endereço IPv6.\n",
@@ -22,7 +22,9 @@ def run_all_queries():
         "SRV": "O registro SRV é utilizado para serviços especiais como o VoIP.\n",
         "TLSA": "O registro de recurso DNS TLSA é usado para associar um certificado de servidor TLS ou chave pública ao nome de domínio onde o registro é encontrado.\n",
         "TSIG": "Pode ser usado para autenticar atualizações dinâmicas como provenientes de um cliente aprovado ou para autenticar respostas como provenientes de um servidor de nomes recursivo aprovado [13] semelhante ao DNSSEC.\n",
-        "TXT": "O registro TXT permite que um administrador de domínio deixe notas em um servidor de DNS.\n"
+        "TXT": "O registro TXT permite que um administrador de domínio deixe notas em um servidor de DNS.\n",
+        "HINFO": "Armazena informações sobre o tipo de hardware e sistema operacional de um host.\n",
+        "NSEC3": "É um registro de negação de autenticação usado para reforçar a segurança no DNSSEC.\n",
     }
 
     for query_type in query_types:
