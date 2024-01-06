@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consultar Cep</title>
+    <style>
+        #searchCEP {            
+            margin-right: 20px; /* Altere o valor conforme necessário */
+            background-color: rgb(80, 220, 245); /* Altere a cor conforme desejado */
+            color: rgb(3, 3, 3); /* Altere a cor do texto conforme necessário */            
+            padding: 3px 30px;            
+            border-radius: 10px;
+            
+        }
+        #openMap {
+            margin-right: 30px; /* Altere o valor conforme necessário */
+            background-color: rgb(241, 237, 11); /* Defina a cor verde desejada */
+            color: rgb(2, 2, 2);           
+            padding: 3px 30px;            
+            border-radius: 10px;
+            
+        }
+
+
+        #resultsContainer {            
+            margin-top: 30px; /* Adiciona margem acima dos resultados */
+            
+        }
+
+        #coordinates,
+        #addressInfo {                        
+            margin-bottom: 30px; /* Adiciona margem abaixo dos resultados individuais */
+            font-size: 22px; /* Altere o valor conforme necessário para aumentar o tamanho da fonte */
+        }
+    </style>
+</head>
+<body>
+
+<center>
+    <p><span style="font-size: 50pt;"><img id="headerImage" src="https://aciah.org.br/material/busca-cep.png" alt="Header Image" width="600" height="150" /></span></p>
+
+    <!-- Campo de entrada para o CEP -->
+    <label for="cepInput">CEP:</label>
+    <input type="text" id="cepInput" placeholder="Digite o CEP">
+    <button id="searchCEP">Buscar</button>
+
+    <!-- Botão para abrir o Google Maps -->
+    <button id="openMap">Abrir Google Maps</button>
+
+    <!-- Resultados -->
+    <div id="resultsContainer">
+        <p id="coordinates"></p>
+        <p id="addressInfo"></p>
+    </div>
+
+    <script>
+        var latitude, longitude, rua, bairro, cidade, estado, ddd;        
+
+        // Abre o Google Maps usando a URL específica
+        var googleMapsUrl = 'https://www.google.com/maps?q=' + latitude + ',' + longitude;        
+
+        function getLocationFromCEP(cep, callback) {
+            var apiUrl = 'https://cep.awesomeapi.com.br/json/' + cep;
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', apiUrl, true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    var response = JSON.parse(xhr.responseText);
+
+                    if (response && response.lat && response.lng) {
+                        latitude = response.lat;
+                        longitude = response.lng;
+                        rua = response.address;
+                        bairro = response.district;
+                        cidade = response.city;
+                        estado = response.state;
+                        ddd = response.ddd;
+
+                        // Atualiza a exibição de informações de endereço
+                        document.getElementById('addressInfo').innerHTML = 'Rua: ' + rua + '<br>Bairro: ' + bairro + '<br>Cidade: ' + cidade + '<br>Estado: ' + estado + '<br>DDD: ' + ddd;
+
+                        // Atualiza a exibição de latitude e longitude
+                        document.getElementById('coordinates').innerHTML = 'Latitude: ' + latitude + '<br>Longitude: ' + longitude;
+                    }
+                }
+            };
+            xhr.send();
+        }
+
+        // Adiciona um ouvinte de evento de clique ao botão
+        document.getElementById('openMap').addEventListener('click', function () {
+            if (latitude !== undefined && longitude !== undefined) {
+                window.open('https://www.google.com/maps?q=' + latitude + ',' + longitude);
+            }
+        });
+
+        // Adiciona um ouvinte de evento de clique ao botão de busca de CEP
+        document.getElementById('searchCEP').addEventListener('click', function () {
+            var cep = document.getElementById('cepInput').value;
+            if (cep.trim() !== "") {
+                getLocationFromCEP(cep);
+            } else {
+                alert('Por favor, digite um CEP válido.');
+            }
+        });
+
+        // Chama a função initMap assim que a página é carregada
+        window.onload = initMap;
+    </script>
+</center>
+</body>
+</html>
