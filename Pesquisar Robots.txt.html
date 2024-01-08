@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pesquisar Robots.txt </title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="https://st.depositphotos.com/47577860/52372/v/450/depositphotos_523728482-stock-illustration-robots-txt-coding-icon-filled.jpg">  
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }        
+
+        .green-button {
+            background-color: #59fc0d;
+            color: rgb(8, 8, 8);
+            padding: 10px 25px;
+            width: 26%;
+            
+            
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 10px;
+        }        
+
+        .red-button {
+            background-color: #33e7ff;
+            color: rgb(5, 5, 5);
+            padding: 10px 5px;
+            display: none; /* Inicialmente oculto */
+            border-radius: 10px;
+        }
+
+        .button-container {
+            margin-top: 20px;
+        }
+
+        .result-container {
+            margin-top: 20px;
+        }
+
+       
+    </style>
+</head>
+<body>
+
+    <center>
+        <h2>Pesquisar  Robots.txt </h2>
+        <p><span style="font-size: 30pt;"><img id="headerImage" src="https://seosherpa.com/wp-content/uploads/2021/07/robots-txt-header.pg_.png" alt="Header Image" width="500" height="300" /></span></p>
+
+    <form id="robotForm">
+        <label for="siteUrl" style="font-size: 24px; width: 33%;">Digite o Nome do Site ou a URL do Site</label>
+
+        <h2><input style="font-size: 25px; width: 33%;" type="text" id="siteUrl" name="siteUrl" placeholder=" " required></h2>
+
+
+
+        <div class="button-container">
+            <button type="button" class="green-button" onclick="viewResultsAndGoogle()" style="font-size: 16px;">Pesquisar no Google por /robots.txt</button>
+
+            <button type="button" class="red-button" onclick="clearResults()">Limpar Tudo</button>
+        </div>
+    </form>
+
+    <div class="result-container" id="result"></div>
+
+    <script>
+        function viewResultsAndGoogle() {
+            var siteUrl = document.getElementById('siteUrl').value.trim();
+            var resultDiv = document.getElementById('result');
+            var clearButton = document.querySelector('.red-button');
+
+            if (siteUrl) {
+                // Exiba a mensagem dinâmica
+                var message = document.createElement('p');
+                message.innerHTML = "<span style='color: #d90707;'>Você visitou o site: </span> " + siteUrl + " /robots.txt";
+                message.style.fontSize = "18pt"
+               
+
+                resultDiv.innerHTML = "";
+                resultDiv.appendChild(message);
+
+                // Construa a URL do Google com a pesquisa específica por robots.txt
+                var googleSearchUrl = "https://www.google.com/search?q=" + encodeURIComponent(siteUrl + " /robots.txt");
+               
+                // Crie um botão para abrir a janela do Google                
+                var googleButton = document.createElement('button');
+                googleButton.className = 'green-button'; 
+                googleButton.innerHTML = 'Abrir no Google';
+                googleButton.style.fontSize = '18px';
+                googleButton.style.width = '33%'; 
+                googleButton.onclick = function() {
+                    window.open(googleSearchUrl, '_blank');
+                };
+                
+                resultDiv.appendChild(googleButton);
+
+                // Torne o botão Limpar Tudo visível
+                clearButton.style.display = 'inline-block';
+            } else {
+                alert('Por favor, digite algo para pesquisar.');
+            }
+        }
+        function clearResults() {
+            var resultDiv = document.getElementById('result');
+            var clearButton = document.querySelector('.red-button');
+            var siteUrlInput = document.getElementById('siteUrl');
+
+            resultDiv.innerHTML = "";
+            siteUrlInput.value = "";
+
+            // Oculte o botão Limpar Tudo novamente
+            clearButton.style.display = 'none';
+        }
+    </script>
+</center>
+</body>
+</html>
