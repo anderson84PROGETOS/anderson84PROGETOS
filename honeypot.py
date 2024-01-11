@@ -13,8 +13,9 @@ class Honeypot_pb:
         print("2- Configuração manual [Usuários avançados, mais opções]\n")
         configuration = input("   -> ")
 
-        print("\nAcesse o link http://localhost/")
-        print("Acesse o link http://127.0.0.1/")
+        print("\nAcesse o link http://localhost/")        
+        
+        print("\nAcesse o link http://127.0.0.1/")
 
         def honeyconfig(port, message, sound, log, logname, content_source):
             try:
@@ -33,8 +34,10 @@ class Honeypot_pb:
                         print("\nErro ao salvar log: Arquivo ou diretório inexistente.\n")
 
                 if content_source == "file":
-                    try:
-                        with open("index.html", "r") as file:
+                                
+                    try:                        
+                        with open("index.html", "r", encoding="utf-8", errors="ignore") as file:
+
                             custom_message = file.read()
                     except FileNotFoundError:
                         print("\nErro: Arquivo 'index.html' não encontrado.\n")
@@ -60,8 +63,8 @@ class Honeypot_pb:
                                 remote_port, remote_ip = socket_.getpeername()
                                 print(f"\nTENTATIVA DE INTRUSAO DETECTADA! de {remote_ip}:{remote_port} ({time.ctime()})")
                                 print(" -----------------------------")
-
-                                received_data = socket_.recv(1000).decode()
+                                
+                                received_data = socket_.recv(1000).decode('utf-8', errors='ignore')
                                 print(received_data)
 
                                 if sound.lower() == "y":
