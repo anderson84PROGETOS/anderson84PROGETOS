@@ -33,11 +33,14 @@ def construir_consulta_dork(site_nome, dork_selecionada):
         "Já para encontrar qualquer tipo de arquivo como imagens vídeos zip e PDF": f"site:docs.{site_nome}/file/d",
         "Agora se você quer encontrar uma pasta completa do Google Drive exposta": f"site:docs.{site_nome}/folder/d",
         "Esses para achar itens secreto": f"site:docs.{site_nome}/open intext:secreto",
-        "Achar inurl e index.php": f'"{site_nome}" + inurl=index.php?id=1',
-        "Achar Arquivo pdf": f"site:{site_nome} ext:pdf",
-        "Achar Arquivo xml": f"site:{site_nome} ext:xml",
-        "Achar Arquivo docx": f"site:{site_nome} ext:docx",
-        "Achar Arquivo intext":f"intext:{site_nome}",
+        "achar inurl e index.php": f'"{site_nome}" + inurl=index.php?id=1',
+        "achar arquivo pdf": f"site:{site_nome} ext:pdf",
+        "achar arquivo xml": f"site:{site_nome} ext:xml",
+        "achar arquivo docx": f"site:{site_nome} ext:docx",
+        "achar arquivo intext":f"intext:{site_nome}",
+        "achar arquivo txt senha url": f"filetype:txt intext:senha url site:{site_nome}",       
+        "achar Arquivo nos Servidores do Scribd": f"servidores site:scribd.com AND:{site_nome}",
+        "achar arquivo sql aperte a tecla espaço ou nome do site": f"{site_nome} filetype:sql",
     }
 
     return consultas.get(dork_selecionada, "")
@@ -100,7 +103,7 @@ style = ThemedStyle(window)
 style.set_theme("itft1")  # Escolha o tema desejado
 
 # URL do ícone
-icon_url = "https://images.frandroid.com/wp-content/uploads/2021/10/google-bing.jpg"  # Substitua pela URL do seu ícone
+icon_url = "https://images.idgesg.net/images/article/2023/02/microsoft-bing-google-bard-ai-chatbot-search-100937460-large.jpg?auto=webp&quality=85,70"  # Substitua pela URL do seu ícone
 
 # Função para baixar o ícone da web
 def download_icon(url):
@@ -147,11 +150,14 @@ dorks = [
     "Já para encontrar qualquer tipo de arquivo como imagens vídeos zip e PDF",
     "Agora se você quer encontrar uma pasta completa do Google Drive exposta",
     "Esses para achar itens secreto",
-    "Achar inurl e index.php",
-    "Achar Arquivo pdf",
-    "Achar Arquivo xml",
-    "Achar Arquivo docx",
-    "Achar Arquivo intext",
+    "achar inurl e index.php",
+    "achar arquivo pdf",
+    "achar arquivo xml",
+    "achar arquivo docx",
+    "achar arquivo intext",
+    "achar arquivo txt senha url",
+    "achar Arquivo nos Servidores do Scribd",
+    "achar arquivo sql aperte a tecla espaço ou nome do site",
 ]
 
 # Variável para armazenar a Dork selecionada
@@ -171,11 +177,11 @@ site_frame = tk.Frame(window)
 site_frame.grid(column=0, row=1, padx=5)
 
 # Rótulo para instruções
-site_label = Label(site_frame, text="Por favor, insira o nome do site ou URL do site", font=("Arial", 12))
+site_label = Label(site_frame, text="insira o nome do site ou URL do site ou oque voce deseja buscar", font=("Arial", 12))
 site_label.grid(column=0, row=0)
 
 # Entrada do nome do site
-site_entry = Entry(site_frame, width=34, font=("Arial", 12))
+site_entry = Entry(site_frame, width=50, font=("Arial", 12))
 site_entry.grid(column=0, row=1, padx=5, pady=2)
 
 # Criar os botões para obter dados usando ttkButton
