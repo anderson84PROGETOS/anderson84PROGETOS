@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visitantes</title>
+
+    <link rel="icon" type="image/x-icon" href="https://w7.pngwing.com/pngs/1006/598/png-transparent-icon-click-thumbnail.png">
+
+</head>
+<center>
+<p><span style="font-size: 50pt;"><img id="headerImage" src="https://usagif.com/wp-content/uploads/2021/4fh5wi/bemvindo-16.gif" alt="Header Image" width="400" height="200" /></span></p>
+<body>
+    <style>
+        body 
+          
+        .green-button {
+          padding: 10px 20px;
+          font-size: 16px;
+          background-color: #03fcec;
+          color: black;          
+          cursor: pointer;
+          border-radius: 10px;
+        }
+    
+        .green-button:hover {
+          background-color: #03a1fc;
+        }
+    
+        .red-button {
+          padding: 10px 20px;
+          font-size: 16px;
+          background-color: #03fc4e;
+          color: black;          
+          cursor: pointer;
+          border-radius: 10px;
+        }
+    
+        .red-button:hover {
+          background-color: #d9534f;
+        }
+    
+        
+      </style>
+    
+   
+    <p id="visit-count">Total de visitantes: Loading...</p>
+    <p id="visitor-location" data-latitude="N/A" data-longitude="N/A">Sua localização: Loading...</p>
+
+    <button class="green-button" onclick="openGoogleMaps()">Abrir no Google Maps</button>
+    <button class="red-button" onclick="resetCounters()">Zerar Contadores</button>
+
+
+    <script>    
+        // Função para obter a localização do visitante
+        function getVisitorLocation() {
+            if ("geolocation" in navigator) {
+                navigator.geolocation.getCurrentPosition(position => {
+                    const latitude = position.coords.latitude;
+                    const longitude = position.coords.longitude;
+
+                    // Usando um serviço de geocodificação reversa (requer acesso à internet)
+                    fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`)
+                        .then(response => response.json())
+                        .then(locationData => {
+                            const city = locationData.address.city || 'N/A';
+                            const ipAddress = city ? 'N/A' : locationData.address.city || 'N/A';
+                            const latitude = locationData.lat || 'N/A';
+                            const longitude = locationData.lon || 'N/A';
+
+                            document.getElementById('visitor-location').textContent = `Sua localização: ${city ? `Cidade: ${city}` : `IP: ${ipAddress}`}, Latitude: ${latitude}, Longitude: ${longitude}`;
+                            document.getElementById('visitor-location').dataset.latitude = latitude;
+                            document.getElementById('visitor-location').dataset.longitude = longitude;
+                            updateCityCounter(city || ipAddress);
+                        })
+                        .catch(error => {
+                            console.error('Erro ao obter informações de localização:', error);
+                        });
+                }, error => {
+                    console.error('Erro ao obter informações de localização:', error);
+                });
+            } else {
+                console.error('Geolocalização não suportada pelo navegador.');
+            }
+        }
+
+        // Função para obter e exibir o número total de visitantes e a contagem por cidade
+        function updateVisitCount() {
+            // Verifica se há um contador salvo no armazenamento local
+            let visitCount = localStorage.getItem('visitCount') || 0;
+
+            // Atualiza o contador
+            visitCount++;
+            localStorage.setItem('visitCount', visitCount);
+
+            // Exibe o contador total na página
+            document.getElementById('visit-count').textContent = `Total de visitantes: ${visitCount}`;
+        }
+
+        // Função para atualizar o contador da cidade
+        function updateCityCounter(location) {
+            // Verifica se há um contador de cidades no armazenamento local
+            let cityCounter = JSON.parse(localStorage.getItem('cityCounter')) || {};
+
+            // Atualiza o contador da cidade
+            cityCounter[location] = (cityCounter[location] || 0) + 1;
+            localStorage.setItem('cityCounter', JSON.stringify(cityCounter));
+
+            // Exibe a contagem da cidade na página
+            document.getElementById('visit-count').textContent = `${cityCounter[location]} pessoas de ${location === 'N/A' ? 'IP: ' + location : location} Já Visitarão o WebSite`;
+        }
+
+        // Função para abrir o Google Maps
+        function openGoogleMaps() {
+            const latitude = document.getElementById('visitor-location').dataset.latitude;
+            const longitude = document.getElementById('visitor-location').dataset.longitude;
+
+            if (latitude !== 'N/A' && longitude !== 'N/A') {
+                const mapsUrl = `https://www.google.com/maps?q=${latitude},${longitude}`;
+                window.open(mapsUrl, '_blank');
+            } else {
+                console.error('Latitude e/ou Longitude indisponíveis.');
+            }
+        }
+
+        // Função para zerar os contadores
+        function resetCounters() {
+            localStorage.removeItem('visitCount');
+            localStorage.removeItem('cityCounter');
+            // Atualiza os contadores na página
+            updateVisitCount();
+            updateCityCounter('N/A');
+        }
+
+        // Chamando as funções ao carregar a página
+        window.onload = function() {
+            updateVisitCount();
+            getVisitorLocation();
+        };
+
+    </script>
+    </center>
+</body>
+</html>
