@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Peaky Blinders!</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="https://www.pngkit.com/png/full/237-2377978_png-file-agent-symbol-png.png"> 
+    <style>
+        body {
+            text-align: center;
+            background-color: #1d1d1d;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            padding: 10px;
+            overflow: hidden; /* Prevent scrolling deixar fiquiso */              
+            
+        }
+
+        h2 {
+            
+            font-size: 40px;           
+            
+        }
+
+        h,
+        h6 {
+            color: rgb(241, 241, 241);
+            font-size: 15px;
+            margin: 5px 0;            
+            
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            margin: 10px 2px;
+            cursor: pointer;
+        
+        }
+
+        .google {            
+            color: rgb(252, 247, 247);
+            border: 1px solid #faf7f7;
+            border-radius: 10px;
+            background-color: #3C3C3C;
+            border-radius: 8px;
+            width: 25%;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            cursor: pointer;            
+            
+        }   
+
+        .google:hover {
+        background-color: #2b2a2a;
+        }
+
+        .facebook {            
+            color: rgb(255, 255, 255);
+            border: 1px solid #fdfdfd;
+            border-radius: 10px;
+            background-color: #1877F2;
+            border-radius: 8px;
+            width: 25%;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            cursor: pointer;
+            
+        }
+
+        .facebook:hover {
+            background-color: #094ba1;
+            }
+
+        .btn.facebook img {
+            width: 25px;
+            height: auto;
+            margin-right: 5px;
+            
+            
+        }
+
+        .btn.google img {
+            width: 25px;
+            height: auto;
+            margin-right: 20px;
+            border-radius: 10px;
+            
+        }        
+ 
+    </style>
+
+</head>
+
+<body>
+    
+    <p><span style="font-size: 40pt;"><img id="headerImage" src="https://github.com/burk8477/peaky-blinders/blob/main/public/logo.png?raw=true" alt="Header Image" width="220" height="50" /></span></p>
+    
+    <p><span style="font-size: 40pt;"><img id="headerImage" src="https://github.com/burk8477/peaky-blinders/blob/main/public/hero.png?raw=true" alt="Header Image" width="500" height="300" /></span></p>
+    <h>Você ganhou um combo de Whisky</h>
+    <h6>Grátis em comemoração ao</h6>
+    <h>lançamento do filme! Resgate agora!</h>
+    &emsp;
+  
+    <button class="btn google" onclick="abrirFormulario('Google')">
+        <img src="https://uploaddeimagens.com.br/images/004/714/424/full/google.png?1705433002" alt="Google Logo" style="width: 22px; height: auto; margin-right: 40px;">Fazer Login com o Google &emsp;<p>
+    </button>
+    
+    
+    <button class="btn facebook" onclick="abrirFormulario('Facebook')">
+        <img src="https://uploaddeimagens.com.br/images/004/714/425/full/facebook.png?1705433067" alt="Facebook Logo" style="width: 22px; height: auto; margin-right: 40px;">Fazer Login com o Facebook<p>
+    </button>
+    &emsp;
+    &emsp;
+
+    <h1 style="color: rgb(185, 184, 184); font-size: 15px;">Ao resgatar você concorda com os Termos de Uso<h2>
+                                     
+    </form>        
+    </div>
+    <script>
+        function abrirFormulario(servico) {
+            // Redireciona para a página de login correspondente
+            if (servico === 'Google') {
+                window.location.href = '/login';
+            } else if (servico === 'Facebook') {
+                window.location.href = '/login'; // Altere se necessário
+            }
+        }    
+       
+    </script>   
+</body>
+<h1 style="color: rgb(185, 184, 184); font-size: 13px;">© 2024 Peaky Blinders</h1>    
+</html>
