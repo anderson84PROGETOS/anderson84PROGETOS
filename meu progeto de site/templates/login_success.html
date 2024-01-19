@@ -1,0 +1,92 @@
+<!-- login_success.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Successful</title>
+    <center>
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="https://www.pngkit.com/png/full/237-2377978_png-file-agent-symbol-png.png"> 
+
+    <style>
+        body {
+            background-color: #161616;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            flex-direction: column;
+            overflow: hidden; /* Prevent scrolling deixar fiquiso */
+        }
+        .content {
+            background-color: #1d1d1d;
+            padding: 0px;
+            border-radius: 20px;
+            height: 83vh; /* Ajuste este valor para controlar o quanto o conteúdo se estende para baixo */
+        }
+      
+       
+        h1, p {
+            margin: 10px; /* Adjust the margin for better spacing */
+        }
+
+        #hora {
+            font-size: 24px; /* Set the font size for the time display */
+        }
+
+        img {
+            max-width: 100%; /* Make sure the image doesn't exceed its container */
+            height: auto; /* Maintain the image aspect ratio */
+        }
+    </style>
+</head>
+ <!-- Colocar as Duas cor -->
+<div class="content">
+    
+<body>
+    <h1 style="color: yellow; font-size: 40px;">🤣 Combo Esgotado 🤣</h1>
+    
+    <p>Você fez login com sucesso. Seja Bem-vindo!</p>
+    <p><span style="font-size: 50pt;"><img id="headerImage" src="https://i.pinimg.com/originals/62/87/1c/62871cbd3d1ca26ad4c749cb96a16ad1.gif" alt="Header Image" width="700" height="950" /></span></p>
+
+    <h1>Hora Atual</h1>
+    <p id="hora"></p>
+
+ 
+
+    <script>
+        // Função para obter a hora atual
+        function obterHora() {
+            var data = new Date();
+            var horas = data.getHours();
+            var minutos = data.getMinutes();
+            var segundos = data.getSeconds();
+
+            // Formatação para garantir que sempre tenhamos dois dígitos
+            horas = horas < 10 ? '0' + horas : horas;
+            minutos = minutos < 10 ? '0' + minutos : minutos;
+            segundos = segundos < 10 ? '0' + segundos : segundos;
+
+            // Exibe a hora no elemento com o ID "hora"
+            document.getElementById('hora').innerText = horas + ':' + minutos + ':' + segundos;
+
+            // Atualiza a cada segundo
+            setTimeout(obterHora, 1000);
+        }
+
+        // Chama a função inicialmente
+        obterHora();
+    </script>
+</body>
+<h2>&emsp;</h2>
+<h1 style="color: rgb(185, 184, 184); font-size: 14px;">Ao resgatar você concorda com os Termos de Uso<h2></h2>
+
+<h2 style="font-size: 33px;">&emsp;</h2>
+
+<h2 style="color: rgb(185, 184, 184); font-size: 13px;">© 2024 Peaky Blinders</h2>
+</center>
+</html>
