@@ -41,6 +41,15 @@ def construir_consulta_dork(site_nome, dork_selecionada):
         "achar arquivo txt senha url": f"filetype:txt intext:senha url site:{site_nome}",       
         "achar Arquivo nos Servidores do Scribd": f"servidores site:scribd.com AND:{site_nome}",
         "achar arquivo sql aperte a tecla espaço ou nome do site": f"{site_nome} filetype:sql",
+        "achar arquivo env": f"filetype:env {site_nome}",
+        "Achar arquivo inurl": f"inurl:{site_nome}",
+        "Achar arquivo pdf xlsx docx txt": f"'{site_nome}' filetype:pdf OR filetype:xlsx OR filetype:docx OR filetype:txt",
+        "Achar arquivo txt": f"site:{site_nome} filetype:txt",
+        "Achar arquivo WEBCAM 7 Aperte Espasso": f"{site_nome} intitle:\"WEBCAM 7\" -inurl:/admin.html",
+        "Achar arquivo robots.txt": f"{site_nome} robots.txt",
+        "Achar arquivo senha": f"intitle:\"index of\" intext:{site_nome}",
+    
+
     }
 
     return consultas.get(dork_selecionada, "")
@@ -158,6 +167,13 @@ dorks = [
     "achar arquivo txt senha url",
     "achar Arquivo nos Servidores do Scribd",
     "achar arquivo sql aperte a tecla espaço ou nome do site",
+    "achar arquivo env",
+    "Achar arquivo inurl",
+    "Achar arquivo pdf xlsx docx txt",
+    "Achar arquivo txt",
+    "Achar arquivo WEBCAM 7 Aperte Espasso",
+    "Achar arquivo robots.txt",
+    "Achar arquivo senha",
 ]
 
 # Variável para armazenar a Dork selecionada
