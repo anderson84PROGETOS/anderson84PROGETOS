@@ -5,18 +5,22 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Google  Bing  Hacking Information</title>
+
+   <!-- Favicon -->
+   <link rel="icon" type="image/x-icon" href="https://uploaddeimagens.com.br/images/004/698/677/full/google-bing-differences-simalarities-removebg-preview.png?1703689876">  
+
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #f0f0f0;
+      background-color: #ffffff;
     }
 
     #container {
       max-width: 800px;
       margin: 20px auto;
       padding: 20px;
-      background-color: #fff;
+      background-color: #ffffff;
       border-radius: 10px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
@@ -25,9 +29,8 @@
       padding: 10px;
       font-size: 16px;
       cursor: pointer;
-      background-color: #00FFFF;
-      border: none;
-      border-radius: 5px;
+      background-color: #00FFFF;      
+      border-radius: 10px;
     }
 
     #headerImage {
@@ -37,9 +40,9 @@
     }
 
     #headerImage {
-      width: 730px;
+      width: 750px;
       /* Set the width to 400 pixels */
-      height: 400px;
+      height: 195px;
       /* Set the height to 400 pixels */
       object-fit: cover;
     }
@@ -48,7 +51,7 @@
 
 <body>
   <div id="container" class="container">
-    <img id="headerImage" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTZGWqSzeK_MbsIItJ28JwVUwMyAikyeQzaRA&usqp=CAU"
+    <img id="headerImage" src="https://uploaddeimagens.com.br/images/004/698/677/full/google-bing-differences-simalarities-removebg-preview.png?1703689876"
       alt="Header Image">
       <h1 class="font-weight-bold" style="font-size: 46px;">Google Bing Hacking Information</h1>
 
@@ -93,6 +96,18 @@
             "Achar Arquivo pdf",
             "Achar Arquivo xml",
             "Achar Arquivo docx",
+            "Achar Arquivo intext",
+            "Achar Arquivo txt senha url",
+            "Achar Arquivo nos Servidores do Scribd",
+            "Achar arquivo sql aperte a tecla espaço ou nome do site",
+            "Achar arquivo env",
+            "Achar arquivo inurl",
+            "Achar arquivo pdf xlsx docx txt",            
+            "Achar arquivo txt",
+            "Achar arquivo WEBCAM 7",
+            "Achar arquivo robots.txt",
+            "Achar arquivo senha",
+            
             // ... (outras dorks)
           ];
           var dorkSelect = document.getElementById("dorkSelect");
@@ -152,7 +167,19 @@
         "Achar Arquivo pdf": `site:${siteNome} ext:pdf`,
         "Achar Arquivo xml": `site:${siteNome} ext:xml`,
         "Achar Arquivo docx": `site:${siteNome} ext:docx`,
-        // ... (outras consultas)
+        "Achar Arquivo intext": `intext:${siteNome}`,
+        "Achar Arquivo txt senha url":`filetype:txt intext:senha+url site:${siteNome}`,
+        "Achar Arquivo nos Servidores do Scribd": `servidores site:scribd.com AND:${siteNome}`,
+        "Achar arquivo sql aperte a tecla espaço ou nome do site": `filetype:sql${siteNome}`,
+        "Achar arquivo env": `filetype:env ${siteNome}`,
+        "Achar arquivo inurl": `inurl:${siteNome}`,
+        "Achar arquivo pdf xlsx docx txt":`"${siteNome}"filetype:pdf OR filetype:xlsx OR filetype:docx OR filetype:txt`,
+        "Achar arquivo txt": `site:${siteNome} filetype:txt`,
+        "Achar arquivo WEBCAM 7":`${siteNome}intitle:"WEBCAM 7" -inurl:/admin.html`,
+        "Achar arquivo robots.txt": `"${siteNome}" robots.txt`,
+        "Achar arquivo senha": `intitle:"index of" intext:${siteNome}`         
+     
+       
       };
       // Obter a consulta com base na Dork selecionada      
     var consulta = consultas[dorkSelecionada];
@@ -162,15 +189,17 @@
       `https://www.bing.com/search?q=${consulta}`;
     window.open(url, "_blank");
     // Exibir resultados (apenas um exemplo, substitua conforme necessário)
+    
     var resultContainer = document.getElementById("result");
     resultContainer.innerHTML = `
           <p><span style="color: #c40c2b;">Resultados para:</span> ${siteNome} - ${dorkSelecionada}</p>
-          <p style="color:#0a33c7;">Exemplo de resultado...</p>
+          <p style="color:#05966d;">Exemplo de resultado...</p>
           <p><span style="color: #c40c2b;">Consulta utilizada:</span> ${consulta}</p>
           <p><span style="color: #c40c2b;">Pesquisado em:</span> ${motorPesquisa}</p>
           `;
     }
   </script>
+  <body style="font-size: 18px;"></body>
 </body>
 
 </html>
