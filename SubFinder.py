@@ -1,5 +1,4 @@
 import socket
-import os
 
 print("""
 
@@ -101,9 +100,13 @@ def main():
     
     resultados = []
     contagem = 0
+    subdominios_testados = set()
 
     for txt in wordlist:
         result = txt + alvo
+        if result in subdominios_testados:
+            continue
+        subdominios_testados.add(result)
         try:
             ip = socket.gethostbyname(result)
             print(f"HOST ENCONTRADO: {result} ====> IP: {ip}")
