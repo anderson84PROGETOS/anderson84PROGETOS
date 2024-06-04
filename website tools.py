@@ -1,10 +1,9 @@
 import requests
 from bs4 import BeautifulSoup
-from urllib.parse import urljoin
+from urllib.parse import urljoin, urlparse
 from socket import socket, AF_INET, SOCK_STREAM
 import re
 import subprocess
-from urllib.parse import urlparse, urljoin
 
 print("""
 
@@ -14,7 +13,7 @@ print("""
 ██║███╗██║██╔══╝  ██╔══██╗╚════██║██║   ██║   ██╔══╝         ██║   ██║   ██║██║   ██║██║     ╚════██║
 ╚███╔███╔╝███████╗██████╔╝███████║██║   ██║   ███████╗       ██║   ╚██████╔╝╚██████╔╝███████╗███████║
  ╚══╝╚══╝ ╚══════╝╚═════╝ ╚══════╝╚═╝   ╚═╝   ╚══════╝       ╚═╝    ╚═════╝  ╚═════╝ ╚══════╝╚══════╝
-                                                                                                                                                                           
+                                                                                                     
 """)
 
 # Solicitar a URL do usuário
@@ -43,35 +42,25 @@ headers_curl = {
     'User-Agent': user_agent_curl
 }
 
-# Função para fazer a requisição e processar o conteúdo
 def fetch_and_process(url, headers, user_agent_name):
-    # Criar uma sessão para manter cookies e outras configurações
     session = requests.Session()
     session.headers.update(headers)
-    
-    # Fazer a requisição HTTP para obter o conteúdo da página com os cabeçalhos
     response = session.get(url)
     
-    # Verificar o código de status e continuar mesmo que não seja 200
     print(f"\n\nStatus da resposta HTTP ({user_agent_name}): {response.status_code}")
 
-    # Extrair e imprimir os cabeçalhos HTTP da resposta
     print(f"\n\n============= Cabeçalhos HTTP ({user_agent_name}) =============\n")
     for key, value in response.headers.items():
         print(f"{key}: {value}")
     
-    # Se o user agent não for o cURL, continuar com a extração de conteúdo
     if user_agent_name != "CURL":
-        # Analisar o conteúdo HTML da página
         soup = BeautifulSoup(response.content, 'html.parser')
         
-        # Extrair e imprimir parágrafos
         print(f"\n\n============= Parágrafos ({user_agent_name}) =============\n")
         paragraphs = soup.find_all('p')
         for para in paragraphs:
             print(para.get_text())
         
-        # Extrair e imprimir links
         print(f"\n\n============= Links ({user_agent_name}) =============\n")
         links = soup.find_all('a')
         for link in links:
@@ -80,13 +69,11 @@ def fetch_and_process(url, headers, user_agent_name):
             if href:
                 print(f"{text}: {href}")
         
-        # Extrair e imprimir títulos
         print(f"\n\n============= Títulos ({user_agent_name}) =============\n")
         titles = soup.find_all(['h1', 'h2', 'h3', 'h4', 'h5', 'h6'])
         for title in titles:
             print(title.get_text().strip())
         
-        # Extrair e imprimir imagens
         print(f"\n\n============= Imagens ({user_agent_name}) =============\n")
         images = soup.find_all('img')
         for img in images:
@@ -95,7 +82,6 @@ def fetch_and_process(url, headers, user_agent_name):
             if src:
                 print(f"Fonte: {src}, Texto alternativo: {alt}")
         
-        # Extrair e imprimir listas
         print(f"\n\n============= Listas ({user_agent_name}) =============\n")
         lists = soup.find_all(['ul', 'ol'])
         for lst in lists:
@@ -103,7 +89,6 @@ def fetch_and_process(url, headers, user_agent_name):
             for item in items:
                 print(item.get_text().strip())
         
-        # Extrair e imprimir tabelas
         print(f"\n\n============= Tabelas ({user_agent_name}) =============\n")
         tables = soup.find_all('table')
         for table in tables:
@@ -113,7 +98,6 @@ def fetch_and_process(url, headers, user_agent_name):
                 col_texts = [col.get_text().strip() for col in cols]
                 print('\t'.join(col_texts))
         
-        # Extrair e imprimir todos os outros textos
         print(f"\n\n============= Outros Textos ({user_agent_name}) =============\n")
         other_texts = soup.find_all(string=True)
         for text in other_texts:
@@ -122,13 +106,12 @@ def fetch_and_process(url, headers, user_agent_name):
                 if content:
                     print(content)
 
-# Função para requisitar informações WHOIS
 def requisicao_whois(servidor_whois, endereco_host, padrao):
     objeto_socket = socket(AF_INET, SOCK_STREAM)
     conexao = objeto_socket.connect_ex((servidor_whois, 43))
     if conexao == 0:
         if padrao:
-            if servidor_whois == 'whois.verisign-grs.com':  # For .com and .net domains
+            if servidor_whois == 'whois.verisign-grs.com':
                 objeto_socket.send(f'domain {endereco_host}\r\n'.encode())
             else:
                 objeto_socket.send(f'n + {endereco_host}\r\n'.encode())
@@ -142,30 +125,24 @@ def requisicao_whois(servidor_whois, endereco_host, padrao):
             print(dados.decode('latin-1'))
     objeto_socket.close()
 
-# Função para obter WHOIS para domínios .gov
 def obter_whois_gov(endereco):
-    servidores_whois_tdl = {
-        '.gov': 'whois.nic.gov'
-    }
+    servidores_whois_tdl = {'.gov': 'whois.nic.gov'}
     servidor_whois_gov = servidores_whois_tdl.get('.gov', None)
     if servidor_whois_gov:
         requisicao_whois(servidor_whois_gov, endereco, False)
     else:
         print("Servidor WHOIS para domínios .gov não encontrado.")
 
-# Função para encontrar e-mails em um BeautifulSoup object
 def encontrar_emails(soup):
     email_regex = r"[\w\.-]+@[\w\.-]+"
     emails = []
 
-    # Procura e retorna os e-mails na página principal do WHOIS
     email_section = soup.find("div", class_="row-fluid registry-data")
     if email_section:
         email_text = email_section.find_all("div", class_="row")[1].find("div", class_="span9").get_text()
         email_matches = re.findall(email_regex, email_text)
         emails.extend(email_matches)
 
-    # Procura e retorna os e-mails no resultado completo do WHOIS
     whois_section = soup.find("pre", class_="df-raw")
     if whois_section:
         whois_text = whois_section.get_text()
@@ -174,7 +151,6 @@ def encontrar_emails(soup):
 
     return emails
 
-# Função para extrair campos específicos do WHOIS
 def extrair_campo(whois_section, label):
     field = whois_section.find("div", string=re.compile(label))
     if field:
@@ -182,7 +158,6 @@ def extrair_campo(whois_section, label):
         return value
     return ""
 
-# Função para obter informações WHOIS
 def obter_whois(endereco):
     url_whois = f"https://www.whois.com/whois/{endereco}"
     url_registro_br = f"https://registro.br/cgi-bin/whois/?qr={endereco}"
@@ -197,14 +172,12 @@ def obter_whois(endereco):
             whois_text = whois_section.get_text()
             print(whois_text)
 
-            # Extract and display additional information
             emails = encontrar_emails(soup_whois)
             if emails:
                 print("\nE-mails encontrados:")
                 for email in emails:
                     print(email)
 
-            # Extract more fields if needed
             name = extrair_campo(whois_section, "Registrant Name:")
             registration_date = extrair_campo(whois_section, "Creation Date:")
             expiration_date = extrair_campo(whois_section, "Registrar Registration Expiration Date:")
@@ -224,57 +197,51 @@ def obter_whois(endereco):
             print(result_text)
 
 def obter_whois_br(endereco):
-    servidores_whois_tdl = {
-        '.br': 'whois.registro.br'
-    }
+    servidores_whois_tdl = {'.br': 'whois.registro.br'}
     servidor_whois = servidores_whois_tdl['.br']
     requisicao_whois(servidor_whois, endereco, False)
 
-# Função para executar a transferência de zona DNS
 def dns_transfer(site):
     print("\n\n\n\n========================================== Transferência de Zona DNS ==========================================\n")
-    # Executa o comando 'nslookup' e captura a saída
     output_dns = subprocess.run(['nslookup', '-query=ns', site], capture_output=True, text=True)
-
-    # Divide a saída em linhas e extrai os servidores DNS
     lines = output_dns.stdout.splitlines()
     servers = [line.split()[-1] for line in lines if 'nameserver' in line]
 
-    # Lista para armazenar a saída de cada consulta do nslookup
     output_list_dns = []
-
-    # Itera sobre cada servidor DNS e executa o comando 'nslookup -type=any'
     for server in servers:
         output = subprocess.run(['nslookup', '-type=any', site, server], capture_output=True, text=True)
         output_list_dns.append(output.stdout)
 
-    # Imprime a saída do nslookup na tela
     for output in output_list_dns:
         print(output)
 
-    # Lista para armazenar os endereços IPv4 encontrados
-    global ipv4_addresses
-    ipv4_addresses = []
+def get_ipv4_addresses(site):
+    output_dns = subprocess.run(['nslookup', '-query=ns', site], capture_output=True, text=True)
+    lines = output_dns.stdout.splitlines()
+    servers = [line.split()[-1] for line in lines if 'nameserver' in line]
 
-    # Extrai os endereços IPv4 de cada saída do nslookup
+    output_list_dns = []
+    for server in servers:
+        output = subprocess.run(['nslookup', '-type=A', site, server], capture_output=True, text=True)
+        output_list_dns.append(output.stdout)
+
+    ipv4_addresses = []
     for output in output_list_dns:
         ipv4_matches = re.findall(r'\b(?:\d{1,3}\.){3}\d{1,3}\b', output)
         ipv4_addresses.extend(ipv4_matches)
 
-    # Remove duplicatas dos endereços IPv4
     ipv4_addresses = list(set(ipv4_addresses))
+    return ipv4_addresses
 
-# Função para exibir endereços IPv4 encontrados
-def exibir_ipv4():
-    print("\n\n\n\n========================================== Endereços IPv4 Encontrados ==========================================\n")
+def exibir_ipv4(site):
+    ipv4_addresses = get_ipv4_addresses(site)
     if ipv4_addresses:
-        print("\n↓ Endereços IPv4 encontrados ↓\n")
+        print("\n\n\n\n========================================== Endereços IPv4 Encontrados ==========================================\n")
         for ipv4_address in ipv4_addresses:
             print(ipv4_address)
     else:
-        print("Nenhum endereço IPv4 encontrado.")
+        print("\nNenhum Endereço IPv4 encontrado.")
 
-# Função para obter e exibir o conteúdo do robots.txt
 def exibir_robots_txt(site, headers):
     robots_url = urljoin(site, '/robots.txt')
     response = requests.get(robots_url, headers=headers)
@@ -284,7 +251,6 @@ def exibir_robots_txt(site, headers):
     else:
         print(f"Não foi possível acessar o robots.txt (Status: {response.status_code})")
 
-# Function for web scraping
 def web_scraper(url, headers):
     response = requests.get(url, headers=headers)
     
@@ -293,48 +259,36 @@ def web_scraper(url, headers):
         return
     
     soup = BeautifulSoup(response.content, 'html.parser')
-    
-    # Find all subdomains in the URLs
     subdomains = set(re.findall(r'(https?://(?:[\w-]+\.)+[\w]+)', response.text))
     
-    # Print subdomains and count
     print(f"\nForam Encontrados ====>  {len(subdomains)}  Subdomínios\n")
     for subdomain in subdomains:
         print(subdomain)
     
-    # Find all links (URLs)
     links = soup.find_all('a', href=True)
     urls = {link['href'] for link in links if link['href'].startswith('http://') or link['href'].startswith('https://') or link['href'].startswith('/')}
-    
-    # Build complete URLs
     complete_urls = {urljoin(url, link) if link.startswith('/') else link for link in urls}
-    
-    # Filter internal URLs
     internal_urls = {link for link in complete_urls if urlparse(url).netloc in urlparse(link).netloc}
     
-    # Print internal URLs and count
     print(f"\nForam Encontradas ====>  {len(internal_urls)}   URL internas\n")
     for internal_url in internal_urls:
         print(internal_url)
 
-# Function principal to perform operations
 def main():
     while True:
         print("""
-        
-Escolha uma opção
+Escolha uma opção:
 
 1 = Usando User Agent do Firefox
 2 = Cabeçalhos HTTP (CURL)
 3 = Consulta Whois
 4 = Transferência de Zona DNS
-5 = Exibir robots.txt
-6 = Endereços IPv4 encontrados
+5 = Exibir IPv4
+6 = Exibir robots.txt
 7 = Scraper Web
 
 0 = Sair
-
- """)
+""")
         choice = input("\nDigite o número da sua escolha: ")
         print("\n\n")
         
@@ -354,27 +308,28 @@ Escolha uma opção
                 obter_whois_gov(site)
         
         elif choice == '4':
-            dns_transfer(site) # Fazendo a transferência de zona DNS
-        
+            dns_transfer(site)
+            
+            
         elif choice == '5':
-            print("\n\n\n\n🎯=========================== Exibir robots.txt ===========================🎯\n")
-            exibir_robots_txt(url, headers_firefox) # Executa diretamente com o user agent do Firefox
+            exibir_ipv4(site)  # Exibir os endereços IPv4 encontrados     
         
         elif choice == '6':
-            exibir_ipv4() # Exibir os endereços IPv4 encontrados
-
-        # Call the web_scraper function for option 7
+            print("\n\n\n\n🎯=========================== Exibir robots.txt ===========================🎯\n")
+            exibir_robots_txt(url, headers_firefox)
+        
         elif choice == '7':
             print("\n\n\n\n🎯=========================== Scraper Web ===========================🎯\n")
             web_scraper(url, headers_firefox)
 
-    
+           
+
         elif choice == '0':
             break
         
         else:
             print("\nOpção inválida. Tente novamente.")
 
-# Executar a função principal
 if __name__ == "__main__":
     main()
+
