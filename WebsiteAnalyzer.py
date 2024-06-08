@@ -4,78 +4,92 @@ import urllib.request
 import urllib.error
 import socket
 import requests
+import subprocess
+import re
 import webbrowser
 
 def analyze_and_check_website():
-    url = website_entry.get()
+    url = website_entry.get().replace('http://', '').replace('https://', '').split('/')[0]
     try:
         response = urllib.request.urlopen("http://" + url, timeout=5)
         result_text.insert(tk.END, '\nCabeçalhos HTTP do Response\n')
         result_text.insert(tk.END, response.headers)
         
+        # Verifica o status da conexão
         status_code = response.getcode()
-        result_text.insert(tk.END, f'\nStatus da conexão: {status_code}')
+        result_text.insert(tk.END, f'\nStatus da conexão: {status_code}\n')
         if status_code == 200:
-            result_text.insert(tk.END, f'\nConexão com o {url} estabelecida com sucesso!\n\n')
+            result_text.insert(tk.END, f'Conexão com o {url} estabelecida com sucesso!\n\n')
         else:
-            result_text.insert(tk.END, f'\nErro ao conectar-se ao {url}: {response.reason}')
+            result_text.insert(tk.END, f'Erro ao conectar-se ao {url}: {response.reason}\n')
     except urllib.error.HTTPError as e:
         if e.code == 403:
-            result_text.insert(tk.END, '\n============== Cabeçalhos HTTP ===============\n\n')
+            result_text.insert(tk.END, '\n============== Cabeçalhos HTTP =========================\n')
             result_text.insert(tk.END, e.headers)            
         else:
-            result_text.insert(tk.END, f'\nErro ao conectar-se ao {url}: {e}')
+            result_text.insert(tk.END, f'Erro ao conectar-se ao {url}: {e}\n')
     except Exception as e:
-        result_text.insert(tk.END, f'\nErro ao conectar-se ao {url}: {e}')
+        result_text.insert(tk.END, f'Erro ao conectar-se ao {url}: {e}\n')
 
 def get_ipv4_addresses():
-    site = website_entry.get()
-    try:
-        ipv4_addresses = socket.gethostbyname_ex(site)[2]
-        if ipv4_addresses:
-            result_text.insert(tk.END, "\n============== Endereços IPv4 Encontrados ===============\n\n")
-            for ipv4_address in ipv4_addresses:
-                result_text.insert(tk.END, ipv4_address + "\n")
-        else:
-            result_text.insert(tk.END, "\nNenhum Endereço IPv4 encontrado.")
-    except socket.gaierror as e:
-        result_text.insert(tk.END, f'\nErro ao resolver o endereço IP do {site}: {e}')
+    site = website_entry.get().replace('http://', '').replace('https://', '').split('/')[0]
+    output_dns = subprocess.run(['nslookup', '-query=ns', site], capture_output=True, text=True)
+    lines = output_dns.stdout.splitlines()
+    servers = [line.split()[-1] for line in lines if 'nameserver' in line]
+
+    output_list_dns = []
+    for server in servers:
+        output = subprocess.run(['nslookup', '-type=A', site, server], capture_output=True, text=True)
+        output_list_dns.append(output.stdout)
+
+    ipv4_addresses = []
+    for output in output_list_dns:
+        ipv4_matches = re.findall(r'\b(?:\d{1,3}\.){3}\d{1,3}\b', output)
+        ipv4_addresses.extend(ipv4_matches)
+
+    ipv4_addresses = list(set(ipv4_addresses))
+    
+    if ipv4_addresses:
+        result_text.insert(tk.END, "\n============== Endereços IPv4 Encontrados ================\n")
+        for ipv4_address in ipv4_addresses:
+            result_text.insert(tk.END, ipv4_address + "\n")
+    else:
+        result_text.insert(tk.END, "\nNenhum Endereço IPv4 encontrado.\n")
 
 def get_geolocation_info():
-    ip = socket.gethostbyname(website_entry.get())
+    site = website_entry.get().replace('http://', '').replace('https://', '').split('/')[0]
     try:
+        ip = socket.gethostbyname(site)
         response = requests.get(f"http://ip-api.com/json/{ip}")
         if response.status_code == 200:
             data = response.json()
             if data['status'] == 'success':
-                result_text.insert(tk.END, "\n============== Informações de Geolocalização ===============\n\n")
+                result_text.insert(tk.END, "\n\n\n============== Informações de Geolocalização ==============\n")
                 result_text.insert(tk.END, f"Provedor de Internet: {data['isp']}\n")
                 result_text.insert(tk.END, f"País: {data['country']}\n")
                 result_text.insert(tk.END, f"Cidade: {data['city']}\n")        
                 result_text.insert(tk.END, f"Latitude: {data['lat']}\n")
                 result_text.insert(tk.END, f"Longitude: {data['lon']}\n")
                 
-                # Adicionando a URL do Google Maps
-                lat = data['lat']
-                lon = data['lon']
-                google_maps_url = f"https://www.google.com/maps/place/{lat},{lon}"
-                result_text.insert(tk.END, f"\nURL do Google Maps: {google_maps_url}\n")
+                return data['lat'], data['lon']
             else:
                 result_text.insert(tk.END, "Erro ao obter informações de geolocalização: status não é 'success'\n")
+                return None, None
         else:
             result_text.insert(tk.END, f"Erro ao obter informações de geolocalização: {response.status_code}\n")
+            return None, None
     except Exception as e:
         result_text.insert(tk.END, f"Erro ao obter informações de geolocalização: {e}\n")
+        return None, None
 
 def obter_informacoes_website():
-    endereco = website_entry.get()
-    user_agent = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:89.0) Gecko/20100101 Firefox/89.0'}
+    site = website_entry.get().replace('http://', '').replace('https://', '').split('/')[0]
     try:
-        resposta = requests.get(f"http://ip-api.com/json/{endereco}")
+        resposta = requests.get(f"http://ip-api.com/json/{site}")
         if resposta.status_code == 200:
             dados = resposta.json()
             if dados['status'] == 'success':
-                result_text.insert(tk.END, "\n========= Informações sobre o website ==============\n\n")                
+                result_text.insert(tk.END, "\n\n\n============== Informações sobre o website ================\n")                
                 result_text.insert(tk.END, f"\nIP: {dados['query']}\n")
                 result_text.insert(tk.END, f"\nPaís: {dados['country']}\n")
                 result_text.insert(tk.END, f"\nCidade: {dados['city']}\n")
@@ -89,26 +103,28 @@ def obter_informacoes_website():
                     if endereco_completo.status_code == 200:
                         endereco_completo = endereco_completo.json()
                         result_text.insert(tk.END, f"\nNome da Rua: {endereco_completo['display_name']}\n")
+                        return lat, lon
                     else:
                         result_text.insert(tk.END, f"Erro ao obter informações do Nominatim: {endereco_completo.status_code}\n")
+                        return None, None
             else:
                 result_text.insert(tk.END, "Não foi possível obter informações para este endereço.\n")
+                return None, None
         else:
             result_text.insert(tk.END, f"Erro ao obter informações do site: {resposta.status_code}\n")
+            return None, None
     except Exception as e:
         result_text.insert(tk.END, f"Ocorreu um erro: {e}\n")
+        return None, None
 
 def open_google_maps():
-    ip = socket.gethostbyname(website_entry.get())
-    response = requests.get(f"http://ip-api.com/json/{ip}")
-    if response.status_code == 200:
-        data = response.json()
-        if data['status'] == 'success':
-            lat = data['lat']
-            lon = data['lon']
-            google_maps_url = f"https://www.google.com/maps/place/{lat},{lon}"
-            webbrowser.open(google_maps_url)
+    lat, lon = get_geolocation_info()
+    if lat and lon:
+        google_maps_url = f"https://www.google.com/maps/place/{lat},{lon}"
+        result_text.insert(tk.END, f"\nURL do Google Maps: {google_maps_url}\n")
+        webbrowser.open(google_maps_url)
 
+# Configurar a janela principal
 window = tk.Tk()
 window.wm_state('zoomed')
 window.title("Website Analyzer")
@@ -164,4 +180,3 @@ result_text = scrolledtext.ScrolledText(result_frame, wrap=tk.WORD, width=135, h
 result_text.grid(column=0, row=0, sticky=tk.W)
 
 window.mainloop()
-
