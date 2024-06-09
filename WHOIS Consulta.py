@@ -1,11 +1,11 @@
 import re
 import requests
 from bs4 import BeautifulSoup
+from socket import *
 import tkinter as tk
 from tkinter import scrolledtext
-from socket import *
 
-# WHOIS servers dictionary
+# Mapeamento dos servidores WHOIS para diferentes TLDs
 servidores_whois_tdl = {
     '.com': 'whois.verisign-grs.com',
     '.net': 'whois.verisign-grs.com',
@@ -14,29 +14,29 @@ servidores_whois_tdl = {
     '.gov': 'whois.nic.gov',
 }
 
-# Function to make WHOIS request
-def requisicao_whois(servidor_whois, endereco_host, padrao, output_text):
+def requisicao_whois(servidor_whois, endereco_host, padrao):
     objeto_socket = socket(AF_INET, SOCK_STREAM)
     conexao = objeto_socket.connect_ex((servidor_whois, 43))
     if conexao == 0:
         if padrao:
-            if servidor_whois == 'whois.verisign-grs.com':  # For .com and .net domains
+            if servidor_whois == 'whois.verisign-grs.com':  # Para domínios .com e .net
                 objeto_socket.send('domain {}\r\n'.format(endereco_host).encode())
             else:
                 objeto_socket.send('n + {}\r\n'.format(endereco_host).encode())
         else:
             objeto_socket.send('{}\r\n'.format(endereco_host).encode())
-        
+
+        response = ''
         while True:
             dados = objeto_socket.recv(65500)
             if not dados:
                 break
-            output_text.insert(tk.END, dados.decode('latin-1') + "\n")
+            response += dados.decode('latin-1')
+        objeto_socket.close()
+        return response
     else:
-        output_text.insert(tk.END, "Erro ao conectar ao servidor WHOIS.\n")
-    objeto_socket.close()
+        return "Erro ao conectar ao servidor WHOIS."
 
-# Function to find emails in HTML
 def encontrar_emails(soup):
     email_regex = r"[\w\.-]+@[\w\.-]+"
     emails = []
@@ -55,7 +55,6 @@ def encontrar_emails(soup):
 
     return emails
 
-# Function to extract specific field from WHOIS section
 def extrair_campo(whois_section, label):
     field = whois_section.find("div", string=re.compile(label))
     if field:
@@ -63,8 +62,7 @@ def extrair_campo(whois_section, label):
         return value
     return ""
 
-# Function to get WHOIS information for a domain
-def obter_whois(endereco, output_text):
+def obter_whois(endereco):
     url_whois = "https://www.whois.com/whois/{}".format(endereco)
     url_registro_br = "https://registro.br/cgi-bin/whois/?qr={}".format(endereco)
 
@@ -103,21 +101,20 @@ def obter_whois(endereco, output_text):
     else:
         output_text.insert(tk.END, "Erro ao obter informações WHOIS.\n")
 
-# Function to get WHOIS information for .gov domains
-def obter_whois_gov(endereco, output_text):
+def obter_whois_gov(endereco):
     servidor_whois_gov = servidores_whois_tdl.get('.gov', None)
     if servidor_whois_gov:
-        requisicao_whois(servidor_whois_gov, endereco, False, output_text)
+        response = requisicao_whois(servidor_whois_gov, endereco, False)
+        output_text.insert(tk.END, response + "\n")
     else:
         output_text.insert(tk.END, "Servidor WHOIS para domínios .gov não encontrado.\n")
 
-# Function to get WHOIS information for .br domains
-def obter_whois_br(endereco, output_text):
+def obter_whois_br(endereco):
     servidor_whois = servidores_whois_tdl['.br']
-    requisicao_whois(servidor_whois, endereco, False, output_text)
+    response = requisicao_whois(servidor_whois, endereco, False)
+    output_text.insert(tk.END, response + "\n")
 
-# Function to get WHOIS information for IP addresses using who.is
-def obter_whois_ip_whois(ip, output_text):
+def obter_whois_ip_whois(ip):
     url_whois = "https://who.is/whois-ip/ip-address/{}".format(ip)
     response_whois = requests.get(url_whois)
 
@@ -137,28 +134,22 @@ def obter_whois_ip_whois(ip, output_text):
     else:
         output_text.insert(tk.END, "Erro ao obter informações WHOIS.\n")
 
-# Function to get WHOIS information for IP addresses based on the selected server
-def obter_whois_ip(ip, output_text, servidor_selecionado):
-    if servidor_selecionado == 'registro.br':
-        requisicao_whois('whois.registro.br', ip, False, output_text)
-    else:  # Servidor 'who.is'
-        obter_whois_ip_whois(ip, output_text)
+def obter_whois_ip(ip):
+    obter_whois_ip_whois(ip)
 
-# Function to search WHOIS information based on the input
 def buscar_whois():
     endereco = entry.get().strip()
     output_text.delete(1.0, tk.END)
-    servidor_selecionado = var_servidor.get()
     if re.match(r'^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$', endereco):  # Verifica se é um IP
-        obter_whois_ip(endereco, output_text, servidor_selecionado)
+        obter_whois_ip(endereco)
     elif re.search(r'\.gov$', endereco):
-        obter_whois_gov(endereco, output_text)
+        obter_whois_gov(endereco)
     elif re.search(r'\.br$', endereco):
-        obter_whois_br(endereco, output_text)
+        obter_whois_br(endereco)
     elif re.search(r'\.com$', endereco):
-        obter_whois(endereco, output_text)    
+        obter_whois(endereco)    
     else:
-        obter_whois(endereco, output_text)
+        obter_whois(endereco)
 
 # Configuração da interface gráfica
 root = tk.Tk()
@@ -169,27 +160,15 @@ frame = tk.Frame(root)
 frame.pack(pady=5)
 
 label = tk.Label(frame, text="Digite o nome do Website ou IP para WHOIS", font=("Arial", 12))
-label.pack(padx=10, pady=3)
+label.pack(padx=10, pady=5)
 
 entry = tk.Entry(frame, width=35, font=("Arial", 12))
 entry.pack(padx=10, pady=5)
 
-# Variável para armazenar a escolha do servidor WHOIS
-var_servidor = tk.StringVar(value='registro.br')
-
-frame_radios = tk.Frame(root)
-frame_radios.pack(pady=2)
-
 button = tk.Button(frame, text="Consultar WHOIS", command=buscar_whois, font=("Arial", 12), bg="#0bfc03")
-button.pack(pady=1)
+button.pack(pady=5)
 
-radio1 = tk.Radiobutton(frame_radios, text="registro.br", variable=var_servidor, value='registro.br', font=("Arial", 12))
-radio1.pack(side=tk.LEFT, padx=2)
-
-radio2 = tk.Radiobutton(frame_radios, text="who.is", variable=var_servidor, value='who.is', font=("Arial", 12))
-radio2.pack(side=tk.LEFT, padx=2)
-
-output_text = scrolledtext.ScrolledText(root, width=120, height=44, font=("TkDefaultFont", 11, "bold"))
-output_text.pack(pady=2)
+output_text = scrolledtext.ScrolledText(root, width=120, height=42, font=("TkDefaultFont", 12, "bold"))
+output_text.pack(pady=5)
 
 root.mainloop()
