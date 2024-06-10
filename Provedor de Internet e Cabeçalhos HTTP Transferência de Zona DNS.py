@@ -97,7 +97,7 @@ def dns_transferencia_zona():
 # Configuração da interface gráfica
 root = tk.Tk()
 root.wm_state('zoomed')
-root.title("Provedor de Internet e Cabeçalhos HTTP Transferência de Zona DNS")
+root.title("Headers DNS Zone Transfer")
 
 tk.Label(root, text="Digite a URL do website", font=("TkDefaultFont", 12)).pack(pady=5)
 url_entry = tk.Entry(root, width=30, font=("TkDefaultFont", 12))
