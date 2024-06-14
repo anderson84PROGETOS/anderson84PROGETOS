@@ -259,7 +259,7 @@ def obter_informacoes_website(endereco):
                 if 'lat' in dados and 'lon' in dados:
                     lat = dados['lat']
                     lon = dados['lon']
-                    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:89.0) Gecko/20100101 Firefox/89.0'}
+                    headers = {'User-Agent': 'Mozilla/5.0 (Linux; Android 13; SM-G981B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Mobile Safari/537.36'}
                     endereco_completo = requests.get(f"https://nominatim.openstreetmap.org/reverse?lat={lat}&lon={lon}&format=json", headers=headers)
                     if endereco_completo.status_code == 200:
                         endereco_completo = endereco_completo.json()
@@ -271,16 +271,16 @@ def obter_informacoes_website(endereco):
                             webbrowser.open(google_maps_url)  # Abrir o Google Maps no navegador
                         return lat, lon
                     else:
-                        print(f"Erro ao obter informações do Nominatim: {endereco_completo.status_code}")
+                        print(f"\nErro ao obter informações do Nominatim: {endereco_completo.status_code}")
                         return None, None
             else:
-                print("Não foi possível obter informações para este endereço.")
+                print("\nNão foi possível obter informações para este endereço.")
                 return None, None
         else:
-            print(f"Erro ao obter informações do site: {resposta.status_code}")
+            print(f"\nErro ao obter informações do site: {resposta.status_code}")
             return None, None
     except Exception as e:
-        print(f"Ocorreu um erro: {e}")
+        print(f"\nOcorreu um erro: {e}")
         return None, None       
 
 # Função para lidar com as opções escolhidas
