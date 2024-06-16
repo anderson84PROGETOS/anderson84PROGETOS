@@ -252,7 +252,9 @@ def obter_informacoes_website(endereco):
                 print(f"\nName Servers: {dados['isp']}\n")               
                 print(f"\nIP: {dados['query']}")
                 print(f"\nPaís: {dados['country']}")
-                print(f"\nCidade: {dados['city']}")
+                print(f"\nCidade: {dados['city']}\n")
+                print(f"Latitude: {dados['lat']}")
+                print(f"Longitude: {dados['lon']}\n\n")
 
                 # Obtendo informações adicionais usando o Nominatim
                 if 'lat' in dados and 'lon' in dados:
@@ -353,5 +355,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 input("\n\n\n\n🎯============ PRESSIONE ENTER PARA SAIR ============🎯\n")
