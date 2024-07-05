@@ -111,7 +111,8 @@
             "Nome do IP",
             "Achar arquivo pdf confidencial",
             "Confidencial",
-            "Achar credit card"
+            "Achar credit card",
+            "Achar coisas em google drive",
             
             // ... (outras dorks)
           ];
@@ -187,7 +188,9 @@
         "Nome do IP": ` IP:${siteNome}`,
         "Achar arquivo pdf confidencial": `filetype:pdf intitle:confidencial site:${siteNome}`,
         "Confidencial": `intitle:confidencial filetype:pdf intext:"${siteNome}"`,
-        "Achar credit card": `site:pastebin.com ${siteNome} credit card`     
+        "Achar credit card": `site:pastebin.com ${siteNome} credit card`,
+        "Achar coisas em google drive": `site:drive.google.com ${siteNome}`,   
+     
        
       };
       // Obter a consulta com base na Dork selecionada      
