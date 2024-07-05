@@ -48,7 +48,12 @@ def construir_consulta_dork(site_nome, dork_selecionada):
         "Achar arquivo WEBCAM 7 Aperte Espasso": f"{site_nome} intitle:\"WEBCAM 7\" -inurl:/admin.html",
         "Achar arquivo robots.txt": f"{site_nome} robots.txt",
         "Achar arquivo senha": f"intitle:\"index of\" intext:{site_nome}",
-    
+        "Achar nome de pessoa": f'intext:"{site_nome}"',
+        "Nome do IP": f'IP:{site_nome}',
+        "Achar arquivo pdf confidencial": f'filetype:pdf intitle:confidencial site:{site_nome}',
+        "Confidencial": f'intitle:confidencial filetype:pdf intext:"{site_nome}"',
+        "Achar credit card": f'site:pastebin.com {site_nome} credit card',
+        "Achar coisas em google drive": f'site:drive.google.com {site_nome}',    
 
     }
 
@@ -131,7 +136,7 @@ window.iconphoto(True, tk_icon)
 
 # Criar o frame para a lista de Dorks do Google
 dorks_frame = tk.Frame(window)
-dorks_frame.grid(column=0, row=0, padx=10, pady=10)
+dorks_frame.grid(column=0, row=0, padx=20, pady=3)
 
 # Lista de Dorks do Google
 dorks = [
@@ -174,6 +179,12 @@ dorks = [
     "Achar arquivo WEBCAM 7 Aperte Espasso",
     "Achar arquivo robots.txt",
     "Achar arquivo senha",
+    "Achar nome de pessoa",
+    "Nome do IP",
+    "Achar arquivo pdf confidencial",
+    "Confidencial",
+    "Achar credit card",
+    "Achar coisas em google drive",
 ]
 
 # Variável para armazenar a Dork selecionada
@@ -190,7 +201,7 @@ dork_menu.grid(column=0, row=1)
 
 # Criar o frame para a entrada do nome do site
 site_frame = tk.Frame(window)
-site_frame.grid(column=0, row=1, padx=5)
+site_frame.grid(column=0, row=1, padx=2)
 
 # Rótulo para instruções
 site_label = Label(site_frame, text="insira o nome do site ou URL do site ou oque voce deseja buscar", font=("Arial", 12))
@@ -205,14 +216,14 @@ obter_dados_google_button = ttk.Button(window, text="Search Google", command=lam
 obter_dados_google_button.grid(column=0, row=1, pady=(100, 5))
 
 obter_dados_bing_button = ttk.Button(window, text="Search Bing", command=lambda: obter_dados_hacking("Bing"))
-obter_dados_bing_button.grid(column=0, row=2, pady=8)
+obter_dados_bing_button.grid(column=0, row=2, pady=3)
 
 # Criar o frame para os resultados
 result_frame = tk.Frame(window)
 result_frame.grid(column=0, row=3, columnspan=2, padx=5, pady=2)
 
 # Criar os widgets ScrolledText para os resultados do Google e Bing
-result_text = scrolledtext.ScrolledText(result_frame, wrap=tk.WORD, width=135, height=37, font=("Arial", 12))
+result_text = scrolledtext.ScrolledText(result_frame, wrap=tk.WORD, width=130, height=37, font=("Arial", 12))
 result_text.grid(column=0, row=0, sticky=tk.W)
 
 # Iniciar o loop da janela
