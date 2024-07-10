@@ -36,7 +36,7 @@ if __name__ == '__main__':
         save_choice = input("\nDeseja salvar os URLs extraídos? (s/n): ").strip().lower()
         if save_choice == 's':
             filename = input("\nDigite o nome do arquivo para salvar (com extensão .txt): ").strip()
-            with open(filename, 'w') as f:
+            with open(filename, 'w', encoding='utf-8') as f:  # Abrir o arquivo com o codec utf-8
                 for url in urls:
                     f.write(url + '\n')
             print(f'\n[*] URLs extraídos salvos em: {filename}')
