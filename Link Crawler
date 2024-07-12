@@ -1,0 +1,63 @@
+import requests
+from bs4 import BeautifulSoup
+import re
+
+print("""
+
+██╗     ██╗███╗   ██╗██╗  ██╗     ██████╗██████╗  █████╗ ██╗    ██╗██╗     ███████╗██████╗ 
+██║     ██║████╗  ██║██║ ██╔╝    ██╔════╝██╔══██╗██╔══██╗██║    ██║██║     ██╔════╝██╔══██╗
+██║     ██║██╔██╗ ██║█████╔╝     ██║     ██████╔╝███████║██║ █╗ ██║██║     █████╗  ██████╔╝
+██║     ██║██║╚██╗██║██╔═██╗     ██║     ██╔══██╗██╔══██║██║███╗██║██║     ██╔══╝  ██╔══██╗
+███████╗██║██║ ╚████║██║  ██╗    ╚██████╗██║  ██║██║  ██║╚███╔███╔╝███████╗███████╗██║  ██║
+╚══════╝╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝     ╚═════╝╚═╝  ╚═╝╚═╝  ╚═╝ ╚══╝╚══╝ ╚══════╝╚══════╝╚═╝  ╚═╝
+                                                                                          
+""")
+
+def extrair_dados(url):
+    # Definindo os cabeçalhos HTTP para a solicitação
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:89.0) Gecko/20100101 Firefox/89.0',
+        'Accept-Language': 'en-US,en;q=0.5',
+        'Connection': 'keep-alive',
+        'Upgrade-Insecure-Requests': '1',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8'
+    }
+
+    # Fazendo a solicitação HTTP para obter o conteúdo da página
+    response = requests.get(url, headers=headers)
+
+    # Verificando se a solicitação foi bem-sucedida
+    if response.status_code == 200:
+        # Parsing do conteúdo HTML com BeautifulSoup
+        soup = BeautifulSoup(response.content, 'html.parser')
+
+        # Extraindo todos os links (tags <a>)
+        links = soup.find_all('a')
+        
+        # Usando um conjunto para armazenar URLs únicas
+        urls_unicas = set()
+        for link in links:
+            href = link.get('href')
+            if href and href.startswith('http'):
+                urls_unicas.add(href)
+
+        # Buscando URLs dentro de atributos 'content=' usando expressão regular
+        content_urls = re.findall(r'content=["\'](https?://\S+?)(?=["\'])', str(soup))
+
+        # Adicionando URLs encontradas em 'content=' ao conjunto de URLs únicas
+        for url in content_urls:
+            urls_unicas.add(url)
+
+        # Imprimindo URLs únicas e contando quantas foram encontradas
+        print(f"\n\n\nForam Encontradas: {len(urls_unicas)} URL\n")
+        for url in urls_unicas:
+            print(url)
+    else:
+        print(f"\nFalha ao acessar a página. Status code: {response.status_code}")
+
+if __name__ == '__main__':
+    # Solicita ao usuário a URL do website
+    url = input("\nDigite a URL do website: ")
+    extrair_dados(url)
+    
+    input("\n\n\nPRESSIONE ENTER PARA SAIR\n=========================\n\n")
