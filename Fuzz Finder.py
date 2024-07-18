@@ -41,29 +41,41 @@ wordlist = [
 ]
 
 # Função para realizar a requisição e processar o resultado
-def fuzz_url(base_url, word):
+def fuzz_url(base_url, word, results):
     url = urljoin(base_url, word.strip())
     try:
         response = requests.get(url, headers=HEADERS)
         status = response.status_code
         size = len(response.content)
         if status in [200, 204, 301, 302, 307, 401]:
-            print(f"{word.strip():<30} [Status: {status}, Size: {size}]")
-    except requests.RequestException as e:
+            result = f"{word.strip():<30} [Status: {status}, Size: {size}]"
+            print(result)
+            results.append(result)
+    except requests.RequestException:
         pass  # Ignore erros de requisição
 
 # Função principal
 def main():
     base_url = input("\nDigite a URL do website (ex: https://example.com): ").strip()
-    print("\nCarregando FUZZ\n")
+    print("\n\n\nCarregando FUZZ\n")
     if not base_url.endswith("/FUZZ"):
         if not base_url.endswith("/"):
             base_url += "/"
         base_url += "FUZZ"
     
+    results = []
+    
     with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
-        futures = [executor.submit(fuzz_url, base_url, word) for word in wordlist]
+        futures = [executor.submit(fuzz_url, base_url, word, results) for word in wordlist]
         concurrent.futures.wait(futures)
+
+    save_results = input("\nDeseja salvar as informações? (s/n): ").strip().lower()
+    if save_results == 's':
+        filename = input("\nDigite o nome do arquivo (ex: arquivo.txt): ").strip()
+        with open(filename, 'w') as file:
+            for result in results:
+                file.write(result + '\n')
+        print(f"\nInformações salvas Em: {filename}")
 
 if __name__ == "__main__":
     main()
