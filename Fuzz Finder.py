@@ -48,7 +48,7 @@ def fuzz_url(base_url, word):
         status = response.status_code
         size = len(response.content)
         if status in [200, 204, 301, 302, 307, 401]:
-            print(f"{word.strip():<15} [Status: {status}, Size: {size}]")
+            print(f"{word.strip():<30} [Status: {status}, Size: {size}]")
     except requests.RequestException as e:
         pass  # Ignore erros de requisição
 
