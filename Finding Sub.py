@@ -35,8 +35,8 @@ def get_subdomains(domain):
         full_domain = f"{subdomain}.{domain}"
         try:
             # Realiza a consulta DNS
-            result = socket.gethostbyname(full_domain)
-            print(f"{full_domain}          ======>  IP:  {result}")
+            result = socket.gethostbyname(full_domain)            
+            print(f"{full_domain:<30}  IP: {result}")
         except socket.gaierror:
             # Caso não encontre endereço para o subdomínio
             pass
