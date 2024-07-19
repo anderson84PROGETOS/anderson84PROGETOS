@@ -5,7 +5,6 @@ tribo
 painel
 www
 mail
-ftp
 localhost
 webmail
 smtp
