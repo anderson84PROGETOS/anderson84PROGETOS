@@ -655,7 +655,6 @@ win.
 windows.
 wks.
 word.
-wordpress.
 work.
 workstation.
 wp.
