@@ -28,12 +28,12 @@ def search_wayback_machine():
         progress_bar["value"] = 0
 
         # Mostrar as URLs capturadas na tela
-        urls_label.config(text="Foram capturadas as seguintes URL")
+        urls_label.config(text="")
         urls_text.delete("1.0", tk.END)
 
         for i, url in enumerate(data):
-            # Filtrar a palavra "original" antes de inserir na caixa de texto
-            filtered_url = url[0].replace("original", "")
+            # Filtrar a palavra "original" antes de inserir na caixa de texto            
+            filtered_url = url[0].replace("original", "Foram capturadas as seguintes URL do Wayback Machine\n=============================================\n")
             urls_text.insert(tk.END, filtered_url + "\n")
 
             # Atualizar a barra de progresso (agendando a atualização na thread principal)
@@ -89,9 +89,11 @@ url_entry = tk.Entry(window, width=50, font=("Arial", 12))
 search_button = ttk.Button(window, text="Procurar", command=start_search_thread)
 urls_label = tk.Label(window, text="")
 
-urls_text = tk.Text(window, height=42, width=147)
+urls_text = tk.Text(window, height=38, width=130, font=("Arial", 12))
 urls_scrollbar = ttk.Scrollbar(window, command=urls_text.yview)
-urls_text.config(yscrollcommand=urls_scrollbar.set)
+
+urls_text.config(yscrollcommand=urls_scrollbar.set, font=("Arial", 12))
+
 count_label = tk.Label(window, text="")
 separator = ttk.Separator(window, orient="horizontal")
 progress_bar = ttk.Progressbar(window, orient="horizontal", length=500, mode="determinate")
