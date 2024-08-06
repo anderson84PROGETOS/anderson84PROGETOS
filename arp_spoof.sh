@@ -2,7 +2,7 @@
 
 echo ""
 echo "======================================================================================================================"
-echo "Digite: arp.spoof on"        =====> 👀  Tentar Ligar o arp.spoof on   2 vezes ou mais ate da serto   👀
+echo "Digite: arp.spoof on        =====> 👀  Tentar Ligar o arp.spoof on   2 vezes ou mais ate da serto   👀               "
 echo "======================================================================================================================"
 echo ""
 
