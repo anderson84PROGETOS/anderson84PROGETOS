@@ -103,11 +103,14 @@ def save_results():
 root = tk.Tk()
 root.title("Network Scanner")
 
+# Definindo o tamanho da janela para 800x800 pixels
+root.geometry("1120x830")
+
 # Criando o campo de entrada para o endereço da rede
 entry_label = tk.Label(root, text="Endereço de Rede", font=("TkDefaultFont", 11, "bold"))
 entry_label.pack(pady=5)
 entry = tk.Entry(root, width=30, font=("TkDefaultFont", 11, "bold"))  # Definindo a largura do campo de entrada
-entry.insert(0, "192.168.0.0/24")  # Valor padrão
+entry.insert(0, "192.168.0.1/24")  # Valor padrão
 entry.pack(pady=5)
 
 # Criando o botão para iniciar o escaneamento
