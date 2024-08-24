@@ -12,31 +12,10 @@ print("""
  ╚══╝╚══╝ ╚═╝╚═╝     ╚═╝    ╚══════╝ ╚═════╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝
                                                                                        
 """)
-print("\n\nExemplo: Copiar e colar no website o BSSID: f0:25:8e:cb:5f:14")
+print("\n\nExemplo: Copiar e colar no website o BSSID Endereço MAC: f0:25:8e:cb:5f:14")
 print("\nSe não aparecer o nome do Fabricante, acesse o website: https://macvendors.com\n\n")
-print("Procurando redes Wi-Fi\n")
-
-def scan_ip(ip, results, mac_lookup):
-    import scapy.all as scapy  # Importa scapy dentro da função para evitar problemas de importação global
-    # Criando um pacote ARP
-    arp_request = scapy.ARP(pdst=str(ip))
-    # Criando um pacote Ethernet
-    ether = scapy.Ether(dst="ff:ff:ff:ff:ff:ff")
-    # Combinando os pacotes ARP e Ethernet
-    packet = ether / arp_request
-    # Enviando o pacote e recebendo a resposta
-    answered = scapy.srp(packet, timeout=0.5, verbose=0)[0]
-
-    # Processando as respostas
-    for sent, received in answered:
-        # Obtenha o fabricante a partir do endereço MAC
-        try:
-            vendor = mac_lookup.lookup(received.hwsrc)
-        except KeyError:
-            vendor = "Desconhecido"
-
-        # Adicionando o endereço IP, o endereço MAC e o fabricante aos resultados
-        results.append((received.psrc, received.hwsrc, vendor))
+print("\n\n")
+print("SSID                       BSSID Endereço MAC        WPS             Fabricante                                 Sinal      dBm         Segurança WPS\n====================================================================================================================================================")
 
 def scan_wifi():
     wifi = PyWiFi()
@@ -59,7 +38,19 @@ def print_networks(networks, mac_lookup):
         bssid = network.bssid.rstrip(":")  # Remove ':' do final, se houver
         if (ssid, bssid) not in seen_ssids:  # Verifica se o SSID + BSSID já foram processados
             seen_ssids.add((ssid, bssid))  # Adiciona o SSID + BSSID ao conjunto
-            wps = 'WPS ativo' if network.akm[0] == const.AKM_TYPE_WPA2PSK else 'WPS não ativo'
+            
+            # Identificar o tipo de segurança
+            if const.AKM_TYPE_WPA2PSK in network.akm:
+                security = "WPA2"
+            elif const.AKM_TYPE_WPA in network.akm:
+                security = "WPA"
+            else:
+                security = "Aberto"
+            
+            # Identificar se WPS está ativo
+            wps = 'WPS: ativo' if const.AKM_TYPE_WPA2PSK in network.akm else 'WPS: não ativo'
+            
+            # Obter o nome do fabricante do BSSID
             try:
                 vendor_name = mac_lookup.lookup(bssid)
             except KeyError:
@@ -74,13 +65,12 @@ def print_networks(networks, mac_lookup):
                 signal_quality = "Médio"
             else:
                 signal_quality = "Fraco"
-
-            print(f"\nSSID: {ssid:<20} BSSID: {bssid:<20} {wps:<15} Fabricante: {vendor_name:<45} Sinal: {signal_strength} dBm ({signal_quality})")
+            
+            print(f"\nSSID: {ssid:<20} MAC: {bssid:<20} {wps:<15} Fabri: {vendor_name:<35} Sinal: {signal_strength} dBm ({signal_quality}) Segury: {security}")
             count += 1  # Incrementa o contador de redes Wi-Fi
     return count
 
 def main(mac_lookup):    
-   
     networks = scan_wifi()    
     count = print_networks(networks, mac_lookup)
     print(f"\n\n\nTotal de redes Wi-Fi Encontradas: {count}\n")
