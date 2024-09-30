@@ -10,8 +10,8 @@ import webbrowser
 class FaviconFinderApp:
     def __init__(self, root):
         self.root = root
-        self.root.geometry("1200x920")  # Ajusta o tamanho da janela
-        self.root.title("Favicon hash Finder")
+        self.root.geometry("1240x960")  # Ajusta o tamanho da janela
+        self.root.title("Favicon Hash")
         
         # Layout
         tk.Label(root, text="Digite a URL do WebSite", font=("TkDefaultFont", 11, "bold")).pack(pady=5)
@@ -27,7 +27,7 @@ class FaviconFinderApp:
         self.result_frame = tk.Frame(root)
         self.result_frame.pack(pady=5)
         
-        self.result_text = tk.Text(self.result_frame, width=125, height=40, font=("TkDefaultFont", 11, "bold"))
+        self.result_text = tk.Text(self.result_frame, width=128, height=42, font=("TkDefaultFont", 11, "bold"))
         self.result_text.pack(side=tk.LEFT, fill=tk.Y)
         
         self.scrollbar = tk.Scrollbar(self.result_frame, orient=tk.VERTICAL, command=self.result_text.yview)
@@ -75,8 +75,8 @@ class FaviconFinderApp:
                 
                 for favicon_url in self.favicon_urls:
                     self.result_text.insert(tk.END, f"{favicon_url}\n")
-                    response = requests.get(favicon_url, headers=headers)
-                    
+                    response = requests.get(favicon_url, headers=headers)    
+                       
                     if response.status_code == 200:
                         favicon = response.content
                         favicon_hash = mmh3.hash(codecs.encode(favicon, "base64"))
@@ -84,7 +84,11 @@ class FaviconFinderApp:
                         self.result_text.insert(tk.END, f"\nO hash do favicon do website: {favicon_url} é: {favicon_hash}\n\n")
                         
                         shodan_url = f"https://www.shodan.io/search?query=http.favicon.hash%3A{favicon_hash}"
-                        self.result_text.insert(tk.END, f"Link para pesquisa no Shodan: {shodan_url}\n\n")
+                        self.result_text.insert(tk.END, f"Link para pesquisa no Shodan: {shodan_url}\n")
+                        
+                        # Exibe o formato "http.favicon.hash:{hash_value}" logo abaixo do link Shodan
+                        self.result_text.insert(tk.END, f"\nhttp.favicon.hash:{favicon_hash}\n\n")
+                        
                         self.result_text.insert(tk.END, "\n===============================================================================================================\n\n")
                         
                         # Adiciona um botão para abrir o link do Shodan
@@ -93,7 +97,7 @@ class FaviconFinderApp:
                         
                         # Muda a cor do botão quando clicado
                         open_button.bind("<Button-1>", lambda e, btn=open_button: self.change_button_color(btn))
-                        
+
                     else:
                         self.result_text.insert(tk.END, f"\nNão foi possível obter o favicon de {favicon_url}\n")
             else:
