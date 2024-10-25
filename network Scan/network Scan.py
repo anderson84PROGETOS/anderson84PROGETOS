@@ -10,8 +10,33 @@ print("""
 ██║╚██╗██║██╔══╝     ██║   ██║███╗██║██║   ██║██╔══██╗██╔═██╗     ╚════██║██║     ██╔══██║██║╚██╗██║
 ██║ ╚████║███████╗   ██║   ╚███╔███╔╝╚██████╔╝██║  ██║██║  ██╗    ███████║╚██████╗██║  ██║██║ ╚████║
 ╚═╝  ╚═══╝╚══════╝   ╚═╝    ╚══╝╚══╝  ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝    ╚══════╝ ╚═════╝╚═╝  ╚═╝╚═╝  ╚═══╝
-                                                                                                                                                                      
+
 """)
+
+# Mapeamento de portas para nomes de serviços
+service_ports = {
+    21: 'FTP',
+    22: 'SSH',
+    23: 'Telnet',
+    25: 'SMTP',
+    53: 'DNS',
+    67: 'DHCP (Servidor)',
+    68: 'DHCP (Cliente)',
+    80: 'HTTP',
+    110: 'POP3',
+    143: 'IMAP',
+    161: 'SNMP',
+    162: 'SNMP (Trap)',
+    443: 'HTTPS',
+    3306: 'MySQL',
+    3389: 'RDP',
+    5900: 'VNC',
+    6379: 'Redis',
+    8080: 'HTTP Alternativo',
+    5432: 'PostgreSQL',
+    27017: 'MongoDB',
+    # Adicione mais portas e serviços conforme necessário
+}
 
 def parse_ports(ports_input):
     ports = set()  # Usar um conjunto para evitar duplicatas
@@ -43,7 +68,7 @@ def check_ports(url, ports):
     
     # Utilizar tqdm para criar a barra de progresso
     print("")
-    for port in tqdm(ports, desc="Verificando portas", unit="porta", ncols=82):  # Ajustar ncols para 50
+    for port in tqdm(ports, desc="Verificando portas", unit="porta", ncols=82):
         try:
             # Criar um socket
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -51,7 +76,8 @@ def check_ports(url, ports):
             # Tentar conectar
             result = sock.connect_ex((url, port))
             if result == 0:
-                results.append(f'\nPorta {port} aberta em: {url}')
+                service_name = service_ports.get(port, 'Desconhecida')
+                results.append(f'\nPorta {port} ({service_name}) aberta em: {url}')
             sock.close()
         except Exception as e:
             results.append(f'Erro ao tentar conectar à porta {port} em {url}: {e}')
