@@ -1,0 +1,3 @@
+requests
+mmh3
+beautifulsoup4
