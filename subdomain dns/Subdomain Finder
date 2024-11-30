@@ -1,0 +1,150 @@
+import socket
+import os
+import requests
+import threading
+import tkinter as tk
+from tkinter import ttk, filedialog, messagebox
+from tkinter.scrolledtext import ScrolledText
+import time  # Importa o módulo de tempo para cálculos de tempo
+
+def clean_subdomain(subdomain):
+    """Remove invalid trailing periods and clean subdomain."""
+    return subdomain.strip().rstrip(".")
+
+def is_accessible(url):
+    """Check if a URL is accessible (responds to a request)."""
+    try:
+        response = requests.get(url, timeout=3)
+        # Return True if any response is received
+        return True
+    except requests.exceptions.RequestException:
+        return False
+
+def dns_sub(alvo, arquivo, output_text, progress_bar, time_label, update_callback):
+    subdominios_encontrados = 0  # Contador de subdomínios encontrados
+    start_time = time.time()  # Marca o início da busca
+    
+    try:
+        with open(arquivo, 'r') as sub:
+            subdominios = sub.readlines()
+            total_subdominios = len(subdominios)
+
+            for i, linha in enumerate(subdominios):
+                subdominio = clean_subdomain(linha)  # Clean trailing periods
+                if not subdominio:  # Skip empty lines
+                    continue
+                
+                host = f"{subdominio}.{alvo}".strip()
+                url_https = f"https://{host}"
+                url_http = f"http://{host}"
+
+                # Check accessibility for both protocols and display the accessible one
+                if is_accessible(url_https):
+                    ip = socket.gethostbyname(host)
+                    update_callback(f"HOST ENCONTRADO: {url_https:<40} IP: {ip}\n")
+                    subdominios_encontrados += 1
+                elif is_accessible(url_http):
+                    ip = socket.gethostbyname(host)
+                    update_callback(f"HOST ENCONTRADO: {url_http:<40} IP: {ip}\n")
+                    subdominios_encontrados += 1
+
+                # Atualiza a barra de progresso
+                progress_value = (i + 1) / total_subdominios * 100
+                progress_bar['value'] = progress_value
+
+                # Calcula o tempo decorrido e estima o tempo restante
+                elapsed_time = time.time() - start_time
+                estimated_total_time = (elapsed_time / (i + 1)) * total_subdominios
+                remaining_time = estimated_total_time - elapsed_time
+
+                # Atualiza o rótulo com o tempo estimado
+                if remaining_time > 0:
+                    minutes, seconds = divmod(int(remaining_time), 60)
+                    time_label.config(text=f"Tempo Restante: {minutes}m {seconds}s")
+                else:
+                    time_label.config(text="Tempo Restante: ")
+
+            # Exibir a quantidade de subdomínios encontrados
+            update_callback(f"\nTotal de subdomínios Encontrados: {subdominios_encontrados}\n")
+            messagebox.showinfo("Concluído", f"Total de subdomínios encontrados: {subdominios_encontrados}")
+
+    except FileNotFoundError:
+        messagebox.showerror("Erro", f"O arquivo '{arquivo}' não foi encontrado.")
+    except socket.gaierror:
+        pass  # Ignore invalid hostnames without printing an error
+
+def start_search():
+    # Desabilitar o botão de busca
+    search_button.config(state=tk.DISABLED)
+
+    # Função que chama a busca em uma thread separada
+    def run_search():
+        alvo = domain_entry.get().strip()
+        if not alvo:
+            messagebox.showwarning("Aviso", "Por favor, insira o domínio.")
+            search_button.config(state=tk.NORMAL)
+            return
+        if not wordlist_label.cget("text") or wordlist_label.cget("text") == "Nenhuma wordlist escolhida":
+            messagebox.showwarning("Aviso", "Por favor, escolha uma wordlist.")
+            search_button.config(state=tk.NORMAL)
+            return
+
+        arquivo = wordlist_label.cget("text")
+        output_text.delete(1.0, tk.END)
+        progress_bar['value'] = 0
+
+        def update_gui(text):
+            output_text.insert(tk.END, text)
+            output_text.yview(tk.END)
+
+        dns_sub(alvo, arquivo, output_text, progress_bar, time_label, update_gui)
+
+        # Reabilitar o botão de busca após a conclusão
+        search_button.config(state=tk.NORMAL)
+
+    # Cria e inicia a thread para a busca
+    search_thread = threading.Thread(target=run_search, daemon=True)
+    search_thread.start()
+
+def open_file():
+    arquivo = filedialog.askopenfilename(title="Escolher Wordlist", filetypes=[("Text files", "*.txt")])
+    if arquivo:
+        wordlist_label.config(text=arquivo)
+
+# Criar a interface gráfica
+root = tk.Tk()
+root.title("Subdomain Finder")
+root.wm_state('zoomed')
+
+# Layout
+frame = tk.Frame(root)
+frame.pack(pady=10)
+
+domain_label = tk.Label(frame, text="Digite o domínio", font=("TkDefaultFont", 11, "bold"))
+domain_label.grid(pady=5)
+
+domain_entry = tk.Entry(frame, width=30, font=("TkDefaultFont", 11, "bold"))
+domain_entry.grid(pady=5)
+
+search_button = tk.Button(frame, text="Buscar Subdomínios", command=start_search, font=("TkDefaultFont", 11, "bold"), bg='#07f5c1')
+search_button.grid(pady=10)
+
+wordlist_button = tk.Button(frame, text="Escolher Wordlist", command=open_file, font=("TkDefaultFont", 11, "bold"), bg='#07edf5')
+wordlist_button.grid(pady=10)
+
+wordlist_label = tk.Label(frame, text="Nenhuma wordlist escolhida", font=("TkDefaultFont", 11, "bold"))
+wordlist_label.grid(pady=5)
+
+# Barra de progresso
+progress_bar = ttk.Progressbar(root, length=400, mode='determinate')
+progress_bar.pack(pady=10)
+
+# Rótulo para exibir o tempo restante
+time_label = tk.Label(root, text="Tempo Restante: ", font=("TkDefaultFont", 11, "bold"))
+time_label.pack()
+
+# Caixa de texto rolável para exibição dos resultados
+output_text = ScrolledText(root, width=100, height=35)
+output_text.pack(padx=10, pady=10)
+
+root.mainloop()
