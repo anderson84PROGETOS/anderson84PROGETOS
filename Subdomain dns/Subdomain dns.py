@@ -79,7 +79,7 @@ def buscar_subdominios(domains_list, domain):
             subdominio_url = f"{protocolo}://{subdominio_completo}"
             
             subdominios_encontrados.append(subdominio_url)
-            print(f"Subdomínio Encontrado: {subdominio_url:<40} IP: {ip}")            
+            print(f"Subdomínio: {subdominio_url:<75} IP: {ip}")            
         except (dns.resolver.NXDOMAIN, dns.resolver.NoAnswer, dns.resolver.Timeout):
             pass  # Subdomínio não encontrado ou erro de resposta
         except (socket.gaierror, socket.error) as e:
@@ -99,7 +99,7 @@ def buscar_subdominios(domains_list, domain):
 if __name__ == "__main__":
     # Verifica se o arquivo existe na pasta onde o script está localizado
     script_path = os.path.dirname(os.path.abspath(__file__))
-    nomes_arquivo = os.path.join(script_path, 'subdomain.txt')
+    nomes_arquivo = os.path.join(script_path, 'word.txt')
 
     # Solicita o nome do domínio
     domain = input("\nDigite o nome do website (exemplo: example.com): ").strip()
