@@ -549,7 +549,6 @@ seven.
 sf.
 sftp.
 sigma.
-_sip.
 sip.
 sistema.
 sistemas.
@@ -566,7 +565,6 @@ snort.
 soft.
 sos.
 source.
-_spf.
 sql.
 sqlserver.
 squid.
@@ -595,7 +593,6 @@ tester.
 teta.
 tigre.
 tim.
-_tls.
 torvalds.
 totem.
 totens.
