@@ -11,7 +11,6 @@ print("""
 ╚═╝  ╚═╝╚══════╝╚═════╝ ╚═╝╚═╝  ╚═╝╚══════╝ ╚═════╝   ╚═╝   
                                                           
 """)
-
 # Dicionário para traduzir os códigos de status HTTP para seus nomes
 STATUS_HTTP = {
     200: "OK",
