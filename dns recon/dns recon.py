@@ -23,7 +23,7 @@ def dns_enum(domain):
     except dns.resolver.NXDOMAIN:
         print(f"\n[!] O domínio {domain} não foi encontrado.")
     except Exception as e:
-        print(f"\n[!] Ocorreu um erro ao consultar DNS para {domain}: {e}")
+        print(f"\n\n[!] Ocorreu um erro ao consultar DNS para: {domain}  {e}")
         
     try:
         answers = dns.resolver.resolve(domain, 'MX')
@@ -36,7 +36,7 @@ def dns_enum(domain):
         else:
             print(f"\n[!] Nenhum registro MX encontrado para: {domain}")
     except Exception as e:
-        print(f"[!] Ocorreu um erro ao consultar DNS para {domain}: {e}")
+        print(f"\n\n\n[!] Ocorreu um erro ao consultar DNS para: {domain}  {e}")
         
     try:
         answers = dns.resolver.resolve(domain, 'NS')
@@ -48,7 +48,7 @@ def dns_enum(domain):
     except dns.resolver.NoAnswer:
         print(f"\n[!] Nenhum registro NS encontrado para: {domain}")
     except Exception as e:
-        print(f"\n[!] Ocorreu um erro ao consultar DNS para {domain}: {e}")
+        print(f"\n\n\n[!] Ocorreu um erro ao consultar DNS para: {domain}  {e}")
 
     try:
         answers = dns.resolver.resolve(domain, 'HINFO')
@@ -63,7 +63,7 @@ def dns_enum(domain):
         print("========================")
         print(f"\n[!] Nenhum registro HINFO encontrado para: {domain}")
     except Exception as e:
-        print(f"\n[!] Ocorreu um erro ao consultar DNS para {domain}: {e}")
+        print(f"\n\n\n[!] Ocorreu um erro ao consultar DNS para: {domain}  {e}")
 
     try:
         answers = dns.resolver.resolve(domain, 'TXT')
@@ -76,7 +76,7 @@ def dns_enum(domain):
     except dns.resolver.NoAnswer:
         print(f"\n[!] Nenhum registro TXT encontrado para {domain}.")
     except Exception as e:
-        print(f"\n[!] Ocorreu um erro ao consultar DNS para {domain}: {e}")    
+        print(f"\n\n\n[!] Ocorreu um erro ao consultar DNS para: {domain}  {e}")    
 
     try:
         answers = dns.resolver.resolve(domain, 'SOA')
@@ -88,7 +88,7 @@ def dns_enum(domain):
     except dns.resolver.NoAnswer:
         print(f"\n[!] Nenhum registro SOA encontrado para {domain}.")
     except Exception as e:
-        print(f"\n[!] Ocorreu um erro ao consultar DNS para {domain}: {e}")        
+        print(f"\n\n\n[!] Ocorreu um erro ao consultar DNS para: {domain}  {e}")        
 
     # Get SRV records for common services
     print(f"\n\n\nService Records (SRV)")
