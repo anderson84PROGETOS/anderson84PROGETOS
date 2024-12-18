@@ -33,38 +33,76 @@ def consultar_e_mostrar(cnpj_entry, info_text):
         info_text.delete(1.0, tk.END)
 
         # Monta a mensagem para exibir no ScrolledText
-        message = f"Dados Encontrados para CNPJ:  {cnpj}\n\n"
-        message += f"\nCNPJ: {dados_cnpj.get('cnpj', 'Não encontrado')}\n"
-        message += f"\nNome: {dados_cnpj.get('nome', 'Não encontrado')}\n"
-        message += f"\nTelefone: {dados_cnpj.get('telefone', 'Não encontrado')}\n"
-        message += f"\nE-mail: {dados_cnpj.get('email', 'Não encontrado')}\n"  # Aqui foi adicionado o email
-        message += f"\nSituação: {dados_cnpj.get('situacao', 'Não encontrado')}\n"
-        message += f"\nCNAE principal: {dados_cnpj['atividade_principal'][0]['text'] if 'atividade_principal' in dados_cnpj else 'Não encontrado'}\n"
-        message += f"\nData da situação cadastral: {dados_cnpj.get('data_situacao', 'Não encontrado')}\n"        
-        message += f"\nData de abertura: {dados_cnpj.get('abertura', 'Não encontrado')}\n"
-        
-        # Calcula e adiciona a idade da empresa (data de abertura)
-        if 'abertura' in dados_cnpj:
-            idade_empresa = calcular_idade(dados_cnpj['abertura'])
-            message += f"\nIdade da Empresa: {idade_empresa}\n"
-        else:
-            message += "Data de abertura não encontrada\n"
-        
-        message += f"\nCapital social: R$ {dados_cnpj.get('capital_social', 'Não encontrado')}\n"
+        message = f"""
+CNPJ: {dados_cnpj.get('cnpj', 'Não encontrado')}
 
-        # Adiciona informações de endereço, bairro, cidade, estado e CEP
-        if 'logradouro' in dados_cnpj:
-            message += f"\n\nENDEREÇO: {dados_cnpj.get('logradouro', 'Não encontrado')} | Número: {dados_cnpj.get('numero', 'Não encontrado')}\n"
-            message += f"\nBAIRRO: {dados_cnpj.get('bairro', 'Não encontrado')}\n"
-            message += f"\nCIDADE: {dados_cnpj.get('municipio', 'Não encontrado')}\n"
-            message += f"\nESTADO: {dados_cnpj.get('uf', 'Não encontrado')}\n"
-            message += f"\nCEP: {dados_cnpj.get('cep', 'Não encontrado')}\n"
+RAZÃO SOCIAL: {dados_cnpj.get('nome', 'Não encontrado')}
 
-        # Adiciona Quadro de sócios e administradores, se existir
-        if 'qsa' in dados_cnpj:            
+MATRIZ OU FILIAL: {dados_cnpj.get('tipo', 'Não encontrado')}
+
+NOME FANTASIA: {dados_cnpj.get('fantasia', 'Não encontrado')}
+
+SITUAÇÃO CADASTRAL: {dados_cnpj.get('situacao', 'Não encontrado')}
+
+DATA DA SITUAÇÃO CADASTRAL: {dados_cnpj.get('data_situacao', 'Não encontrado')}
+
+MOTIVO DA SITUAÇÃO CADASTRAL: {dados_cnpj.get('motivo_situacao', 'Não encontrado')}
+
+NATUREZA JURÍDICA: {dados_cnpj.get('natureza_juridica', 'Não encontrado')}
+
+DATA DE ABERTURA: {dados_cnpj.get('abertura', 'Não encontrado')}
+
+IDADE: {calcular_idade(dados_cnpj['abertura']) if 'abertura' in dados_cnpj else 'Não encontrado'}
+
+PORTE (RFB): {dados_cnpj.get('porte', 'Não encontrado')}
+
+CAPITAL SOCIAL: R$ {dados_cnpj.get('capital_social', 'Não encontrado')}
+
+ATUALIZAÇÃO DESTA PÁGINA: {dados_cnpj.get('ultima_atualizacao', 'Não encontrado')}
+
+\n\nLOCALIZAÇÃO\n=============
+ENDEREÇO: {dados_cnpj.get('logradouro', 'Não encontrado')}    | Número: {dados_cnpj.get('numero', 'Não encontrado')}\n
+COMPLEMENTO: {dados_cnpj.get('complemento', 'Não encontrado')}\n
+BAIRRO: {dados_cnpj.get('bairro', 'Não encontrado')}\n
+CIDADE | ESTADO: {dados_cnpj.get('municipio', 'Não encontrado')} | {dados_cnpj.get('uf', 'Não encontrado')}\n
+CEP: {dados_cnpj.get('cep', 'Não encontrado')}\n
+TELEFONES: {dados_cnpj.get('telefone', 'Não encontrado')}\n
+E-MAILS: {dados_cnpj.get('email', 'Não encontrado')}\n
+
+\n\nATIVIDADE ECONÔMICA PRINCIPAL\n==============================
+CÓDIGO: {dados_cnpj['atividade_principal'][0]['code'] if 'atividade_principal' in dados_cnpj else 'Não encontrado'}
+DESCRIÇÃO: {dados_cnpj['atividade_principal'][0]['text'] if 'atividade_principal' in dados_cnpj else 'Não encontrado'}
+
+\n\nATIVIDADES ECONÔMICAS SECUNDÁRIAS\n====================================
+"""
+        # Adiciona atividades econômicas secundárias
+        if 'atividades_secundarias' in dados_cnpj:
+            for atividade in dados_cnpj['atividades_secundarias']:
+                message += f"CÓDIGO: {atividade['code']} | DESCRIÇÃO: {atividade['text']}\n"
+
+        # Adiciona informações do QSA
+        message += "\n\n\nQUADRO DE SÓCIOS E ADMINISTRADORES (QSA)\n==========================================\n"
+        
+        if 'qsa' in dados_cnpj:
             for socio in dados_cnpj['qsa']:
-                message += f"\nNome: {socio['nome']} | Qualificação: {socio['qual']} | Entrada: {socio['qual']}\n"
+                data_entrada = socio.get('data_entrada', None)
+                if data_entrada:
+                    # Converte para formato adequado, se necessário
+                    data_entrada = datetime.strptime(data_entrada, '%d/%m/%Y').strftime('%d/%m/%Y')
+                    message += f"""
+NOME: {socio.get('nome', 'Não encontrado')}
+QUALIFICAÇÃO: {socio.get('qual', 'Não encontrado')}
+ENTRADA: {data_entrada}
+"""
+                else:
+                    message += f"""
+NOME: {socio.get('nome', 'Não encontrado')}
+QUALIFICAÇÃO: {socio.get('qual', 'Não encontrado')}
+"""
+        else:
+            message += "Não encontrado\n"
 
+        # Exibe os dados no ScrolledText
         info_text.insert(tk.END, message)
         info_text.config(state=tk.DISABLED)
 
