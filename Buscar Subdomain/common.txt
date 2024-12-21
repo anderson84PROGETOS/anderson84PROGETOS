@@ -230,7 +230,7 @@ dns02
 dns1
 dns2
 doc
-_docs
+docs
 documentacao
 documentation
 documento
@@ -503,7 +503,6 @@ restrict
 restrige
 restringe
 restrito
-_restrito
 rfid
 rh
 rips
@@ -543,7 +542,7 @@ seven
 sf
 sftp
 sigma
-_sip
+sip
 sip
 sistema
 sistemas
@@ -560,7 +559,7 @@ snort
 soft
 sos
 source
-_spf
+spf
 sql
 sqlserver
 squid
@@ -589,7 +588,7 @@ tester
 teta
 tigre
 tim
-_tls
+tls
 torvalds
 totem
 totens
