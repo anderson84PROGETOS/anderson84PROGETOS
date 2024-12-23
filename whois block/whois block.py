@@ -82,7 +82,7 @@ def list_subnet_ips(subnet):
         print("Erro: Insira um bloco de IP válido. Exemplo: 200.196.144.0/20")
         return
 
-    print("Endereços IP disponíveis na sub-rede:")
+    print("\nEndereços IP disponíveis na sub-rede\n")
     ips = []
 
     for ip in network.hosts():
