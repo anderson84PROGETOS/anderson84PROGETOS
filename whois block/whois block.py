@@ -79,7 +79,7 @@ def list_subnet_ips(subnet):
     try:
         network = ipaddress.ip_network(subnet)
     except ValueError:
-        print("Erro: Insira um bloco de IP válido. Exemplo: 200.196.144.0/20")
+        print("\nErro: Insira um bloco de IP válido. Exemplo: 200.196.144.0/20\n")
         return
 
     print("\nEndereços IP disponíveis na sub-rede\n")
@@ -98,7 +98,7 @@ def list_subnet_ips(subnet):
                     f.write(ip + '\n')
             print(f"\nIP salvos no arquivo: {filename}")
         except Exception as e:
-            print(f"Erro ao salvar os IP no arquivo: {e}")
+            print(f"\nErro ao salvar os IP no arquivo: {e}\n")
 
 def main():
     domain = input("Digite o nome do Website: ")
@@ -111,7 +111,9 @@ def main():
             # Extraindo o nome do host MX do registro
             mx_host = line.split('=')[-1].strip()
             # Exibindo o domínio seguido do registro MX
-            print(f"{domain}     MX = {mx_host}")
+            ping_result = ping_host(mx_host)
+            ip_address = obter_ip_do_ping(ping_result)
+            print(f"{domain}     MX = {mx_host}    IP: {ip_address}")
     
     for line in mx_records.splitlines():
         if "mail exchanger" in line:
