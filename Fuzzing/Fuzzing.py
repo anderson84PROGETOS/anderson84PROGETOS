@@ -13,7 +13,6 @@ def fuzzing():
     if not url or not wordlist_file:
         messagebox.showerror("Erro", "URL ou wordlist não fornecidos.")
         return
-
     try:
         with open(wordlist_file, "r", encoding="utf-8") as file:
             wordlist = [word.strip() for word in file.read().splitlines() if word.strip()]
