@@ -4,8 +4,12 @@ import mmh3
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
 import webbrowser
+from colorama import Fore, Style, init
 
-print("""
+# Inicializando o colorama
+init(autoreset=True)
+
+print(Fore.LIGHTCYAN_EX + Style.BRIGHT + """
 ███████╗ █████╗ ██╗   ██╗██╗ ██████╗ ██████╗ ███╗   ██╗    ██╗  ██╗ █████╗ ███████╗██╗  ██╗
 ██╔════╝██╔══██╗██║   ██║██║██╔════╝██╔═══██╗████╗  ██║    ██║  ██║██╔══██╗██╔════╝██║  ██║
 █████╗  ███████║██║   ██║██║██║     ██║   ██║██╔██╗ ██║    ███████║███████║███████╗███████║
@@ -28,7 +32,7 @@ def find_favicons_and_hashes(url):
         soup = BeautifulSoup(response.text, 'html.parser')
         favicon_urls = set()
 
-        # Coleta URLs de favicons (terminando em .ico ou .png)
+        # Coleta URLs de favicons
         for link in soup.find_all('link', rel='icon'):
             favicon_url = link.get('href')
             if favicon_url and (favicon_url.endswith('.ico') or favicon_url.endswith('.png')):
@@ -40,30 +44,31 @@ def find_favicons_and_hashes(url):
         if default_favicon_response.status_code == 200:
             favicon_urls.add(default_favicon_url)
 
+        result_text = ""
         if favicon_urls:
             print("\n\nFavicons URL Encontradas\n")
-            result_text = ""
+            result_text += "Favicons URL Encontradas\n"
             for favicon_url in favicon_urls:
-                print(favicon_url)
-                result_text += f"URL do favicon: {favicon_url}\n"
+                print(Fore.LIGHTWHITE_EX + favicon_url)
+                result_text += f"\n\n{favicon_url}\n"                
 
                 # Verifica o hash do favicon
                 response = requests.get(favicon_url, headers=headers)
                 if response.status_code == 200:
                     favicon = response.content
                     favicon_hash = mmh3.hash(codecs.encode(favicon, "base64"))
-                    print(f"\nHash do favicon do website {favicon_url} é: {favicon_hash}")
-                    result_text += f"Hash do favicon do website {favicon_url} é: {favicon_hash}\n"                    
+                    print(Fore.LIGHTGREEN_EX + f"\nHash do favicon do website: {favicon_url} " + Fore.LIGHTYELLOW_EX + f"   http.favicon.hash:{favicon_hash}")
+                    result_text += f"\nHash do favicon do website: {favicon_url}    http.favicon.hash:{favicon_hash}\n"
 
                     shodan_url = f"https://www.shodan.io/search?query=http.favicon.hash%3A{favicon_hash}"
-                    print(f"\nLink para pesquisa no Shodan: {shodan_url}\n")
-                    result_text += f"Link para pesquisa no Shodan: {shodan_url}\n"
-                    result_text += f"http.favicon.hash:{favicon_hash}\n\n"
-                    print(f"http.favicon.hash:{favicon_hash}\n\n")
-                    
+                    print(Fore.LIGHTMAGENTA_EX + f"\nLink para pesquisa no Shodan: {shodan_url}\n")
+                    result_text += f"\nLink para pesquisa no Shodan: {shodan_url}\n"
+                    result_text += f"\nhttp.favicon.hash:{favicon_hash}\n==============================\n"
+                    print(Fore.LIGHTRED_EX + f"http.favicon.hash:{favicon_hash}\n\n")
+
                     # Pergunta ao usuário se deseja abrir o link do Shodan
-                    open_shodan = input("\nDeseja abrir o link do Shodan? (s/n): ")
-                    print("======================================================\n\n")
+                    open_shodan = input(Fore.LIGHTCYAN_EX + Style.BRIGHT + "\nDeseja abrir o link do Shodan? (s/n): ")
+                    print(Fore.LIGHTCYAN_EX + Style.BRIGHT + "======================================================\n\n")
                     if open_shodan.lower() == 's':
                         webbrowser.open(shodan_url)
 
@@ -72,19 +77,19 @@ def find_favicons_and_hashes(url):
                     result_text += f"\nErro ao obter o favicon: {favicon_url}\n"
 
             # Pergunta se o usuário deseja salvar os resultados em um arquivo
-            save_results = input("\n\nDeseja salvar os resultados em um arquivo? (s/n): ")
+            save_results = input(Fore.LIGHTRED_EX + "\n\nDeseja salvar os resultados em um arquivo? (s/n): ")
             if save_results.lower() == 's':
                 filename = input("\nDigite o nome do arquivo (exemplo: resultados.txt): ")
                 with open(filename, 'w', encoding='utf-8') as file:
                     file.write(result_text)
-                print(f"\nResultados salvos Em: {filename}")
+                print(f"\nResultados salvos em: {filename}")
         else:
             print("\nNenhum favicon .ico ou .png encontrado.")
     except Exception as e:
         print(f"\nErro ao buscar os favicons: {e}")
 
 def main():    
-    url = input("\nDigite a URL do website (exemplo: http://example.com): ")
+    url = input(Fore.LIGHTMAGENTA_EX + "\nDigite a URL do website (exemplo: http://example.com): ")
     if not url.startswith("http://") and not url.startswith("https://"):
         url = "http://" + url
     
@@ -92,4 +97,5 @@ def main():
 
 if __name__ == "__main__":
     main()
-    input("\n\nPRESSIONE ENTER PARA SAIR\n=========================\n")
+
+input(Fore.LIGHTMAGENTA_EX + "\n\nPRESSIONE ENTER PARA SAIR\n=========================\n\n")
