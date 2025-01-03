@@ -18,7 +18,6 @@ print(Fore.LIGHTCYAN_EX + Style.BRIGHT + """
  ╚══╝╚══╝ ╚══════╝╚═════╝      ╚═════╝ ╚═╝  ╚═╝╚══════╝    ╚══════╝╚═╝     ╚═╝╚═╝  ╚═╝╚═╝╚══════╝
                                                                                                                                                              
 """)
-
 def process_url():
     user_url = input(Fore.LIGHTMAGENTA_EX + "Digite a URL do Website: ").strip()
     if not user_url.startswith(('http:', 'https:')):
