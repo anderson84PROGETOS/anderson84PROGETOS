@@ -1,0 +1,5 @@
+# estalar tudo pip install -r requirements.txt
+
+requests
+beautifulsoup4
+colorama
