@@ -1,0 +1,5 @@
+# Estalar tudo pip install -r requirements.txt
+
+dnspython
+ipaddress
+colorama
