@@ -1,0 +1,7 @@
+# Estalar tudo   pip install -r requirements.txt
+
+requests
+beautifulsoup4
+ipwhois
+urllib3
+colorama
