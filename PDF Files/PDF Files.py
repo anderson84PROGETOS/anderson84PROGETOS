@@ -20,7 +20,7 @@ print(Fore.LIGHTCYAN_EX + Style.BRIGHT + """
 
 def buscar_arquivos(website, max_arquivos, termo, tipo_arquivo):
     query = f"site:{website} {termo} filetype:{tipo_arquivo}"
-    print(Fore.LIGHTYELLOW_EX + f"\n\n\nProcurando até: {max_arquivos} arquivos {termo} {website}\n")
+    print(Fore.LIGHTRED_EX + Style.BRIGHT + f"\n\n\nProcurando até: {max_arquivos} arquivos {termo} {website}\n")
     
     resultados = []
     headers = {
@@ -41,7 +41,7 @@ def buscar_arquivos(website, max_arquivos, termo, tipo_arquivo):
                     response = requests.head(link, headers=headers, timeout=5)
                     if response.status_code == 200:
                         contador += 1
-                        print(Fore.LIGHTGREEN_EX + f"{contador} = " + Fore.LIGHTMAGENTA_EX + f"Encontrado: " + Fore.LIGHTGREEN_EX + f"{link}\n")
+                        print(Fore.LIGHTGREEN_EX + Style.BRIGHT + f"{contador} = " + Fore.LIGHTMAGENTA_EX + Style.BRIGHT + f"Encontrado: " + Fore.LIGHTGREEN_EX + Style.BRIGHT + f"{link}\n")
                         resultados.append(link)
                 except requests.RequestException as e:
                     print()
@@ -50,12 +50,12 @@ def buscar_arquivos(website, max_arquivos, termo, tipo_arquivo):
         print(f"\nErro durante a pesquisa: {e}")
     
     if not resultados:
-        print(Fore.LIGHTRED_EX + "\nNenhum arquivo encontrado\n")
+        print(Fore.LIGHTRED_EX + Style.BRIGHT + "\nNenhum arquivo encontrado\n")
     return resultados
 
 def buscar_arquivos_geral(max_arquivos, termo, tipo_arquivo):
     query = f"{termo} filetype:{tipo_arquivo}"
-    print(Fore.LIGHTYELLOW_EX + f"\n\n\nProcurando até: {max_arquivos} arquivos {termo} em sites gerais\n")
+    print(Fore.LIGHTRED_EX + Style.BRIGHT + f"\n\n\nProcurando até: {max_arquivos} arquivos {termo} em sites gerais\n")
     
     resultados = []
     headers = {
@@ -76,7 +76,7 @@ def buscar_arquivos_geral(max_arquivos, termo, tipo_arquivo):
                     response = requests.head(link, headers=headers, timeout=5)
                     if response.status_code == 200:
                         contador += 1
-                        print(Fore.LIGHTGREEN_EX + f"{contador} = " + Fore.LIGHTMAGENTA_EX + f"Encontrado: " + Fore.LIGHTGREEN_EX + f"{link}\n")
+                        print(Fore.LIGHTGREEN_EX + Style.BRIGHT + f"{contador} = " + Fore.LIGHTMAGENTA_EX + Style.BRIGHT + f"Encontrado: " + Fore.LIGHTGREEN_EX + Style.BRIGHT + f"{link}\n")
                         resultados.append(link)
                 except requests.RequestException as e:
                     print()
@@ -85,14 +85,14 @@ def buscar_arquivos_geral(max_arquivos, termo, tipo_arquivo):
         print(f"\nErro durante a pesquisa: {e}")
     
     if not resultados:
-        print(Fore.LIGHTRED_EX + "\nNenhum arquivo encontrado\n")
+        print(Fore.LIGHTRED_EX + Style.BRIGHT + "\nNenhum arquivo encontrado\n")
     return resultados
 
 def salvar_em_arquivo(resultados):
     # Perguntar se o usuário deseja salvar os resultados
-    resposta = input(Fore.LIGHTCYAN_EX + "\nDeseja salvar os Links Encontrados? (s/n): ").strip().lower()
+    resposta = input(Fore.LIGHTCYAN_EX + Style.BRIGHT + "\nDeseja salvar os Links Encontrados? (s/n): ").strip().lower()
     if resposta == 's':
-        nome_arquivo = input(Fore.LIGHTYELLOW_EX + "\nDigite o nome do arquivo (exemplo: arquivo.txt): ").strip()
+        nome_arquivo = input(Fore.LIGHTYELLOW_EX + Style.BRIGHT + "\nDigite o nome do arquivo (exemplo: arquivo.txt): ").strip()
         try:
             with open(nome_arquivo, 'w') as f:
                 # Escrevendo a quantidade de arquivos encontrados no início do arquivo
@@ -102,59 +102,59 @@ def salvar_em_arquivo(resultados):
                 for link in resultados:
                     f.write(link + '\n\n')  # Salvando as URLs com espaçamento entre elas
 
-            print(Fore.LIGHTGREEN_EX + f"\nOs Links foram salvos em: {nome_arquivo}")
+            print(Fore.LIGHTGREEN_EX + Style.BRIGHT + f"\nOs Links foram salvos em: {nome_arquivo}")
         except Exception as e:
-            print(Fore.LIGHTRED_EX + f"\nErro ao salvar o arquivo: {e}")
+            print(Fore.LIGHTRED_EX + Style.BRIGHT + f"\nErro ao salvar o arquivo: {e}")
     else:
-        print(Fore.LIGHTRED_EX + "\nOs Links não foram salvos.")    
+        print(Fore.LIGHTRED_EX + Style.BRIGHT + "\nOs Links não foram salvos.")    
 
 if __name__ == "__main__":
     # Menu de seleção
-    print(Fore.LIGHTMAGENTA_EX + "\nEscolha o tipo de pesquisa\n")
-    print("1 - Procurar PDF")
-    print("2 - Procurar Livros (PDF)")
-    print("3 - Procurar outros tipos de arquivos (PDF, DOCX, XLSX, TXT)")
+    print(Fore.LIGHTMAGENTA_EX + Style.BRIGHT + "\nEscolha o tipo de pesquisa\n")
+    print(Fore.LIGHTRED_EX + Style.BRIGHT + "1 - Procurar PDF")
+    print(Fore.LIGHTRED_EX + Style.BRIGHT + "2 - Procurar Livros (PDF)")
+    print(Fore.LIGHTRED_EX + Style.BRIGHT + "3 - Procurar outros tipos de arquivos (PDF, DOCX, XLSX, TXT)")
 
-    tipo_pesquisa = input(Fore.LIGHTGREEN_EX + "\nDigite o número da opção desejada (1, 2, 3): ").strip()
+    tipo_pesquisa = input(Fore.LIGHTGREEN_EX + Style.BRIGHT + "\nDigite o número da opção desejada (1, 2, 3): ").strip()
 
     if tipo_pesquisa == "1":
         termo = "filetype:pdf"
         tipo_arquivo = "pdf"
         # Solicitar o nome do site apenas para a opção 1
-        site = input(Fore.LIGHTGREEN_EX + "\nDigite o nome do website (exemplo: example.com): ")
+        site = input(Fore.LIGHTGREEN_EX + Style.BRIGHT + "\nDigite o nome do website (exemplo: example.com): ")
     elif tipo_pesquisa == "2":
-        nome_livro = input(Fore.LIGHTYELLOW_EX + "\nDigite o nome do livro que deseja procurar (exemplo: Python para Iniciantes): ").strip()
+        nome_livro = input(Fore.LIGHTYELLOW_EX + Style.BRIGHT + "\nDigite o nome do livro que deseja procurar (exemplo: Python para Iniciantes): ").strip()
         termo = f"livro {nome_livro} filetype:pdf"  # Incluir o filetype:pdf na pesquisa
         tipo_arquivo = "pdf"
         # Não solicitar o nome do site na opção 2
         site = None  # Não precisa de um site específico
     elif tipo_pesquisa == "3":
-        termo = input(Fore.LIGHTMAGENTA_EX + "\nDigite o termo a ser pesquisado: ").strip()
-        tipo_arquivo = input(Fore.LIGHTMAGENTA_EX + "\nDigite o tipo de arquivo desejado (pdf, docx, xlsx, txt): ").strip().lower()
+        termo = input(Fore.LIGHTMAGENTA_EX + Style.BRIGHT + "\nDigite o termo a ser pesquisado: ").strip()
+        tipo_arquivo = input(Fore.LIGHTMAGENTA_EX + Style.BRIGHT + "\nDigite o tipo de arquivo desejado (pdf, docx, xlsx, txt): ").strip().lower()
         # Garantir que a pesquisa seja feita corretamente para os tipos de arquivo escolhidos
         if tipo_arquivo not in ["pdf", "docx", "xlsx", "txt"]:
-            print(Fore.LIGHTRED_EX + "\nTipo de arquivo inválido. Escolha entre pdf, docx, xlsx ou txt.")
+            print(Fore.LIGHTRED_EX + Style.BRIGHT + "\nTipo de arquivo inválido. Escolha entre pdf, docx, xlsx ou txt.")
             exit()
         termo += f" filetype:{tipo_arquivo}"
         site = None  # Não precisa de um site específico
     else:
-        print(Fore.LIGHTRED_EX + "\nOpção inválida.")
+        print(Fore.LIGHTRED_EX + Style.BRIGHT + "\nOpção inválida.")
         exit()
 
     try:
-        max_arquivos = int(input(Fore.LIGHTCYAN_EX + "\nDigite o Número Máximo de Arquivos Que Deseja Encontrar: "))
+        max_arquivos = int(input(Fore.LIGHTCYAN_EX + Style.BRIGHT + "\nDigite o Número Máximo de Arquivos Que Deseja Encontrar: "))
     except ValueError:
         print("\nEntrada inválida. Usando o padrão de 10 arquivos.\n")
         max_arquivos = 10    
 
-    print(Fore.LIGHTYELLOW_EX + f"\nPesquisando por: {termo}\n")
+    print(Fore.LIGHTYELLOW_EX + Style.BRIGHT + f"\nPesquisando por: {termo}\n")
 
     # Realiza a busca de arquivos
     if site:
-        print(Fore.LIGHTYELLOW_EX + f"\nProcurando até: {max_arquivos} arquivos de {tipo_arquivo} no site: {site}")
+        print(Fore.LIGHTYELLOW_EX + Style.BRIGHT + f"\nProcurando até: {max_arquivos} arquivos de {tipo_arquivo} no site: {site}")
         resultados = buscar_arquivos(site, max_arquivos, termo, tipo_arquivo)
     else:
-        print(Fore.LIGHTYELLOW_EX + f"\nProcurando até: {max_arquivos} arquivos de {tipo_arquivo} com o termo: {termo}\n")
+        print(Fore.LIGHTYELLOW_EX + Style.BRIGHT + f"\nProcurando até: {max_arquivos} arquivos de {tipo_arquivo} com o termo: {termo}\n")
         resultados = buscar_arquivos_geral(max_arquivos, termo, tipo_arquivo)
 
     # Excluir o arquivo .google-cookie, se ele existir
@@ -164,4 +164,4 @@ if __name__ == "__main__":
     # Perguntar se deseja salvar os arquivos encontrados
     salvar_em_arquivo(resultados)
 
-input(Fore.LIGHTRED_EX + "\n\n========== PRESSIONE ENTER PARA SAIR ==========\n\n")
+input(Fore.LIGHTRED_EX + Style.BRIGHT + "\n\n========== PRESSIONE ENTER PARA SAIR ==========\n\n")
