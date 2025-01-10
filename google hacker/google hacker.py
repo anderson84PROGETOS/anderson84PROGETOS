@@ -1,5 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
+import webbrowser
 from colorama import Fore, Style, init
 
 # Inicializando o colorama
@@ -14,6 +15,7 @@ print(Fore.LIGHTCYAN_EX + Style.BRIGHT + """
 ╚██████╔╝╚██████╔╝╚██████╔╝╚██████╔╝███████╗███████╗    ██║  ██║██║  ██║╚██████╗██║  ██╗███████╗██║  ██║
  ╚═════╝  ╚═════╝  ╚═════╝  ╚═════╝ ╚══════╝╚══════╝    ╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
                                                                                                                                                                 
+
 """)
 
 def construir_consulta_dork(site_nome, dork_selecionada):
@@ -68,7 +70,7 @@ def construir_consulta_dork(site_nome, dork_selecionada):
     return consultas.get(dork_selecionada, "")
 
 def obter_dados_hacking():
-    site_nome = input(Fore.LIGHTGREEN_EX + Style.BRIGHT + "insira o nome Para pesquisar ou email ou o nome do website: ").strip()
+    site_nome = input(Fore.LIGHTGREEN_EX + Style.BRIGHT + "Insira o nome para pesquisar ou o nome do website: ").strip()
     if not site_nome:
         print("Por favor, insira o nome do site.")
         return
@@ -157,11 +159,28 @@ def obter_dados_hacking():
                 href = link["href"]
                 # Filtro para exibir apenas links que começam com 'http' ou 'https' e não contêm 'mailto:'
                 if (href.startswith("http") or href.startswith("https")) and "mailto:" not in href:
-                    print("\n",href)
+                    print("\n", href)
+
+            # Abertura automática do Google
+            motor_pesquisa = input(Fore.LIGHTMAGENTA_EX + Style.BRIGHT + "\n\nDeseja abrir o Google com a consulta da dork selecionada? (s/n): ").strip().lower()
+
+            # Exibe o resultado da consulta da dork
+            print(Fore.LIGHTYELLOW_EX + Style.BRIGHT + f"\nConsulta: {consulta_dork}")            
+
+            if motor_pesquisa == "s":
+                # Cria a URL para pesquisa
+                url = f"https://www.google.com/search?q={consulta_dork.replace(' ', '+')}"
+                
+                # Abre a URL de pesquisa no Google
+                webbrowser.open(url)                
+                print(Fore.LIGHTCYAN_EX + Style.BRIGHT + f"\nAbrindo o Google com a Consulta: " + Fore.LIGHTGREEN_EX + Style.BRIGHT + f"{consulta_dork}")
+            elif motor_pesquisa == "n":
+                pass         
+                
         except requests.exceptions.RequestException as e:
-            print(f"Erro ao realizar a pesquisa: {e}")
+            print(f"\nErro ao realizar a pesquisa: {e}")
     else:
-        print("Nenhuma consulta dork encontrada.")
+        print("\nNenhuma consulta dork encontrada.")
 
 # Chamar a função para testar
 obter_dados_hacking()
