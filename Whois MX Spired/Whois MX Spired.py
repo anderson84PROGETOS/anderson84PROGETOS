@@ -11,7 +11,6 @@ from colorama import Fore, Style, init
 
 # Inicializando o colorama
 init(autoreset=True)
-
 print(Fore.LIGHTCYAN_EX + Style.BRIGHT + """
 
 ██╗    ██╗██╗  ██╗ ██████╗ ██╗███████╗    ███╗   ███╗██╗  ██╗    ███████╗██████╗ ██╗██████╗ ███████╗██████╗ 
