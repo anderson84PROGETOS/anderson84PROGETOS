@@ -1,0 +1,7 @@
+# estalar tudo  pip install -r requirements.txt
+
+ipaddress
+requests
+beautifulsoup4
+dnspython
+colorama
