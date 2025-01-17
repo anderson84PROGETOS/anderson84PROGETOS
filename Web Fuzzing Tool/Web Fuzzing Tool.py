@@ -45,7 +45,7 @@ def fuzz_url(base_url, word, results_text, found_urls, progress, total_words, up
             else:
                 page_type = "Página grande"
 
-            result = f"{url:<32} Status: {status}, Tamanho: {size / (1024 * 1024):.2f} MB, Tipo: {page_type}"
+            result = f"{url:<60} Status: {status}, Tamanho: {size / (1024 * 1024):.2f} MB, Tipo: {page_type}"
             
             # Exibir resultado em vermelho para status 301
             if status == 301:
@@ -80,7 +80,8 @@ def main():
     global found_urls  # A variável found_urls deve ser global
     found_urls = []  # Lista para armazenar URLs encontradas
     wordlist_path = None  # Inicializando a variável wordlist_path
-    
+    fuzz_thread = None  # Variável para armazenar a thread de fuzzing
+
     def select_wordlist():
         nonlocal wordlist_path  # Acessando a variável wordlist_path dentro da função
         wordlist_path = filedialog.askopenfilename(title="Selecione o arquivo wordlist", filetypes=[("Text Files", "*.txt")])
@@ -132,14 +133,22 @@ def main():
         start_button.config(state=tk.DISABLED)
 
         # Iniciando o fuzzing em uma thread separada
+        nonlocal fuzz_thread
         fuzz_thread = threading.Thread(target=fuzz_in_thread)
         fuzz_thread.daemon = True  # Permite que a thread seja fechada quando a GUI for fechada
         fuzz_thread.start()
+
+    # Função de fechamento para garantir que as threads sejam finalizadas
+    def on_close():
+        if fuzz_thread is not None and fuzz_thread.is_alive():
+            fuzz_thread.join()  # Espera a thread de fuzzing finalizar antes de fechar
+        window.destroy()  # Fecha a janela principal
 
     # Criando a janela principal
     window = tk.Tk()
     window.title("Web Fuzzing Tool")
     window.geometry("1200x960")
+    window.protocol("WM_DELETE_WINDOW", on_close)  # Configurando a função de fechamento
 
     # Estilo da barra de progresso
     style = ttk.Style()
@@ -168,11 +177,12 @@ def main():
     progress.pack(pady=10)
 
     # Adicionando a área de texto para exibir os resultados com tag para a cor vermelha
-    results_text = ScrolledText(window, width=120, height=40)
+    results_text = ScrolledText(window, width=130, height=40)
     results_text.pack(pady=10)  
     results_text.tag_configure("red", foreground="#f50a16")  # Configurando a cor vermelha
 
     # Iniciando a GUI
     window.mainloop()
+
 if __name__ == "__main__":
     main()
