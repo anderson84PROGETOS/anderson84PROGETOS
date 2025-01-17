@@ -174,6 +174,5 @@ def main():
 
     # Iniciando a GUI
     window.mainloop()
-
 if __name__ == "__main__":
     main()
