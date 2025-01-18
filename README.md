@@ -41,9 +41,6 @@ Aqui estão alguns dos projetos que desenvolvi:
 
 Se você quiser contribuir para meus projetos, fique à vontade para fazer um fork e enviar um pull request com suas modificações. A colaboração é sempre bem-vinda!
 
-## Licença
-
-Este repositório está disponível sob a licença [MIT](LICENSE).
 
 ## Como Usar
 
