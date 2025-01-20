@@ -66,17 +66,17 @@ def abrir_no_google_street_view():
             error_message = f"Error: {str(e)}, latitude: {latitude}, longitude: {longitude}"
             text_box.insert(tk.END, f"\nFailed to open Google Street View. {error_message}")
 
-
 def open_file():
     global latitude, longitude
 
-    file_path = filedialog.askopenfilename(filetypes=[("Image Files", "*.jpg;*.jpeg;*.png;*.gif;*.ico"),
+    file_path = filedialog.askopenfilename(filetypes=[("Image Files", "*.jpg;*.jpeg;*.png;*.gif;*.ico;*.webp"),
                                                      ("CSV Files", "*.csv"),
                                                      ("Text Files", "*.txt"),
                                                      ("Word Documents", "*.docx"),
-                                                     ("Image Files", "*.jpg;*.jpeg;*.png;*.gif;*.ico"),
                                                      ("PDF Files", "*.pdf"),
-                                                     ("Executable Files", "*.exe")])
+                                                     ("Executable Files", "*.exe"),
+                                                     ("All Files", "*.*")])
+
     if file_path:
         try:
             if file_path.lower().endswith((".csv", ".txt")):
@@ -84,7 +84,7 @@ def open_file():
                     content = file.read()
                 text_box.delete(1.0, tk.END)
                 text_box.insert(tk.END, content)
-            elif file_path.lower().endswith((".jpg", ".jpeg", ".png", ".gif", ".ico")):
+            elif file_path.lower().endswith((".jpg", ".jpeg", ".png", ".gif", ".ico", ".webp")):  # Adicionado .webp
                 image = Image.open(file_path)
                 exif_data = image._getexif()
                 
@@ -130,20 +130,19 @@ def open_file():
                 else:
                     text_box.delete(1.0, tk.END)
                     text_box.insert(tk.END, "No EXIF information found.")
-
-
-            elif file_path.lower().endswith((".pdf", ".exe")):
-                if file_path.lower().endswith(".pdf"):
-                    pdf_file = open(file_path, 'rb')
-                    pdf_reader = PyPDF2.PdfReader(pdf_file)
-                    text_content = ""
-                    for page in pdf_reader.pages:
-                        text_content += page.extract_text()
-                    pdf_file.close()
-                else:  # .exe file
-                    with open(file_path, 'rb') as file:
-                        content = file.read().hex()
-                    text_content = "Hexadecimal representation of the executable file:\n" + content
+            elif file_path.lower().endswith(".pdf"):
+                pdf_file = open(file_path, 'rb')
+                pdf_reader = PyPDF2.PdfReader(pdf_file)
+                text_content = ""
+                for page in pdf_reader.pages:
+                    text_content += page.extract_text()
+                pdf_file.close()
+                text_box.delete(1.0, tk.END)
+                text_box.insert(tk.END, text_content)
+            elif file_path.lower().endswith(".exe"):
+                with open(file_path, 'rb') as file:
+                    content = file.read().hex()
+                text_content = "Hexadecimal representation of the executable file:\n" + content
                 text_box.delete(1.0, tk.END)
                 text_box.insert(tk.END, text_content)
             elif file_path.lower().endswith(".docx"):
@@ -153,6 +152,7 @@ def open_file():
         except Exception as e:
             text_box.delete(1.0, tk.END)
             text_box.insert(tk.END, f"Failed to open the file {file_path}. Error: {str(e)}.")
+
 
 def clear_results():
     global latitude, longitude
