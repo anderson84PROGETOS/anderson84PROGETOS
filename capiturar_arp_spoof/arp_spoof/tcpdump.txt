@@ -1,0 +1,17 @@
+salvar arquivo
+sudo tcpdump -i eth0 -w capture.pcap -U -s 0 | tee /dev/tty | tcpdump -r capture.pcap -nn
+
+
+ler arquivo
+tshark -r capture.pcap -Y 'http' -V | grep -Ei 'Form item' 
+
+
+
+tshark -r capture.pcap -Y 'http' -V | grep -Ei 'Form item|cookie' 
+
+
+
+abrir no Wireshark
+
+frame contains "youtube" or frame contains "http://php.testsparker.com"
+
