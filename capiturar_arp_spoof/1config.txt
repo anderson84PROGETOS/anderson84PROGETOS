@@ -38,7 +38,7 @@ sudo ettercap -T -i eth0 -M arp:remote //192.168.0.1// //192.168.0.3//
 só funciona dentro do kali linux
 sudo ettercap -T -i eth0 -M arp:remote //192.168.0.9// //192.168.0.1//
 
-                                        ipkali linux   Gateway Padrão
+                                        ip kali linux   Gateway Padrão
 sudo ettercap -T -i eth0 -M arp:remote //192.168.0.9// //192.168.0.1// 
 
                                         
