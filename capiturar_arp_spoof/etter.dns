@@ -1,0 +1,61 @@
+############################################################################
+#                                                                          #
+#  ettercap -- etter.dns -- host file for dns_spoof plugin                 #
+#                                                                          #
+#  Copyright (C) ALoR & NaGA                                               #
+#                                                                          #
+#  This program is free software; you can redistribute it and/or modify    #
+#  it under the terms of the GNU General Public License as published by    #
+#  the Free Software Foundation; either version 2 of the License, or       #
+#  (at your option) any later version.                                     #
+#                                                                          #
+############################################################################
+#                                                                          #
+# Sample hosts file for dns_spoof plugin                                   #
+#                                                                          #
+# the format is (for A query):                                             #
+#   www.myhostname.com A 168.11.22.33 3600                                 #
+#   *.foo.com          A 168.44.55.66 [optional TTL]                       #
+#                                                                          #
+############################################################################
+
+# Redirecionar facebook.com e seus subdomínios para o IP do Kali
+facebook.com          A 192.168.0.9
+www.facebook.com      A 192.168.0.9
+
+# Redirecionar google.com e seus subdomínios para o IP do Kali
+google.com            A 192.168.0.9
+www.google.com        A 192.168.0.9
+
+# Redirecionar instagram.com e seus subdomínios para o IP do Kali
+instagram.com         A 192.168.0.9
+www.instagram.com     A 192.168.0.9
+
+# Redirecionar testphp.vulnweb.com e seus subdomínios para o IP do Kali
+testphp.vulnweb.com         A 192.168.0.9
+www.testphp.vulnweb.com     A 192.168.0.9
+testphp.vulnweb.com/login.php A 192.168.0.9
+
+# Redirecionar itau.com.br e seus subdomínios para o IP do Kali
+itau.com.br           A 192.168.0.9
+www.itau.com.br       A 192.168.0.9
+
+# Redirecionar mercadolivre.com.br e seus subdomínios para o IP do Kali
+mercadolivre.com.br          A 192.168.0.9
+www.mercadolivre.com.br      A 192.168.0.9
+
+# Redirecionar youtube.com e seus subdomínios para o IP do Kali
+youtube.com           A 192.168.0.9
+www.youtube.com       A 192.168.0.9
+
+# Redirecionar businesscorp.com.br e seus subdomínios para o IP do Kali
+businesscorp.com.br          A 192.168.0.9
+www.businesscorp.com.br      A 192.168.0.9
+
+# Redirecionar mail.google.com para o IP do Kali
+mail.google.com       A 192.168.0.9
+www.mail.google.com   A 192.168.0.9
+
+############################################################################
+
+# vim:ts=8:noexpandtab
