@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import filedialog, messagebox, scrolledtext, ttk
 import requests
 import threading
+import dns.resolver  # Importa o dns.resolver
 
 subdomains = []  # Variável global para armazenar os subdomínios carregados
 thread = None  # Variável global para armazenar a referência da thread em execução
@@ -44,10 +45,18 @@ def escanear_subdominios_thread(domain):
         if exit_event.is_set():  # Verificar se a thread deve ser interrompida
             break
         url = f"http://{subdomain}.{domain}"
+
+        try:
+            # Obter o IP do subdomínio usando o dns.resolver
+            answer = dns.resolver.resolve(f"{subdomain}.{domain}", "A")
+            ip = answer[0].to_text()
+        except (dns.resolver.NoAnswer, dns.resolver.NXDOMAIN, dns.resolver.Timeout):
+            ip = "IP não encontrado"
+
         try:
             response = requests.get(url, headers=headers, timeout=3)
             if response.status_code == 200:
-                text_area.insert(tk.END, f"[Encontrado] {url}\n")
+                text_area.insert(tk.END, f"[Encontrado] {url:<55} IP: {ip}\n")
         except requests.RequestException:
             continue
 
@@ -92,7 +101,7 @@ def on_close():
 
 # Interface gráfica
 root = tk.Tk()
-root.title("Subdomain Finder")
+root.title("Subdomain Finder DNS")
 root.geometry("1200x950")
 
 # Campo de entrada para o domínio
@@ -118,7 +127,7 @@ progress_bar = ttk.Progressbar(root, orient="horizontal", length=400, mode="dete
 progress_bar.pack(pady=10)
 
 # Área de texto para exibir os resultados com barra de rolagem
-text_area = scrolledtext.ScrolledText(root, width=120, height=35, font=("Arial", 12))
+text_area = scrolledtext.ScrolledText(root, width=120, height=35)
 text_area.pack(pady=10)
 
 # Iniciar a interface
