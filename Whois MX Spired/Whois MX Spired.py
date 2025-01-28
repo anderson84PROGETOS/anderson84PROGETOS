@@ -7,19 +7,15 @@ import requests
 from bs4 import BeautifulSoup
 from socket import *
 import dns.resolver
-from colorama import Fore, Style, init
+from colorama import init, Fore, Style
 
 # Inicializando o colorama
 init(autoreset=True)
 print(Fore.LIGHTCYAN_EX + Style.BRIGHT + """
-
-██╗    ██╗██╗  ██╗ ██████╗ ██╗███████╗    ███╗   ███╗██╗  ██╗    ███████╗██████╗ ██╗██████╗ ███████╗██████╗ 
-██║    ██║██║  ██║██╔═══██╗██║██╔════╝    ████╗ ████║╚██╗██╔╝    ██╔════╝██╔══██╗██║██╔══██╗██╔════╝██╔══██╗
-██║ █╗ ██║███████║██║   ██║██║███████╗    ██╔████╔██║ ╚███╔╝     ███████╗██████╔╝██║██████╔╝█████╗  ██║  ██║
-██║███╗██║██╔══██║██║   ██║██║╚════██║    ██║╚██╔╝██║ ██╔██╗     ╚════██║██╔═══╝ ██║██╔══██╗██╔══╝  ██║  ██║
-╚███╔███╔╝██║  ██║╚██████╔╝██║███████║    ██║ ╚═╝ ██║██╔╝ ██╗    ███████║██║     ██║██║  ██║███████╗██████╔╝
- ╚══╝╚══╝ ╚═╝  ╚═╝ ╚═════╝ ╚═╝╚══════╝    ╚═╝     ╚═╝╚═╝  ╚═╝    ╚══════╝╚═╝     ╚═╝╚═╝  ╚═╝╚══════╝╚═════╝ 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+ _    _  _   _  _____  ____  ___    __  __  _  _    ___  ____  ____  ____  ____  ____  
+( \/\/ )( )_( )(  _  )(_  _)/ __)  (  \/  )( \/ )  / __)(  _ \(_  _)(  _ \( ___)(  _ \ 
+ )    (  ) _ (  )(_)(  _)(_ \__ \   )    (  )  (   \__ \ )___/ _)(_  )   / )__)  )(_) )
+(__/\__)(_) (_)(_____)(____)(___/  (_/\/\_)(_/\_)  (___/(__)  (____)(_)\_)(____)(____/                                                                                                            
 """)
 
 servidores_whois_tdl = {
@@ -31,9 +27,24 @@ servidores_whois_tdl = {
 }
 
 def remover_copyright(texto):
+    # Remove mensagens de copyright e avisos adicionais    
+    extra_pattern = re.compile(r"(" \
+        r"URL of the ICANN WHOIS Data Problem Reporting System:.*|" \
+        r"Last update of WHOIS database:.*|" \
+        r">>>*|"    
+        r"For more information on Whois status codes, please visit.*|" \
+        r"WHOIS information is provided by the registry solely for query-based.*|" \
+        r"Any information provided is \"as is\" without any guarantee of accuracy.*|" \
+        r"We reserve the right to restrict or deny your access to the WHOIS database.*|" \
+        r"agree to abide by the following terms.*?https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/domain-contact-support.html" \
+    ")", re.MULTILINE | re.IGNORECASE | re.DOTALL)
+    texto = re.sub(extra_pattern, "", texto)
+    
     # Remove o texto de copyright
-    copyright_pattern = re.compile(r"%.*\n", re.MULTILINE)
-    return re.sub(copyright_pattern, "", texto)
+    copyright_pattern = re.compile(r"%.*\n", re.MULTILINE)    
+    texto = re.sub(copyright_pattern, "", texto)
+
+    return texto
 
 def requisicao_whois(servidor_whois, endereco_host, padrao):
     objeto_socket = socket(AF_INET, SOCK_STREAM)
