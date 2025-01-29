@@ -5,7 +5,6 @@ from colorama import init, Fore, Style
 
 # Inicializando o colorama
 init(autoreset=True)
-
 # Banner do script
 print(Fore.LIGHTCYAN_EX + Style.BRIGHT + """
 
