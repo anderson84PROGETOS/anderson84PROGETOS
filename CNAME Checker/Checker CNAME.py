@@ -110,8 +110,6 @@ def encontrar_subdominios(site, subdominios_comuns, cname_set, resultados):
             print(f"Erro ao consultar subdomínio {subdominio}: {e}")
 
 # Função para salvar resultados em um arquivo .txt
-# Função para salvar resultados em um arquivo .txt
-# Função para perguntar se deseja salvar os resultados e salvar se necessário
 def perguntar_salvar_resultados(resultados):
     # Perguntar se o usuário deseja salvar os resultados
     salvar = input(Fore.LIGHTMAGENTA_EX + Style.BRIGHT + "\nDeseja salvar os resultados? (s/n): ").lower()
@@ -121,8 +119,16 @@ def perguntar_salvar_resultados(resultados):
         
         try:
             with open(nome_arquivo, 'w') as file:
+                file.write("======= CNAME Encontrados =====\n")
                 for resultado in resultados:
-                    file.write(resultado + "\n")
+                    if 'CNAME' in resultado:
+                        file.write(resultado + "\n")
+                
+                file.write("\n\n======== Subdomínios Encontrados =========\n\n")
+                for resultado in resultados:
+                    if 'Subdominio' in resultado:
+                        file.write(resultado + "\n")
+            
             print(Fore.LIGHTGREEN_EX + Style.BRIGHT + f"\nResultados salvos em: {nome_arquivo}")
         except Exception as e:
             print(f"Erro ao salvar os resultados: {e}")
@@ -154,7 +160,6 @@ if __name__ == "__main__":
     else:
         print("\nNenhum CNAME encontrado.")    
 
-    
     # No final do script, substitua a chamada original
     perguntar_salvar_resultados(resultados)
 
