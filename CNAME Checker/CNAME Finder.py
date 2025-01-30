@@ -186,3 +186,4 @@ scrollbar.config(command=resultados_text.yview)
 
 # Iniciar a interface gráfica
 root.mainloop()
+
