@@ -121,3 +121,4 @@ if __name__ == "__main__":
     main()
 
 input(Fore.LIGHTRED_EX + Style.BRIGHT + "\n\n========== PRESSIONE ENTER PARA SAIR ==========\n\n")
+
