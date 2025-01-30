@@ -5,8 +5,9 @@ from colorama import init, Fore, Style
 
 # Inicializando o colorama
 init(autoreset=True)
+
 # Banner do script
-print(Fore.LIGHTCYAN_EX + Style.BRIGHT + """
+print(Fore.LIGHTCYAN_EX + Style.BRIGHT + """ 
 
  ██████╗██╗  ██╗███████╗ ██████╗██╗  ██╗███████╗██████╗      ██████╗███╗   ██╗ █████╗ ███╗   ███╗███████╗    
 ██╔════╝██║  ██║██╔════╝██╔════╝██║ ██╔╝██╔════╝██╔══██╗    ██╔════╝████╗  ██║██╔══██╗████╗ ████║██╔════╝    
@@ -18,11 +19,12 @@ print(Fore.LIGHTCYAN_EX + Style.BRIGHT + """
 
 # Função para listar arquivos .txt na pasta onde o script está
 def listar_txt_na_pasta():
-    txt_files = [f for f in os.listdir(os.path.dirname(__file__)) if f.endswith('.txt')]
+    caminho_atual = os.path.dirname(os.path.abspath(__file__))  # Obter o diretório onde o script está
+    txt_files = [f for f in os.listdir(caminho_atual) if f.endswith('.txt')]
 
     if not txt_files:
-        print("\nNenhum arquivo .txt encontrado na pasta.")
-        sys.exit()
+        print(Fore.LIGHTRED_EX + Style.BRIGHT + "Nenhum arquivo .txt encontrado na pasta.")
+        return None
 
     print(Fore.LIGHTMAGENTA_EX + Style.BRIGHT + "Escolha um arquivo de wordlist\n")
     for idx, file in enumerate(txt_files, start=1):
@@ -33,21 +35,28 @@ def listar_txt_na_pasta():
             choice = int(input(Fore.LIGHTMAGENTA_EX + Style.BRIGHT + "\nDigite o número do arquivo wordlist: "))
             print("\n")
             if 1 <= choice <= len(txt_files):
-                return os.path.join(os.path.dirname(__file__), txt_files[choice - 1])
+                file_path = os.path.join(caminho_atual, txt_files[choice - 1])
+                subdominios_comuns = process_wordlist(file_path)  # Processar a wordlist escolhida
+                return subdominios_comuns
             else:
                 print("Opção inválida. Tente novamente.")
         except ValueError:
             print("Por favor, insira um número válido.")
 
 # Função para ler o conteúdo do arquivo wordlist
-def ler_wordlist(caminho_arquivo):
+def process_wordlist(file_path):
     try:
-        with open(caminho_arquivo, 'r') as file:
-            subdominios = [line.strip() for line in file.readlines() if line.strip()]
-        return subdominios
+        with open(file_path, "r") as file:
+            linhas = file.readlines()
+            subdominios = set(linha.strip() for linha in linhas if linha.strip())  # Remover espaços extras
+            print(Fore.LIGHTCYAN_EX + Style.BRIGHT + f"\nTotal de subdomínios únicos na wordlist: {len(subdominios)}\n")
+            return subdominios
+    except FileNotFoundError:
+        print(Fore.LIGHTRED_EX + Style.BRIGHT + f"\nErro: Arquivo '{file_path}' não encontrado.\n")
+        return None
     except Exception as e:
-        print(f"Erro ao ler o arquivo: {e}")
-        return []
+        print(Fore.LIGHTRED_EX + Style.BRIGHT + f"Erro ao ler o arquivo: {e}")
+        return None
 
 # Função para obter o CNAME de um domínio
 def obter_cname(site, cname_set, resultados):
@@ -135,9 +144,8 @@ def perguntar_salvar_resultados(resultados):
         print(Fore.LIGHTRED_EX + Style.BRIGHT + "Resultados não salvos.")
 
 if __name__ == "__main__":
-    caminho_arquivo = listar_txt_na_pasta()
-    subdominios_comuns = ler_wordlist(caminho_arquivo)
-    
+    subdominios_comuns = listar_txt_na_pasta()
+
     if not subdominios_comuns:
         print("A lista de subdomínios está vazia ou não foi carregada corretamente.")
         sys.exit()
@@ -147,7 +155,6 @@ if __name__ == "__main__":
 
     cname_set = set()
     resultados = []
-    subdominios_encontrados = []
 
     obter_cname(site, cname_set, resultados)
     encontrar_subdominios(site, subdominios_comuns, cname_set, resultados)
