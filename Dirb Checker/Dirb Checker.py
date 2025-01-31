@@ -120,7 +120,7 @@ if salvar == 's':
         for resultado in resultados:
             f.write(resultado + "\n")
 
-    print(Fore.LIGHTGREEN_EX + Style.BRIGHT + f"\nResultados Salvos Em: {nome_arquivo}")
+    print(Fore.LIGHTGREEN_EX + Style.BRIGHT + f"\nResultados Salvos Em: {nome_arquivo}") 
 
 # Finalizar o programa
 input(Fore.LIGHTRED_EX + Style.BRIGHT + "\n\n========== SCAN FINALIZADO. PRESSIONE ENTER PARA SAIR ==========\n\n")
