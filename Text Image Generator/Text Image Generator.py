@@ -25,8 +25,8 @@ def salvar_imagem():
     if not nome_arquivo:
         return  # Se o usuário cancelar, não faz nada
     
-    largura = 1000
-    altura = 1500  # Altura ajustável
+    largura = 1800
+    altura = 2000  # Altura ajustável
     img = Image.new("RGB", (largura, altura), cor_fundo)
     draw = ImageDraw.Draw(img)
     
