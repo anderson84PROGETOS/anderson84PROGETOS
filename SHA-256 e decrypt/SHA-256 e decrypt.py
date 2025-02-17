@@ -8,12 +8,13 @@ init(autoreset=True)
 # Banner do script
 print(Fore.LIGHTCYAN_EX + Style.BRIGHT + """
 
-███████╗██╗  ██╗ █████╗       ██████╗ ███████╗ ██████╗     ███████╗    ██████╗ ███████╗ ██████╗██████╗ ██╗   ██╗██████╗ ████████╗    
-██╔════╝██║  ██║██╔══██╗      ╚════██╗██╔════╝██╔════╝     ██╔════╝    ██╔══██╗██╔════╝██╔════╝██╔══██╗╚██╗ ██╔╝██╔══██╗╚══██╔══╝    
-███████╗███████║███████║█████╗ █████╔╝███████╗███████╗     █████╗      ██║  ██║█████╗  ██║     ██████╔╝ ╚████╔╝ ██████╔╝   ██║       
-╚════██║██╔══██║██╔══██║╚════╝██╔═══╝ ╚════██║██╔═══██╗    ██╔══╝      ██║  ██║██╔══╝  ██║     ██╔══██╗  ╚██╔╝  ██╔═══╝    ██║       
-███████║██║  ██║██║  ██║      ███████╗███████║╚██████╔╝    ███████╗    ██████╔╝███████╗╚██████╗██║  ██║   ██║   ██║        ██║       
-╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝      ╚══════╝╚══════╝ ╚═════╝     ╚══════╝    ╚═════╝ ╚══════╝ ╚═════╝╚═╝  ╚═╝   ╚═╝   ╚═╝        ╚═╝                                                                                                                                           
+███████╗██╗  ██╗ █████╗       ██████╗ ███████╗ ██████╗ 
+██╔════╝██║  ██║██╔══██╗      ╚════██╗██╔════╝██╔════╝ 
+███████╗███████║███████║█████╗ █████╔╝███████╗███████╗ 
+╚════██║██╔══██║██╔══██║╚════╝██╔═══╝ ╚════██║██╔═══██╗
+███████║██║  ██║██║  ██║      ███████╗███████║╚██████╔╝
+╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝      ╚══════╝╚══════╝ ╚═════╝ 
+                                                                                                                                             
 """)
 
 def generate_hash(input_string):
@@ -46,9 +47,10 @@ def listar_txt_na_pasta():
 
 def carregar_wordlist(arquivo):
     """Lê a wordlist do arquivo e retorna uma lista de palavras únicas sem espaços extras."""
-    with open(arquivo, 'r', encoding='utf-8') as f:
+    with open(arquivo, 'r', encoding='latin1') as f:  # Alterado para 'latin1'
         palavras = [linha.strip() for linha in f if linha.strip()]
     return palavras
+
 
 # Menu interativo para o usuário
 print(Fore.LIGHTMAGENTA_EX + Style.BRIGHT + "Escolha uma opção\n")
@@ -66,7 +68,7 @@ if opcao == '1':
 elif opcao == '2':
     wordlist_arquivo = listar_txt_na_pasta()
     wordlist = carregar_wordlist(wordlist_arquivo)
-    print(Fore.LIGHTCYAN_EX + f"\n🔍 Wordlist carregada com: {len(wordlist)} palavras")
+    print(Fore.LIGHTCYAN_EX + f"\nWordlist carregada com: {len(wordlist)} palavras")
 
     print(Fore.LIGHTYELLOW_EX + Style.BRIGHT + "\nDigite o hash SHA-256 para tentar descobrir a palavra original: ", end="")
     hash_to_crack = input(Fore.LIGHTGREEN_EX + Style.BRIGHT).strip().lower()
