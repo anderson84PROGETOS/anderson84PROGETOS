@@ -5,16 +5,13 @@ from colorama import Fore, Style, init
 
 # Inicializando o colorama
 init(autoreset=True)
-
 print(Fore.LIGHTCYAN_EX + Style.BRIGHT + """
-
  ██████╗  ██████╗  ██████╗  ██████╗ ██╗     ███████╗    ██╗  ██╗ █████╗  ██████╗██╗  ██╗███████╗██████╗ 
 ██╔════╝ ██╔═══██╗██╔═══██╗██╔════╝ ██║     ██╔════╝    ██║  ██║██╔══██╗██╔════╝██║ ██╔╝██╔════╝██╔══██╗
 ██║  ███╗██║   ██║██║   ██║██║  ███╗██║     █████╗      ███████║███████║██║     █████╔╝ █████╗  ██████╔╝
 ██║   ██║██║   ██║██║   ██║██║   ██║██║     ██╔══╝      ██╔══██║██╔══██║██║     ██╔═██╗ ██╔══╝  ██╔══██╗
 ╚██████╔╝╚██████╔╝╚██████╔╝╚██████╔╝███████╗███████╗    ██║  ██║██║  ██║╚██████╗██║  ██╗███████╗██║  ██║
  ╚═════╝  ╚═════╝  ╚═════╝  ╚═════╝ ╚══════╝╚══════╝    ╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
-                                                                                                                                                                
 
 """)
 
@@ -66,6 +63,7 @@ def construir_consulta_dork(site_nome, dork_selecionada):
         "Achar credit card": f'site:pastebin.com {site_nome} credit card',
         "Achar coisas em google drive": f'site:drive.google.com {site_nome}',
         "Achar email": f'"{site_nome}"',
+        "Login -Painel": 'site:itau.com.br intitle:Login -Painel',
     }
     return consultas.get(dork_selecionada, "")
 
@@ -123,6 +121,7 @@ def obter_dados_hacking():
         "Achar credit card",
         "Achar coisas em google drive",
         "Achar email",
+        "Login -Painel",
     ]
 
     for idx, dork in enumerate(dorks, 1):
@@ -138,35 +137,25 @@ def obter_dados_hacking():
     consulta_dork = construir_consulta_dork(site_nome, dork_selecionada)
     
     if consulta_dork:
-        print(Fore.LIGHTYELLOW_EX + Style.BRIGHT + f"\nConsultando: {consulta_dork}")
+        print(Fore.LIGHTYELLOW_EX + Style.BRIGHT + f"\n\nConsultando: " + Fore.LIGHTGREEN_EX + Style.BRIGHT + f" {consulta_dork}")
         
         # Realizar a pesquisa no Google
         search_url = f"https://www.google.com/search?q={consulta_dork}"
         headers = {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
-        }
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:89.0) Gecko/20100101 Firefox/89.0',
+        'Accept-Language': 'en-US,en;q=0.5',
+        'Connection': 'keep-alive',
+        'Upgrade-Insecure-Requests': '1',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8'
+    }
 
         try:
             response = requests.get(search_url, headers=headers)
-            response.raise_for_status()  # Lança um erro se a resposta for inválida
-
-            soup = BeautifulSoup(response.text, "html.parser")
-            # Encontrar os links de resultado de pesquisa
-            resultados = soup.find_all("a", href=True)
-
-            print(Fore.LIGHTRED_EX + Style.BRIGHT + "\nResultados Encontrados\n")
-            for link in resultados:
-                href = link["href"]
-                # Filtro para exibir apenas links que começam com 'http' ou 'https' e não contêm 'mailto:'
-                if (href.startswith("http") or href.startswith("https")) and "mailto:" not in href:
-                    print("\n", href)
+            response.raise_for_status()  # Lança um erro se a resposta for inválida            
 
             # Abertura automática do Google
-            motor_pesquisa = input(Fore.LIGHTMAGENTA_EX + Style.BRIGHT + "\n\nDeseja abrir o Google com a consulta da dork selecionada? (s/n): ").strip().lower()
-
-            # Exibe o resultado da consulta da dork
-            print(Fore.LIGHTYELLOW_EX + Style.BRIGHT + f"\nConsulta: {consulta_dork}")            
-
+            motor_pesquisa = input(Fore.LIGHTMAGENTA_EX + Style.BRIGHT + "\n\n\nDeseja abrir o Google com a consulta da dork selecionada? (s/n): ").strip().lower()
+            print("\n")
             if motor_pesquisa == "s":
                 # Cria a URL para pesquisa
                 url = f"https://www.google.com/search?q={consulta_dork.replace(' ', '+')}"
@@ -185,4 +174,4 @@ def obter_dados_hacking():
 # Chamar a função para testar
 obter_dados_hacking()
 
-input(Fore.LIGHTRED_EX + Style.BRIGHT + "\n\n========== PRESSIONE ENTER PARA SAIR ==========\n\n")
+input(Fore.LIGHTRED_EX + Style.BRIGHT + "\n\n\n========== PRESSIONE ENTER PARA SAIR ==========\n")
