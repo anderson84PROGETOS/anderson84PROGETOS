@@ -63,7 +63,7 @@ def construir_consulta_dork(site_nome, dork_selecionada):
         "Achar credit card": f'site:pastebin.com {site_nome} credit card',
         "Achar coisas em google drive": f'site:drive.google.com {site_nome}',
         "Achar email": f'"{site_nome}"',
-        "Login -Painel": 'site:itau.com.br intitle:Login -Painel',
+        "Login -Painel": f'site:{site_nome} intitle:Login -Painel',
     }
     return consultas.get(dork_selecionada, "")
 
