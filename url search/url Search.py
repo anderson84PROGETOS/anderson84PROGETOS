@@ -99,3 +99,4 @@ if __name__ == "__main__":
     process_url()
 
 input(Fore.LIGHTMAGENTA_EX + "\n\nPRESSIONE ENTER PARA SAIR\n=========================")
+
