@@ -8,16 +8,15 @@ from colorama import init, Fore, Style
 
 # Inicializando o colorama
 init(autoreset=True)
+
 # Banner do script
 print(Fore.LIGHTCYAN_EX + Style.BRIGHT + """
-
 ███████╗ ██████╗██████╗  █████╗ ██████╗ ███████╗██████╗     ███████╗██╗██╗     ███████╗    
 ██╔════╝██╔════╝██╔══██╗██╔══██╗██╔══██╗██╔════╝██╔══██╗    ██╔════╝██║██║     ██╔════╝    
 ███████╗██║     ██████╔╝███████║██████╔╝█████╗  ██████╔╝    █████╗  ██║██║     █████╗      
 ╚════██║██║     ██╔══██╗██╔══██║██╔═══╝ ██╔══╝  ██╔══██╗    ██╔══╝  ██║██║     ██╔══╝      
 ███████║╚██████╗██║  ██║██║  ██║██║     ███████╗██║  ██║    ██║     ██║███████╗███████╗    
 ╚══════╝ ╚═════╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝     ╚══════╝╚═╝  ╚═╝    ╚═╝     ╚═╝╚══════╝╚══════╝    
-                                                                                                                                                              
 """)
 
 # Ignorar o aviso específico
@@ -158,6 +157,90 @@ def fetch_pdfs_from_urls(starting_urls, max_pdfs=10):
     print(Fore.LIGHTGREEN_EX + Style.BRIGHT + f"\n\nForam Encontrados: {len(pdf_urls)} PDF")
     return pdf_urls
 
+def save_results_to_file(js_urls, css_urls, img_urls, ico_urls, php_urls, other_urls, pdf_urls):
+    filename = input("\nDigite o nome do arquivo para salvar os resultados: ").strip()
+    if not filename.endswith('.txt'):
+        filename += '.txt'
+    
+    with open(filename, 'w', encoding='utf-8') as f:
+        f.write(f"URL de Arquivos JavaScript: {len(js_urls)}\n")
+        f.writelines(f"{url}\n" for url in js_urls)   
+        
+        f.write(f"\n\nURL de Arquivos CSS: {len(css_urls)}\n")
+        f.writelines(f"{url}\n" for url in css_urls)
+
+        f.write(f"\n\nURL de Imagens: {len(img_urls)}\n")
+        f.writelines(f"{url}\n" for url in img_urls)
+
+        f.write(f"\n\nURL de Ícones: {len(ico_urls)}\n")
+        f.writelines(f"{url}\n" for url in ico_urls)
+
+        f.write(f"\n\nURL de Arquivos PHP: {len(php_urls)}\n")
+        f.writelines(f"{url}\n" for url in php_urls)
+
+        f.write(f"\n\nOutras URL: {len(other_urls)}\n")
+        f.writelines(f"{url}\n" for url in other_urls)       
+
+        f.write(f"\n\nURL de Arquivos PDF: {len(pdf_urls)}\n")
+        f.writelines(f"{url}\n" for url in pdf_urls)  
+
+        print(Fore.LIGHTYELLOW_EX + Style.BRIGHT + f"\nResultados salvos em: {filename}")    
+
+
+# Certificando-se de que os PDFs são encontrados corretamente e passados para a função
+def fetch_pdfs_from_urls(starting_urls, max_pdfs=10):
+    urls = deque(starting_urls)  # Fila de URLs para processar
+    scrapped_urls = set()  # Conjunto para URLs já processadas
+    pdf_urls = set()  # Conjunto para armazenar URLs de arquivos PDF
+    global global_count  # Contador global de PDFs encontrados
+
+    # Cabeçalhos adicionais para buscar PDFs
+    pdf_headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:89.0) Gecko/20100101 Firefox/89.0',
+        'Accept': 'application/pdf, application/x-pdf, application/vnd.adobe.xfdf, image/jpeg, image/png, image/tiff, image/pjpeg, */*',
+        'Accept-Language': 'en-US,en;q=0.5',
+        'Connection': 'keep-alive',
+        'Upgrade-Insecure-Requests': '1'
+    }
+
+    while urls and len(pdf_urls) < max_pdfs:
+        url = urls.popleft()
+
+        if url in scrapped_urls:
+            continue
+
+        scrapped_urls.add(url)
+
+        try:
+            response = requests.get(url, headers=pdf_headers)
+            response.raise_for_status()
+        except requests.exceptions.RequestException as e:
+            pass
+            continue
+        
+        response.encoding = response.apparent_encoding
+
+        try:
+            soup = BeautifulSoup(response.text, 'html.parser')  # Mantendo apenas 'html.parser' para evitar erro            
+        except Exception as e:
+            continue
+
+        # Adicionando logs de depuração
+        for tag in soup.find_all("a", href=True):
+            full_url = urljoin(url, tag["href"])  
+            # Log para verificar as URLs encontradas            
+           
+            if full_url.endswith(".pdf") and full_url not in pdf_urls:
+                print(Fore.LIGHTMAGENTA_EX + Style.BRIGHT + f"\n{global_count:<2}  = PDF: " + Fore.LIGHTGREEN_EX + Style.BRIGHT + full_url)
+                pdf_urls.add(full_url)
+                global_count += 1
+                if len(pdf_urls) >= max_pdfs:
+                    break
+            elif full_url.startswith(("http://", "https://")) and full_url not in scrapped_urls:
+                urls.append(full_url)    
+    print(Fore.LIGHTGREEN_EX + Style.BRIGHT + f"\n\nForam Encontrados: {len(pdf_urls)} PDF")
+    return pdf_urls
+
 # Função principal para processar URL do usuário
 def process_url():
     global global_count    
@@ -165,7 +248,7 @@ def process_url():
     if not user_url.startswith(('http:', 'https:')):
         user_url = 'http://' + user_url
 
-    max_pdfs_input = input("\nQuantos PDF deseja encontrar (deixe em branco para buscar todos): ").strip()
+    max_pdfs_input = input(Fore.LIGHTMAGENTA_EX + Style.BRIGHT + "\nQuantos PDF deseja encontrar (deixe em branco para buscar todos): ").strip()
     max_pdfs = int(max_pdfs_input) if max_pdfs_input else float('inf')  # Sem limite se não especificado    
 
     # Buscar PDFs do site inicial
@@ -210,18 +293,22 @@ def process_url():
             print(Fore.LIGHTYELLOW_EX + Style.BRIGHT + "\nOutros URL\n==========")
             for other_url in other_urls:
                 print(Fore.LIGHTYELLOW_EX + Style.BRIGHT + f"\n{other_url}")
-
    
         print(Fore.LIGHTGREEN_EX + Style.BRIGHT + "\n\nURL de Arquivos PDF\n===================")
         if pdf_urls:
             print(f"\n\nTotal de URL de Arquivos PDF: {len(pdf_urls)}")            
             for pdf_url in pdf_urls:
-                print(pdf_url)
-        
-    # Buscar mais PDFs se necessário
-    fetch_pdfs_from_urls([user_url], max_pdfs)    
+                print(pdf_url)        
+    
+    # Buscar mais PDFs se necessário       
+    pdf_urls = fetch_pdfs_from_urls([user_url], max_pdfs)
 
-    input(Fore.LIGHTMAGENTA_EX + "\n\nPRESSIONE ENTER PARA SAIR\n=========================")
+    # Oferecer a opção de salvar resultados em arquivo
+    save_results_input = input(Fore.LIGHTYELLOW_EX + Style.BRIGHT + "\nGostaria de salvar os resultados? (s/n): ").strip().lower()
+    if save_results_input == 's':    
+        save_results_to_file(js_urls, css_urls, img_urls, ico_urls, php_urls, other_urls, pdf_urls)     
+    
+    input(Fore.LIGHTRED_EX + Style.BRIGHT + "\n\nPRESSIONE ENTER PARA SAIR\n=========================")
 
 # Rodar o script
 process_url()
