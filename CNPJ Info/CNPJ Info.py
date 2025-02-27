@@ -1,10 +1,11 @@
+import re
 import requests
 from datetime import datetime
 from colorama import Fore, Style, init
 
 # Inicializando o colorama
 init(autoreset=True)
-print(Fore.LIGHTRED_EX + Style.BRIGHT + "Acesse o site: https://www.informecadastral.com.br")
+print(Fore.LIGHTRED_EX + Style.BRIGHT + "\nMais informações acesse o website: https://www.informecadastral.com.br\n")
 print(Fore.LIGHTCYAN_EX + Style.BRIGHT + """
  ██████╗███╗   ██╗██████╗      ██╗    ██╗███╗   ██╗███████╗ ██████╗ 
 ██╔════╝████╗  ██║██╔══██╗     ██║    ██║████╗  ██║██╔════╝██╔═══██╗
@@ -12,8 +13,69 @@ print(Fore.LIGHTCYAN_EX + Style.BRIGHT + """
 ██║     ██║╚██╗██║██╔═══╝ ██   ██║    ██║██║╚██╗██║██╔══╝  ██║   ██║
 ╚██████╗██║ ╚████║██║     ╚█████╔╝    ██║██║ ╚████║██║     ╚██████╔╝
  ╚═════╝╚═╝  ╚═══╝╚═╝      ╚════╝     ╚═╝╚═╝  ╚═══╝╚═╝      ╚═════╝ 
-                                                                
 """)
+
+# Cabeçalhos globais para evitar bloqueios
+HEADERS = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:89.0) Gecko/20100101 Firefox/89.0',
+    'Accept-Language': 'en-US,en;q=0.5',
+    'Connection': 'keep-alive',
+    'Upgrade-Insecure-Requests': '1',
+    'Accept': 'application/json'
+}
+
+def limpar_cnpj(cnpj):
+    """
+    Remove caracteres que não são dígitos de um CNPJ.
+    """
+    return re.sub(r'\D', '', cnpj)
+
+def consultar_cnpj(cnpj):
+    """
+    Consulta informações de um CNPJ em um serviço público ou API.
+    """
+    url = f"https://www.receitaws.com.br/v1/cnpj/{cnpj}"
+    try:
+        response = requests.get(url, headers=HEADERS, timeout=10)
+        if response.status_code == 200:
+            return response.json()
+        else:
+            print(Fore.LIGHTYELLOW_EX + Style.BRIGHT + f"Erro ao consultar o CNPJ. Status code: {response.status_code}")
+            return None
+    except requests.RequestException as e:
+        print(Fore.LIGHTYELLOW_EX + Style.BRIGHT + f"Erro na requisição: {e}")
+        return None
+
+def limpar_cep(cep):
+    """
+    Remove caracteres que não são dígitos de um CEP.
+    """
+    return re.sub(r'\D', '', cep)
+
+def consultar_cep(cep):
+    """
+    Consulta informações de latitude e longitude baseadas no CEP.
+    """
+    cep = limpar_cep(cep)
+    if not cep.isdigit() or len(cep) != 8:
+        print(Fore.LIGHTYELLOW_EX + Style.BRIGHT + "CEP inválido. Certifique-se de digitar um CEP com 8 dígitos.")
+        return None
+
+    url = f"https://cep.awesomeapi.com.br/json/{cep}"
+    try:
+        response = requests.get(url, headers=HEADERS, timeout=10)
+        if response.status_code == 200:
+            return response.json()
+        elif response.status_code == 403:
+            print(Fore.LIGHTYELLOW_EX + Style.BRIGHT + "Acesso bloqueado! Verifique o User-Agent ou limite de requisições.")
+        elif response.status_code == 400:
+            print(Fore.LIGHTYELLOW_EX + Style.BRIGHT + "Erro 400: O CEP enviado é inválido ou malformado.")
+        else:
+            print(Fore.LIGHTYELLOW_EX + Style.BRIGHT + f"Erro ao consultar o CEP. Status code: {response.status_code}")
+        return None
+    except requests.RequestException as e:
+        print(Fore.LIGHTYELLOW_EX + Style.BRIGHT + f"Erro na requisição do CEP: {e}")
+        return None
 
 def consultar_cnpj(cnpj):
     url = f'https://www.receitaws.com.br/v1/cnpj/{cnpj}'
@@ -72,12 +134,11 @@ def consultar_e_mostrar(cnpj):
 {Fore.LIGHTGREEN_EX}{Style.BRIGHT}CÓDIGO:{Style.RESET_ALL} {Fore.LIGHTYELLOW_EX}{Style.BRIGHT} {dados_cnpj['atividade_principal'][0]['code'] if 'atividade_principal' in dados_cnpj else 'Não encontrado'}
 {Fore.LIGHTGREEN_EX}{Style.BRIGHT}DESCRIÇÃO:{Style.RESET_ALL} {Fore.LIGHTYELLOW_EX}{Style.BRIGHT} {dados_cnpj['atividade_principal'][0]['text'] if 'atividade_principal' in dados_cnpj else 'Não encontrado'}
 
-""" 
-        # Adiciona atividades econômicas secundárias
+"""
+    # Adiciona atividades econômicas secundárias
         if 'atividades_secundarias' in dados_cnpj:
             for atividade in dados_cnpj['atividades_secundarias']:
                 message += Fore.LIGHTGREEN_EX + Style.BRIGHT + f"CÓDIGO: " + Fore.LIGHTYELLOW_EX + Style.BRIGHT + f"{atividade['code']} | DESCRIÇÃO: " + Fore.LIGHTYELLOW_EX + Style.BRIGHT + f"{atividade['text']}\n"
-
 
         # Adiciona informações do QSA
         message += Fore.LIGHTGREEN_EX + Style.BRIGHT + "\n\n\nQUADRO DE SÓCIOS E ADMINISTRADORES (QSA)\n==========================================\n"
@@ -102,7 +163,39 @@ QUALIFICAÇÃO: {socio.get('qual', 'Não encontrado')}
             message += "Não encontrado\n"
 
         # Exibe os dados no console
-        print(message)
+        print(message)  
+
+
+    
+    # Consultar CEP para obter latitude e longitude
+    cep = dados_cnpj.get('cep', '')
+    if cep:
+        info_cep = consultar_cep(cep)
+        if info_cep:
+            latitude = info_cep.get('lat', 'Não disponível')
+            longitude = info_cep.get('lng', 'Não disponível')          
+            
+            # Exibindo o endereço com o título em amarelo e as informações em verde
+            logradouro = dados_cnpj.get('logradouro', 'Não encontrado')
+            numero = dados_cnpj.get('numero', 'Não encontrado')
+            municipio = dados_cnpj.get('municipio', 'Não encontrado')
+            uf = dados_cnpj.get('uf', 'Não encontrado')
+            
+            # Título em amarelo, informações em verde
+            print(Fore.LIGHTYELLOW_EX + Style.BRIGHT + f"\n\nEndereço: ", end="")
+            print(Fore.LIGHTCYAN_EX + Style.BRIGHT + f"{logradouro}   Número: {numero:<5} {municipio} {uf}")
+            
+            # Exibindo a geolocalização como Latitude, Longitude
+            print(Fore.LIGHTYELLOW_EX + Style.BRIGHT + f"\nGeolocalização: ", end="")
+            print(Fore.LIGHTCYAN_EX + Style.BRIGHT + f"{latitude}, {longitude}")
+
+            # Links do Google Maps 
+            print(Fore.LIGHTYELLOW_EX + Style.BRIGHT + f"\nGoogle Maps: ", end="")            
+            print(Fore.LIGHTCYAN_EX + Style.BRIGHT + f"https://www.google.com/maps?q={latitude},{longitude}\n")
+
+             # Links Street View
+            print(Fore.LIGHTYELLOW_EX + Style.BRIGHT + f"Street View: ", end="")
+            print(Fore.LIGHTCYAN_EX + Style.BRIGHT + f"https://www.google.com/maps/@?api=1&map_action=pano&viewpoint={latitude},{longitude}")
 
 def main():
     cnpj = input(Fore.LIGHTMAGENTA_EX + Style.BRIGHT + "Digite o número do CNPJ (ex: 22333333011150 ou 22.333.333/0111-50): ").strip()
@@ -112,4 +205,4 @@ def main():
 if __name__ == "__main__":
     main()
 
-input(Fore.LIGHTRED_EX + Style.BRIGHT + "\n========== PRESSIONE ENTER PARA SAIR ==========\n")
+input(Fore.LIGHTRED_EX + Style.BRIGHT + "\n\n========== PRESSIONE ENTER PARA SAIR ==========\n")
