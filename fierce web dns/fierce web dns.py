@@ -2,7 +2,8 @@ import dns.resolver
 import threading
 import platform
 import os
-import sys  # Importação corrigida
+import sys
+import time  # Importando a biblioteca para medir o tempo
 from colorama import Fore, Style, init
 
 # Inicializando o colorama
@@ -14,7 +15,7 @@ print(Fore.LIGHTCYAN_EX + Style.BRIGHT + """
 ██╔══╝  ██║██╔══╝  ██╔══██╗██║     ██╔══╝      ██║███╗██║██╔══╝  ██╔══██╗    ██║  ██║██║╚██╗██║╚════██║
 ██║     ██║███████╗██║  ██║╚██████╗███████╗    ╚███╔███╔╝███████╗██████╔╝    ██████╔╝██║ ╚████║███████║
 ╚═╝     ╚═╝╚══════╝╚═╝  ╚═╝ ╚═════╝╚══════╝     ╚══╝╚══╝ ╚══════╝╚═════╝     ╚═════╝ ╚═╝  ╚═══╝╚══════╝
-                                                                                                                                                                        
+                                                                                                                                                                      
 """)
 
 # Função para listar arquivos .txt na pasta onde o script está
@@ -77,6 +78,7 @@ def resolver_subdominio(subdominio, dominio):
 # Função principal para iniciar a enumeração
 def enumerar_subdominios(dominio):
     threads = []
+    tempo_inicio = time.time()  # Marca o início do tempo
     for sub in subdominios:
         thread = threading.Thread(target=resolver_subdominio, args=(sub, dominio))
         thread.start()
@@ -84,6 +86,8 @@ def enumerar_subdominios(dominio):
     
     for thread in threads:
         thread.join()
+    
+    tempo_fim = time.time()  # Marca o fim do tempo
 
     if resultados:
         print(Fore.LIGHTYELLOW_EX + Style.BRIGHT +  "\n### Resultados Encontrados ###\n")
@@ -121,7 +125,22 @@ if __name__ == "__main__":
     
     print(Fore.LIGHTCYAN_EX + Style.BRIGHT + f"\n[+] Sistema Detectado: {sistema}\n")
     print(Fore.LIGHTMAGENTA_EX + Style.BRIGHT +  "[+] Enumerando subdomínios...\n")
+    
+    # Registra o início do tempo
+    tempo_inicio = time.time()
+    
     enumerar_subdominios(site)
+    
+    # Registra o fim do tempo
+    tempo_fim = time.time()    
+   
+    # Calcula o tempo total de execução
+    tempo_total = tempo_fim - tempo_inicio
+    if tempo_total < 60:
+        print(Fore.LIGHTMAGENTA_EX + Style.BRIGHT + f"\n\nTempo total de execução: {tempo_total:.2f} segundos")
+    else:
+        tempo_total_minutos = tempo_total / 60  # Tempo em minutos
+        print(Fore.LIGHTMAGENTA_EX + Style.BRIGHT + f"\n\nTempo total de execução: {tempo_total_minutos:.2f} minutos")
     
     # Pergunta se deseja salvar os resultados
     salvar_resultados()
