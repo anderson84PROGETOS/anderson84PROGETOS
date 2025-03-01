@@ -86,7 +86,7 @@ def print_result(result, verbose=False):
         else:
             color = Fore.LIGHTCYAN_EX + Style.BRIGHT  # Outros códigos
 
-        output = color + Style.BRIGHT + f"\n[{result['status']}] {result['url']:<35} [IP: {result['ip']:<15} ] [Size: {result['content_length']:<10}] [Server: {result['server']}]"
+        output = color + Style.BRIGHT + f"\n[{result['status']}] {result['url']:<38} [IP: {result['ip']:<15} ] [Size: {result['content_length']:<10}] [Server: {result['server']}]"
         if verbose and result["title"]:
             output += f" [Title: {result['title']}]"
         print(output)
@@ -100,9 +100,9 @@ def listar_txt_na_pasta():
         print("\nNenhum arquivo .txt encontrado na pasta.")
         sys.exit()
 
-    print(Fore.LIGHTMAGENTA_EX + Style.BRIGHT + "Escolha um arquivo de wordlist\n")
+    print(Fore.LIGHTMAGENTA_EX + Style.BRIGHT + "Escolha um arquivo de wordlist")
     for idx, file in enumerate(txt_files, start=1):
-        print(Fore.LIGHTYELLOW_EX + Style.BRIGHT + f"\n{idx} = {file}")
+        print(Fore.LIGHTYELLOW_EX + Style.BRIGHT + f"\n\n{idx} = {file}")
 
     while True:
         try:
