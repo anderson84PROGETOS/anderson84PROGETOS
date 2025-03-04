@@ -85,6 +85,7 @@
             <option value="site:*.${siteNome}">Encontrar subdomínios</option>
             <option value="site:*.*.${siteNome}">Encontrar sub-subdomínios</option>
             <option value="https://web.archive.org/web/*/${siteNome}/*">Pesquisar no Wayback Machine</option>
+            <option value="(${siteNome}) (site:*.*.0.* | site:*.*.1.* | site:*.*.2.* | site:*.*.3.* | site:*.*.4.* | site:*.*.5.* | site:*.*.6.* | site:*.*.7.* | site:*.*.8.* | site:*.*.9.* | site:*.*.10.* | site:*.*.11.* | site:*.*.12.* | site:*.*.13.* | site:*.*.14.* | site:*.*.15.* | site:*.*.16.* | site:*.*.17.* | site:*.*.18.* | site:*.*.19.* | site:*.*.20.* | site:*.*.21.* | site:*.*.22.* | site:*.*.23.* | site:*.*.24.* | site:*.*.25.* | site:*.*.26.* | site:*.*.27.* | site:*.*.28.* | site:*.*.29.*)">Mostrar apenas endereços IP (abre várias abas)</option>
             <option value="site:docs.${siteNome}/document/d">Documentos, Apresentações e desenhos vazados</option>
             <option value="site:docs.${siteNome}/presentation/d">Encontrar presentations</option>
             <option value="site:docs.${siteNome}/drawings/d">Encontrar drawings</option>
@@ -116,6 +117,7 @@
             <option value="site:${siteNome} filetype:pdf">Achar Arquivo pdf</option>
             <option value='"${siteNome} "'>Achar email</option>
             <option value="site:${siteNome} intitle:Login -Painel">Login -Painel</option>
+            <option value='"{siteNome}"'>Extrair Dados</option>
         </select>
         <input type="text" id="siteInput" placeholder="Digite o nome do site (ex: example.com)">
         <button onclick="searchGoogle()">Pesquisar</button>
