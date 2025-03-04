@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Dorks</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 600px;
+            text-align: center; /* Centraliza o conteúdo interno */
+        }
+        h1 {
+            text-align: center;
+            color: rgb(7, 204, 34);
+            margin-top: 5px; /* Espaço entre a imagem e o título */
+        }
+        select, input[type="text"], button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #4285f4;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #357abd;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            display: none;
+            min-height: 100px;
+            line-height: 1.5;
+            text-align: left; /* Mantém o texto do resultado alinhado à esquerda */
+        }
+        .header-img {
+            max-width: 100%; /* Garante que a imagem não exceda o container */
+            height: auto; /* Mantém a proporção */
+            margin-bottom: 10px; /* Espaço entre a imagem e o título */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="https://tac.youthbridgefoundation.org/wp-content/uploads/2024/08/Google-Dorks.jpg" alt="Google Dorks" class="header-img">
+        <option value="">Selecione um Tipo de Pesquisa</option>
+        
+        <select id="dorkSelect">            
+            <option value="site:${siteNome} ext:doc | ext:docx | ext:odt | ext:rtf | ext:sxw | ext:psw | ext:ppt | ext:pptx | ext:pps | ext:csv">Documentos expostos publicamente</option>
+            <option value="site:${siteNome} intitle:index.of">Vulnerabilidades em listagem de diretórios</option>
+            <option value="site:${siteNome} ext:xml | ext:conf | ext:cnf | ext:reg | ext:inf | ext:rdp | ext:cfg | ext:txt | ext:ora | ext:ini | ext:env">Arquivos de configuração expostos</option>
+            <option value="site:${siteNome} ext:sql | ext:dbf | ext:mdb">Arquivos de banco de dados expostos</option>
+            <option value="site:${siteNome} ext:log">Arquivos de log expostos</option>
+            <option value="site:${siteNome} ext:bkf | ext:bkp | ext:bak | ext:old | ext:backup">Arquivos de backup e antigos</option>
+            <option value="site:${siteNome} inurl:login | inurl:signin | intitle:Login | intitle:'sign in' | inurl:auth">Páginas de login</option>
+            <option value="site:${siteNome} intext:'sql syntax near' | intext:'syntax error has occurred' | intext:'incorrect syntax near' | intext:'unexpected end of SQL command' | intext:'Warning: mysql_connect()' | intext:'Warning: mysql_query()' | intext:'Warning: pg_connect()'">Erros SQL</option>
+            <option value="site:${siteNome} 'PHP Parse error' | 'PHP Warning' | 'PHP Error'">Erros/avisos PHP</option>
+            <option value="site:${siteNome} ext:php intitle:phpinfo 'published by the PHP Group'">phpinfo()</option>
+            <option value="site:pastebin.com | site:paste2.org | site:pastehtml.com | site:slexy.org | site:snipplr.com | site:snipt.net | site:textsnip.com | site:bitpaste.app | site:justpaste.it | site:heypasteit.com | site:hastebin.com | site:dpaste.org | site:dpaste.com | site:codepad.org | site:jsitor.com | site:codepen.io | site:jsfiddle.net | site:dotnetfiddle.net | site:phpfiddle.org | site:ide.geeksforgeeks.org | site:repl.it | site:ideone.com | site:paste.debian.net | site:paste.org | site:paste.org.ru | site:codebeautify.org | site:codeshare.io | site:trello.com ${siteNome}">Pesquisar em pastebin.com / sites de pasting</option>
+            <option value="site:github.com | site:gitlab.com ${siteNome}">Pesquisar no github.com e gitlab.com</option>
+            <option value="site:stackoverflow.com ${siteNome}">Pesquisar no stackoverflow.com</option>
+            <option value="site:${siteNome} inurl:signup | inurl:register | intitle:Signup">Páginas de cadastro</option>
+            <option value="site:*.${siteNome}">Encontrar subdomínios</option>
+            <option value="site:*.*.${siteNome}">Encontrar sub-subdomínios</option>
+            <option value="https://web.archive.org/web/*/${siteNome}/*">Pesquisar no Wayback Machine</option>
+            <option value="site:docs.${siteNome}/document/d">Documentos, Apresentações e desenhos vazados</option>
+            <option value="site:docs.${siteNome}/presentation/d">Encontrar presentations</option>
+            <option value="site:docs.${siteNome}/drawings/d">Encontrar drawings</option>
+            <option value="site:docs.${siteNome}/file/d">Qualquer tipo de arquivo (imagens, vídeos, zip, pdf)</option>
+            <option value="site:docs.${siteNome}/folder/d">Pasta completa do Google Drive exposta</option>
+            <option value="site:docs.${siteNome}/open intext:secreto">Itens secretos</option>
+            <option value=' "${siteNome}" + inurl= index.php?id=1'>Achar inurl e index.php</option>
+            <option value="site:${siteNome} ext:pdf">Achar Arquivo pdf</option>
+            <option value="site:${siteNome} ext:xml">Achar Arquivo xml</option>
+            <option value="site:${siteNome} ext:docx">Achar Arquivo docx</option>
+            <option value="intext:${siteNome}">Achar Arquivo intext</option>
+            <option value="filetype:txt intext:senha+url site:${siteNome}">Achar Arquivo txt senha url</option>
+            <option value="servidores site:scribd.com AND:${siteNome}">Achar Arquivo nos Servidores do Scribd</option>
+            <option value="filetype:sql${siteNome}">Achar arquivo sql aperte a tecla espaço ou nome do site</option>
+            <option value="filetype:env ${siteNome}">Achar arquivo env</option>
+            <option value="inurl:${siteNome}">Achar arquivo inurl</option>
+            <option value='"${siteNome}"filetype:pdf OR filetype:xlsx OR filetype:docx OR filetype:txt'>Achar arquivo pdf xlsx docx txt</option>
+            <option value="site:${siteNome} filetype:txt">Achar arquivo txt</option>
+            <option value='${siteNome}intitle:"WEBCAM 7" -inurl:/admin.html'>Achar arquivo WEBCAM 7</option>
+            <option value='"${siteNome}" robots.txt'>Achar arquivo robots.txt</option>
+            <option value='intitle:"index of" intext:${siteNome}'>Achar arquivo senha</option>
+            <option value='intext:"${siteNome}"'>Achar nome de pessoa</option>
+            <option value=" IP:${siteNome}">Nome do IP</option>
+            <option value="filetype:pdf intitle:confidencial site:${siteNome}">Achar arquivo pdf confidencial</option>
+            <option value='intitle:confidencial filetype:pdf intext:"${siteNome}"'>Confidencial</option>
+            <option value="site:pastebin.com ${siteNome} credit card">Achar credit card</option>
+            <option value="site:drive.google.com ${siteNome}">Achar coisas em google drive</option>
+            <option value="link:${siteNome}">Achar link</option>
+            <option value="site:${siteNome} filetype:pdf">Achar Arquivo pdf</option>
+            <option value='"${siteNome} "'>Achar email</option>
+            <option value="site:${siteNome} intitle:Login -Painel">Login -Painel</option>
+        </select>
+        <input type="text" id="siteInput" placeholder="Digite o nome do site (ex: example.com)">
+        <button onclick="searchGoogle()">Pesquisar</button>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        function searchGoogle() {
+            const dork = document.getElementById('dorkSelect').value;
+            const siteNome = document.getElementById('siteInput').value.trim();
+            const resultDiv = document.getElementById('result');
+
+            if (!dork || !siteNome) {
+                alert('Por favor, selecione um tipo de pesquisa e insira um site!');
+                return;
+            }
+
+            // Substitui ${siteNome} pelo valor inserido pelo usuário
+            let query = dork.replace(/\${siteNome}/g, siteNome);
+
+            // Exibe a consulta no elemento #result
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = `
+                <h3><strong style="color: red;">Resultados para: ${siteNome} - ${document.getElementById('dorkSelect').options[document.getElementById('dorkSelect').selectedIndex].text}</strong></h3>
+                <h2>Consulta utilizada: ${query}</h2>
+            `;
+
+            // Se for Wayback Machine, usa a URL direta
+            if (query.startsWith('https://web.archive.org')) {
+                window.open(query, '_blank');
+            } else {
+                // Para outras pesquisas, usa o Google
+                const googleUrl = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
+                window.open(googleUrl, '_blank');
+            }
+        }
+    </script>
+</body>
+</html>
