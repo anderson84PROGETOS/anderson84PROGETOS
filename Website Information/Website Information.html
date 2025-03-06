@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website Information</title>
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1a1a1a;
+            color: #ffffff;
+            padding: 20px;
+            margin: 0;
+            line-height: 1.6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center; /* Center all text within container */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .ascii-art {
+            color: #00ffff;
+            font-family: monospace;
+            white-space: pre;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        .input-group {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center; /* Center input group items */
+        }
+        input[type="text"] {
+            padding: 12px;
+            width: 33%;
+            background-color: #2a2a2a;
+            border: 1px solid #00ffff;
+            color: #ffffff;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        select {
+            padding: 12px;
+            background-color: #2a2a2a;
+            border: 1px solid #00ffff;
+            color: #ffffff;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            padding: 12px 25px;
+            background-color: #00ffff;
+            border: none;
+            color: #1a1a1a;
+            cursor: pointer;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #00cccc;
+        }
+        #resultado {
+            background-color: #2a2a2a;
+            padding: 120px;
+            border-radius: 5px;
+            white-space: pre-wrap;
+            margin-top: 20px;
+            font-family: monospace;
+            font-size: 14px;
+            overflow-x: auto;
+            text-align: left; /* Keep result text left-aligned for readability */
+            width: 200%;
+            max-width: 1020px; /* Optional: limit width of result box */
+        }
+        .section-title {
+            color: #ff00ff;
+            border-bottom: 2px solid #ff00ff;
+            padding-bottom: 5px;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-weight: bold;
+            display: block;
+        }
+        .info-green { color: #00ff00; }
+        .info-lightgreen { color: #00ff7f; }
+        .info-yellow { color: #ffff00; }
+        .info-lightyellow { color: #ffffe0; }
+        .info-magenta { color: #ff00ff; }
+        .info-lightmagenta { color: #ff77ff; }
+        .info-red { color: #ff0000; }
+        .info-lightred { color: #ff4040; }
+        .info-cyan { color: #00ffff; }
+        .info-lightcyan { color: #e0ffff; }
+        .loading { color: #e0ffff; font-style: italic; }
+        .footer {
+            margin-top: 40px;
+            color: #888888;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">   
+        <img src="https://i.postimg.cc/3JL3LvGK/5b94017e-4e7b-4582-850e-90594b6b1b2d.png" 
+        alt="Imagem Website Information" 
+        width="940" height="400">     
+        
+        <div class="input-group">
+            <input type="text" id="endereco" placeholder="Digite o domínio">
+            <select id="tipoConsulta">
+                <option value="whois">Informações do Domínio</option>
+                <option value="dns">DNS (A, NS, PTR, TXT, MX, SOA, DS, SRV, NSEC3, HINFO, CNAME, ANY)</option>
+                <option value="ip">Informações de IP</option>
+            </select>
+            <button onclick="consultar()">Consultar</button>
+        </div>
+
+        <div id="resultado"></div>
+
+        <div class="footer">
+            Desenvolvido E Atualizado Em 06 de Março de 2025
+        </div>
+    </div>
+
+    <script>
+        async function consultar() {
+            const endereco = document.getElementById('endereco').value.trim();
+            const tipoConsulta = document.getElementById('tipoConsulta').value;
+            const resultadoDiv = document.getElementById('resultado');
+            resultadoDiv.innerHTML = '<span class="loading">Consultando...</span>';
+
+            if (!endereco) {
+                resultadoDiv.innerHTML = '<span class="info-red">Por favor, insira um domínio ou IP válido</span>';
+                return;
+            }
+
+            try {
+                let resultado = '';
+                const isIP = /^(\d+\.){3}\d+$/.test(endereco);
+
+                if (tipoConsulta === 'whois') {
+                    if (isIP) {
+                        resultado += await consultaWhoisIP(endereco);
+                    } else {
+                        resultado += endereco.endsWith('.br') ? await obterWhoisBR(endereco) : await obterWhois(endereco);
+                        resultado += await obterMX(endereco);
+                        resultado += await consultaWhoisAdicional(endereco);
+                    }
+                } else if (tipoConsulta === 'dns') {
+                    resultado += await obterDNS(endereco);
+                } else if (tipoConsulta === 'ip') {
+                    resultado += await consultaWhoisIP(endereco);
+                }
+
+                resultadoDiv.innerHTML = resultado || '<span class="info-lightyellow">Nenhuma informação encontrada</span>';
+            } catch (error) {
+                resultadoDiv.innerHTML = `<span class="info-lightred">Erro ao consultar: ${error.message}</span>`;
+            }
+        }
+
+        async function obterWhoisBR(endereco) {
+            const url = `https://rdap.registro.br/domain/${endereco}`;
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error('Domínio não encontrado');
+                const data = await response.json();
+                return formatarWhois(data, endereco);
+            } catch (error) {
+                return `<span class="info-lightred">${error.message}</span>\n`;
+            }
+        }
+
+        async function obterWhois(endereco) {
+            const url = `https://rdap.org/domain/${endereco}`;
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error('Domínio não encontrado');
+                const data = await response.json();
+                return formatarWhois(data, endereco);
+            } catch (error) {
+                return `<span class="info-lightred">${error.message}</span>\n`;
+            }
+        }
+
+        async function obterMX(endereco) {
+            try {
+                const response = await fetch(`https://dns.google/resolve?name=${endereco}&type=MX`);
+                const data = await response.json();
+                if (!data.Answer) return '';
+                let resultado = '\n<span class="section-title">Registros MX Encontrados</span>\n';
+                data.Answer.forEach(record => {
+                    resultado += `<span class="info-lightmagenta">${record.data}</span>\n`;
+                });
+                return resultado;
+            } catch (error) {
+                return `\n<span class="info-lightred">Erro ao consultar MX: ${error.message}</span>\n`;
+            }
+        }
+
+        async function obterDNS(endereco) {
+            let resultado = '';
+            const tipos = ['A', 'NS', 'PTR', 'TXT', 'MX', 'SOA', 'DS', 'SRV', 'NSEC3', 'HINFO', 'CNAME', 'ANY'];
+            for (const tipo of tipos) {
+                try {
+                    const response = await fetch(`https://dns.google/resolve?name=${endereco}&type=${tipo}`);
+                    const data = await response.json();
+                    if (data.Answer) {
+                        resultado += `\n<span class="section-title">Registros ${tipo} Encontrados</span>\n`;
+                        data.Answer.forEach(record => {
+                            resultado += `<span class="info-lightcyan">${record.data}</span>\n`;
+                        });
+                    }
+                } catch (error) {
+                    resultado += `\n<span class="info-lightred">Erro ao consultar ${tipo}: ${error.message}</span>\n`;
+                }
+            }
+
+            let srv_found = false;
+            const srv_services = ['_sip._tcp', '_sip._udp', '_sips._tcp', '_h323cs._tcp', '_h323ls._udp', '_sip._tls'];
+            resultado += '\n<span class="section-title">Registros SRV de Serviços Comuns</span>\n';
+            for (const service of srv_services) {
+                try {
+                    const srvQuery = `${service}.${endereco}`;
+                    const response = await fetch(`https://dns.google/resolve?name=${srvQuery}&type=SRV`);
+                    const data = await response.json();
+                    if (data.Answer) {
+                        srv_found = true;
+                        resultado += `\n<span class="info-lightyellow">Serviço: ${service}</span>\n`;
+                        for (const record of data.Answer) {
+                            const srvData = record.data;
+                            const host = srvData.split(' ').pop();
+                            let ip = 'N/A';
+                            try {
+                                const ipResponse = await fetch(`https://dns.google/resolve?name=${host}&type=A`);
+                                const ipData = await ipResponse.json();
+                                if (ipData.Answer) {
+                                    ip = ipData.Answer[0].data;
+                                }
+                            } catch (ipError) {
+                                ip = `Erro ao resolver IP: ${ipError.message}`;
+                            }
+                            resultado += `<span class="info-lightcyan">${srvData.padEnd(60, ' ')} IP: ${ip}</span>\n`;
+                        }
+                    }
+                } catch (error) {
+                    resultado += `<span class="info-lightred">Erro ao consultar ${service}: ${error.message}</span>\n`;
+                }
+            }
+            if (!srv_found) {
+                resultado += `<span class="info-lightyellow">Nenhum registro SRV comum encontrado</span>\n`;
+            }
+
+            return resultado;
+        }
+
+        async function consultaWhoisIP(endereco) {
+            const url = `http://ip-api.com/json/${endereco}?fields=status,message,continent,country,countryCode,region,regionName,city,zip,lat,lon,timezone,isp,org,as,query`;
+            let resultado = '\n<span class="section-title">Informações de IP</span>\n';
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error('Erro na consulta de IP');
+                const data = await response.json();
+                if (data.status === 'fail') throw new Error(data.message);
+
+                resultado += `<span class="info-green">IP: ${data.query}</span>\n`;
+                resultado += `<span class="info-green">Continente: ${data.continent || 'N/A'}</span>\n`;
+                resultado += `<span class="info-green">País: ${data.country} (${data.countryCode})</span>\n`;
+                resultado += `<span class="info-green">Região: ${data.regionName} (${data.region})</span>\n`;
+                resultado += `<span class="info-green">Cidade: ${data.city || 'N/A'}</span>\n`;
+                resultado += `<span class="info-green">CEP: ${data.zip || 'N/A'}</span>\n`;                
+                resultado += `<span class="info-green">Fuso Horário: ${data.timezone || 'N/A'}</span>\n`;
+                resultado += `<span class="info-green">ISP: ${data.isp || 'N/A'}</span>\n`;
+                resultado += `<span class="info-green">Organização: ${data.org || 'N/A'}</span>\n`;
+                resultado += `<span class="info-green">AS: ${data.as || 'N/A'}</span>\n`;
+
+                resultado += `<h4><span class="info-green">Latitude: ${data.lat || 'N/A'}</span>\n`;
+                resultado += `<span class="info-green">Longitude: ${data.lon || 'N/A'}</span>\n`;
+
+                if (data.lat && data.lon) {
+                    const lat = data.lat;
+                    const lon = data.lon;
+                    resultado += `\n<span class="info-green">Geolocalização: ${lat},${lon}</span>\n`;
+                    resultado += `<span class="info-green">Google Maps: https://www.google.com/maps/place/${lat},${lon}</span>\n`;
+                    resultado += `<span class="info-green">Google Street View: https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${lat},${lon}&heading=-45&pitch=38&fov=80</span>\n`;
+                } else {
+                    resultado += `\n<span class="info-lightred">Geolocalização: Não disponível</span>\n`;
+                }
+
+                return resultado;
+            } catch (error) {
+                return resultado + `<span class="info-lightred">Erro: ${error.message}</span>\n`;
+            }
+        }
+
+        async function consultaWhoisAdicional(endereco) {
+            const isIP = /^(\d+\.){3}\d+$/.test(endereco);
+            const url = isIP ? `http://ip-api.com/json/${endereco}`
+                : endereco.endsWith('.br') ? `https://rdap.registro.br/domain/${endereco}`
+                : `https://rdap.org/domain/${endereco}`;
+            let resultado = '\n<span class="section-title">Mais Informações</span>\n';
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error('Não encontrado');
+                const data = await response.json();
+
+                if (isIP) {
+                    if (data.status === 'fail') throw new Error(data.message);
+                    resultado += `<span class="info-green">IP: ${data.query}</span>\n`;
+                    resultado += `<span class="info-lightyellow">País: ${data.country || 'N/A'}</span>\n`;
+                    resultado += `<span class="info-lightmagenta">ISP: ${data.isp || 'N/A'}</span>\n`;
+                } else {
+                    const events = data.events || [];
+                    const created = events.find(e => e.eventAction === 'registration');
+                    const updated = events.find(e => e.eventAction === 'last changed');
+                    const expires = events.find(e => e.eventAction === 'expiration');
+
+                    resultado += `<span class="info-green">Domínio: ${endereco}</span>\n`;
+                    if (created) resultado += `<span class="info-lightyellow">Registrado: ${formatarData(created.eventDate)}</span>\n`;
+                    if (updated) resultado += `<span class="info-lightmagenta">Modificado: ${formatarData(updated.eventDate)}</span>\n`;
+                    if (expires) resultado += `<span class="info-lightred">Expira: ${formatarData(expires.eventDate)}</span>\n`;
+                }
+                return resultado;
+            } catch (error) {
+                return resultado + `<span class="info-lightred">Nenhuma informação encontrada: ${error.message}</span>\n`;
+            }
+        }
+
+        function formatarWhois(data, endereco) {
+            let resultado = `<span class="info-cyan">Informações do Domínio: ${endereco}</span>\n\n`;
+
+            resultado += `<span class="section-title">Detalhes Gerais</span>\n`;
+            resultado += `<span class="info-green">Domínio: ${data.ldhName || 'N/A'}</span>\n`;
+            resultado += `<span class="info-green">Status: ${data.status ? data.status.join(', ') : 'N/A'}</span>\n`;
+            const events = data.events || [];
+            const registration = events.find(e => e.eventAction === 'registration');
+            const lastChanged = events.find(e => e.eventAction === 'last changed');
+            const expiration = events.find(e => e.eventAction === 'expiration');
+            if (registration) resultado += `<span class="info-green">Data de Registro: ${formatarData(registration.eventDate)}</span>\n`;
+            if (lastChanged) resultado += `<span class="info-green">Última Modificação: ${formatarData(lastChanged.eventDate)}</span>\n`;
+            if (expiration) resultado += `<span class="info-green">Data de Expiração: ${formatarData(expiration.eventDate)}</span>\n`;
+
+            const registrant = data.entities?.find(e => e.roles.includes('registrant'));
+            if (registrant) {
+                resultado += `\n<span class="section-title">Registrante</span>\n`;
+                const vcard = registrant.vcardArray ? registrant.vcardArray[1] : [];
+                const org = vcard.find(v => v[0] === 'fn') ? vcard.find(v => v[0] === 'fn')[3] : 'N/A';
+                resultado += `<span class="info-yellow">Organização: ${org}</span>\n`;
+                const cnpj = registrant.publicIds ? registrant.publicIds[0]?.identifier : 'N/A';
+                resultado += `<span class="info-yellow">CNPJ/Identificador: ${cnpj}</span>\n`;
+                if (registrant.legalRepresentative) resultado += `<span class="info-yellow">Representante Legal: ${registrant.legalRepresentative}</span>\n`;
+            }
+
+            const admin = data.entities?.find(e => e.roles.includes('administrative'));
+            if (admin) {
+                resultado += `\n<span class="section-title">Contato Administrativo</span>\n`;
+                const adminVcard = admin.vcardArray ? admin.vcardArray[1] : [];
+                const adminName = adminVcard.find(v => v[0] === 'fn') ? adminVcard.find(v => v[0] === 'fn')[3] : 'N/A';
+                const adminEmail = adminVcard.find(v => v[0] === 'email') ? adminVcard.find(v => v[0] === 'email')[3] : 'N/A';
+                resultado += `<span class="info-lightgreen">Nome: ${adminName}</span>\n`;
+                resultado += `<span class="info-lightgreen">E-mail: ${adminEmail}</span>\n`;
+            }
+
+            const tech = data.entities?.find(e => e.roles.includes('technical'));
+            if (tech) {
+                resultado += `\n<span class="section-title">Contato Técnico</span>\n`;
+                const techVcard = tech.vcardArray ? tech.vcardArray[1] : [];
+                const techName = techVcard.find(v => v[0] === 'fn') ? techVcard.find(v => v[0] === 'fn')[3] : 'N/A';
+                const techEmail = techVcard.find(v => v[0] === 'email') ? techVcard.find(v => v[0] === 'email')[3] : 'N/A';
+                resultado += `<span class="info-lightcyan">Nome: ${techName}</span>\n`;
+                resultado += `<span class="info-lightcyan">E-mail: ${techEmail}</span>\n`;
+            }
+
+            if (data.nameservers?.length) {
+                resultado += `\n<span class="section-title">Servidores de Nome (Nameservers)</span>\n`;
+                data.nameservers.forEach(ns => {
+                    resultado += `<span class="info-magenta">${ns.ldhName}</span>\n`;
+                });
+            }
+
+            return resultado;
+        }
+
+        function formatarData(dataStr) {
+            const data = new Date(dataStr);
+            return data.toLocaleDateString('pt-BR', {
+                weekday: 'long',
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric',
+                hour: 'numeric',
+                minute: 'numeric'
+            });
+        }
+
+        document.getElementById('endereco').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') consultar();
+        });
+    </script>
+    
+</body>
+</html>
