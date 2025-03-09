@@ -1,159 +1,234 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">    
     <title>Google Dorks</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #f0f0f0;
-        }
-        .container {
-            background: white;
+            background-color: #121212;
+            color: #ffffff;
             padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 600px;
-            text-align: center; /* Centraliza o conteúdo interno */
+            font-family: Arial, sans-serif;
+        }
+        .container {           
+            max-width: 900px;
+            margin: 0 auto;         
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(247, 223, 7, 0.603);
+            
         }
         h1 {
             text-align: center;
-            color: rgb(7, 204, 34);
-            margin-top: 5px; /* Espaço entre a imagem e o título */
+            color: #ffcc00;
         }
-        select, input[type="text"], button {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            font-size: 16px;
-            box-sizing: border-box;
+        label {
+            font-size: 20px;
+            font-weight: bold;
+            display: block;
         }
-        button {
-            background-color: #4285f4;
-            color: white;
+        .form-control {
+            background: #333;
+            color: #fff;
+            border: 1px solid #ffcc00;
+        }
+        .btn-custom {
+            background-color: #ffcc00;
+            color: #000;
+            font-weight: bold;
             border: none;
-            cursor: pointer;
+            transition: 0.3s;
+            
         }
-        button:hover {
-            background-color: #357abd;
+        .btn-custom:hover {
+            background-color: #e6b800;
         }
         #result {
             margin-top: 20px;
-            padding: 20px;
-            background-color: #f9f9f9;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 14px;
-            display: none;
-            min-height: 100px;
-            line-height: 1.5;
-            text-align: left; /* Mantém o texto do resultado alinhado à esquerda */
+            padding: 15px;
+            background-color: #2c2c2c;
+            border-radius: 5px;
+            border: 1px solid #ffcc00;
+            color: #ffffff;
+            
         }
-        .header-img {
-            max-width: 100%; /* Garante que a imagem não exceda o container */
-            height: auto; /* Mantém a proporção */
-            margin-bottom: 10px; /* Espaço entre a imagem e o título */
+        .result-title {
+            color: #ff4444;
+            font-weight: bold;
         }
+        .query-title {
+            color: #44aaff;
+            font-weight: bold;
+        }
+        #headerImage {
+            width: 100%; /* Largura relativa ao container */
+            max-width: 400px; /* Define um tamanho máximo */
+            height: auto; /* Mantém a proporção original da imagem */
+            
+            display: block; /* Remove espaços extras abaixo da imagem */
+            margin: 1px auto 0; /* Ajusta a margem superior para trazer a imagem para cima */
+            
+            border-radius: 20px; /* Cantos arredondados */
+            
+            position: relative; /* Permite ajustes no posicionamento */
+            top: -0px; /* Move a imagem para cima */
+        }
+
     </style>
 </head>
 <body>
-    <div class="container">
-        <img src="https://tac.youthbridgefoundation.org/wp-content/uploads/2024/08/Google-Dorks.jpg" alt="Google Dorks" class="header-img">
-        <option value="">Selecione um Tipo de Pesquisa</option>
-        
-        <select id="dorkSelect">            
-            <option value="site:${siteNome} ext:doc | ext:docx | ext:odt | ext:rtf | ext:sxw | ext:psw | ext:ppt | ext:pptx | ext:pps | ext:csv">Documentos expostos publicamente</option>
-            <option value="site:${siteNome} intitle:index.of">Vulnerabilidades em listagem de diretórios</option>
-            <option value="site:${siteNome} ext:xml | ext:conf | ext:cnf | ext:reg | ext:inf | ext:rdp | ext:cfg | ext:txt | ext:ora | ext:ini | ext:env">Arquivos de configuração expostos</option>
-            <option value="site:${siteNome} ext:sql | ext:dbf | ext:mdb">Arquivos de banco de dados expostos</option>
-            <option value="site:${siteNome} ext:log">Arquivos de log expostos</option>
-            <option value="site:${siteNome} ext:bkf | ext:bkp | ext:bak | ext:old | ext:backup">Arquivos de backup e antigos</option>
-            <option value="site:${siteNome} inurl:login | inurl:signin | intitle:Login | intitle:'sign in' | inurl:auth">Páginas de login</option>
-            <option value="site:${siteNome} intext:'sql syntax near' | intext:'syntax error has occurred' | intext:'incorrect syntax near' | intext:'unexpected end of SQL command' | intext:'Warning: mysql_connect()' | intext:'Warning: mysql_query()' | intext:'Warning: pg_connect()'">Erros SQL</option>
-            <option value="site:${siteNome} 'PHP Parse error' | 'PHP Warning' | 'PHP Error'">Erros/avisos PHP</option>
-            <option value="site:${siteNome} ext:php intitle:phpinfo 'published by the PHP Group'">phpinfo()</option>
-            <option value="site:pastebin.com | site:paste2.org | site:pastehtml.com | site:slexy.org | site:snipplr.com | site:snipt.net | site:textsnip.com | site:bitpaste.app | site:justpaste.it | site:heypasteit.com | site:hastebin.com | site:dpaste.org | site:dpaste.com | site:codepad.org | site:jsitor.com | site:codepen.io | site:jsfiddle.net | site:dotnetfiddle.net | site:phpfiddle.org | site:ide.geeksforgeeks.org | site:repl.it | site:ideone.com | site:paste.debian.net | site:paste.org | site:paste.org.ru | site:codebeautify.org | site:codeshare.io | site:trello.com ${siteNome}">Pesquisar em pastebin.com / sites de pasting</option>
-            <option value="site:github.com | site:gitlab.com ${siteNome}">Pesquisar no github.com e gitlab.com</option>
-            <option value="site:stackoverflow.com ${siteNome}">Pesquisar no stackoverflow.com</option>
-            <option value="site:${siteNome} inurl:signup | inurl:register | intitle:Signup">Páginas de cadastro</option>
-            <option value="site:*.${siteNome}">Encontrar subdomínios</option>
-            <option value="site:*.*.${siteNome}">Encontrar sub-subdomínios</option>
-            <option value="https://web.archive.org/web/*/${siteNome}/*">Pesquisar no Wayback Machine</option>
-            <option value="(${siteNome}) (site:*.*.0.* | site:*.*.1.* | site:*.*.2.* | site:*.*.3.* | site:*.*.4.* | site:*.*.5.* | site:*.*.6.* | site:*.*.7.* | site:*.*.8.* | site:*.*.9.* | site:*.*.10.* | site:*.*.11.* | site:*.*.12.* | site:*.*.13.* | site:*.*.14.* | site:*.*.15.* | site:*.*.16.* | site:*.*.17.* | site:*.*.18.* | site:*.*.19.* | site:*.*.20.* | site:*.*.21.* | site:*.*.22.* | site:*.*.23.* | site:*.*.24.* | site:*.*.25.* | site:*.*.26.* | site:*.*.27.* | site:*.*.28.* | site:*.*.29.*)">Mostrar apenas endereços IP (abre várias abas)</option>
-            <option value="site:docs.${siteNome}/document/d">Documentos, Apresentações e desenhos vazados</option>
-            <option value="site:docs.${siteNome}/presentation/d">Encontrar presentations</option>
-            <option value="site:docs.${siteNome}/drawings/d">Encontrar drawings</option>
-            <option value="site:docs.${siteNome}/file/d">Qualquer tipo de arquivo (imagens, vídeos, zip, pdf)</option>
-            <option value="site:docs.${siteNome}/folder/d">Pasta completa do Google Drive exposta</option>
-            <option value="site:docs.${siteNome}/open intext:secreto">Itens secretos</option>
-            <option value=' "${siteNome}" + inurl= index.php?id=1'>Achar inurl e index.php</option>
-            <option value="site:${siteNome} ext:pdf">Achar Arquivo pdf</option>
-            <option value="site:${siteNome} ext:xml">Achar Arquivo xml</option>
-            <option value="site:${siteNome} ext:docx">Achar Arquivo docx</option>
-            <option value="intext:${siteNome}">Achar Arquivo intext</option>
-            <option value="filetype:txt intext:senha+url site:${siteNome}">Achar Arquivo txt senha url</option>
-            <option value="servidores site:scribd.com AND:${siteNome}">Achar Arquivo nos Servidores do Scribd</option>
-            <option value="filetype:sql${siteNome}">Achar arquivo sql aperte a tecla espaço ou nome do site</option>
-            <option value="filetype:env ${siteNome}">Achar arquivo env</option>
-            <option value="inurl:${siteNome}">Achar arquivo inurl</option>
-            <option value='"${siteNome}"filetype:pdf OR filetype:xlsx OR filetype:docx OR filetype:txt'>Achar arquivo pdf xlsx docx txt</option>
-            <option value="site:${siteNome} filetype:txt">Achar arquivo txt</option>
-            <option value='${siteNome}intitle:"WEBCAM 7" -inurl:/admin.html'>Achar arquivo WEBCAM 7</option>
-            <option value='"${siteNome}" robots.txt'>Achar arquivo robots.txt</option>
-            <option value='intitle:"index of" intext:${siteNome}'>Achar arquivo senha</option>
-            <option value='intext:"${siteNome}"'>Achar nome de pessoa</option>
-            <option value=" IP:${siteNome}">Nome do IP</option>
-            <option value="filetype:pdf intitle:confidencial site:${siteNome}">Achar arquivo pdf confidencial</option>
-            <option value='intitle:confidencial filetype:pdf intext:"${siteNome}"'>Confidencial</option>
-            <option value="site:pastebin.com ${siteNome} credit card">Achar credit card</option>
-            <option value="site:drive.google.com ${siteNome}">Achar coisas em google drive</option>
-            <option value="link:${siteNome}">Achar link</option>
-            <option value="site:${siteNome} filetype:pdf">Achar Arquivo pdf</option>
-            <option value='"${siteNome} "'>Achar email</option>
-            <option value="site:${siteNome} intitle:Login -Painel">Login -Painel</option>
-            <option value='"{siteNome}"'>Extrair Dados</option>
-        </select>
-        <input type="text" id="siteInput" placeholder="Digite o nome do site (ex: example.com)">
-        <button onclick="searchGoogle()">Pesquisar</button>
-        <div id="result"></div>
+    <div class="container mt-5">
+        <img id="headerImage" src="https://i.postimg.cc/9QV7CdQM/Google-Dorks-removebg-preview.png" alt="Header Image" />
+        <h1>Digite Para Pesquisar</h1>
+        <div class="form-group">
+            <input id="siteName" class="form-control" type="text" placeholder="Digite nome Para Pesquisar">
+        </div>
+        <div class="form-group">
+            <label for="dorkSelect">Selecione Dork do Google</label>
+            <select id="dorkSelect" class="form-control"></select>
+        </div>
+        <button class="btn btn-custom btn-block" onclick="obterDados()">Pesquisar no Google</button>
+        <div id="result" class="mt-3"></div>
     </div>
 
     <script>
-        function searchGoogle() {
-            const dork = document.getElementById('dorkSelect').value;
-            const siteNome = document.getElementById('siteInput').value.trim();
-            const resultDiv = document.getElementById('result');
+        var dorks = [
+        "Documentos expostos publicamente",            
+            "Vulnerabilidades em listagem de diretórios",
+            "Arquivos de configuração expostos",
+            "Arquivos de banco de dados expostos",
+            "Arquivos de log expostos",
+            "Arquivos de backup e antigos",            
+            "Páginas de login",
+            "Erros SQL",
+            "Erros/avisos PHP",
+            "phpinfo()",
+            "Pesquisar em pastebin.com / sites de pasting",
+            "Pesquisar no github.com e gitlab.com",
+            "Pesquisar no stackoverflow.com",
+            "Páginas de cadastro",
+            "Encontrar subdomínios",
+            "Encontrar sub-subdomínios",
+            "Pesquisar no Wayback Machine",
+            "Mostrar apenas endereços IP (abre várias abas)",
+            "Para encontrar documentos Apresentaçoes e desenhos vazados",
+            "Para encontrar presentation",
+            "Para encontrar drawings",
+            "Já para encontrar qualquer tipo de arquivo como imagens vídeos zip e pdf",
+            "Agora se você quer encontrar uma pasta completa do Google Drive exposta",
+            "esses para achar itens secretos",
+            "Achar inurl e index.php",
+            "Achar Arquivo ext pdf ",
+            "Achar Arquivo xml",
+            "Achar Arquivo docx",
+            "Achar Arquivo intext",
+            "Achar Arquivo txt senha url",
+            "Achar Arquivo nos Servidores do Scribd",
+            "Achar arquivo sql aperte a tecla espaço ou nome do site",
+            "Achar arquivo env",
+            "Achar arquivo inurl",
+            "Achar arquivo pdf xlsx docx txt",            
+            "Achar arquivo txt",
+            "Achar arquivo WEBCAM 7",
+            "Achar arquivo robots.txt",
+            "Achar arquivo senha",
+            "Achar nome de pessoa",
+            "Nome do IP",
+            "Achar arquivo pdf confidencial",
+            "Confidencial",
+            "Achar credit card",
+            "Achar coisas em google drive",
+            "Achar link",
+            "Achar Arquivo pdf",
+            "Achar email",
+            "Login -Painel",
+            "Achar link",
+            "link",
+            "Extrair Dados",
+            "Achar .git",
+            "Achar site.git",
+        ];
 
-            if (!dork || !siteNome) {
-                alert('Por favor, selecione um tipo de pesquisa e insira um site!');
-                return;
-            }
+        var dorkSelect = document.getElementById("dorkSelect");
+        dorks.forEach(dork => {
+            var option = document.createElement("option");
+            option.value = dork;
+            option.textContent = dork;
+            dorkSelect.appendChild(option);
+        });
 
-            // Substitui ${siteNome} pelo valor inserido pelo usuário
-            let query = dork.replace(/\${siteNome}/g, siteNome);
+        function obterDados() {
+            var siteNome = document.getElementById("siteName").value;
+            var dorkSelecionada = document.getElementById("dorkSelect").value;
+            
+            var consultas = {
+                "Documentos expostos publicamente": `site:${siteNome} ext:doc | ext:docx | ext:odt | ext:rtf | ext:sxw | ext:psw | ext:ppt | ext:pptx | ext:pps | ext:csv`,
+                "Vulnerabilidades em listagem de diretórios": `site:${siteNome} intitle:index.of`,
+                "Arquivos de configuração expostos": `site:${siteNome} ext:xml | ext:conf | ext:cnf | ext:reg | ext:inf | ext:rdp | ext:cfg | ext:txt | ext:ora | ext:ini | ext:env`,
+                "Arquivos de banco de dados expostos": `site:${siteNome} ext:sql | ext:dbf | ext:mdb`,
+                "Arquivos de log expostos": `site:${siteNome} ext:log`,
+                "Arquivos de backup e antigos": `site:${siteNome} ext:bkf | ext:bkp | ext:bak | ext:old | ext:backup`,
+                "Páginas de login": `site:${siteNome} inurl:login | inurl:signin | intitle:Login | intitle:"sign in" | inurl:auth`,
+                "Erros SQL": `site:${siteNome} intext:"sql syntax near" | intext:"syntax error has occurred" | intext:"incorrect syntax near" | intext:"unexpected end of SQL command" | intext:"Warning: mysql_connect()" | intext:"Warning: mysql_query()" | intext:"Warning: pg_connect()"`,
+                "Erros/avisos PHP": `site:${siteNome} "PHP Parse error" | "PHP Warning" | "PHP Error"`,
+                "phpinfo()": `site:${siteNome} ext:php intitle:phpinfo "published by the PHP Group"`,
+                "Pesquisar em pastebin.com / sites de pasting": `site:pastebin.com | site:paste2.org | site:pastehtml.com | site:slexy.org | site:snipplr.com | site:snipt.net | site:textsnip.com | site:bitpaste.app | site:justpaste.it | site:heypasteit.com | site:hastebin.com | site:dpaste.org | site:dpaste.com | site:codepad.org | site:jsitor.com | site:codepen.io | site:jsfiddle.net | site:dotnetfiddle.net | site:phpfiddle.org | site:ide.geeksforgeeks.org | site:repl.it | site:ideone.com | site:paste.debian.net | site:paste.org | site:paste.org.ru | site:codebeautify.org  | site:codeshare.io | site:trello.com ${siteNome}`,
+                "Pesquisar no github.com e gitlab.com": `site:github.com | site:gitlab.com ${siteNome}`,
+                "Pesquisar no stackoverflow.com": `site:stackoverflow.com ${siteNome}`,
+                "Páginas de cadastro": `site:${siteNome} inurl:signup | inurl:register | intitle:Signup`,
+                "Encontrar subdomínios": `site:*.${siteNome}`,
+                "Encontrar sub-subdomínios": `site:*.*.${siteNome}`,
+                "Pesquisar no Wayback Machine": `https://web.archive.org/web/*/${siteNome}/*`,
+                "Mostrar apenas endereços IP (abre várias abas)": `(${siteNome}) (site:*.*.29.* | site:*.*.28.* | site:*.*.27.* | site:*.*.26.* | site:*.*.25.* | site:*.*.24.* | site:*.*.23.* | site:*.*.22.* | site:*.*.21.* | site:*.*.20.* | site:*.*.19.* | site:*.*.18.* | site:*.*.17.* | site:*.*.16.* | site:*.*.15.* | site:*.*.14.* | site:*.*.13.* | site:*.*.12.* | site:*.*.11.* | site:*.*.10.* | site:*.*.9.* | site:*.*.8.* | site:*.*.7.* | site:*.*.6.* | site:*.*.5.* | site:*.*.4.* | site:*.*.3.* | site:*.*.2.* | site:*.*.1.* | site:*.*.0.*)`,
+                "Para encontrar documentos Apresentaçoes e desenhos vazados": `site:docs.${siteNome}/document/d`,
+                "Para encontrar presentation": `site:docs.${siteNome}/presentation/d`,
+                "Para encontrar drawings": `site:docs.${siteNome}/drawings/d`,
+                "Já para encontrar qualquer tipo de arquivo como imagens vídeos zip e pdf": `site:docs.${siteNome}/file/d`,
+                "Agora se você quer encontrar uma pasta completa do Google Drive exposta": `site:docs.${siteNome}/folder/d`,
+                "esses para achar itens secretos": `site:docs.${siteNome}/open intext:secreto`,
+                "Achar inurl e index.php": ` "${siteNome}" + inurl= index.php?id=1`,
+                "Achar Arquivo pdf": `site:${siteNome} ext:pdf`,
+                "Achar Arquivo xml": `site:${siteNome} ext:xml`,
+                "Achar Arquivo docx": `site:${siteNome} ext:docx`,
+                "Achar Arquivo intext": `intext:${siteNome}`,
+                "Achar Arquivo txt senha url":`filetype:txt intext:senha+url site:${siteNome}`,
+                "Achar Arquivo nos Servidores do Scribd": `servidores site:scribd.com AND:${siteNome}`,
+                "Achar arquivo sql aperte a tecla espaço ou nome do site": `filetype:sql${siteNome}`,
+                "Achar arquivo env": `filetype:env ${siteNome}`,
+                "Achar arquivo inurl": `inurl:${siteNome}`,
+                "Achar arquivo pdf xlsx docx txt":`"${siteNome}"filetype:pdf OR filetype:xlsx OR filetype:docx OR filetype:txt`,
+                "Achar arquivo txt": `site:${siteNome} filetype:txt`,
+                "Achar arquivo WEBCAM 7":`${siteNome}intitle:"WEBCAM 7" -inurl:/admin.html`,
+                "Achar arquivo robots.txt": `"${siteNome}" robots.txt`,
+                "Achar arquivo senha": `intitle:"index of" intext:${siteNome}`,
+                "Achar nome de pessoa": `intext:"${siteNome}"`,
+                "Nome do IP": ` IP:${siteNome}`,
+                "Achar arquivo pdf confidencial": `filetype:pdf intitle:confidencial site:${siteNome}`,
+                "Confidencial": `intitle:confidencial filetype:pdf intext:"${siteNome}"`,
+                "Achar credit card": `site:pastebin.com ${siteNome} credit card`,
+                "Achar coisas em google drive": `site:drive.google.com ${siteNome}`,
+                "Achar link" : `link:${siteNome}`,
+                "Achar Arquivo pdf": `site:${siteNome} filetype:pdf`,
+                "Achar email": `"${siteNome} "`,
+                "Login -Painel": `site:${siteNome} intitle:Login -Painel`,
+                "Achar link": 'link:{siteNome}',
+                "link": 'link::{siteNome}',
+                "Extrair Dados": `"${siteNome} "`,
+                "Achar .git": `${siteNome} intitle index of .git`,
+                "Achar site.git": `site:${siteNome} intitle index of .git`,
+            };
 
-            // Exibe a consulta no elemento #result
-            resultDiv.style.display = 'block';
-            resultDiv.innerHTML = `
-                <h3><strong style="color: red;">Resultados para: ${siteNome} - ${document.getElementById('dorkSelect').options[document.getElementById('dorkSelect').selectedIndex].text}</strong></h3>
-                <h2>Consulta utilizada: ${query}</h2>
+            const consulta = consultas[dorkSelecionada];
+            const url = `https://www.google.com/search?q=${encodeURIComponent(consulta)}`;
+            window.open(url, "_blank");
+            
+            document.getElementById("result").innerHTML = `                
+                <p><span style="color: #08f0fc;">Resultados para:</span> ${siteNome} - ${dorkSelecionada}</p>                
+                <p><span style="color: #2af007;">Consulta utilizada:</span> ${consulta}</p>
             `;
-
-            // Se for Wayback Machine, usa a URL direta
-            if (query.startsWith('https://web.archive.org')) {
-                window.open(query, '_blank');
-            } else {
-                // Para outras pesquisas, usa o Google
-                const googleUrl = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
-                window.open(googleUrl, '_blank');
-            }
         }
     </script>
 </body>
-</html> 
+</html>
