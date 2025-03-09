@@ -68,6 +68,8 @@ def construir_consulta_dork(site_nome, dork_selecionada):
         "Achar link": f'link:{site_nome}',
         "link": f'link::{site_nome}',
         "Extrair Dados": f'"{site_nome}"',
+        "Achar .git": f'site:{site_nome} intitle index of .git',
+        
     }
     return consultas.get(dork_selecionada, "")
 
@@ -129,6 +131,8 @@ def obter_dados_hacking():
         "Achar link",
         "link",
         "Extrair Dados",
+        "Achar .git",
+        
     ]
 
     for idx, dork in enumerate(dorks, 1):
