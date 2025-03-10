@@ -65,8 +65,7 @@ def construir_consulta_dork(site_nome, dork_selecionada):
         "Achar coisas em google drive": f'site:drive.google.com {site_nome}',
         "Achar email": f'"{site_nome}"',
         "Login -Painel": f'site:{site_nome} intitle:Login -Painel',
-        "Achar link": f'link:{site_nome}',
-        "link": f'link::{site_nome}',
+        "Achar link": f'link:{site_nome}',        
         "Extrair Dados": f'"{site_nome}"',
         "Achar .git": f'site:{site_nome} intitle index of .git',
         
@@ -128,8 +127,7 @@ def obter_dados_hacking():
         "Achar coisas em google drive",
         "Achar email",
         "Login -Painel",
-        "Achar link",
-        "link",
+        "Achar link",        
         "Extrair Dados",
         "Achar .git",
         
