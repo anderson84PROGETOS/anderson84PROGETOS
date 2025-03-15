@@ -2,105 +2,259 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">    
-    <title>Google Dorks</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Dorks Explorer</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             background-color: #121212;
             color: #ffffff;
-            padding: 20px;
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
         }
-        .container {           
-            max-width: 900px;
-            margin: 0 auto;         
-            padding: 10px;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(247, 223, 7, 0.603);
-            
-        }
-        h1 {
+
+        header {
+            background: linear-gradient(135deg, #1a1a1a, #333);
+            padding: 3rem 1rem;
             text-align: center;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header-image {
+            max-width: 300px;
+            height: auto;
+            border-radius: 15px;
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            color: #ffcc00;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            color: #ccc;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background-color: #ffcc00;
+            color: #000;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+            margin-top: 1rem;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #e6b800;
+        }
+
+        nav {
+            background-color: #222;
+            padding: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 20px;
+            font-size: 1.1rem;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
             color: #ffcc00;
         }
-        label {
-            font-size: 20px;
-            font-weight: bold;
-            display: block;
+
+        nav i {
+            margin-right: 8px;
         }
-        .form-control {
+
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #1e1e1e;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(255, 204, 0, 0.3);
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        h2 {
+            color: #ffcc00;
+            border-bottom: 2px solid #ffcc00;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .search-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .form-input {
             background: #333;
             color: #fff;
             border: 1px solid #ffcc00;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 1rem;
         }
-        .btn-custom {
-            background-color: #ffcc00;
-            color: #000;
-            font-weight: bold;
-            border: none;
-            transition: 0.3s;
-            
+
+        .form-input:focus {
+            outline: none;
+            border-color: #e6b800;
+            box-shadow: 0 0 5px rgba(255, 204, 0, 0.5);
         }
-        .btn-custom:hover {
-            background-color: #e6b800;
-        }
-        #result {
+
+        .result-box {
             margin-top: 20px;
             padding: 15px;
             background-color: #2c2c2c;
             border-radius: 5px;
             border: 1px solid #ffcc00;
-            color: #ffffff;
-            
         }
+
         .result-title {
             color: #ff4444;
             font-weight: bold;
         }
+
         .query-title {
             color: #44aaff;
             font-weight: bold;
         }
-        #headerImage {
-            width: 100%; /* Largura relativa ao container */
-            max-width: 400px; /* Define um tamanho máximo */
-            height: auto; /* Mantém a proporção original da imagem */
-            
-            display: block; /* Remove espaços extras abaixo da imagem */
-            margin: 1px auto 0; /* Ajusta a margem superior para trazer a imagem para cima */
-            
-            border-radius: 20px; /* Cantos arredondados */
-            
-            position: relative; /* Permite ajustes no posicionamento */
-            top: -0px; /* Move a imagem para cima */
+
+        ul {
+            padding-left: 20px;
         }
 
-    </style>
+        ul li {
+            margin: 10px 0;
+        }
+
+        footer {
+            background-color: #1a1a1a;
+            text-align: center;
+            padding: 1.5rem;
+            color: #ccc;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            .nav-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            nav a {
+                margin: 10px 0;
+            }
+            .header-image {
+                max-width: 200px;
+            }
+        }
+
+    </style>    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-    <div class="container mt-5">
-        <img id="headerImage" src="https://i.postimg.cc/9QV7CdQM/Google-Dorks-removebg-preview.png" alt="Header Image" />
-        <h1>Digite Para Pesquisar</h1>
-        <div class="form-group">
-            <input id="siteName" class="form-control" type="text" placeholder="Digite nome Para Pesquisar">
+    <header>
+        <div class="header-content">
+            <img src="https://i.postimg.cc/9QV7CdQM/Google-Dorks-removebg-preview.png" alt="Google Dorks" class="header-image">
+            <h1>Google Dorks Explorer</h1>
+            <p>Descubra informações ocultas com técnicas avançadas de pesquisa</p>
+            <a href="#search" class="btn">Começar Agora</a>
         </div>
-        <div class="form-group">
-            <label for="dorkSelect">Selecione Dork do Google</label>
-            <select id="dorkSelect" class="form-control"></select>
+    </header>
+
+    <nav>
+        <div class="nav-container">
+            <a href="#inicio"><i class="fas fa-home"></i> Início</a>
+            <a href="#search"><i class="fas fa-search"></i> Pesquisar</a>
+            <a href="#about"><i class="fas fa-info-circle"></i> Sobre</a>
+            <a href="#tips"><i class="fas fa-lightbulb"></i> Dicas</a>
         </div>
-        <button class="btn btn-custom btn-block" onclick="obterDados()">Pesquisar no Google</button>
-        <div id="result" class="mt-3"></div>
-    </div>
+    </nav>
+
+    <main>
+        <section id="inicio" class="container">
+            <h2>Bem-vindo ao Google Dorks Explorer</h2>
+            <p>Utilize o poder das Google Dorks para encontrar informações públicas, vulnerabilidades e dados expostos na web de forma eficiente e ética.</p>
+        </section>
+
+        <section id="search" class="container">
+            <h2>Pesquisar com Google Dorks</h2>
+            <div class="search-form">
+                <input id="siteName" type="text" placeholder="Digite o nome do site" class="form-input">
+                <label for="dorkSelect">Escolha uma Google Dork:</label>
+                <select id="dorkSelect" class="form-input"></select>
+                <button onclick="obterDados()" class="btn">Pesquisar</button>
+            </div>
+            <div id="result" class="result-box"></div>
+        </section>
+
+        <section id="about" class="container">
+            <h2>Sobre Google Dorks</h2>
+            <p>Google Dorks são comandos avançados de pesquisa que utilizam operadores especiais para filtrar resultados no Google, permitindo encontrar arquivos, vulnerabilidades e informações específicas que não aparecem em buscas comuns.</p>
+            <p>Este site foi criado para fins educativos e deve ser usado de forma ética e legal.</p>
+        </section>
+
+        <section id="tips" class="container">
+            <h2>Dicas de Uso</h2>
+            <ul>
+                <li>Use <strong>site:</strong> para limitar a busca a um domínio específico.</li>
+                <li>Combine <strong>ext:</strong> com tipos de arquivo (ex.: pdf, sql).</li>
+                <li>Evite abusar das consultas para não ser bloqueado pelo Google.</li>
+                <li>Respeite as leis de privacidade e uso de dados.</li>
+            </ul>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2025 Google Dorks Explorer | Desenvolvido para fins educativos</p>
+    </footer>
 
     <script>
-        var dorks = [
-        "Documentos expostos publicamente",            
+        const dorks = [
+            "Documentos expostos publicamente",
             "Vulnerabilidades em listagem de diretórios",
             "Arquivos de configuração expostos",
             "Arquivos de banco de dados expostos",
             "Arquivos de log expostos",
-            "Arquivos de backup e antigos",            
+            "Arquivos de backup e antigos",
             "Páginas de login",
             "Erros SQL",
             "Erros/avisos PHP",
@@ -112,7 +266,7 @@
             "Encontrar subdomínios",
             "Encontrar sub-subdomínios",
             "Pesquisar no Wayback Machine",
-            "Mostrar apenas endereços IP (abre várias abas)",
+            "Mostrar apenas endereços IP",
             "Para encontrar documentos Apresentaçoes e desenhos vazados",
             "Para encontrar presentation",
             "Para encontrar drawings",
@@ -120,7 +274,7 @@
             "Agora se você quer encontrar uma pasta completa do Google Drive exposta",
             "esses para achar itens secretos",
             "Achar inurl e index.php",
-            "Achar Arquivo ext pdf ",
+            "Achar Arquivo ext pdf",
             "Achar Arquivo xml",
             "Achar Arquivo docx",
             "Achar Arquivo intext",
@@ -129,7 +283,7 @@
             "Achar arquivo sql aperte a tecla espaço ou nome do site",
             "Achar arquivo env",
             "Achar arquivo inurl",
-            "Achar arquivo pdf xlsx docx txt",            
+            "Achar arquivo pdf xlsx docx txt",
             "Achar arquivo txt",
             "Achar arquivo WEBCAM 7",
             "Achar arquivo robots.txt",
@@ -139,29 +293,29 @@
             "Achar arquivo pdf confidencial",
             "Confidencial",
             "Achar credit card",
-            "Achar coisas em google drive",            
+            "Achar coisas em google drive",
             "Achar Arquivo pdf",
             "Achar email",
             "Login -Painel",
-            "Achar link",            
+            "Achar link",
             "Extrair Dados",
             "Achar .git",
-            "Achar site.git",
+            "Achar site.git"
         ];
 
-        var dorkSelect = document.getElementById("dorkSelect");
+        const dorkSelect = document.getElementById("dorkSelect");
         dorks.forEach(dork => {
-            var option = document.createElement("option");
+            const option = document.createElement("option");
             option.value = dork;
             option.textContent = dork;
             dorkSelect.appendChild(option);
         });
 
         function obterDados() {
-            var siteNome = document.getElementById("siteName").value;
-            var dorkSelecionada = document.getElementById("dorkSelect").value;
-            
-            var consultas = {
+            const siteNome = document.getElementById("siteName").value;
+            const dorkSelecionada = document.getElementById("dorkSelect").value;
+
+            const consultas = {
                 "Documentos expostos publicamente": `site:${siteNome} ext:doc | ext:docx | ext:odt | ext:rtf | ext:sxw | ext:psw | ext:ppt | ext:pptx | ext:pps | ext:csv`,
                 "Vulnerabilidades em listagem de diretórios": `site:${siteNome} intitle:index.of`,
                 "Arquivos de configuração expostos": `site:${siteNome} ext:xml | ext:conf | ext:cnf | ext:reg | ext:inf | ext:rdp | ext:cfg | ext:txt | ext:ora | ext:ini | ext:env`,
@@ -186,8 +340,8 @@
                 "Já para encontrar qualquer tipo de arquivo como imagens vídeos zip e pdf": `site:docs.${siteNome}/file/d`,
                 "Agora se você quer encontrar uma pasta completa do Google Drive exposta": `site:docs.${siteNome}/folder/d`,
                 "esses para achar itens secretos": `site:docs.${siteNome}/open intext:secreto`,
-                "Achar inurl e index.php": ` "${siteNome}" + inurl= index.php?id=1`,
-                "Achar Arquivo pdf": `site:${siteNome} ext:pdf`,
+                "Achar Arquivo ext pdf": `site:${siteNome} ext:pdf`,
+                "Achar inurl e index.php": ` "${siteNome}" + inurl= index.php?id=1`,                
                 "Achar Arquivo xml": `site:${siteNome} ext:xml`,
                 "Achar Arquivo docx": `site:${siteNome} ext:docx`,
                 "Achar Arquivo intext": `intext:${siteNome}`,
@@ -219,10 +373,10 @@
             const consulta = consultas[dorkSelecionada];
             const url = `https://www.google.com/search?q=${encodeURIComponent(consulta)}`;
             window.open(url, "_blank");
-            
-            document.getElementById("result").innerHTML = `                
-                <p><span style="color: #08f0fc;">Resultados para:</span> ${siteNome} - ${dorkSelecionada}</p>                
-                <p><span style="color: #2af007;">Consulta utilizada:</span> ${consulta}</p>
+
+            document.getElementById("result").innerHTML = `
+                <p><span class="result-title">Resultados para:</span> ${siteNome} - ${dorkSelecionada}</p>
+                <p><span class="query-title">Consulta utilizada:</span> ${consulta}</p>
             `;
         }
     </script>
