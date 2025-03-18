@@ -152,9 +152,9 @@ elif opcao == '2':
             break
 
     if not found:
-        print(Fore.LIGHTRED_EX + "\n[❌] Nenhuma correspondência encontrada na wordlist.")
+        print(Fore.LIGHTRED_EX + Style.BRIGHT + "\n[❌] Nenhuma correspondência encontrada na wordlist.")
 
 else:
-    print(Fore.LIGHTRED_EX + "\nOpção inválida. Saindo...")
+    print(Fore.LIGHTRED_EX + Style.BRIGHT + "\nOpção inválida. Saindo...")
 
 input(Fore.LIGHTRED_EX + "\n\n========== PRESSIONE ENTER PARA SAIR ==========\n")
