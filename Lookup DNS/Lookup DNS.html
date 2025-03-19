@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lookup DNS</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: top; /* Corrigido: "display: top" não é válido */
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #4e4e4e;
+        }
+        .container {
+            background-color: rgb(255, 255, 255);
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 1220px;
+        }
+        .input-section {
+            background-color: #0bf1cb;
+            padding: 10px;
+            margin-bottom: 10px;
+            display: flex; /* Corrigido: "display: top" não é válido */
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+        }
+        .input-section input {
+            width: 60%;
+            padding: 5px;
+            border: 1px solid rgb(204, 204, 204);
+            border-radius: 3px;
+        }
+        .input-section select {
+            padding: 5px;
+            border: 1px solid rgb(204, 204, 204);
+            border-radius: 3px;
+            background-color: rgb(13, 207, 233);
+            cursor: pointer;
+        }
+        .input-section button {
+            padding: 5px 10px;
+            background-color: #0dcfe9;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .input-section button:hover {
+            background-color: #1bee1b;
+        }
+        .results-section {
+            background-color: #0a0a0a;
+            padding: 10px;
+            color: #0bd81c; /* Cor do texto: verde */
+            width: 100%; /* Garante que a seção de resultados respeite a largura do container */
+            box-sizing: border-box; /* Inclui padding na largura total */
+        }
+        .results-section h3 {
+            margin: 0 0 10px 0;
+        }
+        .results-section p {            
+            margin: 10px; /* Corrigido: "margin: 10" para "margin: 10px" */
+            font-family: monospace;
+            color: #0bd81c; /* Cor do texto: verde */
+            white-space: pre-wrap; /* Permite quebras de linha */
+            font-size: 15px; /* Tamanho da fonte aumentado */
+            overflow-wrap: break-word; /* Força a quebra de palavras longas */
+            word-break: break-all; /* Quebra palavras longas, se necessário */
+        }
+       
+        h1 {
+            display: top;
+            text-align: center;
+            color: rgb(17, 223, 17);
+        }
+    </style>
+
+    <h1>Lookup DNS</h1>
+    
+</head>
+<body>
+
+    <div class="container">
+        <div class="input-section">
+            <input type="text" id="domainInput" placeholder="Digite o domínio (ex: google.com)">
+            <select id="recordType">
+                <option value="A">A (Endereço IPv4)</option>                
+                <option value="NS">NS (Nameserver)</option>                
+                <option value="TXT">TXT (Texto)</option>
+                <option value="MX">MX (Servidor de E-mail)</option>
+                <option value="SOA">SOA (Autoridade)</option>                       
+                <option value="HINFO">HINFO (Info do Host)</option>                
+                <option value="ANY">ANY (Todos os Registros)</option>
+            </select>
+            <button onclick="lookupDNS()">Lookup DNS</button>
+        </div>
+        <div class="results-section" id="results">
+            <h3 id="resultsHeader">Resultado do website</h3>
+            <p id="resultsContent"></p>
+        </div>
+    </div>
+
+    <script>
+        async function lookupDNS() {
+            // Pega o valor do input e do select
+            const domain = document.getElementById('domainInput').value.trim();
+            const recordType = document.getElementById('recordType').value;
+
+            // Validação básica do domínio
+            if (!domain) {
+                document.getElementById('resultsContent').innerText = 'Por favor, digite um domínio.';
+                return;
+            }
+
+            // Atualiza o cabeçalho dos resultados
+            document.getElementById('resultsHeader').innerText = `Resultado do website: ${domain}`;
+
+            // Limpa o conteúdo anterior
+            const resultsContent = document.getElementById('resultsContent');
+            resultsContent.innerText = 'Loading...';
+
+            try {
+                // Faz uma requisição para a API do Google Public DNS
+                const response = await fetch(`https://dns.google/resolve?name=${domain}&type=${recordType}`);
+                const data = await response.json();
+                
+                // Monta o resultado no formato desejado                
+                let resultText = `Website: ${domain}\n\n`; 
+            
+                if (data.Answer) {
+                    // Formata os resultados com base no tipo de registro
+                    data.Answer.forEach(answer => {
+                        if (recordType === 'A') {
+                            resultText += `IP: ${answer.data}\n`;                       
+                        } else if (recordType === 'NS') {
+                            resultText += `NS: ${answer.data}\n`;                        
+                        } else if (recordType === 'TXT') {
+                            resultText += `TXT: ${answer.data}\n`;
+                        } else if (recordType === 'MX') {
+                            const [priority, mailServer] = answer.data.split(' ');
+                            resultText += `MX: ${mailServer}\n`;
+                        } else if (recordType === 'SOA') {
+                            const [primaryNS, admin, serial, refresh, retry, expire, minimum] = answer.data.split(' ');
+                            resultText += `SOA:\n  Primary NS: ${primaryNS}\n  Admin: ${admin}\n  Serial: ${serial}\n  Refresh: ${refresh}\n  Retry: ${retry}\n  Expire: ${expire}\n  Minimum TTL: ${minimum}\n`;
+                        } else if (recordType === 'HINFO') {
+                            resultText += `HINFO: ${answer.data}\n`;                        
+                        } else if (recordType === 'ANY') {
+                            resultText += `Type: ${answer.type} - Data: ${answer.data}\n`;
+                        }
+                    });
+                } else {
+                    resultText += 'No results found.';
+                }
+
+                // Exibe o resultado formatado
+                resultsContent.innerText = resultText;
+            } catch (error) {
+                resultsContent.innerText = 'Error fetching DNS data. Please try again.';
+                console.error('Error:', error);
+            }
+        }
+    </script>
+</body>
+</html>
