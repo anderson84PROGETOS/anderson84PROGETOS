@@ -1,0 +1,216 @@
+import re
+import requests
+from datetime import datetime
+from colorama import Fore, Style, init
+
+# Inicializando o colorama
+init(autoreset=True)
+print(Fore.LIGHTRED_EX + Style.BRIGHT + "\nMais informações acesse o website: https://www.informecadastral.com.br\n")
+print(Fore.LIGHTCYAN_EX + Style.BRIGHT + """
+ ██████╗███╗   ██╗██████╗      ██╗     ██████╗ ██████╗ ███╗   ██╗███████╗██╗   ██╗██╗     ████████╗ █████╗ 
+██╔════╝████╗  ██║██╔══██╗     ██║    ██╔════╝██╔═══██╗████╗  ██║██╔════╝██║   ██║██║     ╚══██╔══╝██╔══██╗
+██║     ██╔██╗ ██║██████╔╝     ██║    ██║     ██║   ██║██╔██╗ ██║███████╗██║   ██║██║        ██║   ███████║
+██║     ██║╚██╗██║██╔═══╝ ██   ██║    ██║     ██║   ██║██║╚██╗██║╚════██║██║   ██║██║        ██║   ██╔══██║
+╚██████╗██║ ╚████║██║     ╚█████╔╝    ╚██████╗╚██████╔╝██║ ╚████║███████║╚██████╔╝███████╗   ██║   ██║  ██║
+ ╚═════╝╚═╝  ╚═══╝╚═╝      ╚════╝      ╚═════╝ ╚═════╝ ╚═╝  ╚═══╝╚══════╝ ╚═════╝ ╚══════╝   ╚═╝   ╚═╝  ╚═╝
+                                                                                                     
+""")
+
+# Cabeçalhos globais para evitar bloqueios
+HEADERS = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:89.0) Gecko/20100101 Firefox/89.0',
+    'Accept-Language': 'en-US,en;q=0.5',
+    'Connection': 'keep-alive',
+    'Upgrade-Insecure-Requests': '1',
+    'Accept': 'application/json'
+}
+
+def limpar_cnpj(cnpj):
+    """
+    Remove caracteres que não são dígitos de um CNPJ.
+    """
+    return re.sub(r'\D', '', cnpj)
+
+def consultar_cnpj(cnpj):
+    """
+    Consulta informações de um CNPJ em um serviço público ou API.
+    """
+    url = f"https://www.receitaws.com.br/v1/cnpj/{cnpj}"
+    try:
+        response = requests.get(url, headers=HEADERS, timeout=10)
+        if response.status_code == 200:
+            return response.json()
+        else:
+            print(Fore.LIGHTYELLOW_EX + Style.BRIGHT + f"Erro ao consultar o CNPJ. Status code: {response.status_code}")
+            return None
+    except requests.RequestException as e:
+        print(Fore.LIGHTYELLOW_EX + Style.BRIGHT + f"Erro na requisição: {e}")
+        return None
+
+def limpar_cep(cep):
+    """
+    Remove caracteres que não são dígitos de um CEP.
+    """
+    return re.sub(r'\D', '', cep)
+
+def consultar_cep(cep):
+    """
+    Consulta informações de latitude e longitude baseadas no CEP.
+    """
+    cep = limpar_cep(cep)
+    if not cep.isdigit() or len(cep) != 8:
+        print(Fore.LIGHTYELLOW_EX + Style.BRIGHT + "CEP inválido. Certifique-se de digitar um CEP com 8 dígitos.")
+        return None
+
+    url = f"https://cep.awesomeapi.com.br/json/{cep}"
+    try:
+        response = requests.get(url, headers=HEADERS, timeout=10)
+        if response.status_code == 200:
+            return response.json()
+        elif response.status_code == 403:
+            print(Fore.LIGHTYELLOW_EX + Style.BRIGHT + "Acesso bloqueado! Verifique o User-Agent ou limite de requisições.")
+        elif response.status_code == 400:
+            print(Fore.LIGHTYELLOW_EX + Style.BRIGHT + "Erro 400: O CEP enviado é inválido ou malformado.")
+        else:
+            print(Fore.LIGHTYELLOW_EX + Style.BRIGHT + f"Erro ao consultar o CEP. Status code: {response.status_code}")
+        return None
+    except requests.RequestException as e:
+        print(Fore.LIGHTYELLOW_EX + Style.BRIGHT + f"Erro na requisição do CEP: {e}")
+        return None
+
+def consultar_cnpj(cnpj):
+    url = f'https://www.receitaws.com.br/v1/cnpj/{cnpj}'
+    try:
+        response = requests.get(url)
+        if response.status_code == 200:
+            return response.json()
+        else:
+            print(f"Erro ao consultar CNPJ: {response.status_code}")
+    except requests.exceptions.RequestException as e:
+        print(f"Erro na requisição: {e}")
+
+def calcular_idade(data_abertura):
+    hoje = datetime.now()
+    data_abertura = datetime.strptime(data_abertura, '%d/%m/%Y')
+    diferenca = hoje - data_abertura
+    anos = diferenca.days // 365
+    meses = (diferenca.days % 365) // 30
+    dias = (diferenca.days % 365) % 30
+    return f"{anos} anos, {meses} meses e {dias} dias"
+
+def formatar_cnpj(cnpj):
+    return cnpj.replace('.', '').replace('/', '').replace('-', '')
+
+def consultar_e_mostrar(cnpj):
+    dados_cnpj = consultar_cnpj(cnpj)
+    if dados_cnpj:
+        message = f"""
+{Fore.LIGHTGREEN_EX}{Style.BRIGHT}\nCNPJ:{Style.RESET_ALL} {Fore.LIGHTYELLOW_EX}{Style.BRIGHT}{dados_cnpj.get('cnpj', 'Não encontrado')}{Style.RESET_ALL}\n
+{Fore.LIGHTGREEN_EX}{Style.BRIGHT}RAZÃO SOCIAL:{Style.RESET_ALL} {Fore.LIGHTYELLOW_EX}{Style.BRIGHT}{dados_cnpj.get('nome', 'Não encontrado')}{Style.RESET_ALL}\n
+{Fore.LIGHTGREEN_EX}{Style.BRIGHT}MATRIZ OU FILIAL:{Style.RESET_ALL} {Fore.LIGHTYELLOW_EX}{Style.BRIGHT}{dados_cnpj.get('tipo', 'Não encontrado')}{Style.RESET_ALL}\n
+{Fore.LIGHTGREEN_EX}{Style.BRIGHT}NOME FANTASIA:{Style.RESET_ALL} {Fore.LIGHTYELLOW_EX}{Style.BRIGHT}{dados_cnpj.get('fantasia', 'Não encontrado')}{Style.RESET_ALL}\n
+{Fore.LIGHTGREEN_EX}{Style.BRIGHT}SITUAÇÃO CADASTRAL:{Style.RESET_ALL} {Fore.LIGHTYELLOW_EX}{Style.BRIGHT}{dados_cnpj.get('situacao', 'Não encontrado')}{Style.RESET_ALL}\n
+{Fore.LIGHTGREEN_EX}{Style.BRIGHT}DATA DA SITUAÇÃO CADASTRAL:{Style.RESET_ALL} {Fore.LIGHTYELLOW_EX}{Style.BRIGHT}{dados_cnpj.get('data_situacao', 'Não encontrado')}{Style.RESET_ALL}\n
+{Fore.LIGHTGREEN_EX}{Style.BRIGHT}MOTIVO DA SITUAÇÃO CADASTRAL:{Style.RESET_ALL} {Fore.LIGHTYELLOW_EX}{Style.BRIGHT}{dados_cnpj.get('motivo_situacao', 'Não encontrado')}{Style.RESET_ALL}\n
+{Fore.LIGHTGREEN_EX}{Style.BRIGHT}NATUREZA JURÍDICA:{Style.RESET_ALL} {Fore.LIGHTYELLOW_EX}{Style.BRIGHT}{dados_cnpj.get('natureza_juridica', 'Não encontrado')}{Style.RESET_ALL}\n
+{Fore.LIGHTGREEN_EX}{Style.BRIGHT}DATA DE ABERTURA:{Style.RESET_ALL} {Fore.LIGHTYELLOW_EX}{Style.BRIGHT}{dados_cnpj.get('abertura', 'Não encontrado')}{Style.RESET_ALL}\n
+{Fore.LIGHTGREEN_EX}{Style.BRIGHT}IDADE:{Style.RESET_ALL} {Fore.LIGHTYELLOW_EX}{Style.BRIGHT}{calcular_idade(dados_cnpj['abertura']) if 'abertura' in dados_cnpj else 'Não encontrado'}{Style.RESET_ALL}\n
+{Fore.LIGHTGREEN_EX}{Style.BRIGHT}PORTE (RFB):{Style.RESET_ALL} {Fore.LIGHTYELLOW_EX}{Style.BRIGHT}{dados_cnpj.get('porte', 'Não encontrado')}{Style.RESET_ALL}\n
+{Fore.LIGHTGREEN_EX}{Style.BRIGHT}CAPITAL SOCIAL:{Style.RESET_ALL} {Fore.LIGHTYELLOW_EX}{Style.BRIGHT}R$ {dados_cnpj.get('capital_social', 'Não encontrado')}{Style.RESET_ALL}\n
+{Fore.LIGHTGREEN_EX}{Style.BRIGHT}ATUALIZAÇÃO DESTA PÁGINA:{Style.RESET_ALL} {Fore.LIGHTYELLOW_EX}{Style.BRIGHT}{dados_cnpj.get('ultima_atualizacao', 'Não encontrado')}{Style.RESET_ALL}\n
+
+{Fore.LIGHTYELLOW_EX}{Style.BRIGHT}LOCALIZAÇÃO\n==========={Style.RESET_ALL}
+
+{Fore.LIGHTGREEN_EX}{Style.BRIGHT}ENDEREÇO:{Style.RESET_ALL} {Fore.LIGHTYELLOW_EX}{Style.BRIGHT}{dados_cnpj.get('logradouro', 'Não encontrado')} | Número: {Fore.LIGHTGREEN_EX}{Style.BRIGHT}{dados_cnpj.get('numero', 'Não encontrado')}\n
+{Fore.LIGHTGREEN_EX}{Style.BRIGHT}COMPLEMENTO:{Style.RESET_ALL} {Fore.LIGHTYELLOW_EX}{Style.BRIGHT}{dados_cnpj.get('complemento', 'Não encontrado')}\n
+{Fore.LIGHTGREEN_EX}{Style.BRIGHT}BAIRRO:{Style.RESET_ALL} {Fore.LIGHTYELLOW_EX}{Style.BRIGHT}{dados_cnpj.get('bairro', 'Não encontrado')}\n
+{Fore.LIGHTGREEN_EX}{Style.BRIGHT}CIDADE | ESTADO:{Style.RESET_ALL} {Fore.LIGHTYELLOW_EX}{Style.BRIGHT}{dados_cnpj.get('municipio', 'Não encontrado')} | {dados_cnpj.get('uf', 'Não encontrado')}\n
+{Fore.LIGHTGREEN_EX}{Style.BRIGHT}CEP:{Style.RESET_ALL} {Fore.LIGHTYELLOW_EX}{Style.BRIGHT}{dados_cnpj.get('cep', 'Não encontrado')}\n
+{Fore.LIGHTGREEN_EX}{Style.BRIGHT}TELEFONES:{Style.RESET_ALL} {Fore.LIGHTYELLOW_EX}{Style.BRIGHT}{dados_cnpj.get('telefone', 'Não encontrado')}\n
+{Fore.LIGHTGREEN_EX}{Style.BRIGHT}E-MAILS:{Style.RESET_ALL} {Fore.LIGHTYELLOW_EX}{Style.BRIGHT}{dados_cnpj.get('email', 'Não encontrado')}\n
+{Style.RESET_ALL}
+
+{Fore.LIGHTYELLOW_EX}{Style.BRIGHT}ATIVIDADE ECONÔMICA PRINCIPAL\n============================={Style.RESET_ALL}
+
+{Fore.LIGHTGREEN_EX}{Style.BRIGHT}CÓDIGO:{Style.RESET_ALL} {Fore.LIGHTYELLOW_EX}{Style.BRIGHT} {dados_cnpj['atividade_principal'][0]['code'] if 'atividade_principal' in dados_cnpj else 'Não encontrado'}\n
+{Fore.LIGHTGREEN_EX}{Style.BRIGHT}DESCRIÇÃO:{Style.RESET_ALL} {Fore.LIGHTYELLOW_EX}{Style.BRIGHT} {dados_cnpj['atividade_principal'][0]['text'] if 'atividade_principal' in dados_cnpj else 'Não encontrado'}\n
+"""
+        # Adiciona atividades econômicas secundárias
+        if 'atividades_secundarias' in dados_cnpj:
+            for atividade in dados_cnpj['atividades_secundarias']:
+                message += Fore.LIGHTGREEN_EX + Style.BRIGHT + f"CÓDIGO: " + Fore.LIGHTYELLOW_EX + Style.BRIGHT + f"{atividade['code']} | DESCRIÇÃO: " + Fore.LIGHTYELLOW_EX + Style.BRIGHT + f"{atividade['text']}\n"
+
+        # Quadro de Sócios e Administradores (QSA)
+        message += Fore.LIGHTGREEN_EX + Style.BRIGHT + "\n\n\nQUADRO DE SÓCIOS E ADMINISTRADORES (QSA)\n==========================================\n"
+        if 'qsa' in dados_cnpj:
+            for socio in dados_cnpj['qsa']:
+                data_entrada = socio.get('data_entrada', None)
+                if data_entrada:
+                    data_entrada = datetime.strptime(data_entrada, '%d/%m/%Y').strftime('%d/%m/%Y')
+                    message += f"""
+{Fore.LIGHTYELLOW_EX}{Style.BRIGHT}NOME: {Fore.LIGHTGREEN_EX}{Style.BRIGHT}{socio.get('nome', 'Não encontrado')}
+{Fore.LIGHTGREEN_EX}{Style.BRIGHT}QUALIFICAÇÃO: {Fore.LIGHTGREEN_EX}{Style.BRIGHT}{socio.get('qual', 'Não encontrado')}
+{Fore.LIGHTGREEN_EX}{Style.BRIGHT}ENTRADA: {Fore.LIGHTGREEN_EX}{Style.BRIGHT}{data_entrada}
+"""
+                else:
+                    message += f"""
+{Fore.LIGHTYELLOW_EX}{Style.BRIGHT}NOME: {Fore.LIGHTGREEN_EX}{Style.BRIGHT}{socio.get('nome', 'Não encontrado')}\n
+{Fore.LIGHTMAGENTA_EX + Style.BRIGHT}QUALIFICAÇÃO: {Fore.LIGHTYELLOW_EX}{Style.BRIGHT}{socio.get('qual', 'Não encontrado')}\n
+"""
+        else:
+            message += f"{Fore.LIGHTGREEN_EX}{Style.BRIGHT}Não encontrado\n"
+        
+        # Exibe os dados no console
+        print(message)
+        print(Fore.LIGHTMAGENTA_EX + Style.BRIGHT + f"\n========== Endereço completo ==========\n")
+        # Obter informações do endereço
+        logradouro = dados_cnpj.get('logradouro', 'Não encontrado')
+        numero = dados_cnpj.get('numero', 'Não encontrado')
+        municipio = dados_cnpj.get('municipio', 'Não encontrado')
+        uf = dados_cnpj.get('uf', 'Não encontrado')
+        cep = dados_cnpj.get('cep', '')
+
+        # Montar o endereço completo
+        endereco_completo = f"{logradouro}, {numero}, {municipio} - {uf}"
+
+        # Exibir o nome da rua e o endereço completo
+        print(Fore.LIGHTYELLOW_EX + Style.BRIGHT + f"Endereço completo: ", end="")
+        print(Fore.LIGHTCYAN_EX + Style.BRIGHT + f"{endereco_completo}")
+
+        # Gerar o link do Google Maps com o endereço completo
+        google_maps_link = f"https://www.google.com/maps/search/?api=1&query={endereco_completo.replace(' ', '+')}"
+        print(Fore.LIGHTYELLOW_EX + Style.BRIGHT + f"\nLugar Oficial do Google Maps: ", end="")
+        print(Fore.LIGHTCYAN_EX + Style.BRIGHT + f"{google_maps_link}\n\n")
+
+        # Consultar CEP para latitude e longitude (opcional, caso queira manter)
+        if cep:
+            info_cep = consultar_cep(cep)
+            if info_cep:
+                latitude = info_cep.get('lat', 'Não disponível')
+                longitude = info_cep.get('lng', 'Não disponível')
+
+                print(Fore.LIGHTMAGENTA_EX + Style.BRIGHT + f"\n========== Localização Aproximada ==========\n")
+
+                # Opcional: exibir coordenadas como extra
+                print(Fore.LIGHTYELLOW_EX + Style.BRIGHT + f"Geolocalização (referência): ", end="")
+                print(Fore.LIGHTCYAN_EX + Style.BRIGHT + f"{latitude}, {longitude}")
+                 
+                # Links do Google Maps 
+                print(Fore.LIGHTYELLOW_EX + Style.BRIGHT + f"\nGoogle Maps: ", end="")            
+                print(Fore.LIGHTCYAN_EX + Style.BRIGHT + f"https://www.google.com/maps?q={latitude},{longitude}\n")
+
+                # Link do Street View com latitude e longitude (mantido como extra)       
+                street_view_link = f"https://www.google.com/maps/@?api=1&map_action=pano&viewpoint={latitude},{longitude}"
+                print(Fore.LIGHTYELLOW_EX + Style.BRIGHT + f"\nStreet View (baseado em coordenadas): ", end="")
+                print(Fore.LIGHTCYAN_EX + Style.BRIGHT + f"{street_view_link}")
+
+                
+def main():
+    cnpj = input(Fore.LIGHTMAGENTA_EX + Style.BRIGHT + "Digite o número do CNPJ (ex: 22333333011150 ou 22.333.333/0111-50): ").strip()
+    cnpj_formatado = formatar_cnpj(cnpj)  # Formata o CNPJ removendo pontos e barras
+    consultar_e_mostrar(cnpj_formatado)
+
+if __name__ == "__main__":
+    main()
+
+input(Fore.LIGHTRED_EX + Style.BRIGHT + "\n\n========== PRESSIONE ENTER PARA SAIR ==========\n")
