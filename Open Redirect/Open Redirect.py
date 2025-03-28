@@ -81,7 +81,7 @@ def listar_arquivos_txt():
 
     print(f"{VERDE_CLARO}\nEscolha um arquivo de wordlist{RESET}\n")
     for idx, arquivo in enumerate(txt_files, start=1):
-        print(f"{AMARELO}{idx} - {arquivo}{RESET}")
+        print(f"\n{AMARELO}{idx} - {arquivo}{RESET}")
 
     while True:
         try:
@@ -179,11 +179,11 @@ if __name__ == "__main__":
     parser.add_argument('-p', '--payloads', help='Arquivo com payloads', required=False)
     parser.add_argument('-k', '--keyword', help='Palavra-chave a ser substituída nos payloads (padrão: FUZZ)', default="FUZZ")
     parser.add_argument('-c', '--concurrency', help='Número de tarefas simultâneas (padrão: 100)', type=int, default=100)
-    parser.add_argument('-w', '--use-wordlist', action='store_true', help='Usar uma wordlist da pasta atual')
+    parser.add_argument('-w', '--use-wordlist', action='store_true', help='Usar uma wordlist da pasta atual', default=True)  # Ativado por padrão
     args = parser.parse_args()
 
     # Carrega os payloads
-    if args.use_wordlist:
+    if args.use_wordlist and not args.payloads:  # Usa wordlist por padrão, a menos que -p seja especificado
         payloads = carregar_wordlist()
     else:
         payloads = asyncio.run(carregar_payloads(args.payloads))
@@ -208,4 +208,3 @@ if __name__ == "__main__":
         sys.exit(0)
 
     input(f"{VERMELHO}\n\n========== PRESSIONE ENTER PARA SAIR =========={RESET}")
-    
