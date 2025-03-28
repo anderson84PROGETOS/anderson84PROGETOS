@@ -1,0 +1,25 @@
+python3 Open Redirect.py  -w -c 50
+
+python3 Open Redirect.py  -w
+
+python3 Open Redirect.py -h
+
+
+
+python3 Open Redirect.py -h
+
+usage: Open Redirect.py [-h] [-p PAYLOADS] [-k KEYWORD] [-c CONCURRENCY] [-w]
+
+OpenRedireX: Fuzzer para detectar vulnerabilidades de redirecionamento aberto
+
+options
+
+  -h, --help   show this help message and exit
+
+  -p, --payloads PAYLOADS  Arquivo com payloads
+
+  -k, --keyword KEYWORD Palavra-chave a ser substituída nos payloads (padrão: FUZZ)
+
+  -c, --concurrency CONCURRENCY Número de tarefas simultâneas (padrão: 100)
+
+  -w, --use-wordlist    Usar uma wordlist da pasta atual
