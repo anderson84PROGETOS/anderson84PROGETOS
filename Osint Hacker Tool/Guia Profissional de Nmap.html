@@ -1,0 +1,366 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia Profissional de Nmap</title>
+    <style>
+        /* Estilos gerais */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: rgb(48, 48, 48);
+            line-height: 1.6;
+        }
+
+        /* Cabeçalho */
+        header {
+            background-color: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+        }
+
+        /* Navegação */
+        nav {
+            background-color: #34495e;
+            padding: 1rem;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 1rem;
+            font-weight: bold;
+        }
+
+        nav a:hover {
+            color: #3498db;
+        }
+
+        /* Conteúdo principal */
+        .container {
+            max-width: 1000x;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        section {
+            background-color: white;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            color: #e60d0d;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 0.5rem;
+        }
+
+        pre {
+            background-color: #ecf0f1;
+            padding: 1rem;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+
+        code {
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        /* Links */
+        a {
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* Rodapé */
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: rgb(238, 11, 11);
+        }
+
+        /* Responsividade */
+        @media (max-width: 600px) {
+            header h1 {
+                font-size: 1.8rem;
+            }
+
+            nav a {
+                display: block;
+                margin: 0.5rem 0;
+            }
+
+            .container {
+                padding: 0 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Cabeçalho -->
+    <header>
+        <h1>Guia Profissional de Nmap</h1>
+        <p>Aprenda a usar o Nmap de forma prática e eficiente</p>
+    </header>
+
+    <!-- Navegação -->
+    <nav>
+        <a href="#inicio">Início</a>
+        <a href="#guia-basico">Guia Básico</a>
+        <a href="#tutoriais">Tutoriais</a>
+        <a href="#dicas">Dicas Avançadas</a>
+        <a href="#dicas">Manual do Nmap</a>
+        
+    </nav>
+
+    <!-- Conteúdo principal -->
+    <div class="container">
+        <!-- Seção Início -->
+        <section id="inicio">
+            <h2>Bem-vindo ao Guia de Nmap</h2>
+            <p>Aprenda a usar o Nmap, a ferramenta mais poderosa para mapeamento de redes e descoberta de vulnerabilidades. Este site oferece tutoriais práticos e dicas para iniciantes e profissionais que desejam explorar redes de forma eficiente e segura.</p>
+        </section>
+
+        <!-- Seção Guia Básico -->
+        <section id="guia-basico">
+            <h2>Guia Básico</h2>
+            <p><strong>O que é o Nmap?</strong> O Nmap (Network Mapper) é uma ferramenta de código aberto usada para escanear redes, identificar portas abertas, serviços e possíveis vulnerabilidades.</p>
+            <p><strong>Instalação:</strong></p>
+            <ul>
+                <li><strong>Linux:</strong> <code>sudo apt install nmap</code> (Debian/Ubuntu). Baixe em <a href="https://nmap.org/download.html#linux-rpm" target="_blank">nmap.org/download.html#linux-rpm</a> para outras distribuições.</li>
+                <li><strong>Windows:</strong> Baixe o instalador em <a href="https://nmap.org/download.html#windows" target="_blank">nmap.org/download.html#windows</a>.</li>
+                <li><strong>Mac:</strong> Baixe o pacote em <a href="https://nmap.org/download.html#macosx" target="_blank">nmap.org/download.html#macosx</a> ou instale via Homebrew com <code>brew install nmap</code>.</li>
+                <h3>Links Diretos para Baixar o Nmap</h3>
+                <li><strong>Linux:</strong> <code>sudo apt install nmap</code> (Debian/Ubuntu) ou baixe o tarball em <a href="https://nmap.org/dist/nmap-7.94.tar.bz2" target="_blank">nmap-7.94.tar.bz2</a>.</li>
+                <li><strong>Windows:</strong> Baixe o instalador em <a href="https://nmap.org/dist/nmap-7.94-setup.exe" target="_blank">nmap-7.94-setup.exe</a>.</li>
+                <li><strong>Mac:</strong> Baixe o pacote em <a href="https://nmap.org/dist/nmap-7.94.dmg" target="_blank">nmap-7.94.dmg</a> ou use <code>brew install nmap</code>.</li>
+            </ul>
+        </section>
+
+        <!-- Seção Tutoriais -->
+        <section id="tutoriais">
+            <h2>Tutoriais</h2>
+            <p>Aqui estão exemplos práticos de comandos Nmap para escanear redes:</p>
+            
+            <h3>Exemplo 1: Escaneamento Básico</h3>
+            <pre><code>nmap -D RND:20 --open -sS --top-ports=100 exemplo.com.br</code></pre>
+            <p><strong>Explicação:</strong> Usa 20 IPs aleatórios como iscas, mostra apenas portas abertas, escaneia as 100 portas mais comuns com técnica SYN.</p>
+
+            <h3>Exemplo 2: Detectando Versões</h3>
+            <pre><code>nmap -D RND:20 --open -sV -p21,22,53,111 exemplo.com.br</code></pre>
+            <p><strong>Explicação:</strong> Identifica versões de serviços nas portas 21 (FTP), 22 (SSH), 53 (DNS) e 111 (RPC).</p>
+
+            <h3>Exemplo 3: Buscando Vulnerabilidades</h3>
+            <pre><code>nmap -sV --script vulners -D RND:20 --open -sS --top-ports=100 exemplo.com.br</code></pre>
+            <p><strong>Explicação:</strong> Combina escaneamento discreto com o script Vulners para identificar vulnerabilidades.</p>
+
+            <h3>Exemplo 4: Salvando Portas Abertas em Arquivo</h3>
+            <pre><code>nmap -D RND:20 --open -sS --top-ports=100 exemplo.com.br -oN portas-abertas.txt</code></pre>
+            <p><strong>Explicação:</strong> Escaneia as 100 portas mais comuns, mostra apenas as abertas e salva o resultado no arquivo <code>portas-abertas.txt</code>.</p>
+
+            <h3>Exemplo 5: Escaneamento Silencioso com Fragmentação</h3>
+            <pre><code>nmap -D RND:20 --open -sS -f --top-ports=50 exemplo.com.br</code></pre>
+            <p><strong>Explicação:</strong> Adiciona <code>-f</code> para fragmentar pacotes, tornando o escaneamento mais difícil de ser detectado por firewalls.</p>
+
+            <h3>Exemplo 6: Atraso para Evitar Bloqueio pelo Firewall</h3>
+            <pre><code>nmap -D RND:20 --open -sS --scan-delay 2s --top-ports=100 exemplo.com.br</code></pre>
+            <p><strong>Explicação:</strong> Inclui um atraso de 2 segundos (<code>--scan-delay 2s</code>) entre os pacotes para evitar detecção por sistemas de proteção.</p>
+             
+            <h3>Exemplo 7: Achando o Script do Nmap e Buscando Vulnerabilidades</h3>
+            <pre><code>cat /usr/share/nmap/scripts/vulners.nse | grep script</code></pre>
+            <pre><code>nmap -sV --script vulners businesscorp.com.br</code></pre>
+            <p><strong>Explicação:</strong> O primeiro comando verifica o conteúdo do script <code>vulners.nse</code> no Linux; o segundo usa o script para buscar vulnerabilidades em <code>businesscorp.com.br</code>.</p>
+
+            <h3>Exemplo 8: Descobrindo Informações SMB</h3>
+            <pre><code>nmap -p 139,445 --script smb-os-discovery,smb-enum-shares,smb-enum-users -Pn 10.10.9.116</code></pre>
+            <p><strong>Explicação:</strong> Escaneia as portas 139 e 445 (SMB), usa scripts NSE para descobrir o sistema operacional (<code>smb-os-discovery</code>), listar compartilhamentos (<code>smb-enum-shares</code>) e enumerar usuários (<code>smb-enum-users</code>). O <code>-Pn</code> desativa o ping para evitar bloqueios.</p>
+
+            <h3>Exemplo 9: Verificando Vulnerabilidades SMB</h3>
+            <pre><code>nmap -p 445 --script smb-vuln-ms17-010 -Pn 10.10.9.116</code></pre>
+            <p><strong>Explicação:</strong> Verifica se o alvo é vulnerável ao exploit EternalBlue (MS17-010) na porta 445, comum em sistemas Windows. O <code>-Pn</code> ignora o ping para garantir o escaneamento.</p>
+
+            <h3>Exemplo 10: Escaneando Alvos Aleatórios</h3>
+            <pre><code>nmap -iR 100 -Pn -p 80</code></pre>
+            <p><strong>Explicação:</strong> Escaneia 100 hosts aleatórios (<code>-iR 100</code>) na porta 80 (HTTP), ignorando o ping (<code>-Pn</code>) para garantir que todos sejam verificados, útil para explorar a internet.</p>
+
+            <h3>Exemplo 11: Escaneamento Completo com Saída em Múltiplos Formatos</h3>
+            <pre><code>nmap -A -v -oA resultado_scan scanme.nmap.org</code></pre>
+            <p><strong>Explicação:</strong> Usa <code>-A</code> para ativar detecção de SO, versão, scripts e traceroute; <code>-v</code> aumenta a verbosidade; <code>-oA resultado_scan</code> salva a saída em normal, XML e Grepable ao mesmo tempo.</p>
+        </section>    
+        
+        <!-- Seção Dicas Avançadas -->
+        <section id="dicas">
+            <h2>Dicas Avançadas</h2>
+            <p><strong>Como evitar ser bloqueado pelo Firewall?</strong></p>
+            <ul>
+                <li>Use <code>-D RND:20</code> para mascarar sua origem com IPs falsos.</li>
+                <li>Adicione <code>--scan-delay 1s</code> ou mais para reduzir a velocidade e evitar detecção.</li>
+                <li>Experimente <code>-f</code> para fragmentar pacotes e burlar sistemas de proteção.</li>
+                <li>Salve resultados com <code>-oN nome-arquivo.txt</code> para análise posterior.</li>
+                <li>Use <code>-Pn</code> para ignorar o ping e escanear hosts que bloqueiam ICMP.</li>
+                <li>Use <code>-iR</code> para escanear alvos aleatórios e explorar redes desconhecidas.</li>
+            </ul>
+        </section>
+        <section id="Manual do Nmap">
+        <h2>Manual do Nmap</h2>
+        <p><strong>Nmap 7.92SVN (https://nmap.org)</strong></p>
+        <p><strong>Uso: nmap [Tipo (s) de digitalização] [Opções] {especificação de destino}</strong></p>
+       <pre><code><h4>ESPECIFICAÇÃO DO ALVO</code></h4>
+        Pode passar nomes de host, endereços IP, redes, etc.
+        Ex: scanme.nmap.org, microsoft.com/24, 192.168.0.1;  10.0.0-255.1-254
+        -iL <inputfilename>: entrada da lista de hosts / redes
+        -iR <num hosts>: Escolha alvos aleatórios
+        --exclude <host1 [, host2] [, host3], ...>: Exclui hosts / redes
+        --excludefile <exclude_file>: Excluir lista do arquivo
+
+        <h3>DESCOBERTA DO HOST</h3>
+        -sL: Listar Varredura - simplesmente lista os alvos para varredura
+        -sn: Ping Scan - desativa a varredura de portas
+        -Pn: trata todos os hosts como online - ignora a descoberta de host
+        -PS / PA / PU / PY [lista de portas]: descoberta TCP SYN / ACK, UDP ou SCTP para determinadas portas
+        -PE / PP / PM: testes de descoberta de solicitação de eco, carimbo de data / hora e máscara de rede ICMP
+        -PO [lista de protocolos]: Ping do protocolo IP
+        -n / -R: Nunca faz resolução de DNS / Sempre resolve [padrão: às vezes]
+        --dns-servers <serv1 [, serv2], ...>: Especifique servidores DNS personalizados
+        --system-dns: usa o resolvedor DNS do sistema operacional
+        --traceroute: rastreia o caminho de salto para cada host
+
+        <h3>TÉCNICAS DE VARREDURA</h3>
+        -sS / sT / sA / sW / sM: scans TCP SYN / Conectar () / ACK / Janela / Maimon
+        -sU: UDP Scan
+        -sN / sF / sX: scans TCP Null, FIN e Xmas
+        --scanflags <flags>: personaliza sinalizadores de varredura TCP
+        -sI <zombie host [: probeport]>: varredura ociosa
+        -sY / sZ: varreduras SCTP INIT / COOKIE-ECHO
+        -sO: varredura de protocolo IP
+        -b <host de retransmissão de FTP>: varredura de rejeição de FTP
+
+        <h3>ESPECIFICAÇÃO DA PORTA E ORDEM DE VARREDURA</h3>
+        -p <intervalos de portas>: verifica apenas as portas especificadas
+        Ex: -p22;  -p1-65535;  -p U: 53.111.137, T: 21-25.80.139.8080, S: 9
+        --exclude-ports <intervalos de portas>: Exclui as portas especificadas da varredura
+        -F: Modo rápido - faz a varredura de menos portas do que a varredura padrão
+        -r: verifica as portas consecutivamente - não randomiza
+        --top-ports <número>: verifica <número> portas mais comuns
+        --port-ratio <ratio>: verifica as portas mais comuns do que <ratio>
+
+        <h3>DETECÇÃO DE SERVIÇO / VERSÃO</h3>
+        -sV: Sondar portas abertas para determinar informações de serviço / versão
+        --version-Intensity <level>: Defina de 0 (claro) a 9 (tente todas as sondas)
+        --version-light: Limite às sondas mais prováveis ​​(intensidade 2)
+        --version-all: Experimente cada uma das sondas (intensidade 9)
+        --version-trace: Mostra a atividade de verificação de versão detalhada (para depuração)
+
+        <h3>SCRIPT SCAN</h3>
+        -sC: equivalente a --script = default
+        --script = <Lua scripts>: <Lua scripts> é uma lista separada por vírgulas de diretórios,arquivos de script ou categorias de script
+        --script-args = <n1 = v1, [n2 = v2, ...]>: fornece argumentos para scripts
+        --script-args-file = filename: fornece argumentos de script NSE em um arquivo
+        --script-trace: Mostra todos os dados enviados e recebidos
+        --script-updatedb: atualiza o banco de dados do script.
+        --script-help = Mostra ajuda sobre scripts.Lua scripts é uma lista separada por vírgulas de arquivos de script ou categorias de script
+
+        <h3>DETECÇÃO DE SO</h3>
+        -O: Ativar detecção de sistema operacional
+        --osscan-limit: Limita a detecção de SO a alvos promissores
+        --osscan-guess: Adivinha o SO de forma mais agressiva
+
+        <h3>TEMPO E DESEMPENHO</h3>
+        As opções que levam <tempo> estão em segundos, ou acrescentam 'ms' (milissegundos),
+        's' (segundos), 'm' (minutos) ou 'h' (horas) para o valor (por exemplo, 30m).
+        -T <0-5>: Definir modelo de tempo (quanto mais alto, mais rápido)
+        --min-hostgroup / max-hostgroup <size>: Tamanhos de grupos de varredura de hosts paralelos
+        --min-parallelism / max-parallelism <numprobes>: paralelização de teste
+        --min-rtt-timeout / max-rtt-timeout / initial-rtt-timeout <time>: Especifica tempo de ida e volta da sonda.
+        --max-retries <tries>: Número máximo de retransmissões de sondagem de varredura de porta.
+        --host-timeout <time>: Desista no alvo após tanto tempo
+        --scan-delay / - max-scan-delay <time>: ajusta o atraso entre as sondas
+        --min-rate <number>: Envia pacotes não mais lento do que <number> por segundo
+        --max-rate <número>: envia pacotes não mais rápido do que <número> por segundo
+
+        <h3>EVASÃO E SPOOFING DE FIREWALL / IDS</h3>
+        -f;  --mtu <val>: pacotes de fragmento (opcionalmente com MTU fornecido)
+        -D <decoy1, decoy2 [, ME], ...>: Encobrir uma varredura com chamarizes
+        -S <IP_Address>: Endereço de origem falsificado
+        -e <iface>: Use a interface especificada
+        -g / - source-port <portnum>: Use o número de porta fornecido
+        --proxies <url1, [url2], ...>: Conexões de retransmissão por meio de proxies HTTP / SOCKS4
+        --data <hex string>: acrescenta uma carga útil personalizada aos pacotes enviados
+        --data-string <string>: acrescenta uma string ASCII personalizada aos pacotes enviados
+        --data-length <num>: Acrescenta dados aleatórios aos pacotes enviados
+        --ip-options <options>: Envia pacotes com opções de ip especificadas
+        --ttl <val>: Definir campo de tempo de vida do IP
+        --spoof-mac <endereço mac / prefixo / nome do fornecedor>: falsificar seu endereço MAC
+        --badsum: envia pacotes com uma soma de verificação TCP / UDP / SCTP falsa
+
+        <h3>SAÍDA</h3>
+        -oN / -oX / -oS / -oG <arquivo>: Varredura normal, XML,s rIpt kIddi3,e formato Grepable,respectivamente,para o nome de arquivo fornecido.
+        -oA <basename>: Saída nos três formatos principais de uma vez
+        -v: Aumenta o nível de verbosidade (use -vv ou mais para um efeito maior)
+        -d: Aumenta o nível de depuração (use -dd ou mais para maior efeito)
+        --reason: exibe o motivo pelo qual uma porta está em um estado específico
+        --open: mostra apenas portas abertas (ou possivelmente abertas)
+        --packet-trace: Mostra todos os pacotes enviados e recebidos
+        --iflist: Imprimir interfaces de host e rotas (para depuração)
+        --append-output: Anexa em vez de substituir os arquivos de saída especificados
+        --resume <filename>: Retoma uma varredura abortada
+        --noninteractive: desativa as interações de tempo de execução via teclado
+        --stylesheet <path / URL>: folha de estilo XSL para transformar a saída XML em HTML
+        --webxml: Folha de estilo de referência de Nmap.Org para XML mais portátil
+        --no-stylesheet: impede a associação de folha de estilo XSL com saída XML
+
+        
+        <h3>MISC</h3>   
+        -6: Ativar varredura IPv6
+        -A: ativa a detecção de SO, detecção de versão, verificação de script e traceroute
+        --datadir <dirname>: Especifique a localização do arquivo de dados Nmap personalizado
+        --send-eth / - send-ip: Enviar usando frames Ethernet brutos ou pacotes IP
+        --privileged: assume que o usuário tem privilégios totais
+        --unprivileged: assume que o usuário não tem privilégios de soquete brutos
+        -V: Número da versão impressa
+        -h: Imprime esta página de resumo da ajuda.
+
+        <h3>EXEMPLOS</h3>
+        nmap -v -A scanme.nmap.org
+        nmap -v -sn 192.168.0.0/16 10.0.0.0/8
+        nmap -v -iR 10000 -Pn -p 80
+
+        VEJA A PÁGINA DO MAN (https://nmap.org/book/man.html) PARA MAIS OPÇÕES E EXEMPLOS
+    </section>
+        
+<section>
+        <h2>Filme Invasores - Nenhum Sistema Está Salvo</h2>
+        <center>        
+            <iframe width="1000" height="600" 
+            src="https://www.youtube.com/embed/-ovLuuBiwY8" 
+            title="YouTube video player" 
+            frameborder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            allowfullscreen>
+        </iframe>
+    </center>
+    </section> 
+        
+    </div>    
+    <!-- Rodapé -->
+    <footer>
+        <p>© 2025 Guia Profissional de Nmap. Todos os direitos reservados.</p>
+    </footer>
+</body>
+</html>
