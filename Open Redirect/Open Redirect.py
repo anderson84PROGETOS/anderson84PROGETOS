@@ -208,3 +208,4 @@ if __name__ == "__main__":
         sys.exit(0)
 
     input(f"{VERMELHO}\n\n========== PRESSIONE ENTER PARA SAIR =========={RESET}")
+    
