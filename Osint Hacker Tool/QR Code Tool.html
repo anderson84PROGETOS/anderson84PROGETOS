@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Tool - Gerador e Leitor Profissional</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: #f4f7fa;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        header h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+        .container {
+            background-color: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            width: 90%;
+            max-width: 950px;
+            margin: 20px auto;
+        }
+        input, select, button {
+            margin: 12px 0;
+            padding: 10px;
+            width: 100%;
+            max-width: 950px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            font-size: 14px;
+        }
+        select {
+            appearance: none;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="5" viewBox="0 0 10 5"><path d="M0 0h10L5 5z" fill="gray"/></svg>') no-repeat right 10px center;
+            background-size: 10px;
+        }
+        button {
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #219653;
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 14px;
+        }
+        #qrImage {
+            max-width: 100%;
+            margin-top: 20px;
+            border: 1px solid #eee;
+            border-radius: 5px;
+        }
+        footer {
+            margin-top: auto;
+            padding: 15px;
+            background-color: #2c3e50;
+            color: #bdc3c7;
+            text-align: center;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>QR Code Tool</h1>
+    </header>
+
+    <div class="container">
+        <div id="options">
+            <button onclick="showGenerate()">Criar QR Code</button>
+            <button onclick="showRead()">Ler QR Code</button>
+        </div>
+
+        <!-- Formulário para gerar QR Code -->
+        <div id="generateForm" style="display: none;">
+            <input type="text" id="qrText" placeholder="Digite o texto ou URL">
+            <select id="qrSize">
+                <option value="150">150x150</option>
+                <option value="200">200x200</option>
+                <option value="250">250x250</option>
+                <option value="300">300x300</option>
+                <option value="350">350x350</option>
+                <option value="400">400x400</option>
+                <option value="450">450x450</option>
+                <option value="500">500x500</option>
+                <option value="550">550x550</option>
+                <option value="600">600x600</option>
+                <option value="650">650x650</option>
+                <option value="700">700x700</option>
+                <option value="750">750x750</option>
+                <option value="800">800x800</option>
+                <option value="850">850x850</option>
+                <option value="900">900x900</option>
+                <option value="950">950x950</option>
+                <option value="1000">1000x1000</option>
+            </select>
+            <button onclick="generateQR()">Gerar QR Code</button>
+        </div>
+
+        <!-- Formulário para ler QR Code -->
+        <div id="readForm" style="display: none;">
+            <input type="file" id="qrFile" accept="image/*">
+            <button onclick="readQR()">Ler QR Code</button>
+        </div>
+
+        <div id="result"></div>
+        <img id="qrImage" style="display: none;">
+    </div>
+
+    <footer>
+        © 2025 QR Code Tool
+    </footer>
+
+    <script>
+        function showGenerate() {
+            document.getElementById("options").style.display = "none";
+            document.getElementById("generateForm").style.display = "block";
+            document.getElementById("readForm").style.display = "none";
+            document.getElementById("result").innerHTML = "";
+            document.getElementById("qrImage").style.display = "none";
+        }
+
+        function showRead() {
+            document.getElementById("options").style.display = "none";
+            document.getElementById("generateForm").style.display = "none";
+            document.getElementById("readForm").style.display = "block";
+            document.getElementById("result").innerHTML = "";
+            document.getElementById("qrImage").style.display = "none";
+        }
+
+        function generateQR() {
+            const text = document.getElementById("qrText").value;
+            const size = document.getElementById("qrSize").value;
+            const resultDiv = document.getElementById("result");
+            const qrImage = document.getElementById("qrImage");
+
+            if (!text.trim()) {
+                resultDiv.innerHTML = "<span style='color: #e74c3c;'>O texto ou URL não pode estar vazio.</span>";
+                return;
+            }
+
+            const sizeNum = parseInt(size);
+            if (sizeNum < 150 || sizeNum > 1000) {
+                resultDiv.innerHTML = "<span style='color: #e74c3c;'>Tamanho inválido. Escolha entre 150 e 1000.</span>";
+                return;
+            }
+
+            const url = `https://api.qrserver.com/v1/create-qr-code/?size=${sizeNum}x${sizeNum}&data=${encodeURIComponent(text)}`;
+            
+            resultDiv.innerHTML = "";
+            qrImage.style.display = "none";
+
+            qrImage.onload = () => {
+                qrImage.style.display = "block";
+                resultDiv.innerHTML = `<p style='color: #27ae60;'>QR Code gerado com sucesso! Tamanho: ${size}x${size}</p>`;
+            };
+            qrImage.onerror = () => {
+                resultDiv.innerHTML = "<span style='color: #e74c3c;'>Erro ao gerar o QR Code. Tente um tamanho menor ou texto mais curto.</span>";
+            };
+            qrImage.src = url;
+        }
+
+        function readQR() {
+            const fileInput = document.getElementById("qrFile");
+            const resultDiv = document.getElementById("result");
+            const file = fileInput.files[0];
+
+            if (!file) {
+                resultDiv.innerHTML = "<span style='color: #e74c3c;'>Por favor, selecione uma imagem.</span>";
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("file", file);
+
+            fetch("https://api.qrserver.com/v1/read-qr-code/", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data && data[0] && data[0].symbol && data[0].symbol[0].data) {
+                    resultDiv.innerHTML = `<p style='color: #27ae60;'>QR Code detectado: ${data[0].symbol[0].data}</p>`;
+                } else {
+                    resultDiv.innerHTML = "<span style='color: #e74c3c;'>Nenhum QR Code encontrado na imagem.</span>";
+                }
+            })
+            .catch(error => {
+                resultDiv.innerHTML = `<span style='color: #e74c3c;'>Erro ao ler o QR Code: ${error.message}</span>`;
+            });
+        }
+    </script>
+</body>
+</html>
