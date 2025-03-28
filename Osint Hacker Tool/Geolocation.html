@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geolocalização de Websites</title>
+    <style>
+        body {
+            background-color: #1a1a1a;
+            color: #ffffff;
+            font-family: 'Courier New', Courier, monospace;
+            text-align: center;
+            padding: 20px;
+            
+        }
+        .banner {
+            color: #00ffff;
+            font-weight: bold;
+            white-space: pre;
+            margin-bottom: 20px;
+        }
+        .input-label {
+            color: #00ff00;
+            font-weight: bold;
+        }
+        input[type="text"] {
+            background-color: #333;
+            color: #fff;
+            border: 1px solid #00ff00;
+            padding: 5px;
+            margin: 10px;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        button {
+            background-color: #00ff00;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button:hover {
+            background-color: #00cc00;
+        }
+        #result {
+            margin-top: 20px;
+            text-align: left;
+            display: inline-block;
+        }
+        .cyan {
+            color: #00ffff;
+            font-weight: bold;
+        }
+        .green {
+            color: #00ff00;
+            font-weight: bold;
+        }
+        .yellow {
+            color: #ffff00;
+            font-weight: bold;
+        }
+        .red {
+            color: #ff0000;
+            font-weight: bold;
+        }
+        .purple-link {
+            color: #ff00ff;                    
+            font-size: 14px;
+            
+        }
+        .purple-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="banner">
+ ██████╗ ███████╗ ██████╗ ██╗      ██████╗  ██████╗ █████╗ ████████╗██╗ ██████╗ ███╗   ██╗
+██╔════╝ ██╔════╝██╔═══██╗██║     ██╔═══██╗██╔════╝██╔══██╗╚══██╔══╝██║██╔═══██╗████╗  ██║
+██║  ███╗█████╗  ██║   ██║██║     ██║   ██║██║     ███████║   ██║   ██║██║   ██║██╔██╗ ██║
+██║   ██║██╔══╝  ██║   ██║██║     ██║   ██║██║     ██╔══██║   ██║   ██║██║   ██║██║╚██╗██║
+╚██████╔╝███████╗╚██████╔╝███████╗╚██████╔╝╚██████╗██║  ██║   ██║   ██║╚██████╔╝██║ ╚████║
+ ╚═════╝ ╚══════╝ ╚═════╝ ╚══════╝ ╚═════╝  ╚═════╝╚═╝  ╚═╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝
+    </div>
+
+    <div class="input-label">Digite o nome do website (exemplo: google.com)</div>
+    <input type="text" id="website" placeholder="Ex: google.com">
+    <button onclick="getLocation()">Consultar</button>
+
+    <div id="result"></div>
+
+    <script>
+        async function getLocation() {
+            const website = document.getElementById('website').value;
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '';
+
+            if (!website) {
+                resultDiv.innerHTML = '<span class="red">Por favor, insira um website válido.</span>';
+                return;
+            }
+
+            try {
+                // Resolve o domínio para IP usando a API do Google DNS
+                const dnsResponse = await fetch(`https://dns.google/resolve?name=${website}`, {
+                    headers: { 'User-Agent': 'GeolocalizacaoWebsite/1.0' }
+                });
+                const dnsData = await dnsResponse.json();
+
+                if (!dnsData.Answer || dnsData.Answer.length === 0) {
+                    resultDiv.innerHTML = '<span class="red">Erro ao resolver o nome do website.</span>';
+                    return;
+                }
+
+                const ip = dnsData.Answer[0].data;
+
+                // Consulta a API ip-api.com com o IP obtido
+                const ipApiUrl = `http://ip-api.com/json/${ip}?lang=pt-BR`;
+                const ipResponse = await fetch(ipApiUrl, {
+                    headers: { 'User-Agent': 'GeolocalizacaoWebsite/1.0' }
+                });
+                const ipData = await ipResponse.json();
+
+                if (ipResponse.ok && ipData.status === "success") {
+                    const latitude = ipData.lat || 'N/A';
+                    const longitude = ipData.lon || 'N/A';
+                    const cidade = ipData.city || 'N/A';
+                    const regiao = ipData.regionName || 'N/A';
+                    const pais = ipData.country || 'N/A';
+
+                    // Tentativa de geocodificação reversa com Nominatim para obter um endereço mais detalhado
+                    let enderecoCompleto = `${cidade}, ${regiao} - ${pais}`;
+                    let cep = 'N/A';
+                    if (latitude !== 'N/A' && longitude !== 'N/A') {
+                        const nominatimUrl = `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json&addressdetails=1`;
+                        const nominatimResponse = await fetch(nominatimUrl, {
+                            headers: { 'User-Agent': 'GeolocalizacaoWebsite/1.0' }
+                        });
+                        const nominatimData = await nominatimResponse.json();
+
+                        if (nominatimData && nominatimData.address) {
+                            const rua = nominatimData.address.road || 'N/A';
+                            const numero = nominatimData.address.house_number || 'S/N';
+                            const bairro = nominatimData.address.suburb || nominatimData.address.neighbourhood || 'N/A';
+                            cep = nominatimData.address.postcode || 'N/A';
+                            enderecoCompleto = `${rua}, ${numero}, ${bairro}, ${cidade}, ${regiao} - ${pais}`;
+                        }
+                    }
+
+                    // Se houver CEP, consultar a API awesomeapi.com.br
+                    if (cep !== 'N/A' && /^\d{8}$/.test(cep.replace('-', ''))) {
+                        const cepApiUrl = `https://cep.awesomeapi.com.br/json/${cep.replace('-', '')}`;
+                        const cepResponse = await fetch(cepApiUrl, {
+                            headers: { 'User-Agent': 'GeolocalizacaoWebsite/1.0' }
+                        });
+                        const cepData = await cepResponse.json();
+
+                        if (cepResponse.ok && cepData.status !== 404) {
+                            enderecoCompleto = `${cepData.address}, ${cepData.district}, ${cepData.city} - ${cepData.state}`;
+                        }
+                    }
+
+                    const googleMapsQuery = encodeURIComponent(enderecoCompleto);
+
+                    resultDiv.innerHTML = `
+                        <div class="cyan">Informações para o website: ${website}</div><br>
+                        <div class="green">IP: ${ipData.query || 'N/A'}</div><br>
+                        <div class="green">Provedor: ${ipData.isp || 'N/A'}</div><br>
+                        <div class="cyan">País: ${pais}</div><br>
+                        <div class="cyan">Código do País: ${ipData.countryCode || 'N/A'}</div><br>
+                        <div class="cyan">Região: ${regiao}</div><br>
+                        <div class="cyan">Cidade: ${cidade}</div><br>
+                        <div class="yellow">Latitude: ${latitude}</div><br>
+                        <div class="yellow">Longitude: ${longitude}</div><br>
+                        <div class="cyan">========== Endereço completo ==========</div><br>
+                        <div class="green">Endereço completo: ${enderecoCompleto}</div><br>
+                        <div class="cyan">Oficial:<a href="https://www.google.com/maps/search/?api=1&query=${googleMapsQuery}" target="_blank" class="purple-link">https://www.google.com/maps/search/?api=1&query=${googleMapsQuery}</a></div>
+                    `;
+
+                    if (latitude && longitude && latitude !== 'N/A' && longitude !== 'N/A') {
+                        resultDiv.innerHTML += `
+                        <div class="cyan"> </div><br>
+                        <div class="cyan"> </div><br>
+                        <div class="cyan">========== coordenadas ==========</div><br>
+                            <br><div class="yellow">Geolocalização: ${latitude},${longitude}</div><br>
+                            <div class="cyan">Google Maps (coordenadas): <a href="https://www.google.com/maps/place/${latitude},${longitude}" target="_blank" class="purple-link">https://www.google.com/maps/place/${latitude},${longitude}</a></div><br>
+                            <div class="green">Street View: <a href="https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${latitude},${longitude}&heading=-45&pitch=38&fov=80" target="_blank" class="purple-link">https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${latitude},${longitude}&heading=-45&pitch=38&fov=80</a></div>
+                        `;
+                    } else {
+                        resultDiv.innerHTML += '<div class="red">Coordenadas não disponíveis para gerar links do Google Maps/Street View.</div>';
+                    }
+                } else {
+                    resultDiv.innerHTML = `<span class="red">Erro na requisição: ${ipData.message || 'Status desconhecido'}</span>`;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<span class="red">Ocorreu um erro: ${error.message}</span>`;
+            }
+        }
+    </script>
+</body>
+</html>
