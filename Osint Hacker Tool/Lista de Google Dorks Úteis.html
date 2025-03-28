@@ -1,0 +1,492 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Google Dorks</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        h2 {
+            color: #444;
+            border-bottom: 2px solid #0066cc;
+            padding-bottom: 5px;
+        }
+        .dork-container {
+            background-color: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .dork {
+            color: #0066cc;
+            font-family: monospace;
+            font-size: 14px;
+        }
+        .description {
+            color: #666;
+            margin-top: 5px;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Lista de Google Dorks Úteis</h1>
+
+    <!-- Buscas por Tipo de Arquivo -->
+    <h2>Tipos de Arquivo</h2>
+    <div class="dork-container">
+        <div class="dork">filetype:pdf site:*.edu -inurl:(login)</div>
+        <div class="description">PDFs em sites educacionais, excluindo páginas de login</div>
+    </div>
+    <div class="dork-container">
+        <div class="dork">filetype:docx "confidential" -inurl:(signup)</div>
+        <div class="description">Documentos Word com "confidential", sem páginas de cadastro</div>
+    </div>
+    <div class="dork-container">
+        <div class="dork">filetype:xlsx site:*.org -inurl:(members)</div>
+        <div class="description">Planilhas Excel em sites de organizações, excluindo áreas de membros</div>
+    </div>
+    <div class="dork-container">
+        <div class="dork">filetype:txt "password" -inurl:(login)</div>
+        <div class="description">Arquivos de texto contendo "password", sem páginas de login</div>
+    </div>
+    <div class="dork-container">
+        <div class="dork">filetype:sql "create table"</div>
+        <div class="description">Arquivos SQL com criação de tabelas</div>
+    </div>
+
+    <!-- Diretórios Expostos -->
+    <h2>Diretórios Expostos</h2>
+    <div class="dork-container">
+        <div class="dork">"index of" "parent directory" site:*.com</div>
+        <div class="description">Diretórios abertos em sites comerciais</div>
+    </div>
+    <div class="dork-container">
+        <div class="dork">"dir listing" -inurl:(login | signup)</div>
+        <div class="description">Listagens de diretórios, excluindo login e cadastro</div>
+    </div>
+    <div class="dork-container">
+        <div class="dork">"index of /backup"</div>
+        <div class="description">Diretórios de backup expostos</div>
+    </div>
+    <div class="dork-container">
+        <div class="dork">"index of" "ftp"</div>
+        <div class="description">Diretórios FTP expostos</div>
+    </div>
+    <div class="dork-container">
+        <div class="dork">"directory listing" "config"</div>
+        <div class="description">Listagens contendo arquivos de configuração</div>
+    </div>
+
+    <!-- Páginas Administrativas -->
+    <h2>Páginas Administrativas</h2>
+    <div class="dork-container">
+        <div class="dork">inurl:(admin | login | dashboard) site:*.gov</div>
+        <div class="description">Páginas admin em sites governamentais</div>
+    </div>
+    <div class="dork-container">
+        <div class="dork">inurl:wp-admin site:*.org</div>
+        <div class="description">Painéis WordPress em sites de organizações</div>
+    </div>
+    <div class="dork-container">
+        <div class="dork">inurl:(cpanel | phpmyadmin)</div>
+        <div class="description">Painéis de controle ou PHPMyAdmin expostos</div>
+    </div>
+    <div class="dork-container">
+        <div class="dork">inurl:admin "login" -inurl:(signup)</div>
+        <div class="description">Páginas admin com login, sem cadastro</div>
+    </div>
+    <div class="dork-container">
+        <div class="dork">inurl:(controlpanel | backend)</div>
+        <div class="description">Painéis de controle ou backends expostos</div>
+    </div>
+
+    <!-- Informações Sensíveis -->
+    <h2>Informações Sensíveis</h2>
+    <div class="dork-container">
+        <div class="dork">intext:"private key" filetype:pem</div>
+        <div class="description">Chaves privadas em arquivos PEM</div>
+    </div>
+    <div class="dork-container">
+        <div class="dork">intext:"api key" filetype:txt</div>
+        <div class="description">Chaves API em arquivos de texto</div>
+    </div>
+    <div class="dork-container">
+        <div class="dork">intext:"username:password" filetype:cfg</div>
+        <div class="description">Credenciais em arquivos de configuração</div>
+    </div>
+    <div class="dork-container">
+        <div class="dork">"database password" filetype:php</div>
+        <div class="description">Senhas de banco de dados em arquivos PHP</div>
+    </div>
+    <div class="dork-container">
+        <div class="dork">intext:"credit card" filetype:csv</div>
+        <div class="description">Dados de cartão de crédito em CSV</div>
+    </div>
+
+    <!-- Outros Úteis -->
+    <h2>Outros Úteis</h2>
+    <div class="dork-container">
+        <div class="dork">cache:example.com</div>
+        <div class="description">Versão em cache de um site</div>
+    </div>
+    <div class="dork-container">
+        <div class="dork">site:*.edu "research papers" filetype:pdf</div>
+        <div class="description">Artigos de pesquisa em PDF de sites educacionais</div>
+    </div>
+    <div class="dork-container">
+        <div class="dork">site:*.org "donate" -inurl:(login)</div>
+        <div class="description">Páginas de doação em organizações</div>
+    </div>
+    <div class="dork-container">
+        <div class="dork">"webcam" inurl:(view | camera)</div>
+        <div class="description">Webcams públicas acessíveis</div>
+    </div>
+    <div class="dork-container">
+        <div class="dork">site:pastebin.com "password"</div>
+        <div class="description">Senhas vazadas no Pastebin</div>
+    </div>
+        <!-- Continuação da seção "Outros Úteis" -->
+        <div class="dork-container">
+            <div class="dork">site:github.com "api_key" -inurl:(signup)</div>
+            <div class="description">Chaves API expostas no GitHub, excluindo páginas de cadastro</div>
+        </div>
+        <div class="dork-container">
+            <div class="dork">site:*.edu "student list" filetype:pdf</div>
+            <div class="description">Listas de estudantes em PDFs de sites educacionais</div>
+        </div>
+        <div class="dork-container">
+            <div class="dork">inurl:(signup | register) "verification code"</div>
+            <div class="description">Páginas de registro com códigos de verificação</div>
+        </div>
+        <div class="dork-container">
+            <div class="dork">site:*.gov "internal use only" filetype:doc</div>
+            <div class="description">Documentos Word governamentais marcados como uso interno</div>
+        </div>
+        <div class="dork-container">
+            <div class="dork">"backup" filetype:sql site:*.org</div>
+            <div class="description">Backups SQL em sites de organizações</div>
+        </div>
+    
+        <!-- Configurações e Logs -->
+        <h2>Configurações e Logs</h2>
+        <div class="dork-container">
+            <div class="dork">filetype:log "error" -inurl:(login)</div>
+            <div class="description">Arquivos de log com erros, excluindo páginas de login</div>
+        </div>
+        <div class="dork-container">
+            <div class="dork">filetype:ini "password" site:*.com</div>
+            <div class="description">Arquivos INI com senhas em sites comerciais</div>
+        </div>
+        <div class="dork-container">
+            <div class="dork">filetype:conf "server" -inurl:(signup)</div>
+            <div class="description">Arquivos de configuração de servidor, sem páginas de cadastro</div>
+        </div>
+        <div class="dork-container">
+            <div class="dork">inurl:(config | settings) filetype:php</div>
+            <div class="description">Arquivos PHP de configuração ou ajustes</div>
+        </div>
+        <div class="dork-container">
+            <div class="dork">"access.log" "POST" filetype:log</div>
+            <div class="description">Logs de acesso com requisições POST</div>
+        </div>
+    
+        <!-- Vazamentos de Dados -->
+        <h2>Vazamentos de Dados</h2>
+        <div class="dork-container">
+            <div class="dork">site:*.org filetype:csv "email,password"</div>
+            <div class="description">CSVs com emails e senhas em sites de organizações</div>
+        </div>
+        <div class="dork-container">
+            <div class="dork">intext:"data breach" filetype:txt site:*.com</div>
+            <div class="description">Relatos de vazamentos de dados em arquivos de texto</div>
+        </div>
+        <div class="dork-container">
+            <div class="dork">site:pastebin.com "email:password"</div>
+            <div class="description">Combinações de email e senha no Pastebin</div>
+        </div>
+        <div class="dork-container">
+            <div class="dork">filetype:json "token" -inurl:(login)</div>
+            <div class="description">Arquivos JSON com tokens, excluindo login</div>
+        </div>
+        <div class="dork-container">
+            <div class="dork">intext:"ssn" filetype:xlsx site:*.edu</div>
+            <div class="description">Planilhas com números de seguridade social em sites educacionais</div>
+        </div>
+    
+        <!-- Câmeras e Dispositivos -->
+        <h2>Câmeras e Dispositivos IoT</h2>
+        <div class="dork-container">
+            <div class="dork">inurl:(webcamxp | webcam7)</div>
+            <div class="description">Webcams acessíveis via WebcamXP ou Webcam7</div>
+        </div>
+        <div class="dork-container">
+            <div class="dork">inurl:(axis | dvr) "live view"</div>
+            <div class="description">Câmeras Axis ou DVRs com visualização ao vivo</div>
+        </div>
+        <div class="dork-container">
+            <div class="dork">"port:80" inurl:login "camera"</div>
+            <div class="description">Câmeras com login na porta 80</div>
+        </div>
+        <div class="dork-container">
+            <div class="dork">inurl:(hikvision | dahua) "login"</div>
+            <div class="description">Interfaces de login de câmeras Hikvision ou Dahua</div>
+        </div>
+        <div class="dork-container">
+            <div class="dork">"device status" inurl:(iot | device)</div>
+            <div class="description">Status de dispositivos IoT expostos</div>
+        </div>
+    
+        <!-- Recursos Educacionais -->
+        <h2>Recursos Educacionais</h2>
+        <div class="dork-container">
+            <div class="dork">site:*.edu "course syllabus" filetype:pdf</div>
+            <div class="description">Ementas de cursos em PDF de sites educacionais</div>
+        </div>
+        <div class="dork-container">
+            <div class="dork">site:*.org "white paper" filetype:docx</div>
+            <div class="description">White papers em Word de organizações</div>
+        </div>
+        <div class="dork-container">
+            <div class="dork">intext:"lecture notes" filetype:ppt site:*.edu</div>
+            <div class="description">Notas de aula em PowerPoint de sites educacionais</div>
+        </div>
+        <div class="dork-container">
+            <div class="dork">site:*.gov "training manual" filetype:pdf</div>
+            <div class="description">Manuais de treinamento em PDF de sites governamentais</div>
+        </div>
+        <div class="dork-container">
+            <div class="dork">"exam questions" filetype:doc site:*.edu</div>
+            <div class="description">Questões de exames em Word de sites educacionais</div>
+        </div>
+    
+        <!-- Diversos -->
+        <h2>Diversos</h2>
+        <div class="dork-container">
+            <div class="dork">site:*.com "under construction" -inurl:(login)</div>
+            <div class="description">Sites em construção, excluindo login</div>
+        </div>
+        <div class="dork-container">
+            <div class="dork">inurl:(test | testing) "password"</div>
+            <div class="description">Páginas de teste com senhas expostas</div>
+        </div>
+        <div class="dork-container">
+            <div class="dork">site:*.org "member list" filetype:xlsx</div>
+            <div class="description">Listas de membros em Excel de organizações</div>
+        </div>
+        <div class="dork-container">
+            <div class="dork">"temporary file" filetype:tmp</div>
+            <div class="description">Arquivos temporários expostos</div>
+        </div>
+        <div class="dork-container">
+            <div class="dork">inurl:(forum | board) "admin password"</div>
+            <div class="description">Fóruns ou quadros com senhas de admin</div>
+        </div>
+    
+        <!-- APIs e Tokens -->
+        <h2>APIs e Tokens</h2>
+        <div class="dork-container">
+            <div class="dork">site:*.com "bearer token" filetype:txt</div>
+            <div class="description">Tokens Bearer em arquivos de texto</div>
+        </div>
+        <div class="dork-container">
+            <div class="dork">inurl:(api | endpoint) "key"</div>
+            <div class="description">Endpoints de API com chaves</div>
+        </div>
+        <div class="dork-container">
+            <div class="dork">site:gitlab.com "secret_key"</div>
+            <div class="description">Chaves secretas no GitLab</div>
+        </div>
+        <div class="dork-container">
+            <div class="dork">filetype:env "DATABASE_URL"</div>
+            <div class="description">Arquivos .env com URLs de banco de dados</div>
+        </div>
+        <div class="dork-container">
+            <div class="dork">intext:"oauth token" site:*.org</div>
+            <div class="description">Tokens OAuth em sites de organizações</div>
+        </div>
+    
+        <!-- Relatórios e Finanças -->
+        <h2>Relatórios e Finanças</h2>
+        <div class="dork-container">
+            <div class="dork">site:*.com "financial report" filetype:pdf</div>
+            <div class="description">Relatórios financeiros em PDF de sites comerciais</div>
+        </div>
+        <div class="dork-container">
+            <div class="dork">intext:"budget" filetype:xlsx site:*.gov</div>
+            <div class="description">Orçamentos em Excel de sites governamentais</div>
+        </div>
+        <div class="dork-container">
+            <div class="dork">"invoice" filetype:doc site:*.org</div>
+            <div class="description">Faturas em Word de organizações</div>
+        </div>
+        <div class="dork-container">
+            <div class="dork">site:*.edu "grant proposal" filetype:pdf</div>
+            <div class="description">Propostas de bolsas em PDF de sites educacionais</div>
+        </div>
+        <div class="dork-container">
+            <div class="dork">intext:"tax return" filetype:pdf site:*.org</div>
+            <div class="description">Declarações de impostos em PDF de organizações</div>
+        </div>
+    
+        <!-- Arquivos de Backup -->
+        <h2>Arquivos de Backup</h2>
+        <div class="dork-container">
+            <div class="dork">filetype:bak "database"</div>
+            <div class="description">Arquivos de backup de bancos de dados</div>
+        </div>
+        <div class="dork-container">
+            <div class="dork">"backup" filetype:tar site:*.com</div>
+            <div class="description">Arquivos TAR de backup em sites comerciais</div>
+        </div>
+        <div class="dork-container">
+            <div class="dork">filetype:sql.gz "dump"</div>
+            <div class="description">Dumps SQL compactados</div>
+        </div>
+        <div class="dork-container">
+            <div class="dork">"site backup" filetype:zip</div>
+            <div class="description">Backups de sites em ZIP</div>
+        </div>
+        <div class="dork-container">
+            <div class="dork">filetype:rar "config" site:*.org</div>
+            <div class="description">Arquivos RAR com configurações em organizações</div>
+        </div>
+    
+        <!-- Scripts e Códigos -->
+        <h2>Scripts e Códigos</h2>
+        <div class="dork-container">
+            <div class="dork">filetype:sh "password" site:*.com</div>
+            <div class="description">Scripts shell com senhas em sites comerciais</div>
+        </div>
+        <div class="dork-container">
+            <div class="dork">filetype:py "api_key" site:github.com</div>
+            <div class="description">Scripts Python com chaves API no GitHub</div>
+        </div>
+        <div class="dork-container">
+            <div class="dork">inurl:(script | code) "login"</div>
+            <div class="description">Scripts ou códigos com login</div>
+        </div>
+        <div class="dork-container">
+            <div class="dork">filetype:js "token" -inurl:(signup)</div>
+            <div class="description">Arquivos JavaScript com tokens, sem cadastro</div>
+        </div>
+        <div class="dork-container">
+            <div class="dork">filetype:rb "secret" site:*.org</div>
+            <div class="description">Scripts Ruby com segredos em organizações</div>
+        </div>
+            <!-- Dorks Adicionais -->
+    <h2>Dorks Adicionais</h2>
+    <div class="dork-container">
+        <div class="dork">site:*.net "user manual" filetype:pdf -inurl:(signup)</div>
+        <div class="description">Manuais de usuário em PDF em sites .net, sem páginas de cadastro</div>
+    </div>
+    <div class="dork-container">
+        <div class="dork">inurl:(portal | gateway) "authentication"</div>
+        <div class="description">Portais ou gateways com autenticação</div>
+    </div>
+    <div class="dork-container">
+        <div class="dork">filetype:xml "sitemap" site:*.edu</div>
+        <div class="description">Sitemaps XML em sites educacionais</div>
+    </div>
+    <div class="dork-container">
+        <div class="dork">"error 500" site:*.gov -inurl:(login)</div>
+        <div class="description">Páginas com erro 500 em sites governamentais, sem login</div>
+    </div>
+    <div class="dork-container">
+        <div class="dork">intext:"session id" filetype:log site:*.com</div>
+        <div class="description">Logs com IDs de sessão em sites comerciais</div>
+    </div>
+    <div class="dork-container">
+        <div class="dork">site:*.org inurl:(members area) "password reset"</div>
+        <div class="description">Áreas de membros em organizações com redefinição de senha</div>
+    </div>
+    <div class="dork-container">
+        <div class="dork">filetype:yaml "credentials" -inurl:(signup)</div>
+        <div class="description">Arquivos YAML com credenciais, sem páginas de cadastro</div>
+    </div>
+    <div class="dork-container">
+        <div class="dork">"robots.txt" site:*.edu -inurl:(disallow)</div>
+        <div class="description">Arquivos robots.txt em sites educacionais sem "disallow"</div>
+    </div>
+    <div class="dork-container">
+        <div class="dork">inurl:(upload | file) "allowed types"</div>
+        <div class="description">Páginas de upload com tipos de arquivos permitidos</div>
+    </div>
+    <div class="dork-container">
+        <div class="dork">site:*.gov filetype:pptx "project plan"</div>
+        <div class="description">Planos de projeto em PowerPoint de sites governamentais</div>
+    </div>
+    <div class="dork-container">
+        <div class="dork">"debug mode" inurl:(app | application)</div>
+        <div class="description">Aplicações em modo de depuração</div>
+    </div>
+    <div class="dork-container">
+        <div class="dork">site:trello.com "confidential" -inurl:(login)</div>
+        <div class="description">Informações confidenciais no Trello, sem login</div>
+    </div>
+    <div class="dork-container">
+        <div class="dork">filetype:bash_history "sudo"</div>
+        <div class="description">Históricos de comandos Bash com uso de sudo</div>
+    </div>
+    <div class="dork-container">
+        <div class="dork">inurl:(staging | dev) "api endpoint"</div>
+        <div class="description">Endpoints de API em ambientes de staging ou desenvolvimento</div>
+    </div>
+    <div class="dork-container">
+        <div class="dork">site:*.org "event schedule" filetype:ics</div>
+        <div class="description">Agendas de eventos em formato ICS de organizações</div>
+    </div>
+    <div class="dork-container">
+        <div class="dork">intext:"encryption key" filetype:txt site:*.net</div>
+        <div class="description">Chaves de criptografia em arquivos de texto em sites .net</div>
+    </div>
+    <div class="dork-container">
+        <div class="dork">site:*.edu "thesis" filetype:doc -inurl:(signup)</div>
+        <div class="description">Teses em Word de sites educacionais, sem cadastro</div>
+    </div>
+    <div class="dork-container">
+        <div class="dork">"http status" filetype:log site:*.com</div>
+        <div class="description">Logs com status HTTP em sites comerciais</div>
+    </div>
+    <div class="dork-container">
+        <div class="dork">inurl:(backup | archive) filetype:7z</div>
+        <div class="description">Arquivos 7z de backup ou arquivo</div>
+    </div>
+    <div class="dork-container">
+        <div class="dork">site:*.gov "policy document" filetype:rtf</div>
+        <div class="description">Documentos de política em RTF de sites governamentais</div>
+    </div>
+    <div class="dork-container">
+        <div class="dork">"system info" inurl:(status | info)</div>
+        <div class="description">Informações do sistema em páginas de status ou info</div>
+    </div>
+    <div class="dork-container">
+        <div class="dork">site:*.org filetype:md "readme"</div>
+        <div class="description">Arquivos Markdown README em sites de organizações</div>
+    </div>
+    <div class="dork-container">
+        <div class="dork">inurl:(legacy | old) "login page"</div>
+        <div class="description">Páginas de login de sistemas legados ou antigos</div>
+    </div>
+    <div class="dork-container">
+        <div class="dork">site:bitbucket.org "private repo" -inurl:(login)</div>
+        <div class="description">Repositórios privados no Bitbucket, sem login</div>
+    </div>
+    <div class="dork-container">
+        <div class="dork">"cron job" filetype:txt site:*.com</div>
+        <div class="description">Tarefas cron em arquivos de texto em sites comerciais</div>
+    </div>
+</body>
+</html>
