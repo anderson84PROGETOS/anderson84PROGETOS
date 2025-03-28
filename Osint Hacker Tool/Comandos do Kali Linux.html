@@ -1,0 +1,267 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roadmap - Comandos do Kali Linux</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+            text-align: center;
+        }
+        h1 {
+            color: #ffffff;
+            background-color: #28a745;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .roadmap-container {
+            position: relative;
+            display: inline-block;
+            text-align: left;
+        }
+        .main-node {
+            background-color: #ffcc00;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            display: inline-block;
+            min-width: 150px;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .main-node:hover {
+            background-color: #e6b800;
+        }
+        .sub-node {
+            background-color: #007bff;
+            color: #ffffff;
+            padding: 8px;
+            border-radius: 5px;
+            margin: 5px 0 5px 20px;
+            display: block; /* Alterado para block para melhor controle */
+            min-width: 300px;
+            text-align: center;
+            max-height: 0; /* Inicialmente escondido */
+            opacity: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out, opacity 0.5s ease-out;
+        }
+        .sub-node.active {
+            opacity: 1;
+        }
+        .sub-node div {
+            padding: 5px 0;
+        }
+        .arrow {
+            position: absolute;
+            color: #333;
+            font-size: 20px;
+        }
+        /* Posicionamento das setas (ajustado dinamicamente no JS) */
+        .arrow-down-1 { top: 60px; left: 75px; }
+        .arrow-down-2 { top: 120px; left: 75px; }
+        .arrow-down-3 { top: 180px; left: 75px; }
+        .arrow-down-4 { top: 240px; left: 75px; }
+        .arrow-down-5 { top: 300px; left: 75px; }
+        .arrow-down-6 { top: 360px; left: 75px; }
+        .arrow-down-7 { top: 420px; left: 75px; }
+        .arrow-down-8 { top: 480px; left: 75px; }
+    </style>
+</head>
+<body>
+    <h1>Comandos do Kali Linux</h1>
+    <div class="roadmap-container">
+        <!-- Nível 1 -->
+        <div class="main-node" onclick="toggleSection(1)">1. Navegação e Arquivos</div>
+        <div class="sub-node" id="sub-node-1">
+            <div>ls - Lista arquivos e diretórios</div>
+            <div>cd - Navega entre diretórios</div>
+            <div>pwd - Mostra o diretório atual</div>
+            <div>mkdir - Cria um novo diretório</div>
+            <div>rm - Remove arquivos ou diretórios</div>
+            <div>cp - Copia arquivos ou diretórios</div>
+            <div>mv - Move ou renomeia arquivos/diretórios</div>
+            <div>cat - Exibe o conteúdo de um arquivo</div>
+            <div>less - Visualiza arquivos página por página</div>
+            <div>more - Similar ao less, exibe arquivos por páginas</div>
+            <div>chmod - Altera permissões de arquivos/diretórios</div>
+            <div>chown - Altera o proprietário de arquivos/diretórios</div>
+            <div>touch - Cria arquivos vazios ou atualiza timestamps</div>
+            <div>ln - Cria links simbólicos ou físicos</div>
+        </div>
+        <div class="arrow arrow-down-1"></div>
+
+        <div class="main-node" onclick="toggleSection(2)">2. Gerenciamento de Sistema</div>
+        <div class="sub-node" id="sub-node-2">
+            <div>sudo - Executa comandos como administrador</div>
+            <div>apt-get - Gerencia pacotes em sistemas Debian</div>
+            <div>yum - Gerencia pacotes em sistemas Red Hat</div>
+            <div>dnf - Gerencia pacotes em sistemas Fedora</div>
+            <div>systemctl - Gerencia serviços do sistema</div>
+            <div>service - Controla serviços (método antigo)</div>
+            <div>journalctl - Visualiza logs do sistema</div>
+            <div>dmesg - Exibe mensagens do kernel</div>
+            <div>uptime - Mostra o tempo de atividade do sistema</div>
+            <div>reboot - Reinicia o sistema</div>
+            <div>shutdown - Desliga o sistema</div>
+            <div>free - Mostra o uso de memória</div>
+            <div>df - Mostra o uso do espaço em disco</div>
+            <div>du - Calcula o tamanho de arquivos/diretórios</div>
+            <div>mount - Monta dispositivos ou sistemas de arquivos</div>
+            <div>umount - Desmonta dispositivos</div>
+            <div>fdisk - Gerencia partições de disco</div>
+            <div>mkfs - Formata sistemas de arquivos</div>
+            <div>lsblk - Lista dispositivos de bloco</div>
+        </div>
+        <div class="arrow arrow-down-2"></div>
+
+        <div class="main-node" onclick="toggleSection(3)">3. Usuários e Grupos</div>
+        <div class="sub-node" id="sub-node-3">
+            <div>whoami - Exibe o nome do usuário atual</div>
+            <div>id - Mostra informações do usuário e grupos</div>
+            <div>passwd - Altera a senha do usuário</div>
+            <div>useradd - Adiciona um novo usuário</div>
+            <div>usermod - Modifica propriedades de um usuário</div>
+            <div>userdel - Remove um usuário</div>
+            <div>groupadd - Cria um novo grupo</div>
+            <div>groupmod - Modifica um grupo</div>
+            <div>groupdel - Remove um grupo</div>
+        </div>
+        <div class="arrow arrow-down-3"></div>
+
+        <div class="main-node" onclick="toggleSection(4)">4. Compactação e Transferência</div>
+        <div class="sub-node" id="sub-node-4">
+            <div>tar - Compacta ou descompacta arquivos</div>
+            <div>gzip - Compacta arquivos em formato .gz</div>
+            <div>gunzip - Descompacta arquivos .gz</div>
+            <div>unzip - Descompacta arquivos .zip</div>
+            <div>wget - Baixa arquivos da web</div>
+            <div>curl - Transfere dados de ou para um servidor</div>
+            <div>ssh - Conecta a um servidor remoto</div>
+            <div>scp - Copia arquivos entre máquinas via SSH</div>
+            <div>rsync - Sincroniza arquivos entre sistemas</div>
+        </div>
+        <div class="arrow arrow-down-4"></div>
+
+        <div class="main-node" onclick="toggleSection(5)">5. Rede e Diagnóstico</div>
+        <div class="sub-node" id="sub-node-5">
+            <div>ping - Testa conectividade com outro host</div>
+            <div>netstat - Exibe informações de rede</div>
+            <div>ifconfig - Configura ou exibe interfaces de rede</div>
+            <div>ip - Gerencia configurações de rede (moderno)</div>
+            <div>traceroute - Traça a rota até um host</div>
+            <div>nslookup - Consulta informações de DNS</div>
+            <div>dig - Realiza consultas DNS avançadas</div>
+        </div>
+        <div class="arrow arrow-down-5"></div>
+
+        <div class="main-node" onclick="toggleSection(6)">6. Monitoramento e Processos</div>
+        <div class="sub-node" id="sub-node-6">
+            <div>ps - Lista processos em execução</div>
+            <div>kill - Encerra processos por ID</div>
+            <div>top - Monitora processos em tempo real</div>
+            <div>htop - Monitora processos com interface mais amigável</div>
+            <div>jobs - Lista tarefas em segundo plano</div>
+            <div>bg - Coloca uma tarefa em segundo plano</div>
+            <div>fg - Traz uma tarefa para o primeiro plano</div>
+            <div>nohup - Executa comando imune a logout</div>
+            <div>watch - Executa um comando repetidamente</div>
+            <div>screen - Gerencia sessões de terminal</div>
+            <div>tmux - Alternativa ao screen para sessões</div>
+        </div>
+        <div class="arrow arrow-down-6"></div>
+
+        <div class="main-node" onclick="toggleSection(7)">7. Agendamento e Histórico</div>
+        <div class="sub-node" id="sub-node-7">
+            <div>cron - Agenda tarefas recorrentes</div>
+            <div>crontab - Edita tarefas agendadas</div>
+            <div>at - Agenda uma tarefa única</div>
+            <div>history - Mostra o histórico de comandos usados</div>
+            <div>clear - Limpa a tela do terminal</div>
+        </div>
+        <div class="arrow arrow-down-7"></div>
+
+        <div class="main-node" onclick="toggleSection(8)">8. Manipulação de Texto</div>
+        <div class="sub-node" id="sub-node-8">
+            <div>echo - Exibe texto ou variáveis</div>
+            <div>env - Lista variáveis de ambiente</div>
+            <div>export - Define ou exporta variáveis de ambiente</div>
+            <div>alias - Cria atalhos para comandos</div>
+            <div>unalias - Remove atalhos de comandos</div>
+            <div>man - Exibe o manual de um comando</div>
+            <div>info - Mostra informações detalhadas de comandos</div>
+            <div>which - Localiza o caminho de um executável</div>
+            <div>whereis - Localiza binários, fontes e manuais</div>
+            <div>file - Identifica o tipo de um arquivo</div>
+            <div>diff - Compara diferenças entre arquivos</div>
+            <div>cmp - Compara arquivos binários</div>
+            <div>wc - Conta linhas, palavras ou caracteres</div>
+            <div>sort - Ordena linhas de um arquivo</div>
+            <div>uniq - Remove linhas duplicadas</div>
+            <div>cut - Extrai seções de texto</div>
+            <div>paste - Junta linhas de arquivos</div>
+            <div>sed - Edita texto em fluxo</div>
+            <div>awk - Processa e analisa texto</div>
+            <div>tr - Traduz ou remove caracteres</div>
+            <div>tee - Redireciona saída para arquivo e tela</div>
+            <div>head - Mostra as primeiras linhas de um arquivo</div>
+            <div>tail - Mostra as últimas linhas de um arquivo</div>
+        </div>
+        <div class="arrow arrow-down-8"></div>
+    </div>
+    <script>
+        function toggleSection(sectionId) {
+            const subNode = document.getElementById(`sub-node-${sectionId}`);
+            const isActive = subNode.classList.contains('active');
+
+            // Fecha todas as seções
+            document.querySelectorAll('.sub-node').forEach(node => {
+                node.classList.remove('active');
+                node.style.maxHeight = '0';
+                node.style.opacity = '0';
+            });
+
+            // Abre a seção clicada, se não estiver ativa
+            if (!isActive) {
+                subNode.classList.add('active');
+                // Calcula a altura total do conteúdo para a animação
+                const scrollHeight = subNode.scrollHeight + 'px';
+                subNode.style.maxHeight = scrollHeight;
+                subNode.style.opacity = '1';
+
+                // Ajusta dinamicamente as posições das setas
+                adjustArrows(sectionId, scrollHeight);
+            }
+        }
+
+        function adjustArrows(activeSectionId, activeHeight) {
+            // Altura base de cada main-node e margem
+            const baseHeight = 60;
+            const heights = [0]; // Acumula as alturas para ajustar as setas
+
+            // Calcula a altura acumulada para cada seção
+            for (let i = 1; i <= 8; i++) {
+                const subNode = document.getElementById(`sub-node-${i}`);
+                const isActive = subNode.classList.contains('active');
+                const height = isActive ? subNode.scrollHeight : 0;
+                heights[i] = heights[i - 1] + baseHeight + (isActive ? height : 0);
+            }
+
+            // Ajusta as posições das setas
+            for (let i = 1; i <= 8; i++) {
+                const arrow = document.querySelector(`.arrow-down-${i}`);
+                if (arrow) {
+                    arrow.style.top = `${heights[i - 1] + 60}px`; // Ajusta a posição da seta
+                }
+            }
+        }
+    </script>
+</body>
+</html>
