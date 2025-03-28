@@ -1,0 +1,385 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Dorks Explorer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1a1a1a, #333);
+            padding: 3rem 1rem;
+            text-align: center;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header-image {
+            max-width: 300px;
+            height: auto;
+            border-radius: 15px;
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            color: #ffcc00;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            color: #ccc;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background-color: #ffcc00;
+            color: #000;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+            margin-top: 1rem;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #e6b800;
+        }
+
+        nav {
+            background-color: #222;
+            padding: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 20px;
+            font-size: 1.1rem;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #ffcc00;
+        }
+
+        nav i {
+            margin-right: 8px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #1e1e1e;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(255, 204, 0, 0.3);
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        h2 {
+            color: #ffcc00;
+            border-bottom: 2px solid #ffcc00;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .search-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .form-input {
+            background: #333;
+            color: #fff;
+            border: 1px solid #ffcc00;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #e6b800;
+            box-shadow: 0 0 5px rgba(255, 204, 0, 0.5);
+        }
+
+        .result-box {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #2c2c2c;
+            border-radius: 5px;
+            border: 1px solid #ffcc00;
+        }
+
+        .result-title {
+            color: #ff4444;
+            font-weight: bold;
+        }
+
+        .query-title {
+            color: #44aaff;
+            font-weight: bold;
+        }
+
+        ul {
+            padding-left: 20px;
+        }
+
+        ul li {
+            margin: 10px 0;
+        }
+
+        footer {
+            background-color: #1a1a1a;
+            text-align: center;
+            padding: 1.5rem;
+            color: #ccc;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            .nav-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            nav a {
+                margin: 10px 0;
+            }
+            .header-image {
+                max-width: 200px;
+            }
+        }
+
+    </style>    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <img src="https://i.postimg.cc/9QV7CdQM/Google-Dorks-removebg-preview.png" alt="Google Dorks" class="header-image">
+            <h1>Google Dorks Explorer</h1>
+            <p>Descubra informações ocultas com técnicas avançadas de pesquisa</p>
+            <a href="#search" class="btn">Começar Agora</a>
+        </div>
+    </header>
+
+    <nav>
+        <div class="nav-container">
+            <a href="#inicio"><i class="fas fa-home"></i> Início</a>
+            <a href="#search"><i class="fas fa-search"></i> Pesquisar</a>
+            <a href="#about"><i class="fas fa-info-circle"></i> Sobre</a>
+            <a href="#tips"><i class="fas fa-lightbulb"></i> Dicas</a>
+        </div>
+    </nav>
+
+    <main>
+        <section id="inicio" class="container">
+            <h2>Bem-vindo ao Google Dorks Explorer</h2>
+            <p>Utilize o poder das Google Dorks para encontrar informações públicas, vulnerabilidades e dados expostos na web de forma eficiente e ética.</p>
+        </section>
+
+        <section id="search" class="container">
+            <h2>Pesquisar com Google Dorks</h2>
+            <div class="search-form">
+                <input id="siteName" type="text" placeholder="Digite o nome do site" class="form-input">
+                <label for="dorkSelect">Escolha uma Google Dork:</label>
+                <select id="dorkSelect" class="form-input"></select>
+                <button onclick="obterDados()" class="btn">Pesquisar</button>
+            </div>
+            <div id="result" class="result-box"></div>
+        </section>
+
+        <section id="about" class="container">
+            <h2>Sobre Google Dorks</h2>
+            <p>Google Dorks são comandos avançados de pesquisa que utilizam operadores especiais para filtrar resultados no Google, permitindo encontrar arquivos, vulnerabilidades e informações específicas que não aparecem em buscas comuns.</p>
+            <p>Este site foi criado para fins educativos e deve ser usado de forma ética e legal.</p>
+        </section>
+
+        <section id="tips" class="container">
+            <h2>Dicas de Uso</h2>
+            <ul>
+                <li>Use <strong>site:</strong> para limitar a busca a um domínio específico.</li>
+                <li>Combine <strong>ext:</strong> com tipos de arquivo (ex.: pdf, sql).</li>
+                <li>Evite abusar das consultas para não ser bloqueado pelo Google.</li>
+                <li>Respeite as leis de privacidade e uso de dados.</li>
+            </ul>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2025 Google Dorks Explorer | Desenvolvido para fins educativos</p>
+    </footer>
+
+    <script>
+        const dorks = [
+            "Documentos expostos publicamente",
+            "Vulnerabilidades em listagem de diretórios",
+            "Arquivos de configuração expostos",
+            "Arquivos de banco de dados expostos",
+            "Arquivos de log expostos",
+            "Arquivos de backup e antigos",
+            "Páginas de login",
+            "Erros SQL",
+            "Erros/avisos PHP",
+            "phpinfo()",
+            "Pesquisar em pastebin.com / sites de pasting",
+            "Pesquisar no github.com e gitlab.com",
+            "Pesquisar no stackoverflow.com",
+            "Páginas de cadastro",
+            "Encontrar subdomínios",
+            "Encontrar sub-subdomínios",
+            "Pesquisar no Wayback Machine",
+            "Mostrar apenas endereços IP",
+            "Para encontrar documentos Apresentaçoes e desenhos vazados",
+            "Para encontrar presentation",
+            "Para encontrar drawings",
+            "Já para encontrar qualquer tipo de arquivo como imagens vídeos zip e pdf",
+            "Agora se você quer encontrar uma pasta completa do Google Drive exposta",
+            "esses para achar itens secretos",
+            "Achar inurl e index.php",
+            "Achar Arquivo ext pdf",
+            "Achar Arquivo xml",
+            "Achar Arquivo docx",
+            "Achar Arquivo intext",
+            "Achar Arquivo txt senha url",
+            "Achar Arquivo nos Servidores do Scribd",
+            "Achar arquivo sql aperte a tecla espaço ou nome do site",
+            "Achar arquivo env",
+            "Achar arquivo inurl",
+            "Achar arquivo pdf xlsx docx txt",
+            "Achar arquivo txt",
+            "Achar arquivo WEBCAM 7",
+            "Achar arquivo robots.txt",
+            "Achar arquivo senha",
+            "Achar nome de pessoa",
+            "Nome do IP",
+            "Achar arquivo pdf confidencial",
+            "Confidencial",
+            "Achar credit card",
+            "Achar coisas em google drive",
+            "Achar Arquivo pdf",
+            "Achar email",
+            "Login -Painel",
+            "Achar link",
+            "Extrair Dados",
+            "Achar .git",
+            "Achar site.git"
+        ];
+
+        const dorkSelect = document.getElementById("dorkSelect");
+        dorks.forEach(dork => {
+            const option = document.createElement("option");
+            option.value = dork;
+            option.textContent = dork;
+            dorkSelect.appendChild(option);
+        });
+
+        function obterDados() {
+            const siteNome = document.getElementById("siteName").value;
+            const dorkSelecionada = document.getElementById("dorkSelect").value;
+
+            const consultas = {
+                "Documentos expostos publicamente": `site:${siteNome} ext:doc | ext:docx | ext:odt | ext:rtf | ext:sxw | ext:psw | ext:ppt | ext:pptx | ext:pps | ext:csv`,
+                "Vulnerabilidades em listagem de diretórios": `site:${siteNome} intitle:index.of`,
+                "Arquivos de configuração expostos": `site:${siteNome} ext:xml | ext:conf | ext:cnf | ext:reg | ext:inf | ext:rdp | ext:cfg | ext:txt | ext:ora | ext:ini | ext:env`,
+                "Arquivos de banco de dados expostos": `site:${siteNome} ext:sql | ext:dbf | ext:mdb`,
+                "Arquivos de log expostos": `site:${siteNome} ext:log`,
+                "Arquivos de backup e antigos": `site:${siteNome} ext:bkf | ext:bkp | ext:bak | ext:old | ext:backup`,
+                "Páginas de login": `site:${siteNome} inurl:login | inurl:signin | intitle:Login | intitle:"sign in" | inurl:auth`,
+                "Erros SQL": `site:${siteNome} intext:"sql syntax near" | intext:"syntax error has occurred" | intext:"incorrect syntax near" | intext:"unexpected end of SQL command" | intext:"Warning: mysql_connect()" | intext:"Warning: mysql_query()" | intext:"Warning: pg_connect()"`,
+                "Erros/avisos PHP": `site:${siteNome} "PHP Parse error" | "PHP Warning" | "PHP Error"`,
+                "phpinfo()": `site:${siteNome} ext:php intitle:phpinfo "published by the PHP Group"`,
+                "Pesquisar em pastebin.com / sites de pasting": `site:pastebin.com | site:paste2.org | site:pastehtml.com | site:slexy.org | site:snipplr.com | site:snipt.net | site:textsnip.com | site:bitpaste.app | site:justpaste.it | site:heypasteit.com | site:hastebin.com | site:dpaste.org | site:dpaste.com | site:codepad.org | site:jsitor.com | site:codepen.io | site:jsfiddle.net | site:dotnetfiddle.net | site:phpfiddle.org | site:ide.geeksforgeeks.org | site:repl.it | site:ideone.com | site:paste.debian.net | site:paste.org | site:paste.org.ru | site:codebeautify.org  | site:codeshare.io | site:trello.com ${siteNome}`,
+                "Pesquisar no github.com e gitlab.com": `site:github.com | site:gitlab.com ${siteNome}`,
+                "Pesquisar no stackoverflow.com": `site:stackoverflow.com ${siteNome}`,
+                "Páginas de cadastro": `site:${siteNome} inurl:signup | inurl:register | intitle:Signup`,
+                "Encontrar subdomínios": `site:*.${siteNome}`,
+                "Encontrar sub-subdomínios": `site:*.*.${siteNome}`,
+                "Pesquisar no Wayback Machine": `https://web.archive.org/web/*/${siteNome}/*`,
+                "Mostrar apenas endereços IP": `(${siteNome}) (site:*.*.29.* | site:*.*.28.* | site:*.*.27.* | site:*.*.26.* | site:*.*.25.* | site:*.*.24.* | site:*.*.23.* | site:*.*.22.* | site:*.*.21.* | site:*.*.20.* | site:*.*.19.* | site:*.*.18.* | site:*.*.17.* | site:*.*.16.* | site:*.*.15.* | site:*.*.14.* | site:*.*.13.* | site:*.*.12.* | site:*.*.11.* | site:*.*.10.* | site:*.*.9.* | site:*.*.8.* | site:*.*.7.* | site:*.*.6.* | site:*.*.5.* | site:*.*.4.* | site:*.*.3.* | site:*.*.2.* | site:*.*.1.* | site:*.*.0.*)`,
+                "Para encontrar documentos Apresentaçoes e desenhos vazados": `site:docs.${siteNome}/document/d`,
+                "Para encontrar presentation": `site:docs.${siteNome}/presentation/d`,
+                "Para encontrar drawings": `site:docs.${siteNome}/drawings/d`,
+                "Já para encontrar qualquer tipo de arquivo como imagens vídeos zip e pdf": `site:docs.${siteNome}/file/d`,
+                "Agora se você quer encontrar uma pasta completa do Google Drive exposta": `site:docs.${siteNome}/folder/d`,
+                "esses para achar itens secretos": `site:docs.${siteNome}/open intext:secreto`,
+                "Achar Arquivo ext pdf": `site:${siteNome} ext:pdf`,
+                "Achar inurl e index.php": ` "${siteNome}" + inurl= index.php?id=1`,                
+                "Achar Arquivo xml": `site:${siteNome} ext:xml`,
+                "Achar Arquivo docx": `site:${siteNome} ext:docx`,
+                "Achar Arquivo intext": `intext:${siteNome}`,
+                "Achar Arquivo txt senha url":`filetype:txt intext:senha+url site:${siteNome}`,
+                "Achar Arquivo nos Servidores do Scribd": `servidores site:scribd.com AND:${siteNome}`,
+                "Achar arquivo sql aperte a tecla espaço ou nome do site": `filetype:sql${siteNome}`,
+                "Achar arquivo env": `filetype:env ${siteNome}`,
+                "Achar arquivo inurl": `inurl:${siteNome}`,
+                "Achar arquivo pdf xlsx docx txt":`"${siteNome}"filetype:pdf OR filetype:xlsx OR filetype:docx OR filetype:txt`,
+                "Achar arquivo txt": `site:${siteNome} filetype:txt`,
+                "Achar arquivo WEBCAM 7":`${siteNome}intitle:"WEBCAM 7" -inurl:/admin.html`,
+                "Achar arquivo robots.txt": `"${siteNome}" robots.txt`,
+                "Achar arquivo senha": `intitle:"index of" intext:${siteNome}`,
+                "Achar nome de pessoa": `intext:"${siteNome}"`,
+                "Nome do IP": ` IP:${siteNome}`,
+                "Achar arquivo pdf confidencial": `filetype:pdf intitle:confidencial site:${siteNome}`,
+                "Confidencial": `intitle:confidencial filetype:pdf intext:"${siteNome}"`,
+                "Achar credit card": `site:pastebin.com ${siteNome} credit card`,
+                "Achar coisas em google drive": `site:drive.google.com ${siteNome}`,                
+                "Achar Arquivo pdf": `site:${siteNome} filetype:pdf`,
+                "Achar email": `"${siteNome} "`,
+                "Login -Painel": `site:${siteNome} intitle:Login -Painel`,
+                "Achar link": `link:${siteNome}`,             
+                "Extrair Dados": `"${siteNome} "`,
+                "Achar .git": `${siteNome} intitle index of .git`,
+                "Achar site.git": `site:${siteNome} intitle index of .git`,
+            };
+
+            const consulta = consultas[dorkSelecionada];
+            const url = `https://www.google.com/search?q=${encodeURIComponent(consulta)}`;
+            window.open(url, "_blank");
+
+            document.getElementById("result").innerHTML = `
+                <p><span class="result-title">Resultados para:</span> ${siteNome} - ${dorkSelecionada}</p>
+                <p><span class="query-title">Consulta utilizada:</span> ${consulta}</p>
+            `;
+        }
+    </script>
+</body>
+</html>
