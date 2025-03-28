@@ -1,9 +1,10 @@
+python3 Open Redirect.py
+
 python3 Open Redirect.py  -w -c 50
 
 python3 Open Redirect.py  -w
 
 python3 Open Redirect.py -h
-
 
 
 python3 Open Redirect.py -h
