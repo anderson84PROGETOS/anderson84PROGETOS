@@ -1,0 +1,286 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comandos Linux e Windows</title>
+    <style>
+        /* Estilos CSS para um design profissional */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            background-color: #f4f4f4;
+        }
+        header {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 1rem;
+        }
+        nav {
+            background-color: #444;
+            padding: 1rem;
+        }
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 15px;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+            padding: 20px;
+        }
+        .section {
+            background: #fff;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 1rem;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <!-- Cabeçalho -->
+    <header>
+        <h1>Guia de Comandos Linux e Windows</h1>
+        <p>Aprenda os principais comandos para sistemas operacionais</p>
+    </header>
+
+    <!-- Navegação -->
+    <nav>
+        <a href="#linux">Comandos Linux</a>
+        <a href="#windows">Comandos Windows</a>
+    </nav>
+
+    <!-- Conteúdo principal -->
+    <div class="container">
+        <!-- Seção Linux -->
+        <section id="linux" class="section">
+            <h2>Comandos Linux</h2>
+            <ul>
+                <li><strong>ls</strong> - Lista arquivos e diretórios</li>
+                <li><strong>cd</strong> - Navega entre diretórios</li>
+                <li><strong>pwd</strong> - Mostra o diretório atual</li>
+                <li><strong>mkdir</strong> - Cria um novo diretório</li>
+                <li><strong>rm</strong> - Remove arquivos ou diretórios</li>
+                <li><strong>cp</strong> - Copia arquivos ou diretórios</li>
+                <li><strong>mv</strong> - Move ou renomeia arquivos/diretórios</li>
+                <li><strong>cat</strong> - Exibe o conteúdo de um arquivo</li>
+                <li><strong>less</strong> - Visualiza arquivos página por página</li>
+                <li><strong>more</strong> - Similar ao less, exibe arquivos por páginas</li>
+                <li><strong>chmod</strong> - Altera permissões de arquivos/diretórios</li>
+                <li><strong>chown</strong> - Altera o proprietário de arquivos/diretórios</li>
+                <li><strong>sudo</strong> - Executa comandos como administrador</li>
+                <li><strong>apt-get</strong> - Gerencia pacotes em sistemas Debian</li>
+                <li><strong>yum</strong> - Gerencia pacotes em sistemas Red Hat</li>
+                <li><strong>dnf</strong> - Gerencia pacotes em sistemas Fedora</li>
+                <li><strong>grep</strong> - Busca texto em arquivos</li>
+                <li><strong>find</strong> - Localiza arquivos no sistema</li>
+                <li><strong>locate</strong> - Busca arquivos rapidamente usando um banco de dados</li>
+                <li><strong>ps</strong> - Lista processos em execução</li>
+                <li><strong>kill</strong> - Encerra processos por ID</li>
+                <li><strong>top</strong> - Monitora processos em tempo real</li>
+                <li><strong>htop</strong> - Monitora processos com interface mais amigável</li>
+                <li><strong>df</strong> - Mostra o uso do espaço em disco</li>
+                <li><strong>du</strong> - Calcula o tamanho de arquivos/diretórios</li>
+                <li><strong>whoami</strong> - Exibe o nome do usuário atual</li>
+                <li><strong>id</strong> - Mostra informações do usuário e grupos</li>
+                <li><strong>passwd</strong> - Altera a senha do usuário</li>
+                <li><strong>useradd</strong> - Adiciona um novo usuário</li>
+                <li><strong>usermod</strong> - Modifica propriedades de um usuário</li>
+                <li><strong>userdel</strong> - Remove um usuário</li>
+                <li><strong>groupadd</strong> - Cria um novo grupo</li>
+                <li><strong>groupmod</strong> - Modifica um grupo</li>
+                <li><strong>groupdel</strong> - Remove um grupo</li>
+                <li><strong>tar</strong> - Compacta ou descompacta arquivos</li>
+                <li><strong>gzip</strong> - Compacta arquivos em formato .gz</li>
+                <li><strong>gunzip</strong> - Descompacta arquivos .gz</li>
+                <li><strong>unzip</strong> - Descompacta arquivos .zip</li>
+                <li><strong>wget</strong> - Baixa arquivos da web</li>
+                <li><strong>curl</strong> - Transfere dados de ou para um servidor</li>
+                <li><strong>ssh</strong> - Conecta a um servidor remoto</li>
+                <li><strong>scp</strong> - Copia arquivos entre máquinas via SSH</li>
+                <li><strong>rsync</strong> - Sincroniza arquivos entre sistemas</li>
+                <li><strong>ping</strong> - Testa conectividade com outro host</li>
+                <li><strong>netstat</strong> - Exibe informações de rede</li>
+                <li><strong>ifconfig</strong> - Configura ou exibe interfaces de rede</li>
+                <li><strong>ip</strong> - Gerencia configurações de rede (moderno)</li>
+                <li><strong>traceroute</strong> - Traça a rota até um host</li>
+                <li><strong>nslookup</strong> - Consulta informações de DNS</li>
+                <li><strong>dig</strong> - Realiza consultas DNS avançadas</li>
+                <li><strong>uptime</strong> - Mostra o tempo de atividade do sistema</li>
+                <li><strong>reboot</strong> - Reinicia o sistema</li>
+                <li><strong>shutdown</strong> - Desliga o sistema</li>
+                <li><strong>history</strong> - Mostra o histórico de comandos usados</li>
+                <li><strong>clear</strong> - Limpa a tela do terminal</li>
+                <li><strong>echo</strong> - Exibe texto ou variáveis</li>
+                <li><strong>env</strong> - Lista variáveis de ambiente</li>
+                <li><strong>export</strong> - Define ou exporta variáveis de ambiente</li>
+                <li><strong>alias</strong> - Cria atalhos para comandos</li>
+                <li><strong>unalias</strong> - Remove atalhos de comandos</li>
+                <li><strong>man</strong> - Exibe o manual de um comando</li>
+                <li><strong>info</strong> - Mostra informações detalhadas de comandos</li>
+                <li><strong>which</strong> - Localiza o caminho de um executável</li>
+                <li><strong>whereis</strong> - Localiza binários, fontes e manuais</li>
+                <li><strong>file</strong> - Identifica o tipo de um arquivo</li>
+                <li><strong>touch</strong> - Cria arquivos vazios ou atualiza timestamps</li>
+                <li><strong>ln</strong> - Cria links simbólicos ou físicos</li>
+                <li><strong>diff</strong> - Compara diferenças entre arquivos</li>
+                <li><strong>cmp</strong> - Compara arquivos binários</li>
+                <li><strong>wc</strong> - Conta linhas, palavras ou caracteres</li>
+                <li><strong>sort</strong> - Ordena linhas de um arquivo</li>
+                <li><strong>uniq</strong> - Remove linhas duplicadas</li>
+                <li><strong>cut</strong> - Extrai seções de texto</li>
+                <li><strong>paste</strong> - Junta linhas de arquivos</li>
+                <li><strong>sed</strong> - Edita texto em fluxo</li>
+                <li><strong>awk</strong> - Processa e analisa texto</li>
+                <li><strong>tr</strong> - Traduz ou remove caracteres</li>
+                <li><strong>tee</strong> - Redireciona saída para arquivo e tela</li>
+                <li><strong>head</strong> - Mostra as primeiras linhas de um arquivo</li>
+                <li><strong>tail</strong> - Mostra as últimas linhas de um arquivo</li>
+                <li><strong>jobs</strong> - Lista tarefas em segundo plano</li>
+                <li><strong>bg</strong> - Coloca uma tarefa em segundo plano</li>
+                <li><strong>fg</strong> - Traz uma tarefa para o primeiro plano</li>
+                <li><strong>nohup</strong> - Executa comando imune a logout</li>
+                <li><strong>cron</strong> - Agenda tarefas recorrentes</li>
+                <li><strong>crontab</strong> - Edita tarefas agendadas</li>
+                <li><strong>at</strong> - Agenda uma tarefa única</li>
+                <li><strong>watch</strong> - Executa um comando repetidamente</li>
+                <li><strong>screen</strong> - Gerencia sessões de terminal</li>
+                <li><strong>tmux</strong> - Alternativa ao screen para sessões</li>
+                <li><strong>mount</strong> - Monta dispositivos ou sistemas de arquivos</li>
+                <li><strong>umount</strong> - Desmonta dispositivos</li>
+                <li><strong>fdisk</strong> - Gerencia partições de disco</li>
+                <li><strong>mkfs</strong> - Formata sistemas de arquivos</li>
+                <li><strong>lsblk</strong> - Lista dispositivos de bloco</li>
+                <li><strong>systemctl</strong> - Gerencia serviços do sistema</li>
+                <li><strong>service</strong> - Controla serviços (método antigo)</li>
+                <li><strong>journalctl</strong> - Visualiza logs do sistema</li>
+                <li><strong>dmesg</strong> - Exibe mensagens do kernel</li>
+                <li><strong>free</strong> - Mostra o uso de memória</li>
+            </ul>
+        </section>
+
+        <!-- Seção Windows -->
+        <section id="windows" class="section">
+            <h2>Comandos Windows</h2>
+            <ul>
+                <li><strong>dir</strong> - Lista arquivos e diretórios</li>
+                <li><strong>cd</strong> - Navega entre diretórios</li>
+                <li><strong>cd ..</strong> - Volta ao diretório anterior</li>
+                <li><strong>mkdir</strong> - Cria um novo diretório</li>
+                <li><strong>del</strong> - Remove arquivos</li>
+                <li><strong>copy</strong> - Copia arquivos</li>
+                <li><strong>move</strong> - Move ou renomeia arquivos</li>
+                <li><strong>cls</strong> - Limpa a tela do prompt</li>
+                <li><strong>ipconfig</strong> - Exibe informações de configuração de rede</li>
+                <li><strong>ping</strong> - Testa conectividade com outro host</li>
+                <li><strong>tracert</strong> - Traça a rota até um destino</li>
+                <li><strong>netstat</strong> - Exibe estatísticas e conexões de rede</li>
+                <li><strong>tasklist</strong> - Lista processos em execução</li>
+                <li><strong>taskkill</strong> - Encerra processos por nome ou ID</li>
+                <li><strong>chkdsk</strong> - Verifica e corrige erros no disco</li>
+                <li><strong>sfc /scannow</strong> - Verifica e repara arquivos do sistema</li>
+                <li><strong>systeminfo</strong> - Mostra informações detalhadas do sistema</li>
+                <li><strong>path</strong> - Exibe ou modifica variáveis de ambiente</li>
+                <li><strong>echo</strong> - Exibe mensagens ou variáveis</li>
+                <li><strong>ren</strong> - Renomeia arquivos</li>
+                <li><strong>assoc</strong> - Associa extensões de arquivo a programas</li>
+                <li><strong>ftype</strong> - Define tipos de arquivo associados</li>
+                <li><strong>attrib</strong> - Altera atributos de arquivos</li>
+                <li><strong>xcopy</strong> - Copia arquivos e diretórios com opções avançadas</li>
+                <li><strong>robocopy</strong> - Copia arquivos de forma robusta</li>
+                <li><strong>type</strong> - Exibe o conteúdo de arquivos de texto</li>
+                <li><strong>find</strong> - Busca texto em arquivos</li>
+                <li><strong>findstr</strong> - Busca texto com opções avançadas</li>
+                <li><strong>cd /d</strong> - Muda de unidade e diretório simultaneamente</li>
+                <li><strong>rd</strong> - Remove diretórios</li>
+                <li><strong>md</strong> - Cria diretórios (alternativa para mkdir)</li>
+                <li><strong>exit</strong> - Fecha o prompt de comando</li>
+                <li><strong>set</strong> - Define ou exibe variáveis de ambiente</li>
+                <li><strong>ver</strong> - Mostra a versão do Windows</li>
+                <li><strong>whoami</strong> - Exibe o usuário atual</li>
+                <li><strong>net user</strong> - Gerencia contas de usuário</li>
+                <li><strong>net group</strong> - Gerencia grupos de domínio</li>
+                <li><strong>net localgroup</strong> - Gerencia grupos locais</li>
+                <li><strong>shutdown</strong> - Desliga ou reinicia o sistema</li>
+                <li><strong>time</strong> - Define ou exibe a hora do sistema</li>
+                <li><strong>date</strong> - Define ou exibe a data do sistema</li>
+                <li><strong>wmic</strong> - Executa comandos de gerenciamento avançados</li>
+                <li><strong>gpupdate</strong> - Atualiza políticas de grupo</li>
+                <li><strong>gpresult</strong> - Mostra políticas de grupo aplicadas</li>
+                <li><strong>reg add</strong> - Adiciona entradas ao registro</li>
+                <li><strong>reg delete</strong> - Remove entradas do registro</li>
+                <li><strong>reg query</strong> - Consulta valores no registro</li>
+                <li><strong>dism</strong> - Gerencia imagens e recursos do sistema</li>
+                <li><strong>powercfg</strong> - Configura opções de energia</li>
+                <li><strong>bcdedit</strong> - Edita configurações de inicialização</li>
+                <li><strong>bootrec</strong> - Repara problemas de inicialização</li>
+                <li><strong>format</strong> - Formata um disco ou unidade</li>
+                <li><strong>diskpart</strong> - Gerencia discos e partições</li>
+                <li><strong>fsutil</strong> - Gerencia sistemas de arquivos</li>
+                <li><strong>vol</strong> - Exibe informações de volume</li>
+                <li><strong>label</strong> - Define ou altera o rótulo de um volume</li>
+                <li><strong>tree</strong> - Mostra a estrutura de diretórios em árvore</li>
+                <li><strong>comp</strong> - Compara o conteúdo de dois arquivos</li>
+                <li><strong>fc</strong> - Compara arquivos com mais detalhes</li>
+                <li><strong>sort</strong> - Ordena linhas de um arquivo</li>
+                <li><strong>more</strong> - Exibe conteúdo página por página</li>
+                <li><strong>pause</strong> - Pausa a execução de um script</li>
+                <li><strong>prompt</strong> - Personaliza o texto do prompt</li>
+                <li><strong>title</strong> - Define o título da janela do prompt</li>
+                <li><strong>color</strong> - Altera as cores do prompt</li>
+                <li><strong>mode</strong> - Configura dispositivos como portas</li>
+                <li><strong>driverquery</strong> - Lista drivers instalados</li>
+                <li><strong>sc</strong> - Gerencia serviços do sistema</li>
+                <li><strong>net start</strong> - Inicia um serviço</li>
+                <li><strong>net stop</strong> - Para um serviço</li>
+                <li><strong>net share</strong> - Gerencia compartilhamentos de rede</li>
+                <li><strong>net use</strong> - Conecta a recursos de rede</li>
+                <li><strong>arp</strong> - Gerencia a tabela ARP</li>
+                <li><strong>nbtstat</strong> - Diagnostica problemas NetBIOS</li>
+                <li><strong>route</strong> - Gerencia tabelas de roteamento</li>
+                <li><strong>hostname</strong> - Exibe o nome do host</li>
+                <li><strong>getmac</strong> - Mostra o endereço MAC</li>
+                <li><strong>schtasks</strong> - Agenda tarefas</li>
+                <li><strong>at</strong> - Agenda tarefas (método antigo)</li>
+                <li><strong>cipher</strong> - Criptografa ou descriptografa arquivos</li>
+                <li><strong>compact</strong> - Compacta ou descompacta arquivos</li>
+                <li><strong>expand</strong> - Expande arquivos comprimidos</li>
+                <li><strong>cacls</strong> - Altera permissões de arquivos</li>
+                <li><strong>icacls</strong> - Gerencia permissões avançadas</li>
+                <li><strong>takeown</strong> - Assume a propriedade de arquivos</li>
+                <li><strong>where</strong> - Localiza arquivos no PATH</li>
+                <li><strong>replace</strong> - Substitui arquivos</li>
+                <li><strong>subst</strong> - Mapeia um caminho a uma letra de unidade</li>
+                <li><strong>pushd</strong> - Salva o diretório atual e navega</li>
+                <li><strong>popd</strong> - Retorna ao diretório salvo</li>
+                <li><strong>call</strong> - Chama um script ou comando</li>
+                <li><strong>goto</strong> - Direciona a execução em scripts</li>
+                <li><strong>if</strong> - Executa comandos condicionalmente</li>
+                <li><strong>for</strong> - Executa loops em scripts</li>
+                <li><strong>setlocal</strong> - Inicia escopo local para variáveis</li>
+                <li><strong>endlocal</strong> - Finaliza escopo local de variáveis</li>
+                <li><strong>help</strong> - Exibe ajuda para comandos</li>
+                <li><strong>eventcreate</strong> - Cria eventos no log do sistema</li>
+                <li><strong>wevtutil</strong> - Gerencia logs de eventos</li>
+            </ul>
+        </section>
+    </div>
+    
+</body>
+</html>
