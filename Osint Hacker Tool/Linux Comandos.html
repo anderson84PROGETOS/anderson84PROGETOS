@@ -1,0 +1,2722 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linux Comandos</title>
+    <style>
+        /* CSS para um visual profissional */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        header {
+            background-color: #000;
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+            border-bottom: 5px solid #ffcc00;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 2.5em;
+        }
+        header h1 span {
+            color: #ffcc00;
+        }
+        nav {
+            background-color: #333;
+            padding: 10px;
+            text-align: center;
+        }
+        nav input[type="text"] {
+            padding: 10px;
+            width: 50%;
+            max-width: 400px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #ffcc00;
+            color: #000;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        footer {
+            background-color: #000;
+            color: #fff;
+            text-align: center;
+            padding: 10px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+        @media (max-width: 768px) {
+            nav input[type="text"] {
+                width: 80%;
+            }
+            th, td {
+                padding: 10px;
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Cabeçalho -->
+    <header>
+        <h1><span>Linux</span> Comandos</h1>
+        <p>Seu Guia Comandos Linux Mais Usados</p>
+    </header>
+
+    <!-- Navegação com Barra de Pesquisa -->
+    <nav>
+        <input type="text" id="searchBar" onkeyup="searchCommands()" placeholder="Pesquisar por um comando...">
+    </nav>
+
+    <!-- Conteúdo Principal -->
+    <div class="container">
+        <table id="commandsTable">
+            <thead>
+                <tr>
+                    <th>Comando</th>
+                    <th>Descrição</th>
+                    <th>Exemplo</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Gerenciamento de Arquivos e Diretórios -->
+                <tr>
+                    <td>ls</td>
+                    <td>Lista o conteúdo de um diretório</td>
+                    <td>ls -l</td>
+                </tr>
+                <!-- Ferramentas de Gerenciamento de Arquivos (Variações do ls) -->
+                <tr>
+                    <td>ls -a</td>
+                    <td>Lista o conteúdo de um diretório, incluindo arquivos ocultos</td>
+                    <td>ls -a</td>
+                </tr>
+                <tr>
+                    <td>ls -la</td>
+                    <td>Lista o conteúdo de um diretório em formato longo, incluindo arquivos ocultos</td>
+                    <td>ls -la</td>
+                </tr>
+
+                <tr>
+                    <td>cd</td>
+                    <td>Muda de diretório</td>
+                    <td>cd /home/usuario</td>
+                </tr>
+                <tr>
+                    <td>pwd</td>
+                    <td>Exibe o diretório de trabalho atual</td>
+                    <td>pwd</td>
+                </tr>
+                <tr>
+                    <td>mkdir</td>
+                    <td>Cria um novo diretório</td>
+                    <td>mkdir nova_pasta</td>
+                </tr>
+                <tr>
+                    <td>rm</td>
+                    <td>Remove arquivos ou diretórios</td>
+                    <td>rm arquivo.txt</td>
+                </tr>
+                <tr>
+                    <td>cp</td>
+                    <td>Copia arquivos ou diretórios</td>
+                    <td>cp arquivo1.txt arquivo2.txt</td>
+                </tr>
+                <tr>
+                    <td>mv</td>
+                    <td>Move ou renomeia arquivos</td>
+                    <td>mv arquivo1.txt /home/usuario/</td>
+                </tr>
+                <tr>
+                    <td>cat</td>
+                    <td>Concatena e exibe o conteúdo de um arquivo</td>
+                    <td>cat arquivo.txt</td>
+                </tr>
+                <tr>
+                    <td>touch</td>
+                    <td>Cria um arquivo vazio</td>
+                    <td>touch novo_arquivo.txt</td>
+                </tr>
+                <tr>
+                    <td>find</td>
+                    <td>Busca arquivos em uma hierarquia de diretórios</td>
+                    <td>find / -name "arquivo.txt"</td>
+                </tr>
+                <tr>
+                    <td>ln</td>
+                    <td>Cria links (hard ou simbólicos) entre arquivos</td>
+                    <td>ln -s arquivo.txt link_simbolico</td>
+                </tr>
+                <tr>
+                    <td>rmdir</td>
+                    <td>Remove diretórios vazios</td>
+                    <td>rmdir pasta_vazia</td>
+                </tr>
+                <tr>
+                    <td>more</td>
+                    <td>Exibe o conteúdo de um arquivo página por página</td>
+                    <td>more arquivo.txt</td>
+                </tr>
+                <tr>
+                    <td>less</td>
+                    <td>Similar ao more, mas com navegação mais avançada</td>
+                    <td>less arquivo.txt</td>
+                </tr>
+                <tr>
+                    <td>head</td>
+                    <td>Exibe as primeiras linhas de um arquivo</td>
+                    <td>head -n 5 arquivo.txt</td>
+                </tr>
+                <!-- Sistema e Hardware -->
+                <tr>
+                    <td>df</td>
+                    <td>Exibe o uso de espaço em disco</td>
+                    <td>df -h</td>
+                </tr>
+                <tr>
+                    <td>du</td>
+                    <td>Estima o uso de espaço em disco de arquivos ou diretórios</td>
+                    <td>du -sh /pasta</td>
+                </tr>
+                <tr>
+                    <td>free</td>
+                    <td>Exibe a memória disponível no sistema</td>
+                    <td>free -m</td>
+                </tr>
+                <tr>
+                    <td>top</td>
+                    <td>Exibe os processos em execução em tempo real</td>
+                    <td>top</td>
+                </tr>
+                <tr>
+                    <td>htop</td>
+                    <td>Similar ao top, mas com interface mais amigável</td>
+                    <td>htop</td>
+                </tr>
+                <tr>
+                    <td>uname</td>
+                    <td>Mostra informações sobre o sistema</td>
+                    <td>uname -a</td>
+                </tr>
+                <tr>
+                    <td>uptime</td>
+                    <td>Mostra há quanto tempo o sistema está ativo</td>
+                    <td>uptime</td>
+                </tr>
+                <tr>
+                    <td>lscpu</td>
+                    <td>Exibe informações sobre a CPU</td>
+                    <td>lscpu</td>
+                </tr>
+                <tr>
+                    <td>dmidecode</td>
+                    <td>Mostra informações detalhadas sobre o hardware</td>
+                    <td>dmidecode -t memory</td>
+                </tr>
+                <tr>
+                    <td>reboot</td>
+                    <td>Reinicia o sistema</td>
+                    <td>reboot</td>
+                </tr>
+                <!-- Gerenciamento de Processos -->
+                <tr>
+                    <td>ps</td>
+                    <td>Exibe os processos atuais</td>
+                    <td>ps aux</td>
+                </tr>
+                <tr>
+                    <td>kill</td>
+                    <td>Encerra um processo pelo ID</td>
+                    <td>kill 1234</td>
+                </tr>
+                <tr>
+                    <td>killall</td>
+                    <td>Encerra processos pelo nome</td>
+                    <td>killall firefox</td>
+                </tr>
+                <tr>
+                    <td>nice</td>
+                    <td>Define a prioridade de um processo</td>
+                    <td>nice -n 10 comando</td>
+                </tr>
+                <tr>
+                    <td>renice</td>
+                    <td>Altera a prioridade de um processo em execução</td>
+                    <td>renice 10 -p 1234</td>
+                </tr>
+                <!-- Rede -->
+                <tr>
+                    <td>ping</td>
+                    <td>Testa a conectividade com um host</td>
+                    <td>ping google.com</td>
+                </tr>
+                <tr>
+                    <td>curl</td>
+                    <td>Transfere dados de ou para um servidor</td>
+                    <td>curl https://example.com</td>
+                </tr>
+                <tr>
+                    <td>wget</td>
+                    <td>Baixa arquivos da internet</td>
+                    <td>wget https://example.com/arquivo.zip</td>
+                </tr>
+                <tr>
+                    <td>netstat</td>
+                    <td>Exibe informações de rede (conexões, portas, etc.)</td>
+                    <td>netstat -tuln</td>
+                </tr>
+                <tr>
+                    <td>ifconfig</td>
+                    <td>Configura ou exibe informações de interfaces de rede</td>
+                    <td>ifconfig</td>
+                </tr>
+                <tr>
+                    <td>ip</td>
+                    <td>Gerencia endereços IP e configurações de rede</td>
+                    <td>ip addr</td>
+                </tr>
+                <tr>
+                    <td>ssh</td>
+                    <td>Conecta a um servidor remoto via SSH</td>
+                    <td>ssh usuario@servidor</td>
+                </tr>
+                <tr>
+                    <td>scp</td>
+                    <td>Copia arquivos entre hosts via SSH</td>
+                    <td>scp arquivo.txt usuario@servidor:/caminho</td>
+                </tr>
+                <tr>
+                    <td>nslookup</td>
+                    <td>Consulta servidores DNS</td>
+                    <td>nslookup google.com</td>
+                </tr>
+                <tr>
+                    <td>traceroute</td>
+                    <td>Rastreia o caminho de pacotes até um host</td>
+                    <td>traceroute google.com</td>
+                </tr>
+                <!-- Gerenciamento de Usuários e Permissões -->
+                <tr>
+                    <td>chmod</td>
+                    <td>Altera permissões de arquivos</td>
+                    <td>chmod 755 script.sh</td>
+                </tr>
+                <tr>
+                    <td>chown</td>
+                    <td>Altera o proprietário de um arquivo</td>
+                    <td>chown usuario arquivo.txt</td>
+                </tr>
+                <tr>
+                    <td>useradd</td>
+                    <td>Cria um novo usuário</td>
+                    <td>useradd novo_usuario</td>
+                </tr>
+                <tr>
+                    <td>passwd</td>
+                    <td>Altera a senha de um usuário</td>
+                    <td>passwd usuario</td>
+                </tr>
+                <tr>
+                    <td>who</td>
+                    <td>Mostra os usuários conectados ao sistema</td>
+                    <td>who</td>
+                </tr>
+                <!-- Ferramentas de Texto e Busca -->
+                <tr>
+                    <td>grep</td>
+                    <td>Busca texto usando padrões</td>
+                    <td>grep "texto" arquivo.txt</td>
+                </tr>
+                <tr>
+                    <td>awk</td>
+                    <td>Processa e analisa texto</td>
+                    <td>awk '{print $1}' arquivo.txt</td>
+                </tr>
+                <tr>
+                    <td>sed</td>
+                    <td>Edita texto em fluxo</td>
+                    <td>sed 's/antigo/novo/g' arquivo.txt</td>
+                </tr>
+                <tr>
+                    <td>cut</td>
+                    <td>Extrai seções de texto de arquivos</td>
+                    <td>cut -d',' -f1 arquivo.csv</td>
+                </tr>
+                <tr>
+                    <td>sort</td>
+                    <td>Ordena linhas de um arquivo</td>
+                    <td>sort arquivo.txt</td>
+                </tr>
+                <!-- Novos Comandos: Gerenciamento de Pacotes (Debian/Ubuntu) -->
+                <tr>
+                    <td>apt-get</td>
+                    <td>Gerencia pacotes em sistemas baseados em Debian</td>
+                    <td>apt-get update</td>
+                </tr>
+                <tr>
+                    <td>apt-cache</td>
+                    <td>Busca pacotes disponíveis no repositório</td>
+                    <td>apt-cache search nome_pacote</td>
+                </tr>
+                <tr>
+                    <td>dpkg</td>
+                    <td>Instala ou remove pacotes .deb</td>
+                    <td>dpkg -i pacote.deb</td>
+                </tr>
+                <tr>
+                    <td>apt</td>
+                    <td>Interface mais moderna para gerenciamento de pacotes</td>
+                    <td>apt install pacote</td>
+                </tr>
+                <tr>
+                    <td>aptitude</td>
+                    <td>Gerenciador de pacotes com interface interativa</td>
+                    <td>aptitude</td>
+                </tr>
+                <!-- Gerenciamento de Pacotes (Red Hat/CentOS) -->
+                <tr>
+                    <td>yum</td>
+                    <td>Gerencia pacotes em sistemas baseados em Red Hat</td>
+                    <td>yum install pacote</td>
+                </tr>
+                <tr>
+                    <td>rpm</td>
+                    <td>Gerencia pacotes RPM</td>
+                    <td>rpm -ivh pacote.rpm</td>
+                </tr>
+                <tr>
+                    <td>dnf</td>
+                    <td>Substituto do yum em versões mais novas</td>
+                    <td>dnf install pacote</td>
+                </tr>
+                <tr>
+                    <td>zypper</td>
+                    <td>Gerencia pacotes no openSUSE</td>
+                    <td>zypper install pacote</td>
+                </tr>
+                <tr>
+                    <td>pacman</td>
+                    <td>Gerencia pacotes no Arch Linux</td>
+                    <td>pacman -S pacote</td>
+                </tr>
+                <!-- Compressão e Arquivamento -->
+                <tr>
+                    <td>tar</td>
+                    <td>Cria ou extrai arquivos tar</td>
+                    <td>tar -cvf arquivo.tar /pasta</td>
+                </tr>
+                <tr>
+                    <td>gzip</td>
+                    <td>Comprime arquivos</td>
+                    <td>gzip arquivo.txt</td>
+                </tr>
+                <tr>
+                    <td>gunzip</td>
+                    <td>Descomprime arquivos .gz</td>
+                    <td>gunzip arquivo.txt.gz</td>
+                </tr>
+                <tr>
+                    <td>zip</td>
+                    <td>Cria arquivos .zip</td>
+                    <td>zip arquivo.zip arquivo.txt</td>
+                </tr>
+                <tr>
+                    <td>unzip</td>
+                    <td>Extrai arquivos .zip</td>
+                    <td>unzip arquivo.zip</td>
+                </tr>
+                <tr>
+                    <td>bzip2</td>
+                    <td>Comprime arquivos com algoritmo bzip2</td>
+                    <td>bzip2 arquivo.txt</td>
+                </tr>
+                <tr>
+                    <td>bunzip2</td>
+                    <td>Descomprime arquivos .bz2</td>
+                    <td>bunzip2 arquivo.txt.bz2</td>
+                </tr>
+                <tr>
+                    <td>rar</td>
+                    <td>Cria ou extrai arquivos .rar</td>
+                    <td>rar a arquivo.rar arquivo.txt</td>
+                </tr>
+                <tr>
+                    <td>unrar</td>
+                    <td>Extrai arquivos .rar</td>
+                    <td>unrar x arquivo.rar</td>
+                </tr>
+                <tr>
+                    <td>7z</td>
+                    <td>Gerencia arquivos 7z (compressão e extração)</td>
+                    <td>7z a arquivo.7z arquivo.txt</td>
+                </tr>
+                <!-- Segurança -->
+                <tr>
+                    <td>iptables</td>
+                    <td>Configura regras de firewall</td>
+                    <td>iptables -L</td>
+                </tr>
+                <tr>
+                    <td>ufw</td>
+                    <td>Interface simplificada para firewall</td>
+                    <td>ufw enable</td>
+                </tr>
+                <tr>
+                    <td>openssl</td>
+                    <td>Gerencia certificados e criptografia</td>
+                    <td>openssl genrsa -out chave.pem 2048</td>
+                </tr>
+                <tr>
+                    <td>ssh-keygen</td>
+                    <td>Gera chaves SSH</td>
+                    <td>ssh-keygen -t rsa</td>
+                </tr>
+                <tr>
+                    <td>chpasswd</td>
+                    <td>Atualiza senhas em lote</td>
+                    <td>echo "usuario:senha" | chpasswd</td>
+                </tr>
+                <tr>
+                    <td>sudo</td>
+                    <td>Executa comandos com privilégios de superusuário</td>
+                    <td>sudo comando</td>
+                </tr>
+                <tr>
+                    <td>visudo</td>
+                    <td>Edita o arquivo de configuração do sudo</td>
+                    <td>visudo</td>
+                </tr>
+                <tr>
+                    <td>passwd</td>
+                    <td>Altera a senha de um usuário</td>
+                    <td>passwd usuario</td>
+                </tr>
+                <tr>
+                    <td>last</td>
+                    <td>Mostra o histórico de logins no sistema</td>
+                    <td>last</td>
+                </tr>
+                <tr>
+                    <td>w</td>
+                    <td>Mostra quem está conectado e o que estão fazendo</td>
+                    <td>w</td>
+                </tr>
+                <!-- Monitoramento de Logs -->
+                <tr>
+                    <td>tail</td>
+                    <td>Exibe as últimas linhas de um arquivo</td>
+                    <td>tail -f /var/log/syslog</td>
+                </tr>
+                <tr>
+                    <td>journalctl</td>
+                    <td>Exibe logs do sistema (systemd)</td>
+                    <td>journalctl -u sshd</td>
+                </tr>
+                <tr>
+                    <td>dmesg</td>
+                    <td>Exibe mensagens do kernel</td>
+                    <td>dmesg | grep error</td>
+                </tr>
+                <tr>
+                    <td>logger</td>
+                    <td>Adiciona mensagens ao log do sistema</td>
+                    <td>logger "Mensagem de teste"</td>
+                </tr>
+                <tr>
+                    <td>logrotate</td>
+                    <td>Rotaciona e gerencia arquivos de log</td>
+                    <td>logrotate /etc/logrotate.conf</td>
+                </tr>
+                <!-- Agendamento de Tarefas -->
+                <tr>
+                    <td>cron</td>
+                    <td>Agendador de tarefas (geralmente configurado via crontab)</td>
+                    <td>crontab -e</td>
+                </tr>
+                <tr>
+                    <td>at</td>
+                    <td>Agenda uma tarefa para ser executada uma vez</td>
+                    <td>at now + 1 minute</td>
+                </tr>
+                <tr>
+                    <td>atq</td>
+                    <td>Lista tarefas agendadas com at</td>
+                    <td>atq</td>
+                </tr>
+                <tr>
+                    <td>atrm</td>
+                    <td>Remove tarefas agendadas com at</td>
+                    <td>atrm 1</td>
+                </tr>
+                <tr>
+                    <td>batch</td>
+                    <td>Agenda tarefas para serem executadas quando o sistema estiver ocioso</td>
+                    <td>batch</td>
+                </tr>
+                <!-- Desenvolvimento -->
+                <tr>
+                    <td>gcc</td>
+                    <td>Compila código C</td>
+                    <td>gcc programa.c -o programa</td>
+                </tr>
+                <tr>
+                    <td>g++</td>
+                    <td>Compila código C++</td>
+                    <td>g++ programa.cpp -o programa</td>
+                </tr>
+                <tr>
+                    <td>make</td>
+                    <td>Automatiza a compilação de programas</td>
+                    <td>make</td>
+                </tr>
+                <tr>
+                    <td>gdb</td>
+                    <td>Depura programas</td>
+                    <td>gdb ./programa</td>
+                </tr>
+                <tr>
+                    <td>git</td>
+                    <td>Gerencia repositórios Git</td>
+                    <td>git clone url_do_repositorio</td>
+                </tr>
+                <tr>
+                    <td>python</td>
+                    <td>Executa scripts Python</td>
+                    <td>python script.py</td>
+                </tr>
+                <tr>
+                    <td>perl</td>
+                    <td>Executa scripts Perl</td>
+                    <td>perl script.pl</td>
+                </tr>
+                <tr>
+                    <td>ruby</td>
+                    <td>Executa scripts Ruby</td>
+                    <td>ruby script.rb</td>
+                </tr>
+                <tr>
+                    <td>javac</td>
+                    <td>Compila código Java</td>
+                    <td>javac Programa.java</td>
+                </tr>
+                <tr>
+                    <td>java</td>
+                    <td>Executa programas Java</td>
+                    <td>java Programa</td>
+                </tr>
+                <!-- Gerenciamento de Discos -->
+                <tr>
+                    <td>fdisk</td>
+                    <td>Gerencia partições de disco</td>
+                    <td>fdisk /dev/sda</td>
+                </tr>
+                <tr>
+                    <td>mkfs</td>
+                    <td>Formata um sistema de arquivos</td>
+                    <td>mkfs.ext4 /dev/sda1</td>
+                </tr>
+                <tr>
+                    <td>fsck</td>
+                    <td>Verifica e repara sistemas de arquivos</td>
+                    <td>fsck /dev/sda1</td>
+                </tr>
+                <tr>
+                    <td>mount</td>
+                    <td>Monta um sistema de arquivos</td>
+                    <td>mount /dev/sda1 /mnt</td>
+                </tr>
+                <tr>
+                    <td>umount</td>
+                    <td>Desmonta um sistema de arquivos</td>
+                    <td>umount /mnt</td>
+                </tr>
+                <tr>
+                    <td>parted</td>
+                    <td>Gerencia partições de disco (alternativa ao fdisk)</td>
+                    <td>parted /dev/sda</td>
+                </tr>
+                <tr>
+                    <td>blkid</td>
+                    <td>Exibe informações sobre dispositivos de bloco</td>
+                    <td>blkid</td>
+                </tr>
+                <tr>
+                    <td>lsblk</td>
+                    <td>Lista dispositivos de bloco (discos e partições)</td>
+                    <td>lsblk</td>
+                </tr>
+                <tr>
+                    <td>dd</td>
+                    <td>Copia e converte arquivos (útil para criar imagens de disco)</td>
+                    <td>dd if=/dev/sda of=imagem.iso</td>
+                </tr>
+                <tr>
+                    <td>badblocks</td>
+                    <td>Verifica blocos defeituosos em um disco</td>
+                    <td>badblocks /dev/sda</td>
+                </tr>
+                <!-- Outros Comandos Úteis -->
+                <tr>
+                    <td>man</td>
+                    <td>Exibe o manual de um comando</td>
+                    <td>man ls</td>
+                </tr>
+                <tr>
+                    <td>info</td>
+                    <td>Exibe documentação detalhada de um comando</td>
+                    <td>info ls</td>
+                </tr>
+                <tr>
+                    <td>history</td>
+                    <td>Mostra o histórico de comandos</td>
+                    <td>history</td>
+                </tr>
+                <tr>
+                    <td>alias</td>
+                    <td>Cria atalhos para comandos</td>
+                    <td>alias ll='ls -l'</td>
+                </tr>
+                <tr>
+                    <td>unalias</td>
+                    <td>Remove um alias</td>
+                    <td>unalias ll</td>
+                </tr>
+                <tr>
+                    <td>which</td>
+                    <td>Mostra o caminho de um comando</td>
+                    <td>which ls</td>
+                </tr>
+                <tr>
+                    <td>whereis</td>
+                    <td>Localiza binários, fontes e manuais de um comando</td>
+                    <td>whereis ls</td>
+                </tr>
+                <tr>
+                    <td>whatis</td>
+                    <td>Exibe uma breve descrição de um comando</td>
+                    <td>whatis ls</td>
+                </tr>
+                <tr>
+                    <td>clear</td>
+                    <td>Limpa a tela do terminal</td>
+                    <td>clear</td>
+                </tr>
+                <tr>
+                    <td>exit</td>
+                    <td>Fecha o terminal ou encerra uma sessão</td>
+                    <td>exit</td>
+                </tr>
+                <!-- Monitoramento de Sistema -->
+                <tr>
+                    <td>vmstat</td>
+                    <td>Exibe estatísticas de memória virtual, CPU e I/O</td>
+                    <td>vmstat 1</td>
+                </tr>
+                <tr>
+                    <td>iostat</td>
+                    <td>Monitora estatísticas de entrada/saída de dispositivos</td>
+                    <td>iostat -x 1</td>
+                </tr>
+                <tr>
+                    <td>sar</td>
+                    <td>Coletar e exibir estatísticas de desempenho do sistema</td>
+                    <td>sar -u 1 3</td>
+                </tr>
+                <tr>
+                    <td>mpstat</td>
+                    <td>Exibe estatísticas de uso da CPU por processador</td>
+                    <td>mpstat 1 3</td>
+                </tr>
+                <tr>
+                    <td>pidstat</td>
+                    <td>Monitora estatísticas de processos (CPU, memória, I/O)</td>
+                    <td>pidstat 1</td>
+                </tr>
+                <tr>
+                    <td>nmon</td>
+                    <td>Monitor interativo de desempenho do sistema</td>
+                    <td>nmon</td>
+                </tr>
+                <tr>
+                    <td>iotop</td>
+                    <td>Monitora o uso de I/O por processos</td>
+                    <td>iotop</td>
+                </tr>
+                <tr>
+                    <td>watch</td>
+                    <td>Executa um comando repetidamente e exibe a saída</td>
+                    <td>watch -n 1 date</td>
+                </tr>
+                <tr>
+                    <td>time</td>
+                    <td>Mede o tempo de execução de um comando</td>
+                    <td>time ls</td>
+                </tr>
+                <tr>
+                    <td>strace</td>
+                    <td>Rastreia chamadas de sistema e sinais de um processo</td>
+                    <td>strace ls</td>
+                </tr>
+                <!-- Gerenciamento de Serviços -->
+                <tr>
+                    <td>systemctl</td>
+                    <td>Gerencia serviços e unidades do systemd</td>
+                    <td>systemctl start sshd</td>
+                </tr>
+                <tr>
+                    <td>service</td>
+                    <td>Controla serviços (alternativa ao systemctl em sistemas mais antigos)</td>
+                    <td>service sshd restart</td>
+                </tr>
+                <tr>
+                    <td>init</td>
+                    <td>Controla o nível de inicialização do sistema (SysVinit)</td>
+                    <td>init 3</td>
+                </tr>
+                <tr>
+                    <td>telinit</td>
+                    <td>Altera o nível de inicialização (SysVinit)</td>
+                    <td>telinit 3</td>
+                </tr>
+                <tr>
+                    <td>chkconfig</td>
+                    <td>Gerencia serviços no boot (SysVinit)</td>
+                    <td>chkconfig sshd on</td>
+                </tr>
+                <tr>
+                    <td>systemd-analyze</td>
+                    <td>Analisa o tempo de inicialização do sistema</td>
+                    <td>systemd-analyze blame</td>
+                </tr>
+                <tr>
+                    <td>update-rc.d</td>
+                    <td>Gerencia scripts de inicialização em sistemas baseados em Debian</td>
+                    <td>update-rc.d ssh enable</td>
+                </tr>
+                <tr>
+                    <td>rc-update</td>
+                    <td>Gerencia serviços no boot (OpenRC, usado no Gentoo)</td>
+                    <td>rc-update add sshd default</td>
+                </tr>
+                <tr>
+                    <td>rc-status</td>
+                    <td>Mostra o status dos serviços (OpenRC)</td>
+                    <td>rc-status</td>
+                </tr>
+                <tr>
+                    <td>rc-service</td>
+                    <td>Controla serviços (OpenRC)</td>
+                    <td>rc-service sshd start</td>
+                </tr>
+                <!-- Virtualização -->
+                <tr>
+                    <td>virsh</td>
+                    <td>Gerencia máquinas virtuais com libvirt</td>
+                    <td>virsh list --all</td>
+                </tr>
+                <tr>
+                    <td>virt-install</td>
+                    <td>Cria novas máquinas virtuais</td>
+                    <td>virt-install --name vm1 --ram 1024 --disk size=10</td>
+                </tr>
+                <tr>
+                    <td>virt-manager</td>
+                    <td>Interface gráfica para gerenciar máquinas virtuais</td>
+                    <td>virt-manager</td>
+                </tr>
+                <tr>
+                    <td>qemu-img</td>
+                    <td>Gerencia imagens de disco para máquinas virtuais</td>
+                    <td>qemu-img create -f qcow2 disco.qcow2 10G</td>
+                </tr>
+                <tr>
+                    <td>docker</td>
+                    <td>Gerencia contêineres Docker</td>
+                    <td>docker run -it ubuntu bash</td>
+                </tr>
+                <tr>
+                    <td>podman</td>
+                    <td>Alternativa ao Docker, sem daemon</td>
+                    <td>podman run -it ubuntu bash</td>
+                </tr>
+                <tr>
+                    <td>lxc-start</td>
+                    <td>Inicia um contêiner LXC</td>
+                    <td>lxc-start -n meu_container</td>
+                </tr>
+                <tr>
+                    <td>lxc-create</td>
+                    <td>Cria um contêiner LXC</td>
+                    <td>lxc-create -n meu_container -t ubuntu</td>
+                </tr>
+                <tr>
+                    <td>lxc-ls</td>
+                    <td>Lista contêineres LXC</td>
+                    <td>lxc-ls --fancy</td>
+                </tr>
+                <tr>
+                    <td>vagrant</td>
+                    <td>Gerencia ambientes de desenvolvimento virtualizados</td>
+                    <td>vagrant up</td>
+                </tr>
+                <!-- Ferramentas de Backup -->
+                <tr>
+                    <td>rsync</td>
+                    <td>Sincroniza arquivos e diretórios entre sistemas</td>
+                    <td>rsync -av /origem /destino</td>
+                </tr>
+                <tr>
+                    <td>tar</td>
+                    <td>Arquiva e faz backup de arquivos</td>
+                    <td>tar -czvf backup.tar.gz /pasta</td>
+                </tr>
+                <tr>
+                    <td>dump</td>
+                    <td>Faz backup de sistemas de arquivos</td>
+                    <td>dump -0u -f backup.dump /dev/sda1</td>
+                </tr>
+                <tr>
+                    <td>restore</td>
+                    <td>Restaura backups criados com dump</td>
+                    <td>restore -rf backup.dump</td>
+                </tr>
+                <tr>
+                    <td>rdiff-backup</td>
+                    <td>Faz backups incrementais</td>
+                    <td>rdiff-backup /origem /destino</td>
+                </tr>
+                <tr>
+                    <td>duplicity</td>
+                    <td>Faz backups criptografados e incrementais</td>
+                    <td>duplicity /origem file:///destino</td>
+                </tr>
+                <tr>
+                    <td>scp</td>
+                    <td>Copia arquivos para backup remoto via SSH</td>
+                    <td>scp backup.tar.gz usuario@servidor:/caminho</td>
+                </tr>
+                <tr>
+                    <td>ftp</td>
+                    <td>Transfere arquivos de forma segura para backup remoto</td>
+                    <td>ftp usuario@servidor ou ftp 192.168.0.9</td>
+                </tr>
+
+                <tr>             
+                    <td>sftp</td>
+                    <td>Transfere arquivos de forma segura para backup remoto</td>
+                    <td>sftp usuario@servidor ou sftp usuario@192.168.0.9</td>
+                </tr>
+                <tr>    
+                    <td>bacula</td>
+                    <td>Sistema de backup em rede (inicia o daemon)</td>
+                    <td>bacula start</td>
+                </tr>
+                <tr>
+                    <td>restic</td>
+                    <td>Faz backups rápidos e deduplicados</td>
+                    <td>restic -r /backup backup /pasta</td>
+                </tr>
+                <!-- Gerenciamento de Energia -->
+                <tr>
+                    <td>poweroff</td>
+                    <td>Desliga o sistema</td>
+                    <td>poweroff</td>
+                </tr>
+                <tr>
+                    <td>halt</td>
+                    <td>Para o sistema (sem desligar a energia)</td>
+                    <td>halt</td>
+                </tr>
+                <tr>
+                    <td>pm-suspend</td>
+                    <td>Suspende o sistema (modo de espera)</td>
+                    <td>pm-suspend</td>
+                </tr>
+                <tr>
+                    <td>pm-hibernate</td>
+                    <td>Hiberna o sistema (salva o estado no disco)</td>
+                    <td>pm-hibernate</td>
+                </tr>
+                <tr>
+                    <td>upower</td>
+                    <td>Monitora informações de energia (bateria, etc.)</td>
+                    <td>upower -i /org/freedesktop/UPower/devices/battery_BAT0</td>
+                </tr>
+                <tr>
+                    <td>acpi</td>
+                    <td>Exibe informações sobre energia e temperatura</td>
+                    <td>acpi -V</td>
+                </tr>
+                <tr>
+                    <td>tlp</td>
+                    <td>Gerencia energia para laptops (otimiza bateria)</td>
+                    <td>tlp start</td>
+                </tr>
+                <tr>
+                    <td>cpufreq-info</td>
+                    <td>Exibe informações sobre a frequência da CPU</td>
+                    <td>cpufreq-info</td>
+                </tr>
+                <tr>
+                    <td>cpufreq-set</td>
+                    <td>Define a frequência da CPU</td>
+                    <td>cpufreq-set -g powersave</td>
+                </tr>
+                <tr>
+                    <td>powertop</td>
+                    <td>Monitora e otimiza o consumo de energia</td>
+                    <td>powertop</td>
+                </tr>
+                <!-- Ferramentas de Rede Avançadas -->
+                <tr>
+                    <td>dig</td>
+                    <td>Consulta DNS detalhada</td>
+                    <td>dig google.com</td>
+                </tr>
+                <tr>
+                    <td>host</td>
+                    <td>Resolve nomes de domínio</td>
+                    <td>host google.com</td>
+                </tr>
+                <tr>
+                    <td>whois</td>
+                    <td>Consulta informações sobre um domínio</td>
+                    <td>whois google.com</td>
+                </tr>
+                <tr>
+                    <td>arp</td>
+                    <td>Gerencia a tabela ARP (endereços MAC)</td>
+                    <td>arp -n</td>
+                </tr>
+                <tr>
+                    <td>route</td>
+                    <td>Gerencia a tabela de roteamento</td>
+                    <td>route -n</td>
+                </tr>
+                <tr>
+                    <td>ip route</td>
+                    <td>Alternativa moderna ao route para gerenciar rotas</td>
+                    <td>ip route show</td>
+                </tr>
+                <tr>
+                    <td>tcpdump</td>
+                    <td>Captura pacotes de rede</td>
+                    <td>tcpdump -i eth0</td>
+                </tr>
+                <tr>
+                    <td>wireshark</td>
+                    <td>Analisador gráfico de pacotes de rede</td>
+                    <td>wireshark</td>
+                </tr>
+                <tr>
+                    <td>ethtool</td>
+                    <td>Exibe e configura interfaces de rede</td>
+                    <td>ethtool eth0</td>
+                </tr>
+                <tr>
+                    <td>nmcli</td>
+                    <td>Gerencia conexões de rede via NetworkManager</td>
+                    <td>nmcli device status</td>
+                </tr>
+                <!-- Ferramentas de Sistema Avançadas -->
+                <tr>
+                    <td>ldd</td>
+                    <td>Lista dependências de bibliotecas de um executável</td>
+                    <td>ldd /bin/ls</td>
+                </tr>
+                <tr>
+                    <td>file</td>
+                    <td>Identifica o tipo de um arquivo</td>
+                    <td>file arquivo.txt</td>
+                </tr>
+                <tr>
+                    <td>stat</td>
+                    <td>Exibe informações detalhadas sobre um arquivo</td>
+                    <td>stat arquivo.txt</td>
+                </tr>
+                <tr>
+                    <td>readlink</td>
+                    <td>Exibe o destino de um link simbólico</td>
+                    <td>readlink link_simbolico</td>
+                </tr>
+                <tr>
+                    <td>lnstat</td>
+                    <td>Exibe estatísticas de rede do kernel</td>
+                    <td>lnstat -d</td>
+                </tr>
+                <tr>
+                    <td>sysctl</td>
+                    <td>Configura parâmetros do kernel em tempo real</td>
+                    <td>sysctl -a</td>
+                </tr>
+                <tr>
+                    <td>ulimit</td>
+                    <td>Define limites de recursos para usuários</td>
+                    <td>ulimit -n 1024</td>
+                </tr>
+                <tr>
+                    <td>quota</td>
+                    <td>Exibe o uso de disco e limites de quota</td>
+                    <td>quota -u usuario</td>
+                </tr>
+                <tr>
+                    <td>repquota</td>
+                    <td>Relatório de uso de quotas para todos os usuários</td>
+                    <td>repquota -a</td>
+                </tr>
+                <tr>
+                    <td>setquota</td>
+                    <td>Define quotas de disco para usuários</td>
+                    <td>setquota -u usuario 100M 200M 0 0 /</td>
+                </tr>
+                <!-- Ferramentas de Texto Avançadas -->
+                <tr>
+                    <td>diff</td>
+                    <td>Compara diferenças entre dois arquivos</td>
+                    <td>diff arquivo1.txt arquivo2.txt</td>
+                </tr>
+                <tr>
+                    <td>patch</td>
+                    <td>Aplica alterações (diff) a um arquivo</td>
+                    <td>patch arquivo.txt < diff.patch</td>
+                </tr>
+                <tr>
+                    <td>comm</td>
+                    <td>Compara dois arquivos ordenados linha por linha</td>
+                    <td>comm arquivo1.txt arquivo2.txt</td>
+                </tr>
+                <tr>
+                    <td>uniq</td>
+                    <td>Remove ou exibe linhas duplicadas em um arquivo</td>
+                    <td>uniq arquivo.txt</td>
+                </tr>
+                <tr>
+                    <td>wc</td>
+                    <td>Conta linhas, palavras e caracteres em um arquivo</td>
+                    <td>wc arquivo.txt</td>
+                </tr>
+                <tr>
+                    <td>tee</td>
+                    <td>Lê da entrada padrão e escreve para a saída e arquivos</td>
+                    <td>ls | tee arquivo.txt</td>
+                </tr>
+                <tr>
+                    <td>tr</td>
+                    <td>Traduz ou remove caracteres</td>
+                    <td>echo "TEXTO" | tr 'A-Z' 'a-z'</td>
+                </tr>
+                <tr>
+                    <td>nl</td>
+                    <td>Numera linhas de um arquivo</td>
+                    <td>nl arquivo.txt</td>
+                </tr>
+                <tr>
+                    <td>fold</td>
+                    <td>Quebra linhas longas em um arquivo</td>
+                    <td>fold -w 80 arquivo.txt</td>
+                </tr>
+                <tr>
+                    <td>expand</td>
+                    <td>Converte tabulações em espaços</td>
+                    <td>expand arquivo.txt</td>
+                </tr>
+                <!-- Outros Comandos Úteis -->
+                <tr>
+                    <td>date</td>
+                    <td>Exibe ou define a data e hora do sistema</td>
+                    <td>date</td>
+                </tr>
+                <tr>
+                    <td>cal</td>
+                    <td>Exibe um calendário</td>
+                    <td>cal</td>
+                </tr>
+                <tr>
+                    <td>bc</td>
+                    <td>Calculadora de precisão arbitrária</td>
+                    <td>echo "5 + 3" | bc</td>
+                </tr>
+                <tr>
+                    <td>expr</td>
+                    <td>Avalia expressões matemáticas</td>
+                    <td>expr 5 + 3</td>
+                </tr>
+                <tr>
+                    <td>yes</td>
+                    <td>Repete uma string até ser interrompido</td>
+                    <td>yes "sim"</td>
+                </tr>
+                <tr>
+                    <td>nohup</td>
+                    <td>Executa um comando imune a desconexões</td>
+                    <td>nohup comando &</td>
+                </tr>
+                <tr>
+                    <td>screen</td>
+                    <td>Cria sessões de terminal persistentes</td>
+                    <td>screen</td>
+                </tr>
+                <tr>
+                    <td>tmux</td>
+                    <td>Alternativa ao screen para sessões persistentes</td>
+                    <td>tmux</td>
+                </tr>
+                <tr>
+                    <td>jobs</td>
+                    <td>Lista processos em segundo plano</td>
+                    <td>jobs</td>
+                </tr>
+                <tr>
+                    <td>fg</td>
+                    <td>Traz um processo em segundo plano para o primeiro plano</td>
+                    <td>fg %1</td>
+                </tr>
+                <tr>
+                    <td>bg</td>
+                    <td>Coloca um processo em segundo plano</td>
+                    <td>bg %1</td>
+                </tr>
+                <tr>
+                    <td>disown</td>
+                    <td>Remove um processo da lista de jobs</td>
+                    <td>disown %1</td>
+                </tr>
+                <tr>
+                    <td>wait</td>
+                    <td>Espera a conclusão de processos em segundo plano</td>
+                    <td>wait</td>
+                </tr>
+                <tr>
+                    <td>sleep</td>
+                    <td>Pausa a execução por um tempo especificado</td>
+                    <td>sleep 5</td>
+                </tr>
+                <tr>
+                    <td>sync</td>
+                    <td>Força a gravação de buffers de disco</td>
+                    <td>sync</td>
+                </tr>
+                <!-- Gerenciamento de Pacotes Avançado -->
+                <tr>
+                    <td>snap</td>
+                    <td>Gerencia pacotes Snap (pacotes universais)</td>
+                    <td>snap install nome_pacote</td>
+                </tr>
+                <tr>
+                    <td>flatpak</td>
+                    <td>Gerencia pacotes Flatpak (outro formato universal)</td>
+                    <td>flatpak install nome_pacote</td>
+                </tr>
+                <tr>
+                    <td>dpkg-reconfigure</td>
+                    <td>Reconfigura um pacote já instalado</td>
+                    <td>dpkg-reconfigure nome_pacote</td>
+                </tr>
+                <tr>
+                    <td>apt-file</td>
+                    <td>Busca arquivos dentro de pacotes Debian</td>
+                    <td>apt-file search nome_arquivo</td>
+                </tr>
+                <tr>
+                    <td>dnf provides</td>
+                    <td>Descobre qual pacote fornece um arquivo ou recurso</td>
+                    <td>dnf provides /caminho/arquivo</td>
+                </tr>
+                <tr>
+                    <td>yumdownloader</td>
+                    <td>Baixa pacotes RPM sem instalá-los</td>
+                    <td>yumdownloader nome_pacote</td>
+                </tr>
+                <tr>
+                    <td>rpmbuild</td>
+                    <td>Constrói pacotes RPM a partir de fontes</td>
+                    <td>rpmbuild -ba nome.spec</td>
+                </tr>
+                <tr>
+                    <td>zypper source-install</td>
+                    <td>Instala o código-fonte de um pacote no openSUSE</td>
+                    <td>zypper source-install nome_pacote</td>
+                </tr>
+                <tr>
+                    <td>pacman -R</td>
+                    <td>Remove pacotes no Arch Linux</td>
+                    <td>pacman -R nome_pacote</td>
+                </tr>
+                <tr>
+                    <td>apt-mark</td>
+                    <td>Marca pacotes como instalados manualmente ou automaticamente</td>
+                    <td>apt-mark hold nome_pacote</td>
+                </tr>
+                <!-- Ferramentas de Monitoramento de Rede -->
+                <tr>
+                    <td>mtr</td>
+                    <td>Combina ping e traceroute para monitoramento de rede</td>
+                    <td>mtr google.com</td>
+                </tr>
+                <tr>
+                    <td>nmap</td>
+                    <td>Escaneia portas e descobre dispositivos na rede</td>
+                    <td>nmap 192.168.1.1</td>
+                </tr>
+                <tr>
+                    <td>iftop</td>
+                    <td>Monitora o uso de banda de rede por conexão</td>
+                    <td>iftop -i eth0</td>
+                </tr>
+                <tr>
+                    <td>iptraf</td>
+                    <td>Monitora o tráfego de rede em tempo real</td>
+                    <td>iptraf</td>
+                </tr>
+                <tr>
+                    <td>ss</td>
+                    <td>Exibe informações sobre sockets (substitui netstat)</td>
+                    <td>ss -tuln</td>
+                </tr>
+                <tr>
+                    <td>netcat</td>
+                    <td>Utilitário para leitura/escrita em conexões de rede</td>
+                    <td>netcat -l 12345</td>
+                </tr>
+                <tr>
+                    <td>nc</td>
+                    <td>Abreviação para netcat, usada para testes de rede</td>
+                    <td>nc -v host 80</td>
+                </tr>
+                <tr>
+                    <td>hping3</td>
+                    <td>Envia pacotes personalizados para testes de rede</td>
+                    <td>hping3 -S google.com</td>
+                </tr>
+                <tr>
+                    <td>arping</td>
+                    <td>Envia solicitações ARP para um host</td>
+                    <td>arping 192.168.1.1</td>
+                </tr>
+                <tr>
+                    <td>ipset</td>
+                    <td>Gerencia conjuntos de IPs para uso com iptables</td>
+                    <td>ipset create meuset hash:ip</td>
+                </tr>
+                <!-- Gerenciamento de Containers Avançado -->
+                <tr>
+                    <td>docker-compose</td>
+                    <td>Gerencia múltiplos contêineres Docker com YAML</td>
+                    <td>docker-compose up</td>
+                </tr>
+                <tr>
+                    <td>kubectl</td>
+                    <td>Gerencia clusters Kubernetes</td>
+                    <td>kubectl get pods</td>
+                </tr>
+                <tr>
+                    <td>docker ps</td>
+                    <td>Lista contêineres Docker em execução</td>
+                    <td>docker ps</td>
+                </tr>
+                <tr>
+                    <td>docker images</td>
+                    <td>Lista imagens Docker disponíveis</td>
+                    <td>docker images</td>
+                </tr>
+                <tr>
+                    <td>podman ps</td>
+                    <td>Lista contêineres Podman em execução</td>
+                    <td>podman ps</td>
+                </tr>
+                <tr>
+                    <td>ctr</td>
+                    <td>Gerencia contêineres no containerd</td>
+                    <td>ctr images list</td>
+                </tr>
+                <tr>
+                    <td>nerdctl</td>
+                    <td>Interface CLI compatível com Docker para containerd</td>
+                    <td>nerdctl ps</td>
+                </tr>
+                <tr>
+                    <td>docker exec</td>
+                    <td>Executa comandos dentro de um contêiner Docker</td>
+                    <td>docker exec -it container bash</td>
+                </tr>
+                <tr>
+                    <td>docker logs</td>
+                    <td>Exibe logs de um contêiner Docker</td>
+                    <td>docker logs container</td>
+                </tr>
+                <tr>
+                    <td>docker rm</td>
+                    <td>Remove um contêiner Docker</td>
+                    <td>docker rm container</td>
+                </tr>
+                <!-- Ferramentas de Gerenciamento de Arquivos Avançado -->
+                <tr>
+                    <td>tree</td>
+                    <td>Exibe a estrutura de diretórios em forma de árvore</td>
+                    <td>tree /pasta</td>
+                </tr>
+                <tr>
+                    <td>ncdu</td>
+                    <td>Analisa o uso de espaço em disco interativamente</td>
+                    <td>ncdu /pasta</td>
+                </tr>
+                <tr>
+                    <td>rename</td>
+                    <td>Renomeia múltiplos arquivos com expressões</td>
+                    <td>rename 's/\.txt$/.bak/' *.txt</td>
+                </tr>
+                <tr>
+                    <td>shred</td>
+                    <td>Remove arquivos de forma segura, sobrescrevendo dados</td>
+                    <td>shred -u arquivo.txt</td>
+                </tr>
+                <tr>
+                    <td>wipe</td>
+                    <td>Apaga arquivos de forma segura (alternativa ao shred)</td>
+                    <td>wipe arquivo.txt</td>
+                </tr>
+                <tr>
+                    <td>findmnt</td>
+                    <td>Lista sistemas de arquivos montados</td>
+                    <td>findmnt</td>
+                </tr>
+                <tr>
+                    <td>chattr</td>
+                    <td>Altera atributos de arquivos (ex.: torna imutável)</td>
+                    <td>chattr +i arquivo.txt</td>
+                </tr>
+                <tr>
+                    <td>lsattr</td>
+                    <td>Lista atributos de arquivos</td>
+                    <td>lsattr arquivo.txt</td>
+                </tr>
+                <tr>
+                    <td>dos2unix</td>
+                    <td>Converte quebras de linha de DOS para Unix</td>
+                    <td>dos2unix arquivo.txt</td>
+                </tr>
+                <tr>
+                    <td>unix2dos</td>
+                    <td>Converte quebras de linha de Unix para DOS</td>
+                    <td>unix2dos arquivo.txt</td>
+                </tr>
+                <!-- Ferramentas de Gerenciamento de Memória -->
+                <tr>
+                    <td>smem</td>
+                    <td>Exibe o uso de memória por processo</td>
+                    <td>smem</td>
+                </tr>
+                <tr>
+                    <td>pmap</td>
+                    <td>Exibe o mapa de memória de um processo</td>
+                    <td>pmap 1234</td>
+                </tr>
+                <tr>
+                    <td>swapoff</td>
+                    <td>Desativa a memória swap</td>
+                    <td>swapoff /dev/sda2</td>
+                </tr>
+                <tr>
+                    <td>swapon</td>
+                    <td>Ativa a memória swap</td>
+                    <td>swapon /dev/sda2</td>
+                </tr>
+                <tr>
+                    <td>mkswap</td>
+                    <td>Cria uma área de swap</td>
+                    <td>mkswap /dev/sda2</td>
+                </tr>
+                <tr>
+                    <td>free -h</td>
+                    <td>Exibe o uso de memória em formato legível</td>
+                    <td>free -h</td>
+                </tr>
+                <tr>
+                    <td>vmstat -m</td>
+                    <td>Exibe estatísticas de memória em detalhes</td>
+                    <td>vmstat -m</td>
+                </tr>
+                <tr>
+                    <td>slabtop</td>
+                    <td>Exibe o uso de memória do kernel (slab)</td>
+                    <td>slabtop</td>
+                </tr>
+                <tr>
+                    <td>numactl</td>
+                    <td>Controla políticas NUMA (memória e CPU)</td>
+                    <td>numactl --hardware</td>
+                </tr>
+                <tr>
+                    <td>meminfo</td>
+                    <td>Exibe informações detalhadas de memória (via /proc)</td>
+                    <td>cat /proc/meminfo</td>
+                </tr>
+                <!-- Ferramentas de Gerenciamento de Kernel -->
+                <tr>
+                    <td>modprobe</td>
+                    <td>Adiciona ou remove módulos do kernel</td>
+                    <td>modprobe nome_modulo</td>
+                </tr>
+                <tr>
+                    <td>lsmod</td>
+                    <td>Lista módulos carregados no kernel</td>
+                    <td>lsmod</td>
+                </tr>
+                <tr>
+                    <td>insmod</td>
+                    <td>Insere um módulo no kernel</td>
+                    <td>insmod modulo.ko</td>
+                </tr>
+                <tr>
+                    <td>rmmod</td>
+                    <td>Remove um módulo do kernel</td>
+                    <td>rmmod nome_modulo</td>
+                </tr>
+                <tr>
+                    <td>depmod</td>
+                    <td>Gera dependências de módulos do kernel</td>
+                    <td>depmod</td>
+                </tr>
+                <tr>
+                    <td>modinfo</td>
+                    <td>Exibe informações sobre um módulo do kernel</td>
+                    <td>modinfo nome_modulo</td>
+                </tr>
+                <tr>
+                    <td>kexec</td>
+                    <td>Carrega um novo kernel sem reiniciar</td>
+                    <td>kexec -l /boot/vmlinuz</td>
+                </tr>
+                <tr>
+                    <td>sysrq-trigger</td>
+                    <td>Executa comandos de emergência via /proc/sysrq-trigger</td>
+                    <td>echo b > /proc/sysrq-trigger</td>
+                </tr>
+                <tr>
+                    <td>uname -r</td>
+                    <td>Exibe a versão do kernel em uso</td>
+                    <td>uname -r</td>
+                </tr>
+                <tr>
+                    <td>dmesg -T</td>
+                    <td>Exibe mensagens do kernel com carimbo de tempo legível</td>
+                    <td>dmesg -T</td>
+                </tr>
+                <!-- Ferramentas de Gerenciamento de Boot -->
+                <tr>
+                    <td>grub-install</td>
+                    <td>Instala o GRUB em um dispositivo</td>
+                    <td>grub-install /dev/sda</td>
+                </tr>
+                <tr>
+                    <td>update-grub</td>
+                    <td>Atualiza a configuração do GRUB</td>
+                    <td>update-grub</td>
+                </tr>
+                <tr>
+                    <td>grub-mkconfig</td>
+                    <td>Gera um arquivo de configuração para o GRUB</td>
+                    <td>grub-mkconfig -o /boot/grub/grub.cfg</td>
+                </tr>
+                <tr>
+                    <td>bootctl</td>
+                    <td>Gerencia o systemd-boot</td>
+                    <td>bootctl install</td>
+                </tr>
+                <tr>
+                    <td>efibootmgr</td>
+                    <td>Gerencia entradas de boot UEFI</td>
+                    <td>efibootmgr</td>
+                </tr>
+                <tr>
+                    <td>mkinitcpio</td>
+                    <td>Gera imagens initramfs (usado no Arch Linux)</td>
+                    <td>mkinitcpio -P</td>
+                </tr>
+                <tr>
+                    <td>dracut</td>
+                    <td>Gera imagens initramfs (usado em Fedora e outros)</td>
+                    <td>dracut /boot/initramfs.img</td>
+                </tr>
+                <tr>
+                    <td>genkernel</td>
+                    <td>Compila o kernel e initramfs (usado no Gentoo)</td>
+                    <td>genkernel all</td>
+                </tr>
+                <tr>
+                    <td>grub-reboot</td>
+                    <td>Define a entrada de boot para a próxima reinicialização</td>
+                    <td>grub-reboot 2</td>
+                </tr>
+                <tr>
+                    <td>systemd-boot</td>
+                    <td>Inicia o gerenciador de boot systemd-boot</td>
+                    <td>systemd-boot</td>
+                </tr>
+                <!-- Ferramentas de Gerenciamento de Processos Avançado -->
+                <tr>
+                    <td>pstree</td>
+                    <td>Exibe processos em formato de árvore</td>
+                    <td>pstree</td>
+                </tr>
+                <tr>
+                    <td>lsof</td>
+                    <td>Lista arquivos abertos por processos</td>
+                    <td>lsof -p 1234</td>
+                </tr>
+                <tr>
+                    <td>fuser</td>
+                    <td>Identifica processos que estão usando um arquivo</td>
+                    <td>fuser arquivo.txt</td>
+                </tr>
+                <tr>
+                    <td>kill -9</td>
+                    <td>Força o encerramento de um processo</td>
+                    <td>kill -9 1234</td>
+                </tr>
+                <tr>
+                    <td>pgrep</td>
+                    <td>Busca processos pelo nome</td>
+                    <td>pgrep firefox</td>
+                </tr>
+                <tr>
+                    <td>pkill</td>
+                    <td>Encerra processos pelo nome</td>
+                    <td>pkill firefox</td>
+                </tr>
+                <tr>
+                    <td>top -i</td>
+                    <td>Exibe processos interativamente, ignorando ociosos</td>
+                    <td>top -i</td>
+                </tr>
+                <tr>
+                    <td>htop -u</td>
+                    <td>Filtra processos por usuário no htop</td>
+                    <td>htop -u usuario</td>
+                </tr>
+                <tr>
+                    <td>pidof</td>
+                    <td>Retorna o PID de um processo pelo nome</td>
+                    <td>pidof firefox</td>
+                </tr>
+                <tr>
+                    <td>ps -ef</td>
+                    <td>Exibe todos os processos em formato detalhado</td>
+                    <td>ps -ef</td>
+                </tr>
+                <!-- Outros Comandos Úteis -->
+                <tr>
+                    <td>basename</td>
+                    <td>Remove o caminho e retorna apenas o nome do arquivo</td>
+                    <td>basename /caminho/arquivo.txt</td>
+                </tr>
+                <tr>
+                    <td>dirname</td>
+                    <td>Retorna o caminho do diretório de um arquivo</td>
+                    <td>dirname /caminho/arquivo.txt</td>
+                </tr>
+                <tr>
+                    <td>realpath</td>
+                    <td>Retorna o caminho absoluto de um arquivo</td>
+                    <td>realpath arquivo.txt</td>
+                </tr>
+                <tr>
+                    <td>seq</td>
+                    <td>Gera uma sequência de números</td>
+                    <td>seq 1 10</td>
+                </tr>
+                <tr>
+                    <td>shuf</td>
+                    <td>Embaralha linhas de um arquivo ou entrada</td>
+                    <td>shuf arquivo.txt</td>
+                </tr>
+                <tr>
+                    <td>nl -ba</td>
+                    <td>Numera todas as linhas de um arquivo, incluindo vazias</td>
+                    <td>nl -ba arquivo.txt</td>
+                </tr>
+                <tr>
+                    <td>tac</td>
+                    <td>Exibe o conteúdo de um arquivo em ordem inversa</td>
+                    <td>tac arquivo.txt</td>
+                </tr>
+                <tr>
+                    <td>rev</td>
+                    <td>Inverte a ordem dos caracteres em cada linha</td>
+                    <td>rev arquivo.txt</td>
+                </tr>
+                <tr>
+                    <td>od</td>
+                    <td>Exibe o conteúdo de um arquivo em formato octal ou outros</td>
+                    <td>od arquivo.txt</td>
+                </tr>
+                <tr>
+                    <td>hexdump</td>
+                    <td>Exibe o conteúdo de um arquivo em formato hexadecimal</td>
+                    <td>hexdump arquivo.txt</td>
+                </tr>
+                <!-- Gerenciamento de Rede sem Fio -->
+                <tr>
+                    <td>iw</td>
+                    <td>Gerencia interfaces de rede sem fio</td>
+                    <td>iw dev wlan0 scan</td>
+                </tr>
+                <tr>
+                    <td>iwconfig</td>
+                    <td>Configura interfaces de rede sem fio (mais antigo)</td>
+                    <td>iwconfig wlan0 essid "MinhaRede"</td>
+                </tr>
+                <tr>
+                    <td>wpa_supplicant</td>
+                    <td>Conecta a redes Wi-Fi protegidas por WPA</td>
+                    <td>wpa_supplicant -i wlan0 -c /etc/wpa_supplicant.conf</td>
+                </tr>
+                <tr>
+                    <td>nmcli con</td>
+                    <td>Gerencia conexões Wi-Fi via NetworkManager</td>
+                    <td>nmcli con up MinhaRede</td>
+                </tr>
+                <tr>
+                    <td>iwlist</td>
+                    <td>Lista redes Wi-Fi disponíveis</td>
+                    <td>iwlist wlan0 scan</td>
+                </tr>
+                <tr>
+                    <td>rfkill</td>
+                    <td>Ativa ou desativa dispositivos de rádio (Wi-Fi, Bluetooth)</td>
+                    <td>rfkill unblock wifi</td>
+                </tr>
+                <tr>
+                    <td>iwspy</td>
+                    <td>Monitora a qualidade do sinal Wi-Fi</td>
+                    <td>iwspy wlan0</td>
+                </tr>
+                <tr>
+                    <td>wpa_cli</td>
+                    <td>Interface CLI para interagir com o wpa_supplicant</td>
+                    <td>wpa_cli -i wlan0</td>
+                </tr>
+                <tr>
+                    <td>iw dev</td>
+                    <td>Exibe informações sobre dispositivos Wi-Fi</td>
+                    <td>iw dev</td>
+                </tr>
+                <tr>
+                    <td>iw phy</td>
+                    <td>Exibe informações sobre interfaces físicas Wi-Fi</td>
+                    <td>iw phy</td>
+                </tr>
+                <!-- Gerenciamento de Usuários Avançado -->
+                <tr>
+                    <td>adduser</td>
+                    <td>Cria um novo usuário de forma interativa</td>
+                    <td>adduser novo_usuario</td>
+                </tr>
+                <tr>
+                    <td>deluser</td>
+                    <td>Remove um usuário do sistema (Debian/Ubuntu)</td>
+                    <td>deluser usuario</td>
+                </tr>
+                <tr>
+                    <td>newusers</td>
+                    <td>Cria múltiplos usuários a partir de um arquivo</td>
+                    <td>newusers usuarios.txt</td>
+                </tr>
+                <tr>
+                    <td>pwconv</td>
+                    <td>Converte senhas para o formato shadow</td>
+                    <td>pwconv</td>
+                </tr>
+                <tr>
+                    <td>pwunconv</td>
+                    <td>Reverte senhas do formato shadow para passwd</td>
+                    <td>pwunconv</td>
+                </tr>
+                <tr>
+                    <td>grpconv</td>
+                    <td>Converte grupos para o formato shadow</td>
+                    <td>grpconv</td>
+                </tr>
+                <tr>
+                    <td>grpunconv</td>
+                    <td>Reverte grupos do formato shadow para group</td>
+                    <td>grpunconv</td>
+                </tr>
+                <tr>
+                    <td>vipw</td>
+                    <td>Edita o arquivo /etc/passwd com segurança</td>
+                    <td>vipw</td>
+                </tr>
+                <tr>
+                    <td>vigr</td>
+                    <td>Edita o arquivo /etc/group com segurança</td>
+                    <td>vigr</td>
+                </tr>
+                <tr>
+                    <td>pwck</td>
+                    <td>Verifica a integridade dos arquivos de usuários</td>
+                    <td>pwck</td>
+                </tr>
+                <!-- Gerenciamento de Arquivos de Configuração -->
+                <tr>
+                    <td>update-alternatives</td>
+                    <td>Gerencia alternativas para comandos (ex.: editor padrão)</td>
+                    <td>update-alternatives --config editor</td>
+                </tr>
+                <tr>
+                    <td>dpkg-divert</td>
+                    <td>Redireciona arquivos de pacotes para outros locais</td>
+                    <td>dpkg-divert --add /usr/bin/nome</td>
+                </tr>
+                <tr>
+                    <td>update-inetd</td>
+                    <td>Atualiza configurações do inetd (servidor de rede)</td>
+                    <td>update-inetd --add "serviço"</td>
+                </tr>
+                <tr>
+                    <td>debconf</td>
+                    <td>Gerencia configurações de pacotes via debconf</td>
+                    <td>debconf-set-selections arquivo</td>
+                </tr>
+                <tr>
+                    <td>ucf</td>
+                    <td>Gerencia arquivos de configuração durante atualizações</td>
+                    <td>ucf --purge /etc/arquivo.conf</td>
+                </tr>
+                <tr>
+                    <td>etckeeper</td>
+                    <td>Gerencia /etc com controle de versão (ex.: git)</td>
+                    <td>etckeeper commit "Alteração em /etc"</td>
+                </tr>
+                <tr>
+                    <td>augtool</td>
+                    <td>Edita arquivos de configuração com augeas</td>
+                    <td>augtool -s set /files/etc/hosts/1/ipaddr 127.0.0.1</td>
+                </tr>
+                <tr>
+                    <td>update-ca-certificates</td>
+                    <td>Atualiza certificados CA no sistema</td>
+                    <td>update-ca-certificates</td>
+                </tr>
+                <tr>
+                    <td>locale-gen</td>
+                    <td>Gera configurações de localização</td>
+                    <td>locale-gen pt_BR.UTF-8</td>
+                </tr>
+                <tr>
+                    <td>dpkg-statoverride</td>
+                    <td>Sobrescreve permissões de arquivos gerenciados pelo dpkg</td>
+                    <td>dpkg-statoverride --add usuario grupo 644 /caminho</td>
+                </tr>
+                <!-- Gerenciamento de Logs Avançado -->
+                <tr>
+                    <td>logsave</td>
+                    <td>Salva a saída de um comando em um arquivo de log</td>
+                    <td>logsave /var/log/meulog comando</td>
+                </tr>
+                <tr>
+                    <td>savelog</td>
+                    <td>Rotaciona e renomeia arquivos de log</td>
+                    <td>savelog -c 7 /var/log/meulog</td>
+                </tr>
+                <tr>
+                    <td>lastlog</td>
+                    <td>Mostra o último login de todos os usuários</td>
+                    <td>lastlog</td>
+                </tr>
+                <tr>
+                    <td>logname</td>
+                    <td>Exibe o nome do usuário que iniciou a sessão</td>
+                    <td>logname</td>
+                </tr>
+                <tr>
+                    <td>faillog</td>
+                    <td>Exibe falhas de login dos usuários</td>
+                    <td>faillog</td>
+                </tr>
+                <tr>
+                    <td>journalctl -b</td>
+                    <td>Exibe logs desde o último boot</td>
+                    <td>journalctl -b</td>
+                </tr>
+                <tr>
+                    <td>logwatch</td>
+                    <td>Analisa e gera relatórios de logs</td>
+                    <td>logwatch --detail High</td>
+                </tr>
+                <tr>
+                    <td>syslog</td>
+                    <td>Registra mensagens no log do sistema (via logger)</td>
+                    <td>logger -t syslog "Mensagem de teste"</td>
+                </tr>
+                <tr>
+                    <td>tail -n</td>
+                    <td>Exibe as últimas N linhas de um arquivo</td>
+                    <td>tail -n 10 /var/log/syslog</td>
+                </tr>
+                <tr>
+                    <td>head -n</td>
+                    <td>Exibe as primeiras N linhas de um arquivo</td>
+                    <td>head -n 10 /var/log/syslog</td>
+                </tr>
+                <!-- Ferramentas de Gerenciamento de Bancos de Dados Avançado -->
+                <tr>
+                    <td>mysqladmin</td>
+                    <td>Administra o servidor MySQL (status, shutdown, etc.)</td>
+                    <td>mysqladmin -u root status</td>
+                </tr>
+                <tr>
+                    <td>pg_ctl</td>
+                    <td>Controla o servidor PostgreSQL (iniciar, parar)</td>
+                    <td>pg_ctl -D /var/lib/postgres start</td>
+                </tr>
+                <tr>
+                    <td>sqlite3 .dump</td>
+                    <td>Exporta um banco SQLite para SQL</td>
+                    <td>sqlite3 banco.db .dump > banco.sql</td>
+                </tr>
+                <tr>
+                    <td>mongorestore</td>
+                    <td>Restaura backups do MongoDB</td>
+                    <td>mongorestore --db banco dump/</td>
+                </tr>
+                <tr>
+                    <td>redis-benchmark</td>
+                    <td>Testa o desempenho do Redis</td>
+                    <td>redis-benchmark</td>
+                </tr>
+                <tr>
+                    <td>mysqlimport</td>
+                    <td>Importa dados de arquivos de texto para o MySQL</td>
+                    <td>mysqlimport -u usuario banco arquivo.txt</td>
+                </tr>
+                <tr>
+                    <td>pg_restore</td>
+                    <td>Restaura um backup do PostgreSQL</td>
+                    <td>pg_restore -U usuario -d banco backup.dump</td>
+                </tr>
+                <tr>
+                    <td>mysqlcheck</td>
+                    <td>Verifica, repara ou otimiza tabelas MySQL</td>
+                    <td>mysqlcheck -u usuario banco</td>
+                </tr>
+                <tr>
+                    <td>pgbench</td>
+                    <td>Testa o desempenho do PostgreSQL</td>
+                    <td>pgbench -i banco</td>
+                </tr>
+                <tr>
+                    <td>redis-server</td>
+                    <td>Inicia o servidor Redis</td>
+                    <td>redis-server</td>
+                </tr>
+                <!-- Ferramentas de Desenvolvimento Avançado -->
+                <tr>
+                    <td>valgrind</td>
+                    <td>Depura e analisa vazamentos de memória</td>
+                    <td>valgrind ./programa</td>
+                </tr>
+                <tr>
+                    <td>strace -c</td>
+                    <td>Resume chamadas de sistema de um programa</td>
+                    <td>strace -c ls</td>
+                </tr>
+                <tr>
+                    <td>ltrace</td>
+                    <td>Rastreia chamadas de bibliotecas de um programa</td>
+                    <td>ltrace ./programa</td>
+                </tr>
+                <tr>
+                    <td>nm</td>
+                    <td>Lista símbolos de arquivos binários</td>
+                    <td>nm programa</td>
+                </tr>
+                <tr>
+                    <td>objdump</td>
+                    <td>Exibe informações detalhadas de arquivos binários</td>
+                    <td>objdump -d programa</td>
+                </tr>
+                <tr>
+                    <td>readelf</td>
+                    <td>Exibe informações de arquivos ELF</td>
+                    <td>readelf -h programa</td>
+                </tr>
+                <tr>
+                    <td>strip</td>
+                    <td>Remove símbolos de depuração de binários</td>
+                    <td>strip programa</td>
+                </tr>
+                <tr>
+                    <td>ctags</td>
+                    <td>Gera índices de código para navegação</td>
+                    <td>ctags -R .</td>
+                </tr>
+                <tr>
+                    <td>cscope</td>
+                    <td>Navega e analisa código-fonte</td>
+                    <td>cscope -R</td>
+                </tr>
+                <tr>
+                    <td>cmake</td>
+                    <td>Gera arquivos de build para projetos</td>
+                    <td>cmake .</td>
+                </tr>
+                <!-- Ferramentas de Monitoramento de Sistema Avançado -->
+                <tr>
+                    <td>nload</td>
+                    <td>Monitora o tráfego de rede em tempo real</td>
+                    <td>nload eth0</td>
+                </tr>
+                <tr>
+                    <td>atop</td>
+                    <td>Monitora recursos do sistema (CPU, memória, disco)</td>
+                    <td>atop</td>
+                </tr>
+                <tr>
+                    <td>glances</td>
+                    <td>Monitora o sistema com interface avançada</td>
+                    <td>glances</td>
+                </tr>
+                <tr>
+                    <td>htop -d</td>
+                    <td>Define o intervalo de atualização no htop</td>
+                    <td>htop -d 10</td>
+                </tr>
+                <tr>
+                    <td>sar -r</td>
+                    <td>Exibe estatísticas de memória (via sar)</td>
+                    <td>sar -r 1 3</td>
+                </tr>
+                <tr>
+                    <td>vmstat -s</td>
+                    <td>Exibe resumo de estatísticas de memória</td>
+                    <td>vmstat -s</td>
+                </tr>
+                <tr>
+                    <td>iostat -d</td>
+                    <td>Exibe estatísticas de dispositivos de disco</td>
+                    <td>iostat -d 1</td>
+                </tr>
+                <tr>
+                    <td>pidstat -d</td>
+                    <td>Monitora I/O de disco por processo</td>
+                    <td>pidstat -d 1</td>
+                </tr>
+                <tr>
+                    <td>top -b</td>
+                    <td>Executa top em modo batch (não interativo)</td>
+                    <td>top -b -n 1</td>
+                </tr>
+                <tr>
+                    <td>dstat</td>
+                    <td>Monitora recursos do sistema em tempo real</td>
+                    <td>dstat -cdngy</td>
+                </tr>
+                <!-- Ferramentas de Virtualização Avançada -->
+                <tr>
+                    <td>virsh start</td>
+                    <td>Inicia uma máquina virtual com libvirt</td>
+                    <td>virsh start vm1</td>
+                </tr>
+                <tr>
+                    <td>virsh shutdown</td>
+                    <td>Desliga uma máquina virtual com libvirt</td>
+                    <td>virsh shutdown vm1</td>
+                </tr>
+                <tr>
+                    <td>qemu-system-x86_64</td>
+                    <td>Inicia uma máquina virtual diretamente com QEMU</td>
+                    <td>qemu-system-x86_64 -hda disco.qcow2</td>
+                </tr>
+                <tr>
+                    <td>virt-clone</td>
+                    <td>Clona uma máquina virtual existente</td>
+                    <td>virt-clone --original vm1 --name vm2</td>
+                </tr>
+                <tr>
+                    <td>virt-viewer</td>
+                    <td>Abre uma interface gráfica para uma VM</td>
+                    <td>virt-viewer vm1</td>
+                </tr>
+                <tr>
+                    <td>docker build</td>
+                    <td>Constrói uma imagem Docker a partir de um Dockerfile</td>
+                    <td>docker build -t minha_imagem .</td>
+                </tr>
+                <tr>
+                    <td>podman build</td>
+                    <td>Constrói uma imagem com Podman</td>
+                    <td>podman build -t minha_imagem .</td>
+                </tr>
+                <tr>
+                    <td>kubectl apply</td>
+                    <td>Aplica configurações a um cluster Kubernetes</td>
+                    <td>kubectl apply -f arquivo.yaml</td>
+                </tr>
+                <tr>
+                    <td>lxc-attach</td>
+                    <td>Entra em um contêiner LXC em execução</td>
+                    <td>lxc-attach -n meu_container</td>
+                </tr>
+                <tr>
+                    <td>vagrant init</td>
+                    <td>Inicializa um novo ambiente Vagrant</td>
+                    <td>vagrant init</td>
+                </tr>
+                <!-- Ferramentas de Segurança Avançada -->
+                <tr>
+                    <td>fail2ban-client</td>
+                    <td>Gerencia o Fail2Ban (proteção contra ataques)</td>
+                    <td>fail2ban-client start</td>
+                </tr>
+                <tr>
+                    <td>apparmor_status</td>
+                    <td>Exibe o status do AppArmor (segurança baseada em perfis)</td>
+                    <td>apparmor_status</td>
+                </tr>
+                <tr>
+                    <td>selinuxenabled</td>
+                    <td>Verifica se o SELinux está ativado</td>
+                    <td>selinuxenabled</td>
+                </tr>
+                <tr>
+                    <td>getenforce</td>
+                    <td>Exibe o modo atual do SELinux</td>
+                    <td>getenforce</td>
+                </tr>
+                <tr>
+                    <td>setenforce</td>
+                    <td>Altera o modo do SELinux (Enforcing/Permissive)</td>
+                    <td>setenforce 0</td>
+                </tr>
+                <tr>
+                    <td>chcon</td>
+                    <td>Altera o contexto de segurança do SELinux</td>
+                    <td>chcon -t tipo_t arquivo</td>
+                </tr>
+                <tr>
+                    <td>restorecon</td>
+                    <td>Restaura o contexto padrão do SELinux</td>
+                    <td>restorecon -R /caminho</td>
+                </tr>
+                <tr>
+                    <td>auditctl</td>
+                    <td>Configura regras de auditoria do sistema</td>
+                    <td>auditctl -w /etc/passwd -p wa</td>
+                </tr>
+                <tr>
+                    <td>ausearch</td>
+                    <td>Busca eventos no log de auditoria</td>
+                    <td>ausearch -m LOGIN</td>
+                </tr>
+                <tr>
+                    <td>firewalld</td>
+                    <td>Gerencia o firewall dinâmico (firewalld)</td>
+                    <td>firewall-cmd --list-all</td>
+                </tr>
+                <!-- Ferramentas de Gerenciamento de Rede Avançado -->
+                <tr>
+                    <td>ip link</td>
+                    <td>Gerencia interfaces de rede</td>
+                    <td>ip link set eth0 up</td>
+                </tr>
+                <tr>
+                    <td>ip addr add</td>
+                    <td>Adiciona um endereço IP a uma interface</td>
+                    <td>ip addr add 192.168.1.100/24 dev eth0</td>
+                </tr>
+                <tr>
+                    <td>ip neigh</td>
+                    <td>Gerencia a tabela de vizinhos (ARP)</td>
+                    <td>ip neigh show</td>
+                </tr>
+                <tr>
+                    <td>tc</td>
+                    <td>Configura controle de tráfego de rede</td>
+                    <td>tc qdisc add dev eth0 root netem delay 100ms</td>
+                </tr>
+                <tr>
+                    <td>ethtool -s</td>
+                    <td>Configura opções de uma interface de rede</td>
+                    <td>ethtool -s eth0 speed 1000 duplex full</td>
+                </tr>
+                <tr>
+                    <td>nft</td>
+                    <td>Gerencia regras de firewall com nftables</td>
+                    <td>nft list ruleset</td>
+                </tr>
+                <tr>
+                    <td>ipset list</td>
+                    <td>Lista conjuntos de IPs criados com ipset</td>
+                    <td>ipset list</td>
+                </tr>
+                <tr>
+                    <td>route add</td>
+                    <td>Adiciona uma nova rota à tabela de roteamento</td>
+                    <td>route add -net 192.168.2.0/24 gw 192.168.1.1</td>
+                </tr>
+                <tr>
+                    <td>ping -c</td>
+                    <td>Envia um número específico de pacotes ping</td>
+                    <td>ping -c 4 google.com</td>
+                </tr>
+                <tr>
+                    <td>curl -I</td>
+                    <td>Exibe apenas os cabeçalhos de uma solicitação HTTP</td>
+                    <td>curl -I https://example.com</td>
+                </tr>
+                <!-- Ferramentas de Gerenciamento de Sistema Avançado -->
+                <tr>
+                    <td>hostname</td>
+                    <td>Exibe ou define o nome do host do sistema</td>
+                    <td>hostname novo_nome</td>
+                </tr>
+                <tr>
+                    <td>domainname</td>
+                    <td>Exibe ou define o nome de domínio do sistema</td>
+                    <td>domainname meudominio.com</td>
+                </tr>
+                <tr>
+                    <td>dnsdomainname</td>
+                    <td>Exibe o nome de domínio DNS do sistema</td>
+                    <td>dnsdomainname</td>
+                </tr>
+                <tr>
+                    <td>hostnamectl</td>
+                    <td>Gerencia o nome do host e informações relacionadas</td>
+                    <td>hostnamectl set-hostname novo_nome</td>
+                </tr>
+                <tr>
+                    <td>sysctl -w</td>
+                    <td>Define parâmetros do kernel temporariamente</td>
+                    <td>sysctl -w net.ipv4.ip_forward=1</td>
+                </tr>
+                <tr>
+                    <td>uptime -p</td>
+                    <td>Exibe o tempo de atividade em formato legível</td>
+                    <td>uptime -p</td>
+                </tr>
+                <tr>
+                    <td>whoami</td>
+                    <td>Exibe o nome do usuário atual</td>
+                    <td>whoami</td>
+                </tr>
+                <tr>
+                    <td>users</td>
+                    <td>Lista usuários atualmente conectados</td>
+                    <td>users</td>
+                </tr>
+                <tr>
+                    <td>wall</td>
+                    <td>Envia uma mensagem para todos os usuários conectados</td>
+                    <td>wall "Sistema será reiniciado em 5 minutos"</td>
+                </tr>
+                <tr>
+                    <td>write</td>
+                    <td>Envia uma mensagem para um usuário específico</td>
+                    <td>write usuario</td>
+                </tr>
+                <!-- Ferramentas de Gerenciamento de Arquivos Avançado -->
+                <tr>
+                    <td>file -i</td>
+                    <td>Exibe o tipo MIME de um arquivo</td>
+                    <td>file -i arquivo.txt</td>
+                </tr>
+                <tr>
+                    <td>stat -f</td>
+                    <td>Exibe informações sobre o sistema de arquivos</td>
+                    <td>stat -f /</td>
+                </tr>
+                <tr>
+                    <td>touch -t</td>
+                    <td>Altera a data de modificação de um arquivo</td>
+                    <td>touch -t 202501011200 arquivo.txt</td>
+                </tr>
+                <tr>
+                    <td>find -exec</td>
+                    <td>Executa um comando nos arquivos encontrados</td>
+                    <td>find . -name "*.txt" -exec rm {} \;</td>
+                </tr>
+                <tr>
+                    <td>ln -sf</td>
+                    <td>Cria um link simbólico, substituindo se já existir</td>
+                    <td>ln -sf arquivo_original link</td>
+                </tr>
+                <tr>
+                    <td>cp -r</td>
+                    <td>Copia diretórios recursivamente</td>
+                    <td>cp -r origem/ destino/</td>
+                </tr>
+                <tr>
+                    <td>mv -i</td>
+                    <td>Move arquivos com confirmação interativa</td>
+                    <td>mv -i arquivo.txt destino/</td>
+                </tr>
+                <tr>
+                    <td>rm -rf</td>
+                    <td>Remove arquivos e diretórios recursivamente sem confirmação</td>
+                    <td>rm -rf pasta/</td>
+                </tr>
+                <tr>
+                    <td>cat -n</td>
+                    <td>Exibe o conteúdo de um arquivo com numeração de linhas</td>
+                    <td>cat -n arquivo.txt</td>
+                </tr>
+                <tr>
+                    <td>mkdir -p</td>
+                    <td>Cria diretórios pai, se necessário</td>
+                    <td>mkdir -p /caminho/nova/pasta</td>
+                </tr>
+                <!-- Ferramentas de Texto Avançado -->
+                <tr>
+                    <td>grep -r</td>
+                    <td>Busca texto recursivamente em diretórios</td>
+                    <td>grep -r "texto" /pasta</td>
+                </tr>
+                <tr>
+                    <td>awk -F</td>
+                    <td>Define um separador personalizado no awk</td>
+                    <td>awk -F"," '{print $1}' arquivo.csv</td>
+                </tr>
+                <tr>
+                    <td>sed -i</td>
+                    <td>Edita um arquivo diretamente (in-place)</td>
+                    <td>sed -i 's/antigo/novo/g' arquivo.txt</td>
+                </tr>
+                <tr>
+                    <td>cut -c</td>
+                    <td>Extrai caracteres específicos de cada linha</td>
+                    <td>cut -c 1-5 arquivo.txt</td>
+                </tr>
+                <tr>
+                    <td>sort -r</td>
+                    <td>Ordena linhas em ordem inversa</td>
+                    <td>sort -r arquivo.txt</td>
+                </tr>
+                <tr>
+                    <td>paste</td>
+                    <td>Combina linhas de múltiplos arquivos</td>
+                    <td>paste arquivo1.txt arquivo2.txt</td>
+                </tr>
+                <tr>
+                    <td>join</td>
+                    <td>Junta linhas de dois arquivos com base em um campo</td>
+                    <td>join arquivo1.txt arquivo2.txt</td>
+                </tr>
+                <tr>
+                    <td>split</td>
+                    <td>Divide um arquivo em partes menores</td>
+                    <td>split -l 100 arquivo.txt parte_</td>
+                </tr>
+                <tr>
+                    <td>csplit</td>
+                    <td>Divide um arquivo com base em padrões</td>
+                    <td>csplit arquivo.txt '/pattern/'</td>
+                </tr>
+                <tr>
+                    <td>tr -d</td>
+                    <td>Remove caracteres específicos de um texto</td>
+                    <td>echo "texto" | tr -d 't'</td>
+                </tr>
+                <!-- Outros Comandos Úteis -->
+                <tr>
+                    <td>tee -a</td>
+                    <td>Adiciona (append) saída a um arquivo</td>
+                    <td>ls | tee -a arquivo.txt</td>
+                </tr>
+                <tr>
+                    <td>wc -l</td>
+                    <td>Conta o número de linhas em um arquivo</td>
+                    <td>wc -l arquivo.txt</td>
+                </tr>
+                <tr>
+                    <td>yes | comando</td>
+                    <td>Automatiza respostas "sim" para um comando</td>
+                    <td>yes | rm -i *.txt</td>
+                </tr>
+                <tr>
+                    <td>bc -l</td>
+                    <td>Usa a biblioteca matemática no bc</td>
+                    <td>echo "scale=2; 5/3" | bc -l</td>
+                </tr>
+                <tr>
+                    <td>cal -y</td>
+                    <td>Exibe o calendário de um ano inteiro</td>
+                    <td>cal -y 2025</td>
+                </tr>
+                <tr>
+                    <td>date +%F</td>
+                    <td>Exibe a data no formato AAAA-MM-DD</td>
+                    <td>date +%F</td>
+                </tr>
+                <tr>
+                    <td>history -c</td>
+                    <td>Limpa o histórico de comandos</td>
+                    <td>history -c</td>
+                </tr>
+                <tr>
+                    <td>alias -p</td>
+                    <td>Exibe todos os aliases definidos</td>
+                    <td>alias -p</td>
+                </tr>
+                <tr>
+                    <td>which -a</td>
+                    <td>Lista todos os caminhos de um comando</td>
+                    <td>which -a python</td>
+                </tr>
+                <tr>
+                    <td>clear -x</td>
+                    <td>Limpa a tela sem apagar o histórico de rolagem</td>
+                    <td>clear -x</td>
+                </tr>
+                <!-- Ferramentas de Gerenciamento de Imagens -->
+                <tr>
+                    <td>convert</td>
+                    <td>Converte imagens entre formatos (ImageMagick)</td>
+                    <td>convert imagem.jpg imagem.png</td>
+                </tr>
+                <tr>
+                    <td>identify</td>
+                    <td>Exibe informações sobre uma imagem (ImageMagick)</td>
+                    <td>identify imagem.jpg</td>
+                </tr>
+                <tr>
+                    <td>mogrify</td>
+                    <td>Modifica imagens diretamente (ImageMagick)</td>
+                    <td>mogrify -resize 50% imagem.jpg</td>
+                </tr>
+                <tr>
+                    <td>montage</td>
+                    <td>Cria um montagem de várias imagens (ImageMagick)</td>
+                    <td>montage img1.jpg img2.jpg -geometry 100x100 montagem.jpg</td>
+                </tr>
+                <tr>
+                    <td>display</td>
+                    <td>Exibe imagens em uma janela gráfica (ImageMagick)</td>
+                    <td>display imagem.jpg</td>
+                </tr>
+                <!-- Ferramentas de Gerenciamento de Rede Avançado -->
+                <tr>
+                    <td>socat</td>
+                    <td>Estabelece conexões bidirecionais entre fluxos de dados</td>
+                    <td>socat TCP-LISTEN:12345 TCP:localhost:54321</td>
+                </tr>
+                <tr>
+                    <td>proxychains</td>
+                    <td>Executa comandos através de um proxy</td>
+                    <td>proxychains curl https://example.com</td>
+                </tr>
+                <tr>
+                    <td>ngrep</td>
+                    <td>Filtra pacotes de rede com base em padrões</td>
+                    <td>ngrep -d eth0 "http"</td>
+                </tr>
+                <tr>
+                    <td>iperf</td>
+                    <td>Medir a largura de banda da rede</td>
+                    <td>iperf -s</td>
+                </tr>
+                <tr>
+                    <td>iperf3</td>
+                    <td>Versão moderna do iperf para testes de rede</td>
+                    <td>iperf3 -c servidor</td>
+                </tr>
+                <tr>
+                    <td>netperf</td>
+                    <td>Testa o desempenho de rede (latência, throughput)</td>
+                    <td>netperf -H servidor</td>
+                </tr>
+                <tr>
+                    <td>ipcalc</td>
+                    <td>Calcula informações de sub-rede (endereços, máscaras)</td>
+                    <td>ipcalc 192.168.1.0/24</td>
+                </tr>
+                <tr>
+                    <td>arp-scan</td>
+                    <td>Escaneia a rede para descobrir dispositivos via ARP</td>
+                    <td>arp-scan -l</td>
+                </tr>
+                <tr>
+                    <td>dnsmasq</td>
+                    <td>Fornece serviços de DNS e DHCP</td>
+                    <td>dnsmasq --interface=eth0</td>
+                </tr>
+                <tr>
+                    <td>iptraf-ng</td>
+                    <td>Versão moderna do iptraf para monitoramento de tráfego</td>
+                    <td>iptraf-ng</td>
+                </tr>
+                <!-- Ferramentas de Gerenciamento de Pacotes de Código -->
+                <tr>
+                    <td>npm</td>
+                    <td>Gerencia pacotes Node.js</td>
+                    <td>npm install pacote</td>
+                </tr>
+                <tr>
+                    <td>yarn</td>
+                    <td>Alternativa ao npm para gerenciamento de pacotes Node.js</td>
+                    <td>yarn add pacote</td>
+                </tr>
+                <tr>
+                    <td>pip</td>
+                    <td>Gerencia pacotes Python</td>
+                    <td>pip install pacote</td>
+                </tr>
+                <tr>
+                    <td>pip3</td>
+                    <td>Gerencia pacotes Python 3 especificamente</td>
+                    <td>pip3 install pacote</td>
+                </tr>
+                <tr>
+                    <td>gem</td>
+                    <td>Gerencia pacotes Ruby (gems)</td>
+                    <td>gem install pacote</td>
+                </tr>
+                <tr>
+                    <td>composer</td>
+                    <td>Gerencia dependências PHP</td>
+                    <td>composer install</td>
+                </tr>
+                <tr>
+                    <td>mvn</td>
+                    <td>Gerencia projetos Java com Maven</td>
+                    <td>mvn install</td>
+                </tr>
+                <tr>
+                    <td>gradle</td>
+                    <td>Automatiza builds de projetos Java</td>
+                    <td>gradle build</td>
+                </tr>
+                <tr>
+                    <td>go get</td>
+                    <td>Baixa e instala pacotes Go</td>
+                    <td>go get github.com/pacote</td>
+                </tr>
+                <tr>
+                    <td>rustup</td>
+                    <td>Gerencia versões do Rust</td>
+                    <td>rustup update</td>
+                </tr>
+                <!-- Ferramentas de Gerenciamento de Ambientes -->
+                <tr>
+                    <td>virtualenv</td>
+                    <td>Cria ambientes virtuais para Python</td>
+                    <td>virtualenv meu_ambiente</td>
+                </tr>
+                <tr>
+                    <td>pyenv</td>
+                    <td>Gerencia múltiplas versões do Python</td>
+                    <td>pyenv install 3.9.0</td>
+                </tr>
+                <tr>
+                    <td>nvm</td>
+                    <td>Gerencia múltiplas versões do Node.js</td>
+                    <td>nvm install 16</td>
+                </tr>
+                <tr>
+                    <td>rbenv</td>
+                    <td>Gerencia múltiplas versões do Ruby</td>
+                    <td>rbenv install 3.0.0</td>
+                </tr>
+                <tr>
+                    <td>venv</td>
+                    <td>Cria ambientes virtuais Python (módulo embutido)</td>
+                    <td>python -m venv meu_ambiente</td>
+                </tr>
+                <tr>
+                    <td>conda</td>
+                    <td>Gerencia ambientes e pacotes (Anaconda)</td>
+                    <td>conda create -n meu_ambiente python=3.8</td>
+                </tr>
+                <tr>
+                    <td>asdf</td>
+                    <td>Gerencia múltiplas versões de várias linguagens</td>
+                    <td>asdf install nodejs 16.0.0</td>
+                </tr>
+                <tr>
+                    <td>direnv</td>
+                    <td>Carrega variáveis de ambiente por diretório</td>
+                    <td>direnv allow</td>
+                </tr>
+                <tr>
+                    <td>env</td>
+                    <td>Executa um comando com variáveis de ambiente modificadas</td>
+                    <td>env VAR=valor comando</td>
+                </tr>
+                <tr>
+                    <td>export</td>
+                    <td>Define variáveis de ambiente para subprocessos</td>
+                    <td>export PATH=$PATH:/novo/caminho</td>
+                </tr>
+                <!-- Ferramentas de Gerenciamento de Testes -->
+                <tr>
+                    <td>stress</td>
+                    <td>Aplica carga ao sistema para testes de estresse</td>
+                    <td>stress --cpu 4 --timeout 60</td>
+                </tr>
+                <tr>
+                    <td>sysbench</td>
+                    <td>Realiza testes de desempenho (CPU, memória, disco)</td>
+                    <td>sysbench cpu run</td>
+                </tr>
+                <tr>
+                    <td>memtester</td>
+                    <td>Testa a memória RAM para erros</td>
+                    <td>memtester 1024 5</td>
+                </tr>
+                <tr>
+                    <td>fio</td>
+                    <td>Testa o desempenho de I/O de disco</td>
+                    <td>fio --name=test --filename=testfile --size=1G</td>
+                </tr>
+                <tr>
+                    <td>bonnie++</td>
+                    <td>Testa o desempenho de sistemas de arquivos</td>
+                    <td>bonnie++ -d /tmp</td>
+                </tr>
+                <tr>
+                    <td>ab</td>
+                    <td>Testa o desempenho de servidores web (Apache Benchmark)</td>
+                    <td>ab -n 1000 -c 10 http://example.com/</td>
+                </tr>
+                <tr>
+                    <td>siege</td>
+                    <td>Realiza testes de carga em servidores web</td>
+                    <td>siege -c 50 -t 60S http://example.com</td>
+                </tr>
+                <tr>
+                    <td>wrk</td>
+                    <td>Ferramenta moderna para testes de carga HTTP</td>
+                    <td>wrk -t12 -c400 -d30s http://example.com</td>
+                </tr>
+                <tr>
+                    <td>jmeter</td>
+                    <td>Executa testes de carga e desempenho (Apache JMeter)</td>
+                    <td>jmeter -n -t plano.jmx</td>
+                </tr>
+                <tr>
+                    <td>locust</td>
+                    <td>Realiza testes de carga distribuídos (Python)</td>
+                    <td>locust -f locustfile.py</td>
+                </tr>
+                <!-- Outros Comandos Úteis -->
+                <tr>
+                    <td>tee -i</td>
+                    <td>Ignora interrupções ao escrever em um arquivo</td>
+                    <td>ls | tee -i arquivo.txt</td>
+                </tr>
+                <tr>
+                    <td>watch -d</td>
+                    <td>Destaca mudanças na saída de um comando repetido</td>
+                    <td>watch -d date</td>
+                </tr>
+                <tr>
+                    <td>time -p</td>
+                    <td>Mede o tempo de execução em formato POSIX</td>
+                    <td>time -p ls</td>
+                </tr>
+                <tr>
+                    <td>pv</td>
+                    <td>Monitora o progresso de dados em um pipe</td>
+                    <td>pv arquivo.txt | gzip > arquivo.txt.gz</td>
+                </tr>
+                <tr>
+                    <td>jq</td>
+                    <td>Processa e formata dados JSON</td>
+                    <td>cat arquivo.json | jq '.chave'</td>
+                </tr>
+                <tr>
+                    <td>xargs</td>
+                    <td>Executa comandos com argumentos de entrada padrão</td>
+                    <td>echo "arquivo1 arquivo2" | xargs rm</td>
+                </tr>
+                <tr>
+                    <td>parallel</td>
+                    <td>Executa comandos em paralelo</td>
+                    <td>parallel echo ::: 1 2 3</td>
+                </tr>
+                <tr>
+                    <td>fmt</td>
+                    <td>Formata texto ajustando a largura das linhas</td>
+                    <td>fmt -w 80 arquivo.txt</td>
+                </tr>
+                <tr>
+                    <td>pr</td>
+                    <td>Formata texto para impressão (adiciona cabeçalhos)</td>
+                    <td>pr arquivo.txt</td>
+                </tr>
+                <tr>
+                    <td>column</td>
+                    <td>Formata saída em colunas</td>
+                    <td>cat arquivo.txt | column -t</td>
+                </tr>
+                <tr>
+                    <td>strings</td>
+                    <td>Extrai strings legíveis de arquivos binários</td>
+                    <td>strings arquivo.bin</td>                                           
+                </tr>
+                <!-- Ferramentas de Gerenciamento de Rede Avançado -->
+                <tr>
+                    <td>telnet</td>
+                    <td>Estabelece uma conexão com um servidor remoto para testes de porta ou serviços</td>
+                    <td>telnet google.com 80</td>
+                </tr>
+                <!-- Ferramentas de Gerenciamento de Rede Avançado -->
+                <tr>
+                    <td>swaks</td>
+                    <td>Envia e-mails ou testa servidores SMTP de forma flexível</td>
+                    <td>swaks --to destino@exemplo.com --from origem@exemplo.com --server smtp.exemplo.com</td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+    <!-- JavaScript para Funcionalidade de Pesquisa -->
+    <script>
+        function searchCommands() {
+            let input = document.getElementById("searchBar").value.toLowerCase();
+            let table = document.getElementById("commandsTable");
+            let rows = table.getElementsByTagName("tr");
+
+            for (let i = 1; i < rows.length; i++) {
+                let cells = rows[i].getElementsByTagName("td");
+                let command = cells[0].textContent.toLowerCase();
+                let description = cells[1].textContent.toLowerCase();
+                if (command.includes(input) || description.includes(input)) {
+                    rows[i].style.display = "";
+                } else {
+                    rows[i].style.display = "none";
+                }
+            }
+        }
+    </script>
+</body>
+</html>
