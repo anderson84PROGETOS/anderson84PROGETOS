@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hacker Tools</title>
+    <style>
+        body {
+            font-family: monospace;
+            background-color: #1a1a1a;
+            color: #00ff00;
+            padding: 0px;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .container {
+            max-width: 950px;
+            margin: 0 auto;
+            background-color: #333;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        .tabs {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .tab-button {
+            padding: 10px 20px;
+            background-color: #00ff00;
+            color: #1a1a1a;
+            border: none;
+            cursor: pointer;
+            margin: 0 5px;
+            font-family: monospace;
+        }
+        .tab-button:hover {
+            background-color: #00cc00;
+        }
+        .tool-section {
+            display: none;
+        }
+        .tool-section.active {
+            display: block;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            background-color: #444;
+            color: #00ff00;
+            border: 1px solid #00ff00;
+            font-family: monospace;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #00ff00;
+            color: #1a1a1a;
+            border: none;
+            cursor: pointer;
+            font-family: monospace;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #00cc00;
+        }
+        pre {
+            white-space: pre-wrap;
+            margin: 0;
+        }
+        #dnsResults, #qrResult, #geoResult, #dorkResult, #cepResult {
+            margin-top: 20px;
+            color: #00ff00;
+        }
+        #qrImage {
+            max-width: 100%;
+            margin-top: 20px;
+            border: 1px solid #00ff00;
+            border-radius: 5px;
+            display: none;
+        }
+        footer {
+            margin-top: auto;
+            padding: 15px;
+            text-align: center;
+            color: #00ff00;
+            font-size: 12px;
+        }
+        .cyan { color: #00ffff; }
+        .yellow { color: #ffff00; }
+        .red { color: #ff5555; }
+        .purple-link { color: #ff00ff; text-decoration: underline; }
+        .red-text { color: #ff5555; font-weight: bold; }
+        .green-text { color: #00ff00; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <pre>
+ ██████╗ ███████╗██╗███╗   ██╗████████╗    ██╗  ██╗ █████╗  ██████╗██╗  ██╗███████╗██████╗     ████████╗ ██████╗  ██████╗ ██╗   
+██╔═══██╗██╔════╝██║████╗  ██║╚══██╔══╝    ██║  ██║██╔══██╗██╔════╝██║ ██╔╝██╔════╝██╔══██╗    ╚══██╔══╝██╔═══██╗██╔═══██╗██║    
+██║   ██║███████╗██║██╔██╗ ██║   ██║       ███████║███████║██║     █████╔╝ █████╗  ██████╔╝       ██║   ██║   ██║██║   ██║██║     
+██║   ██║╚════██║██║██║╚██╗██║   ██║       ██╔══██║██╔══██║██║     ██╔═██╗ ██╔══╝  ██╔══██╗       ██║   ██║   ██║██║   ██║██║     
+╚██████╔╝███████║██║██║ ╚████║   ██║       ██║  ██║██║  ██║╚██████╗██║  ██╗███████╗██║  ██║       ██║   ╚██████╔╝╚██████╔╝███████╗
+ ╚═════╝ ╚══════╝╚═╝╚═╝  ╚═══╝   ╚═╝       ╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝       ╚═╝    ╚═════╝  ╚═════╝ ╚══════╝
+                                                                                                                                        
+        </pre>
+
+        <div class="tabs">
+            <button class="tab-button" onclick="showTool('dns')">DNS Enumeração</button>
+            <button class="tab-button" onclick="showTool('qr')">QR Code Tool</button>
+            <button class="tab-button" onclick="showTool('geo')">Geolocalização</button>
+            <button class="tab-button" onclick="showTool('dork')">Google Dorks</button>
+            <button class="tab-button" onclick="showTool('cep')">Consulta CEP</button>
+        </div>
+
+        <!-- Seção DNS Enumeração -->
+        <div id="dnsSection" class="tool-section">
+            <input type="text" id="domainInput" placeholder="Digite o Nome do Domínio Para Enumeração DNS">
+            <button onclick="dnsEnum()">Consultar DNS</button>
+            <div id="dnsResults"></div>
+        </div>
+
+        <!-- Seção QR Code Tool -->
+        <div id="qrSection" class="tool-section">
+            <div id="qrOptions">
+                <button onclick="showGenerate()">Criar QR Code</button>
+                <button onclick="showRead()">Ler QR Code</button>
+            </div>
+            <div id="generateForm" style="display: none;">
+                <input type="text" id="qrText" placeholder="Digite o texto ou URL">
+                <select id="qrSize">
+                    <option value="150">150x150</option>
+                    <option value="200">200x200</option>
+                    <option value="250">250x250</option>
+                    <option value="300">300x300</option>
+                    <option value="350">350x350</option>
+                    <option value="400">400x400</option>
+                    <option value="450">450x450</option>
+                    <option value="500">500x500</option>
+                    <option value="550">550x550</option>
+                    <option value="600">600x600</option>
+                    <option value="650">650x650</option>
+                    <option value="700">700x700</option>
+                    <option value="750">750x750</option>
+                    <option value="800">800x800</option>
+                    <option value="850">850x850</option>
+                    <option value="900">900x900</option>
+                    <option value="950">950x950</option>
+                    <option value="1000">1000x1000</option>
+                </select>
+                <button onclick="generateQR()">Gerar QR Code</button>
+            </div>
+            <div id="readForm" style="display: none;">
+                <input type="file" id="qrFile" accept="image/*">
+                <button onclick="readQR()">Ler QR Code</button>
+            </div>
+            <div id="qrResult"></div>
+            <img id="qrImage">
+        </div>
+
+        <!-- Seção Geolocalização de Website -->
+        <div id="geoSection" class="tool-section">
+            <input type="text" id="website" placeholder="Digite o nome do website (exemplo: google.com)">
+            <button onclick="getLocation()">Consultar Geolocalização</button>
+            <div id="geoResult"></div>
+        </div>
+
+        <!-- Seção Google Dorks -->
+        <div id="dorkSection" class="tool-section">
+            <input type="text" id="siteName" placeholder="Digite o nome Para Pesquisar">
+            <select id="dorkSelect"></select>
+            <button onclick="obterDados()">Pesquisar Google Dorks</button>
+            <div id="dorkResult"></div>
+        </div>
+
+        <!-- Seção Consulta CEP -->
+        <div id="cepSection" class="tool-section">
+            <input type="text" id="cepInput" placeholder="Digite o CEP (ex: 12423-121 ou 12423121)">
+            <button onclick="consultarCEP()">Consultar CEP</button>
+            <button onclick="abrirGoogleMaps()">Google Maps</button>
+            <button onclick="abrirStreetView()">Google Street View</button>
+            <div id="cepResult"></div>
+        </div>
+
+    </div>
+    
+    <footer>
+        DNS Enum & QR Code & Geolocalização & Google Dorks & Consulta CEP
+    </footer>
+
+    <script>
+        let informacoesCEP = {};
+
+        // Função para alternar entre ferramentas
+        function showTool(tool) {
+            document.querySelectorAll('.tool-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(`${tool}Section`).classList.add('active');
+
+            if (tool === 'qr') {
+                document.getElementById("qrOptions").style.display = "block";
+                document.getElementById("generateForm").style.display = "none";
+                document.getElementById("readForm").style.display = "none";
+                document.getElementById("qrResult").innerHTML = "";
+                document.getElementById("qrImage").style.display = "none";
+            } else if (tool === 'dns') {
+                document.getElementById("dnsResults").innerHTML = "";
+            } else if (tool === 'geo') {
+                document.getElementById("geoResult").innerHTML = "";
+            } else if (tool === 'dork') {
+                document.getElementById("dorkResult").innerHTML = "";
+            } else if (tool === 'cep') {
+                document.getElementById("cepResult").innerHTML = "";
+            }
+        }
+
+        // DNS Enumeração
+        async function dnsEnum() {
+            const domain = document.getElementById('domainInput').value.trim();
+            const resultsDiv = document.getElementById('dnsResults');
+            resultsDiv.innerHTML = '';
+
+            if (!domain) {
+                resultsDiv.innerHTML = '<pre>Por favor, insira um domínio válido!</pre>';
+                return;
+            }
+
+            const registros = ["A", "AAAA", "CNAME", "MX", "NS", "SOA", "TXT", "CAA", "DS", "DNSKEY", "HINFO"];
+            for (const registro of registros) {
+                try {
+                    const response = await fetch(`https://dns.google/resolve?name=${domain}&type=${registro}`);
+                    const data = await response.json();
+                    if (data.Answer) {
+                        resultsDiv.innerHTML += `<pre> </pre>`;
+                        resultsDiv.innerHTML += `<pre> </pre>`;
+                        resultsDiv.innerHTML += `<pre>\n\n${registro} Records \n===========</pre>`;
+                        for (const answer of data.Answer) {
+                            let output = '';
+                            if (['A', 'AAAA'].includes(registro)) {
+                                output = `${domain.padEnd(40)} IN ${registro.padEnd(10)} IP: ${answer.data}`;
+                            } else if (registro === 'MX') {
+                                const mxDomain = answer.data.split(' ')[1];
+                                const mxResponse = await fetch(`https://dns.google/resolve?name=${mxDomain}&type=A`);
+                                const mxData = await mxResponse.json();
+                                const mxIp = mxData.Answer ? mxData.Answer[0].data : '[Erro ao resolver IP]';
+                                output = `${mxDomain.padEnd(41)}IN MX         IP: ${mxIp}`;
+                            } else if (['NS', 'CNAME'].includes(registro)) {
+                                const targetResponse = await fetch(`https://dns.google/resolve?name=${answer.data}&type=A`);
+                                const targetData = await targetResponse.json();
+                                const targetIp = targetData.Answer ? targetData.Answer[0].data : '[Erro ao resolver IP]';
+                                output = `${answer.data.padEnd(40)} IN ${registro.padEnd(10)} IP: ${targetIp}`;
+                            } else if (registro === 'SOA') {
+                                const soaParts = answer.data.split(' ');
+                                const mname = soaParts[0];
+                                const rname = soaParts[1];
+                                const serial = soaParts[2];
+                                const refresh = soaParts[3];
+                                const retry = soaParts[4];
+                                const expire = soaParts[5];
+                                const minimum = soaParts[6];
+                                const soaResponse = await fetch(`https://dns.google/resolve?name=${mname}&type=A`);
+                                const soaData = await soaResponse.json();
+                                const soaIp = soaData.Answer ? soaData.Answer[0].data : '[Erro ao resolver IP]';
+                                output = `${mname} RNAME: ${rname} Serial: ${serial} Refresh: ${refresh} Retry: ${retry} Expire: ${expire} Minimum: ${minimum}\n\nSOA IP: ${soaIp}`;
+                            } else if (registro === 'TXT') {
+                                const aResponse = await fetch(`https://dns.google/resolve?name=${domain}&type=A`);
+                                const aData = await aResponse.json();
+                                const ip = aData.Answer ? aData.Answer[0].data : '[Erro ao resolver IP]';
+                                output = `\n[TXT] ${answer.data}`;
+                            } else if (registro === 'CAA') {
+                                const caaParts = answer.data.split(' ');
+                                output = `[CAA] ${caaParts[0]} ${caaParts[1]} ${caaParts.slice(2).join(' ')}`;
+                            } else if (['DS', 'DNSKEY'].includes(registro)) {
+                                output = `[${registro}] ${answer.data}`;
+                            } else if (registro === 'HINFO') {
+                                const hinfoParts = answer.data.split(' ');
+                                const cpu = hinfoParts[0];
+                                const os = hinfoParts[1];
+                                const aResponse = await fetch(`https://dns.google/resolve?name=${domain}&type=A`);
+                                const aData = await aResponse.json();
+                                const ipAddress = aData.Answer ? aData.Answer[0].data : '[Erro ao resolver IP]';
+                                output = `[HINFO] ${cpu} ${os}     IP: ${ipAddress.padEnd(20)}`;
+                            }
+                            resultsDiv.innerHTML += `<pre>${output}</pre>`;
+                        }
+                    }
+                } catch (error) {
+                    resultsDiv.innerHTML += `<pre>[!] Ocorreu um erro ao consultar o registro ${registro} para ${domain}: ${error.message}</pre>`;
+                }
+            }
+
+            const srvServices = ['_sip._tcp', '_sip._udp', '_sips._tcp', '_h323cs._tcp', '_h323ls._udp', '_sip._tls'];
+            let srvFound = false;
+            for (const service of srvServices) {
+                const srvDomain = `${service}.${domain}`;
+                try {
+                    const response = await fetch(`https://dns.google/resolve?name=${srvDomain}&type=SRV`);
+                    const data = await response.json();
+                    if (data.Answer) {
+                        if (!srvFound) {
+                            resultsDiv.innerHTML += `<pre> </pre>`;
+                            resultsDiv.innerHTML += `<pre> </pre>`;
+                            resultsDiv.innerHTML += `<pre>\n\nService Records (SRV)\n=====================</pre>`;
+                            srvFound = true;
+                        }
+                        for (const srv of data.Answer) {
+                            const srvParts = srv.data.split(' ');
+                            const target = srvParts[3];
+                            const port = srvParts[2];
+                            const targetResponse = await fetch(`https://dns.google/resolve?name=${target}&type=A`);
+                            const targetData = await targetResponse.json();
+                            const srvIp = targetData.Answer ? targetData.Answer[0].data : '[Erro ao resolver IP]';
+                            resultsDiv.innerHTML += `<pre>\n[SRV] ${srvDomain.padEnd(33)} ${target}         IP: ${srvIp.padEnd(20)} PORT: ${port}</pre>`;
+                        }
+                    }
+                } catch (error) {}
+            }
+        }
+
+        // QR Code Tool
+        function showGenerate() {
+            document.getElementById("qrOptions").style.display = "none";
+            document.getElementById("generateForm").style.display = "block";
+            document.getElementById("readForm").style.display = "none";
+            document.getElementById("qrResult").innerHTML = "";
+            document.getElementById("qrImage").style.display = "none";
+        }
+
+        function showRead() {
+            document.getElementById("qrOptions").style.display = "none";
+            document.getElementById("generateForm").style.display = "none";
+            document.getElementById("readForm").style.display = "block";
+            document.getElementById("qrResult").innerHTML = "";
+            document.getElementById("qrImage").style.display = "none";
+        }
+
+        function generateQR() {
+            const text = document.getElementById("qrText").value;
+            const size = document.getElementById("qrSize").value;
+            const resultDiv = document.getElementById("qrResult");
+            const qrImage = document.getElementById("qrImage");
+
+            if (!text.trim()) {
+                resultDiv.innerHTML = "<span style='color: #ff5555;'>O texto ou URL não pode estar vazio.</span>";
+                return;
+            }
+
+            const sizeNum = parseInt(size);
+            if (sizeNum < 150 || sizeNum > 1000) {
+                resultDiv.innerHTML = "<span style='color: #ff5555;'>Tamanho inválido. Escolha entre 150 e 1000.</span>";
+                return;
+            }
+
+            const url = `https://api.qrserver.com/v1/create-qr-code/?size=${sizeNum}x${sizeNum}&data=${encodeURIComponent(text)}`;
+            resultDiv.innerHTML = "";
+            qrImage.style.display = "none";
+            qrImage.onload = () => {
+                qrImage.style.display = "block";
+                resultDiv.innerHTML = `<p>Tamanho: ${size}x${size}</p>`;
+            };
+            qrImage.onerror = () => {
+                resultDiv.innerHTML = "<span style='color: #ff5555;'>Erro ao gerar o QR Code. Tente um tamanho menor ou texto mais curto.</span>";
+            };
+            qrImage.src = url;
+        }
+
+        function readQR() {
+            const fileInput = document.getElementById("qrFile");
+            const resultDiv = document.getElementById("qrResult");
+            const file = fileInput.files[0];
+
+            if (!file) {
+                resultDiv.innerHTML = "<span style='color: #ff5555;'>Por favor, selecione uma imagem.</span>";
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("file", file);
+            fetch("https://api.qrserver.com/v1/read-qr-code/", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data && data[0] && data[0].symbol && data[0].symbol[0].data) {
+                    resultDiv.innerHTML = `<p>QR Code detectado: ${data[0].symbol[0].data}</p>`;
+                } else {
+                    resultDiv.innerHTML = "<span style='color: #ff5555;'>Nenhum QR Code encontrado na imagem.</span>";
+                }
+            })
+            .catch(error => {
+                resultDiv.innerHTML = `<span style='color: #ff5555;'>Erro ao ler o QR Code: ${error.message}</span>`;
+            });
+        }
+
+        // Geolocalização de Website
+        async function getLocation() {
+            const website = document.getElementById('website').value.trim();
+            const resultDiv = document.getElementById('geoResult');
+            resultDiv.innerHTML = '';
+
+            if (!website) {
+                resultDiv.innerHTML = '<span class="red">Por favor, insira um website válido.</span>';
+                return;
+            }
+
+            try {
+                const dnsResponse = await fetch(`https://dns.google/resolve?name=${website}`, {
+                    headers: { 'User-Agent': 'GeolocalizacaoWebsite/1.0' }
+                });
+                const dnsData = await dnsResponse.json();
+                if (!dnsData.Answer || dnsData.Answer.length === 0) {
+                    resultDiv.innerHTML = '<span class="red">Erro ao resolver o nome do website.</span>';
+                    return;
+                }
+
+                const ip = dnsData.Answer[0].data;
+                const ipApiUrl = `http://ip-api.com/json/${ip}?lang=pt-BR`;
+                const ipResponse = await fetch(ipApiUrl, {
+                    headers: { 'User-Agent': 'GeolocalizacaoWebsite/1.0' }
+                });
+                const ipData = await ipResponse.json();
+
+                if (ipResponse.ok && ipData.status === "success") {
+                    const latitude = ipData.lat || 'N/A';
+                    const longitude = ipData.lon || 'N/A';
+                    const cidade = ipData.city || 'N/A';
+                    const regiao = ipData.regionName || 'N/A';
+                    const pais = ipData.country || 'N/A';
+
+                    let enderecoCompleto = `${cidade}, ${regiao} - ${pais}`;
+                    let cep = 'N/A';
+                    if (latitude !== 'N/A' && longitude !== 'N/A') {
+                        const nominatimUrl = `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json&addressdetails=1`;
+                        const nominatimResponse = await fetch(nominatimUrl, {
+                            headers: { 'User-Agent': 'GeolocalizacaoWebsite/1.0' }
+                        });
+                        const nominatimData = await nominatimResponse.json();
+                        if (nominatimData && nominatimData.address) {
+                            const rua = nominatimData.address.road || 'N/A';
+                            const numero = nominatimData.address.house_number || 'S/N';
+                            const bairro = nominatimData.address.suburb || nominatimData.address.neighbourhood || 'N/A';
+                            cep = nominatimData.address.postcode || 'N/A';
+                            enderecoCompleto = `${rua}, ${numero}, ${bairro}, ${cidade}, ${regiao} - ${pais}`;
+                        }
+                    }
+
+                    if (cep !== 'N/A' && /^\d{8}$/.test(cep.replace('-', ''))) {
+                        const cepApiUrl = `https://cep.awesomeapi.com.br/json/${cep.replace('-', '')}`;
+                        const cepResponse = await fetch(cepApiUrl, {
+                            headers: { 'User-Agent': 'GeolocalizacaoWebsite/1.0' }
+                        });
+                        const cepData = await cepResponse.json();
+                        if (cepResponse.ok && cepData.status !== 404) {
+                            enderecoCompleto = `${cepData.address}, ${cepData.district}, ${cepData.city} - ${cepData.state}`;
+                        }
+                    }
+
+                    const googleMapsQuery = encodeURIComponent(enderecoCompleto);
+                    resultDiv.innerHTML = `
+                        <div class="cyan">Informações para o website: ${website}</div><br>
+                        <div class="green">IP: ${ipData.query || 'N/A'}</div><br>
+                        <div class="green">Provedor: ${ipData.isp || 'N/A'}</div><br>
+                        <div class="cyan">País: ${pais}</div><br>
+                        <div class="cyan">Código do País: ${ipData.countryCode || 'N/A'}</div><br>
+                        <div class="cyan">Região: ${regiao}</div><br>
+                        <div class="cyan">Cidade: ${cidade}</div><br>
+                        <div class="yellow">Latitude: ${latitude}</div><br>
+                        <div class="yellow">Longitude: ${longitude}</div><br>
+                        <div class="cyan">========== Endereço completo ==========</div><br>
+                        <div class="green">Endereço completo: ${enderecoCompleto}</div><br>
+                        <div class="cyan">Oficial:<a href="https://www.google.com/maps/search/?api=1&query=${googleMapsQuery}" target="_blank" class="purple-link">https://www.google.com/maps/search/?api=1&query=${googleMapsQuery}</a></div>
+                    `;
+                    if (latitude && longitude && latitude !== 'N/A' && longitude !== 'N/A') {
+                        resultDiv.innerHTML += `
+                            <div class="cyan"> </div><br>
+                            <div class="cyan"> </div><br>
+                            <div class="cyan">========== Coordenadas ==========</div><br>
+                            <div class="yellow">Geolocalização: ${latitude},${longitude}</div><br>
+                            <div class="cyan">Google Maps (coordenadas): <a href="https://www.google.com/maps/place/${latitude},${longitude}" target="_blank" class="purple-link">https://www.google.com/maps/place/${latitude},${longitude}</a></div><br>
+                            <div class="green">Street View: <a href="https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${latitude},${longitude}&heading=-45&pitch=38&fov=80" target="_blank" class="purple-link">https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${latitude},${longitude}&heading=-45&pitch=38&fov=80</a></div>
+                        `;
+                    } else {
+                        resultDiv.innerHTML += '<div class="red">Coordenadas não disponíveis para gerar links do Google Maps/Street View.</div>';
+                    }
+                } else {
+                    resultDiv.innerHTML = `<span class="red">Erro na requisição: ${ipData.message || 'Status desconhecido'}</span>`;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<span class="red">Ocorreu um erro: ${error.message}</span>`;
+            }
+        }
+
+        // Consulta CEP
+        function limparCEP(cep) {
+            const cepLimpo = cep.replace(/\D/g, '');
+            if (cepLimpo.length !== 8) {
+                throw new Error("O CEP deve conter 8 dígitos.");
+            }
+            return cepLimpo;
+        }
+
+        async function consultarCEP() {
+            const cep = document.getElementById('cepInput').value;
+            const resultadoDiv = document.getElementById('cepResult');
+            
+            try {
+                const cepFormatado = limparCEP(cep);
+                
+                const [respostaAwesome, respostaViaCEP] = await Promise.all([
+                    fetch(`https://cep.awesomeapi.com.br/json/${cepFormatado}`),
+                    fetch(`https://viacep.com.br/ws/${cepFormatado}/json/`)
+                ]);
+
+                if (!respostaAwesome.ok) {
+                    throw new Error(`Erro na Awesome CEP: ${respostaAwesome.status}`);
+                }
+                const dadosAwesome = await respostaAwesome.json();
+
+                if (!respostaViaCEP.ok) {
+                    throw new Error(`Erro na ViaCEP: ${respostaViaCEP.status}`);
+                }
+                const dadosViaCEP = await respostaViaCEP.json();
+                if (dadosViaCEP.erro) {
+                    throw new Error("CEP inválido");
+                }
+
+                informacoesCEP = { ...dadosAwesome, ...dadosViaCEP };
+                exibirResultadoCEP();
+
+            } catch (error) {
+                resultadoDiv.innerHTML = `<span class="red">Erro: ${error.message}</span>`;
+            }
+        }
+
+        function exibirResultadoCEP() {
+            const resultadoDiv = document.getElementById('cepResult');
+            resultadoDiv.innerHTML = '';
+
+            if (Object.keys(informacoesCEP).length > 0) {
+                let html = '<span class="red-text">Informações do CEP</span><br><br>';
+                html += `\n\nCEP: ${informacoesCEP.cep || 'N/A'}<br><br>`;              
+    
+                html += `\n\nRua: ${informacoesCEP.address_name || 'N/A'}<br><br>`;
+                html += `\n\nBairro: ${informacoesCEP.district || informacoesCEP.bairro || 'N/A'}<br><br>`;
+                html += `\n\nCidade: ${informacoesCEP.city || informacoesCEP.localidade || 'N/A'}<br><br>`;
+                html += `\n\nEstado: ${informacoesCEP.state || informacoesCEP.uf || 'N/A'}<br><br>`;
+                html += `\n\nCódigo IBGE da Cidade: ${informacoesCEP.city_ibge || informacoesCEP.ibge || 'N/A'}<br><br>`;
+                html += `\n\nDDD: ${informacoesCEP.ddd || 'N/A'}<br><br>`;
+
+                if (informacoesCEP.complemento) {
+                    
+                    html += `<span style="color: red;">Complemento:</span> ${informacoesCEP.complemento}\n`;
+
+                }
+                if (informacoesCEP.gia) {
+                    html += `\n\nGIA (SP): ${informacoesCEP.gia}\n`;
+                }
+                if (informacoesCEP.siafi) {
+                    html += `\n\nCódigo SIAFI: ${informacoesCEP.siafi}<br><br>`;
+                }
+
+                if (informacoesCEP.lat && informacoesCEP.lng) {
+                    html += `<span class="green-text">Latitude: ${informacoesCEP.lat}<br><br>`;
+                    html += `<span class="green-text">Longitude: ${informacoesCEP.lng}<br><br>`;
+                    html += `<span style="color: yellow;">Coordenadas: ${informacoesCEP.lat}, ${informacoesCEP.lng}</span><br><br>`;
+                    html += '<span class="red-text">Links para visualização</span><br><br>';
+                    html += `<a href="https://www.google.com/maps?q=${informacoesCEP.lat},${informacoesCEP.lng}" target="_blank" class="purple-link">Google Maps</a>\n\n`;
+                    html += `<a href="https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${informacoesCEP.lat},${informacoesCEP.lng}&heading=-45&pitch=38&fov=80" target="_blank" class="purple-link">Google Street View</a>\n`;
+                }
+
+                resultadoDiv.innerHTML = html;
+            } else {
+                resultadoDiv.innerHTML = "Não foi possível obter informações para o CEP fornecido.";
+            }
+        }
+
+        function abrirGoogleMaps() {
+            if (informacoesCEP.lat && informacoesCEP.lng) {
+                window.open(`https://www.google.com/maps/place/${informacoesCEP.lat},${informacoesCEP.lng}`, '_blank');
+            } else {
+                alert("As informações do CEP não incluem coordenadas para o Google Maps.");
+            }
+        }
+
+        function abrirStreetView() {
+            if (informacoesCEP.lat && informacoesCEP.lng) {
+                window.open(`https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${informacoesCEP.lat},${informacoesCEP.lng}&heading=-45&pitch=38&fov=80`, '_blank');
+            } else {
+                alert("As informações do CEP não incluem coordenadas para o Google Street View.");
+            }
+        }
+
+        // Google Dorks
+        const dorks = [
+            "Documentos expostos publicamente",
+            "Vulnerabilidades em listagem de diretórios",
+            "Arquivos de configuração expostos",
+            "Arquivos de banco de dados expostos",
+            "Arquivos de log expostos",
+            "Arquivos de backup e antigos",
+            "Páginas de login",
+            "Erros SQL",
+            "Erros/avisos PHP",
+            "phpinfo()",
+            "Pesquisar em pastebin.com / sites de pasting",
+            "Pesquisar no github.com e gitlab.com",
+            "Pesquisar no stackoverflow.com",
+            "Páginas de cadastro",
+            "Encontrar subdomínios",
+            "Encontrar sub-subdomínios",
+            "Pesquisar no Wayback Machine",
+            "Mostrar apenas endereços IP",
+            "Para encontrar documentos Apresentaçoes e desenhos vazados",
+            "Para encontrar presentation",
+            "Para encontrar drawings",
+            "Já para encontrar qualquer tipo de arquivo como imagens vídeos zip e pdf",
+            "Agora se você quer encontrar uma pasta completa do Google Drive exposta",
+            "esses para achar itens secretos",
+            "Achar inurl e index.php",
+            "Achar Arquivo ext pdf",
+            "Achar Arquivo xml",
+            "Achar Arquivo docx",
+            "Achar Arquivo intext",
+            "Achar Arquivo txt senha url",
+            "Achar Arquivo nos Servidores do Scribd",
+            "Achar arquivo sql aperte a tecla espaço ou nome do site",
+            "Achar arquivo env",
+            "Achar env",
+            "Achar Password screver .com.br",
+            "Achar arquivo inurl",
+            "Achar arquivo pdf xlsx docx txt",
+            "Achar arquivo txt",
+            "Achar arquivo WEBCAM 7",
+            "Achar arquivo robots.txt",
+            "Achar arquivo senha",
+            "Achar nome de pessoa",
+            "Nome do IP",
+            "Achar arquivo pdf confidencial",
+            "Confidencial",
+            "Achar credit card",
+            "Achar coisas em google drive",
+            "Achar Arquivo pdf",
+            "Achar email",
+            "Login -Painel",
+            "Achar link",
+            "Extrair Dados",
+            "Achar .git",
+            "Achar site.git",
+            "Achar git config",
+        ];
+
+        const dorkSelect = document.getElementById("dorkSelect");
+        dorks.forEach(dork => {
+            const option = document.createElement("option");
+            option.value = dork;
+            option.textContent = dork;
+            dorkSelect.appendChild(option);
+        });
+
+        function obterDados() {
+            const siteNome = document.getElementById("siteName").value.trim();
+            const dorkSelecionada = document.getElementById("dorkSelect").value;
+            const resultDiv = document.getElementById("dorkResult");
+
+            if (!siteNome) {
+                resultDiv.innerHTML = '<span class="red">Por favor, insira um nome de site válido!</span>';
+                return;
+            }
+
+            const consultas = {
+                "Documentos expostos publicamente": `site:${siteNome} ext:doc | ext:docx | ext:odt | ext:rtf | ext:sxw | ext:psw | ext:ppt | ext:pptx | ext:pps | ext:csv`,
+                "Vulnerabilidades em listagem de diretórios": `site:${siteNome} intitle:index.of`,
+                "Arquivos de configuração expostos": `site:${siteNome} ext:xml | ext:conf | ext:cnf | ext:reg | ext:inf | ext:rdp | ext:cfg | ext:txt | ext:ora | ext:ini | ext:env`,
+                "Arquivos de banco de dados expostos": `site:${siteNome} ext:sql | ext:dbf | ext:mdb`,
+                "Arquivos de log expostos": `site:${siteNome} ext:log`,
+                "Arquivos de backup e antigos": `site:${siteNome} ext:bkf | ext:bkp | ext:bak | ext:old | ext:backup`,
+                "Páginas de login": `site:${siteNome} inurl:login | inurl:signin | intitle:Login | intitle:"sign in" | inurl:auth`,
+                "Erros SQL": `site:${siteNome} intext:"sql syntax near" | intext:"syntax error has occurred" | intext:"incorrect syntax near" | intext:"unexpected end of SQL command" | intext:"Warning: mysql_connect()" | intext:"Warning: mysql_query()" | intext:"Warning: pg_connect()"`,
+                "Erros/avisos PHP": `site:${siteNome} "PHP Parse error" | "PHP Warning" | "PHP Error"`,
+                "phpinfo()": `site:${siteNome} ext:php intitle:phpinfo "published by the PHP Group"`,
+                "Pesquisar em pastebin.com / sites de pasting": `site:pastebin.com | site:paste2.org | site:pastehtml.com | site:slexy.org | site:snipplr.com | site:snipt.net | site:textsnip.com | site:bitpaste.app | site:justpaste.it | site:heypasteit.com | site:hastebin.com | site:dpaste.org | site:dpaste.com | site:codepad.org | site:jsitor.com | site:codepen.io | site:jsfiddle.net | site:dotnetfiddle.net | site:phpfiddle.org | site:ide.geeksforgeeks.org | site:repl.it | site:ideone.com | site:paste.debian.net | site:paste.org | site:paste.org.ru | site:codebeautify.org  | site:codeshare.io | site:trello.com ${siteNome}`,
+                "Pesquisar no github.com e gitlab.com": `site:github.com | site:gitlab.com ${siteNome}`,
+                "Pesquisar no stackoverflow.com": `site:stackoverflow.com ${siteNome}`,
+                "Páginas de cadastro": `site:${siteNome} inurl:signup | inurl:register | intitle:Signup`,
+                "Encontrar subdomínios": `site:*.${siteNome}`,
+                "Encontrar sub-subdomínios": `site:*.*.${siteNome}`,
+                "Pesquisar no Wayback Machine": `https://web.archive.org/web/*/${siteNome}/*`,                
+                "Mostrar apenas endereços IP": `(${siteNome}) (site:*.*.29.* | site:*.*.28.* | site:*.*.27.* | site:*.*.26.* | site:*.*.25.* | site:*.*.24.* | site:*.*.23.* | site:*.*.22.* | site:*.*.21.* | site:*.*.20.* | site:*.*.19.* | site:*.*.18.* | site:*.*.17.* | site:*.*.16.* | site:*.*.15.* | site:*.*.14.* | site:*.*.13.* | site:*.*.12.* | site:*.*.11.* | site:*.*.10.* | site:*.*.9.* | site:*.*.8.* | site:*.*.7.* | site:*.*.6.* | site:*.*.5.* | site:*.*.4.* | site:*.*.3.* | site:*.*.2.* | site:*.*.1.* | site:*.*.0.*)`,
+                "Para encontrar documentos Apresentaçoes e desenhos vazados": `site:docs.${siteNome}/document/d`,
+                "Para encontrar presentation": `site:docs.${siteNome}/presentation/d`,
+                "Para encontrar drawings": `site:docs.${siteNome}/drawings/d`,
+                "Já para encontrar qualquer tipo de arquivo como imagens vídeos zip e pdf": `site:docs.${siteNome}/file/d`,
+                "Agora se você quer encontrar uma pasta completa do Google Drive exposta": `site:docs.${siteNome}/folder/d`,
+                "esses para achar itens secretos": `site:docs.${siteNome}/open intext:secreto`,
+                "Achar Arquivo ext pdf": `site:${siteNome} ext:pdf`,
+                "Achar inurl e index.php": ` "${siteNome}" + inurl= index.php?id=1`,                
+                "Achar Arquivo xml": `site:${siteNome} ext:xml`,
+                "Achar Arquivo docx": `site:${siteNome} ext:docx`,
+                "Achar Arquivo intext": `intext:${siteNome}`,
+                "Achar Arquivo txt senha url":`filetype:txt intext:senha+url site:${siteNome}`,
+                "Achar Arquivo nos Servidores do Scribd": `servidores site:scribd.com AND:${siteNome}`,
+                "Achar arquivo sql aperte a tecla espaço ou nome do site": `filetype:sql${siteNome}`,
+                "Achar arquivo env": `filetype:env ${siteNome}`,
+                "Achar env": `site:${siteNome} filetype:env`,
+                "Achar Password screver .com.br": `site:${siteNome} filetype:env intext:DB_PASSWORD | intext: AWS_SECRET_ACESS_KEY | intext: API_SECRET | intext:MAIL_PASSWORD`,
+                "Achar arquivo inurl": `inurl:${siteNome}`,
+                "Achar arquivo pdf xlsx docx txt":`"${siteNome}"filetype:pdf OR filetype:xlsx OR filetype:docx OR filetype:txt`,
+                "Achar arquivo txt": `site:${siteNome} filetype:txt`,
+                "Achar arquivo WEBCAM 7":`${siteNome}intitle:"WEBCAM 7" -inurl:/admin.html`,
+                "Achar arquivo robots.txt": `"${siteNome}" robots.txt`,
+                "Achar arquivo senha": `intitle:"index of" intext:${siteNome}`,
+                "Achar nome de pessoa": `intext:"${siteNome}"`,
+                "Nome do IP": ` IP:${siteNome}`,
+                "Achar arquivo pdf confidencial": `filetype:pdf intitle:confidencial site:${siteNome}`,
+                "Confidencial": `intitle:confidencial filetype:pdf intext:"${siteNome}"`,
+                "Achar credit card": `site:pastebin.com ${siteNome} credit card`,
+                "Achar coisas em google drive": `site:drive.google.com ${siteNome}`,                
+                "Achar Arquivo pdf": `site:${siteNome} filetype:pdf`,
+                "Achar email": `"${siteNome} "`,
+                "Login -Painel": `site:${siteNome} intitle:Login -Painel`,
+                "Achar link": `link:${siteNome}`,             
+                "Extrair Dados": `"${siteNome} "`,
+                "Achar .git": `${siteNome} intitle index of .git`,
+                "Achar site.git": `site:${siteNome} intitle index of .git`,
+                "Achar git config": `site:${siteNome} intitle:"index of" "/.git/config"`,
+            };
+
+            const consulta = consultas[dorkSelecionada];
+            const url = `https://www.google.com/search?q=${encodeURIComponent(consulta)}`;
+            window.open(url, "_blank");
+
+            resultDiv.innerHTML = `
+                <p><span class="cyan">Resultados para:</span> ${siteNome} - ${dorkSelecionada}</p>
+                <p><span class="yellow">Consulta utilizada:</span> ${consulta}</p>
+            `;
+        }
+
+        // Iniciar com DNS Enumeração ativa
+        showTool('dns');
+    </script>
+</body>
+</html>
