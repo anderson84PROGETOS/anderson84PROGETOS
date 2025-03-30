@@ -71,7 +71,7 @@
             white-space: pre-wrap;
             margin: 0;
         }
-        #dnsResults, #qrResult, #geoResult, #dorkResult {
+        #dnsResults, #qrResult, #geoResult, #dorkResult, #cepResult, #resultado, #results {
             margin-top: 20px;
             color: #00ff00;
         }
@@ -93,6 +93,16 @@
         .yellow { color: #ffff00; }
         .red { color: #ff5555; }
         .purple-link { color: #ff00ff; text-decoration: underline; }
+        .red-text { color: #ff5555; font-weight: bold; }
+        .green-text { color: #00ff00; }
+        .section-title { color: #00ffff; font-weight: bold; }
+        .info-green { color: #00ff00; }
+        .info-yellow { color: #ffff00; }
+        .info-lightred { color: #ff5555; }
+        .info-lightcyan { color: #00ffff; }
+        .info-lightmagenta { color: #ff00ff; }
+        .result.active { color: #00ff00; }
+        #summary { margin-top: 15px; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -104,7 +114,6 @@
 ██║   ██║╚════██║██║██║╚██╗██║   ██║       ██╔══██║██╔══██║██║     ██╔═██╗ ██╔══╝  ██╔══██╗       ██║   ██║   ██║██║   ██║██║     
 ╚██████╔╝███████║██║██║ ╚████║   ██║       ██║  ██║██║  ██║╚██████╗██║  ██╗███████╗██║  ██║       ██║   ╚██████╔╝╚██████╔╝███████╗
  ╚═════╝ ╚══════╝╚═╝╚═╝  ╚═══╝   ╚═╝       ╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝       ╚═╝    ╚═════╝  ╚═════╝ ╚══════╝
-                                                                                                                                        
         </pre>
 
         <div class="tabs">
@@ -112,10 +121,19 @@
             <button class="tab-button" onclick="showTool('qr')">QR Code Tool</button>
             <button class="tab-button" onclick="showTool('geo')">Geolocalização</button>
             <button class="tab-button" onclick="showTool('dork')">Google Dorks</button>
-        </div>
+            <button class="tab-button" onclick="showTool('cep')">Consulta CEP</button>
+            <button class="tab-button" onclick="showTool('webinfo')">Website Information</button>
+
+            <br><br>
+            <span> </span>
+            </div>
+            <button class="tab-button" onclick="showTool('subdomain')">Subdomain Finder</button>
+            <span><br><br>
+            <span><br><br>   
+            
 
         <!-- Seção DNS Enumeração -->
-        <div id="dnsSection" class="tool-section">
+        <div id="dnsSection" class="tool-section active">
             <input type="text" id="domainInput" placeholder="Digite o Nome do Domínio Para Enumeração DNS">
             <button onclick="dnsEnum()">Consultar DNS</button>
             <div id="dnsResults"></div>
@@ -162,7 +180,7 @@
         <!-- Seção Geolocalização de Website -->
         <div id="geoSection" class="tool-section">
             <input type="text" id="website" placeholder="Digite o nome do website (exemplo: google.com)">
-            <button onclick="getLocation()">Consultar  Geolocalização</button>
+            <button onclick="getLocation()">Consultar Geolocalização</button>
             <div id="geoResult"></div>
         </div>
 
@@ -174,13 +192,49 @@
             <div id="dorkResult"></div>
         </div>
 
+        <!-- Seção Consulta CEP -->
+        <div id="cepSection" class="tool-section">
+            <input type="text" id="cepInput" placeholder="Digite o CEP (ex: 12423-121 ou 12423121)">
+            <button onclick="consultarCEP()">Consultar CEP</button>
+            <button onclick="abrirGoogleMaps()">Google Maps</button>
+            <button onclick="abrirStreetView()">Google Street View</button>
+            <div id="cepResult"></div>
+        </div>
+
+        <!-- Seção Website Information -->
+        <div id="webinfoSection" class="tool-section">
+            <input type="text" id="endereco" placeholder="Digite o domínio (ex: google.com)">
+            <select id="tipoConsulta">
+                <option value="whois">Whois</option>
+                <option value="dns">DNS</option>
+                <option value="ip">IP Info</option>
+            </select>
+            <button onclick="consultar()">Consultar</button>
+            <div id="resultado"></div>
+        </div>
+
+        <!-- Seção Subdomain Finder -->
+        <div id="subdomainSection" class="tool-section">
+            <h2>Subdomain Finder</h2>
+            <div>
+                <input type="text" id="subdomainInput" placeholder="Digite o domínio (ex: google.com)">
+                <input type="file" id="wordlistInput" accept=".txt" onchange="loadWordlist()">
+                <button onclick="findSubdomains()">Buscar Subdomínios</button>
+            </div>
+            <h2>Resultados dos Subdomínios</h2>
+            <div id="results"></div>
+            
+        </div>
     </div>
     
     <footer>
-        DNS Enum & QR Code & Geolocalização & Google Dorks
+        DNS Enum & QR Code & Geolocalização & Google Dorks & Consulta CEP & Website Information & Subdomain Finder
     </footer>
 
     <script>
+        let informacoesCEP = {};
+        let commonSubdomains = []; // Lista vazia inicialmente
+
         // Função para alternar entre ferramentas
         function showTool(tool) {
             document.querySelectorAll('.tool-section').forEach(section => {
@@ -200,6 +254,12 @@
                 document.getElementById("geoResult").innerHTML = "";
             } else if (tool === 'dork') {
                 document.getElementById("dorkResult").innerHTML = "";
+            } else if (tool === 'cep') {
+                document.getElementById("cepResult").innerHTML = "";
+            } else if (tool === 'webinfo') {
+                document.getElementById("resultado").innerHTML = "";
+            } else if (tool === 'subdomain') {
+                document.getElementById("results").innerHTML = "";
             }
         }
 
@@ -480,9 +540,107 @@
             }
         }
 
+        // Consulta CEP
+        function limparCEP(cep) {
+            const cepLimpo = cep.replace(/\D/g, '');
+            if (cepLimpo.length !== 8) {
+                throw new Error("O CEP deve conter 8 dígitos.");
+            }
+            return cepLimpo;
+        }
+
+        async function consultarCEP() {
+            const cep = document.getElementById('cepInput').value;
+            const resultadoDiv = document.getElementById('cepResult');
+            
+            try {
+                const cepFormatado = limparCEP(cep);
+                
+                const [respostaAwesome, respostaViaCEP] = await Promise.all([
+                    fetch(`https://cep.awesomeapi.com.br/json/${cepFormatado}`),
+                    fetch(`https://viacep.com.br/ws/${cepFormatado}/json/`)
+                ]);
+
+                if (!respostaAwesome.ok) {
+                    throw new Error(`Erro na Awesome CEP: ${respostaAwesome.status}`);
+                }
+                const dadosAwesome = await respostaAwesome.json();
+
+                if (!respostaViaCEP.ok) {
+                    throw new Error(`Erro na ViaCEP: ${respostaViaCEP.status}`);
+                }
+                const dadosViaCEP = await respostaViaCEP.json();
+                if (dadosViaCEP.erro) {
+                    throw new Error("CEP inválido");
+                }
+
+                informacoesCEP = { ...dadosAwesome, ...dadosViaCEP };
+                exibirResultadoCEP();
+
+            } catch (error) {
+                resultadoDiv.innerHTML = `<span class="red">Erro: ${error.message}</span>`;
+            }
+        }
+
+        function exibirResultadoCEP() {
+            const resultadoDiv = document.getElementById('cepResult');
+            resultadoDiv.innerHTML = '';
+
+            if (Object.keys(informacoesCEP).length > 0) {
+                let html = '<span class="red-text">Informações do CEP</span><br><br>';
+                html += `\n\nCEP: ${informacoesCEP.cep || 'N/A'}<br><br>`;              
+    
+                html += `\n\nRua: ${informacoesCEP.address_name || 'N/A'}<br><br>`;
+                html += `\n\nBairro: ${informacoesCEP.district || informacoesCEP.bairro || 'N/A'}<br><br>`;
+                html += `\n\nCidade: ${informacoesCEP.city || informacoesCEP.localidade || 'N/A'}<br><br>`;
+                html += `\n\nEstado: ${informacoesCEP.state || informacoesCEP.uf || 'N/A'}<br><br>`;
+                html += `\n\nCódigo IBGE da Cidade: ${informacoesCEP.city_ibge || informacoesCEP.ibge || 'N/A'}<br><br>`;
+                html += `\n\nDDD: ${informacoesCEP.ddd || 'N/A'}<br><br>`;
+
+                if (informacoesCEP.complemento) {
+                    html += `<span style="color: red;">Complemento:</span> ${informacoesCEP.complemento}<br><br>`;
+                }
+                if (informacoesCEP.gia) {
+                    html += `\n\nGIA (SP): ${informacoesCEP.gia}<br><br>`;
+                }
+                if (informacoesCEP.siafi) {
+                    html += `\n\nCódigo SIAFI: ${informacoesCEP.siafi}<br><br>`;
+                }
+
+                if (informacoesCEP.lat && informacoesCEP.lng) {
+                    html += `<span class="green-text">Latitude: ${informacoesCEP.lat}<br><br>`;
+                    html += `<span class="green-text">Longitude: ${informacoesCEP.lng}<br><br>`;
+                    html += `<span style="color: yellow;">Coordenadas: ${informacoesCEP.lat}, ${informacoesCEP.lng}</span><br><br>`;
+                    html += '<span class="red-text">Links para visualização</span><br><br>';
+                    html += `<a href="https://www.google.com/maps?q=${informacoesCEP.lat},${informacoesCEP.lng}" target="_blank" class="purple-link">Google Maps</a><br><br>`;
+                    html += `<a href="https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${informacoesCEP.lat},${informacoesCEP.lng}&heading=-45&pitch=38&fov=80" target="_blank" class="purple-link">Google Street View</a><br>`;
+                }
+
+                resultadoDiv.innerHTML = html;
+            } else {
+                resultadoDiv.innerHTML = "Não foi possível obter informações para o CEP fornecido.";
+            }
+        }
+
+        function abrirGoogleMaps() {
+            if (informacoesCEP.lat && informacoesCEP.lng) {
+                window.open(`https://www.google.com/maps/place/${informacoesCEP.lat},${informacoesCEP.lng}`, '_blank');
+            } else {
+                alert("As informações do CEP não incluem coordenadas para o Google Maps.");
+            }
+        }
+
+        function abrirStreetView() {
+            if (informacoesCEP.lat && informacoesCEP.lng) {
+                window.open(`https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${informacoesCEP.lat},${informacoesCEP.lng}&heading=-45&pitch=38&fov=80`, '_blank');
+            } else {
+                alert("As informações do CEP não incluem coordenadas para o Google Street View.");
+            }
+        }
+
         // Google Dorks
         const dorks = [
-        "Documentos expostos publicamente",
+            "Documentos expostos publicamente",
             "Vulnerabilidades em listagem de diretórios",
             "Arquivos de configuração expostos",
             "Arquivos de banco de dados expostos",
@@ -515,6 +673,8 @@
             "Achar Arquivo nos Servidores do Scribd",
             "Achar arquivo sql aperte a tecla espaço ou nome do site",
             "Achar arquivo env",
+            "Achar env",
+            "Achar Password screver .com.br",
             "Achar arquivo inurl",
             "Achar arquivo pdf xlsx docx txt",
             "Achar arquivo txt",
@@ -533,7 +693,8 @@
             "Achar link",
             "Extrair Dados",
             "Achar .git",
-            "Achar site.git"
+            "Achar site.git",
+            "Achar git config",
         ];
 
         const dorkSelect = document.getElementById("dorkSelect");
@@ -588,6 +749,8 @@
                 "Achar Arquivo nos Servidores do Scribd": `servidores site:scribd.com AND:${siteNome}`,
                 "Achar arquivo sql aperte a tecla espaço ou nome do site": `filetype:sql${siteNome}`,
                 "Achar arquivo env": `filetype:env ${siteNome}`,
+                "Achar env": `site:${siteNome} filetype:env`,
+                "Achar Password screver .com.br": `site:${siteNome} filetype:env intext:DB_PASSWORD | intext: AWS_SECRET_ACESS_KEY | intext: API_SECRET | intext:MAIL_PASSWORD`,
                 "Achar arquivo inurl": `inurl:${siteNome}`,
                 "Achar arquivo pdf xlsx docx txt":`"${siteNome}"filetype:pdf OR filetype:xlsx OR filetype:docx OR filetype:txt`,
                 "Achar arquivo txt": `site:${siteNome} filetype:txt`,
@@ -607,6 +770,7 @@
                 "Extrair Dados": `"${siteNome} "`,
                 "Achar .git": `${siteNome} intitle index of .git`,
                 "Achar site.git": `site:${siteNome} intitle index of .git`,
+                "Achar git config": `site:${siteNome} intitle:"index of" "/.git/config"`,
             };
 
             const consulta = consultas[dorkSelecionada];
@@ -619,9 +783,375 @@
             `;
         }
 
+        // Website Information
+        async function consultar() {
+            const endereco = document.getElementById('endereco').value.trim();
+            const tipoConsulta = document.getElementById('tipoConsulta').value;
+            const resultadoDiv = document.getElementById('resultado');
+            resultadoDiv.innerHTML = '<span class="loading">Consultando...</span>';
+
+            if (!endereco) {
+                resultadoDiv.innerHTML = '<span class="info-lightred">Por favor, insira um domínio ou IP válido</span>';
+                return;
+            }
+
+            try {
+                let resultado = '';
+                const isIP = /^(\d+\.){3}\d+$/.test(endereco);
+
+                if (tipoConsulta === 'whois') {
+                    if (isIP) {
+                        resultado += await consultaWhoisIP(endereco);
+                    } else {
+                        resultado += endereco.endsWith('.br') ? await obterWhoisBR(endereco) : await obterWhois(endereco);
+                        resultado += await obterMX(endereco);
+                        resultado += await consultaWhoisAdicional(endereco);
+                    }
+                } else if (tipoConsulta === 'dns') {
+                    resultado += await obterDNS(endereco);
+                } else if (tipoConsulta === 'ip') {
+                    resultado += await consultaWhoisIP(endereco);
+                }
+
+                resultadoDiv.innerHTML = resultado || '<span class="info-lightyellow">Nenhuma informação encontrada</span>';
+            } catch (error) {
+                resultadoDiv.innerHTML = `<span class="info-lightred">Erro ao consultar: ${error.message}</span>`;
+            }
+        }
+
+        async function obterWhoisBR(endereco) {
+            const url = `https://rdap.registro.br/domain/${endereco}`;
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error('Domínio não encontrado');
+                const data = await response.json();
+                return formatarWhois(data, endereco);
+            } catch (error) {
+                return `<span class="info-lightred">${error.message}</span>\n`;
+            }
+        }
+
+        async function obterWhois(endereco) {
+            const url = `https://rdap.org/domain/${endereco}`;
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error('Domínio não encontrado');
+                const data = await response.json();
+                return formatarWhois(data, endereco);
+            } catch (error) {
+                return `<span class="info-lightred">${error.message}</span>\n`;
+            }
+        }
+
+        async function obterMX(endereco) {
+            try {
+                const response = await fetch(`https://dns.google/resolve?name=${endereco}&type=MX`);
+                const data = await response.json();
+                if (!data.Answer) return '';
+                let resultado = `<br><br><span class="section-title">Registros MX Encontrados</span><br><br>`;
+                data.Answer.forEach(record => {
+                    resultado += `<span class="info-lightmagenta">${record.data}</span><br><br>`;
+                });
+                return resultado;
+            } catch (error) {
+                return `\n<span class="info-lightred">Erro ao consultar MX: ${error.message}</span>\n`;
+            }
+        }
+
+        async function obterDNS(endereco) {
+            let resultado = '';
+            const tipos = ['A', 'NS', 'PTR', 'TXT', 'MX', 'SOA', 'DS', 'SRV', 'NSEC3', 'HINFO', 'CNAME', 'ANY'];
+            for (const tipo of tipos) {
+                try {
+                    const response = await fetch(`https://dns.google/resolve?name=${endereco}&type=${tipo}`);
+                    const data = await response.json();
+                    if (data.Answer) {
+                        resultado += `<span </span><br><br>`;
+                        resultado += `\n<span class="section-title"style="color: #0af765; font-weight: bold;">Registros ${tipo} Encontrados</span><br><br>`;
+                        data.Answer.forEach(record => {
+                            resultado += `<span class="info-lightcyan">${record.data}</span><br><br>`;
+                        });
+                    }
+                } catch (error) {
+                    resultado += `<span class="info-lightred">Erro ao consultar ${tipo}: ${error.message}</span><br><br>`;
+                }
+            }
+
+            let srv_found = false;
+            const srv_services = ['_sip._tcp', '_sip._udp', '_sips._tcp', '_h323cs._tcp', '_h323ls._udp', '_sip._tls'];
+            resultado += `<br><br><span class="section-title"style="color: #f7f70a; font-weight: bold;">Registros SRV de Serviços Comuns</span><br><br>`;
+            for (const service of srv_services) {
+                try {
+                    const srvQuery = `${service}.${endereco}`;
+                    const response = await fetch(`https://dns.google/resolve?name=${srvQuery}&type=SRV`);
+                    const data = await response.json();
+                    if (data.Answer) {
+                        srv_found = true;
+                        resultado += `<span class="info-lightyellow">Serviço: ${service}</span><br><br>`;
+                        for (const record of data.Answer) {
+                            const srvData = record.data;
+                            const host = srvData.split(' ').pop();
+                            let ip = 'N/A';
+                            try {
+                                const ipResponse = await fetch(`https://dns.google/resolve?name=${host}&type=A`);
+                                const ipData = await ipResponse.json();
+                                if (ipData.Answer) {
+                                    ip = ipData.Answer[0].data;
+                                }
+                            } catch (ipError) {
+                                ip = `Erro ao resolver IP: ${ipError.message}`;
+                            }
+                            resultado += `<span class="info-lightcyan">${srvData.padEnd(60, ' ')} IP: ${ip}</span><br><br>`;
+                        }
+                    }
+                } catch (error) {
+                    resultado += `<span class="info-lightred">Erro ao consultar ${service}: ${error.message}</span><br><br>`;
+                }
+            }
+            if (!srv_found) {
+                resultado += `<span class="info-lightyellow">Nenhum registro SRV comum encontrado</span><br><br>`;
+            }
+
+            return resultado;
+        }
+
+        async function consultaWhoisIP(endereco) {
+            const url = `http://ip-api.com/json/${endereco}?fields=status,message,continent,country,countryCode,region,regionName,city,zip,lat,lon,timezone,isp,org,as,query`;
+            let resultado = '<br><br><span class="section-title">Informações de IP</span><br><br>';
+
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error('Erro na consulta de IP');
+                const data = await response.json();
+                if (data.status === 'fail') throw new Error(data.message);
+
+                resultado += `<span class="info-green">IP: ${data.query}</span><br><br>`;
+                resultado += `<span class="info-green">Continente: ${data.continent || 'N/A'}</span><br><br>`;
+                resultado += `<span class="info-green">País: ${data.country} (${data.countryCode})</span><br><br>`;
+                resultado += `<span class="info-green">Região: ${data.regionName} (${data.region})</span><br><br>`;
+                resultado += `<span class="info-green">Cidade: ${data.city || 'N/A'}</span><br><br>`;
+                resultado += `<span class="info-green">CEP: ${data.zip || 'N/A'}</span><br><br>`;
+                resultado += `<span class="info-green">Fuso Horário: ${data.timezone || 'N/A'}</span><br><br>`;
+                resultado += `<span class="info-green">ISP: ${data.isp || 'N/A'}</span><br><br>`;
+                resultado += `<span class="info-green">Organização: ${data.org || 'N/A'}</span><br><br>`;
+                resultado += `<span class="info-green">AS: ${data.as || 'N/A'}</span><br><br>`;
+                resultado += `<span class="info-green">Latitude: ${data.lat || 'N/A'}</span><br><br>`;
+                resultado += `<span class="info-green">Longitude: ${data.lon || 'N/A'}</span><br><br>`;
+
+                if (data.lat && data.lon) {
+                    const lat = data.lat;
+                    const lon = data.lon;
+                    resultado += `\n<span class="info-green">Geolocalização: ${lat},${lon}</span><br><br>`;
+                    resultado += `<span class="info-green">Google Maps: https://www.google.com/maps/place/${lat},${lon}</a></span><br><br>`;
+                    resultado += `<span class="info-green">Google Street View: https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${lat},${lon}&heading=-45&pitch=38&fov=80</a></span><br><br>`;
+                    resultado += `<span class="info-green">Google Maps: <a href="https://www.google.com/maps/place/${lat},${lon}" target="_blank" style="color: #07f5f1;">Abrir no Google Maps</a></span><br><br>`;
+                    resultado += `<span class="info-green">Google Street View: <a href="https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${lat},${lon}&heading=-45&pitch=38&fov=80" target="_blank" style="color: #07f5f1;">Abrir no Street View</a></span><br><br>`;
+                } else {
+                    resultado += `\n<span class="info-lightred">Geolocalização: Não disponível</span>\n`;
+                }
+
+                return resultado;
+            } catch (error) {
+                return resultado + `<span class="info-lightred">Erro: ${error.message}</span>\n`;
+            }
+        }
+
+        async function consultaWhoisAdicional(endereco) {
+            const isIP = /^(\d+\.){3}\d+$/.test(endereco);
+            const url = isIP ? `http://ip-api.com/json/${endereco}`
+                : endereco.endsWith('.br') ? `https://rdap.registro.br/domain/${endereco}`
+                : `https://rdap.org/domain/${endereco}`;
+            let resultado = `<br><br><span class="section-title">Mais Informações</span><br><br>`;
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error('Não encontrado');
+                const data = await response.json();
+
+                if (isIP) {
+                    if (data.status === 'fail') throw new Error(data.message);
+                    resultado += `<span class="info-green">IP: ${data.query}</span><br><br>`;
+                    resultado += `<span class="info-lightyellow">País: ${data.country || 'N/A'}</span><br><br>`;
+                    resultado += `<span class="info-lightmagenta">ISP: ${data.isp || 'N/A'}</span><br><br>`;
+                } else {
+                    const events = data.events || [];
+                    const created = events.find(e => e.eventAction === 'registration');
+                    const updated = events.find(e => e.eventAction === 'last changed');
+                    const expires = events.find(e => e.eventAction === 'expiration');
+
+                    resultado += `<span class="info-green">Domínio: ${endereco}</span><br><br>`;
+                    if (created) resultado += `<span class="info-lightyellow">Registrado: ${formatarData(created.eventDate)}</span><br><br>`;
+                    if (updated) resultado += `<span class="info-lightmagenta">Modificado: ${formatarData(updated.eventDate)}</span><br><br>`;
+                    if (expires) resultado += `<span class="info-lightred">Expira: ${formatarData(expires.eventDate)}</span><br><br>`;
+                }
+                return resultado;
+            } catch (error) {
+                return resultado + `<span class="info-lightred">Nenhuma informação encontrada: ${error.message}</span>\n`;
+            }
+        }
+
+        function formatarWhois(data, endereco) {
+            let resultado = `<span class="info-cyan">Informações do Domínio: ${endereco}</span><br><br>`;
+            resultado += `<span </span><br><br>`;
+            resultado += `<span class="section-title">Detalhes Gerais</span><br><br>`;
+            resultado += `<span class="info-green">Domínio: ${data.ldhName || 'N/A'}</span><br><br>`;
+            resultado += `<span class="info-green">Status: ${data.status ? data.status.join(', ') : 'N/A'}</span><br><br>`;
+
+            const events = data.events || [];
+            const registration = events.find(e => e.eventAction === 'registration');
+            const lastChanged = events.find(e => e.eventAction === 'last changed');
+            const expiration = events.find(e => e.eventAction === 'expiration');
+
+            if (registration) resultado += `<span class="info-green">Data de Registro: ${formatarData(registration.eventDate)}</span><br><br>`;
+            if (lastChanged) resultado += `<span class="info-green">Última Modificação: ${formatarData(lastChanged.eventDate)}</span><br><br>`;
+            if (expiration) resultado += `<span class="info-green">Data de Expiração: ${formatarData(expiration.eventDate)}</span><br><br>`;
+
+            const registrant = data.entities?.find(e => e.roles.includes('registrant'));
+            if (registrant) {
+                resultado += `<span </span><br><br>`;
+                resultado += `<span class="section-title">Registrante</span><br><br>`;
+                const vcard = registrant.vcardArray ? registrant.vcardArray[1] : [];
+                const org = vcard.find(v => v[0] === 'fn') ? vcard.find(v => v[0] === 'fn')[3] : 'N/A';
+                resultado += `<span class="info-yellow">Organização: ${org}</span><br><br>`;
+                const cnpj = registrant.publicIds ? registrant.publicIds[0]?.identifier : 'N/A';
+                resultado += `<span class="info-yellow">CNPJ/Identificador: ${cnpj}</span><br><br>`;
+                if (registrant.legalRepresentative) resultado += `<span class="info-yellow">Representante Legal: ${registrant.legalRepresentative}</span><br><br>`;
+            }
+
+            const admin = data.entities?.find(e => e.roles.includes('administrative'));
+            if (admin) {
+                resultado += `<span class="section-title">Contato Administrativo</span><br><br>`;
+                const adminVcard = admin.vcardArray ? admin.vcardArray[1] : [];
+                const adminName = adminVcard.find(v => v[0] === 'fn') ? adminVcard.find(v => v[0] === 'fn')[3] : 'N/A';
+                const adminEmail = adminVcard.find(v => v[0] === 'email') ? adminVcard.find(v => v[0] === 'email')[3] : 'N/A';
+                resultado += `<span class="info-lightgreen">Nome: ${adminName}</span><br><br>`;
+                resultado += `<span class="info-lightgreen">E-mail: ${adminEmail}</span><br><br>`;
+            }
+
+            const tech = data.entities?.find(e => e.roles.includes('technical'));
+            if (tech) {
+                resultado += `<span </span><br><br>`;
+                resultado += `<span class="section-title" style="color: #e807e1; font-weight: bold;">Contato Técnico</span><br><br>`;
+                const techVcard = tech.vcardArray ? tech.vcardArray[1] : [];
+                const techName = techVcard.find(v => v[0] === 'fn') ? techVcard.find(v => v[0] === 'fn')[3] : 'N/A';
+                const techEmail = techVcard.find(v => v[0] === 'email') ? techVcard.find(v => v[0] === 'email')[3] : 'N/A';
+                resultado += `<span class="info-lightcyan">Nome: ${techName}</span><br><br>`;
+                resultado += `<span class="info-lightcyan">E-mail: ${techEmail}</span><br><br>`;
+            }
+
+            if (data.nameservers?.length) {
+                resultado += `<span </span><br><br>`;
+                resultado += `<span class="section-title" style="color: #e807e1; font-weight: bold;">Servidores de Nome (Nameservers)</span><br><br>`;
+                data.nameservers.forEach(ns => {
+                    resultado += `<span class="info-magenta">${ns.ldhName}</span><br><br>`;
+                });
+            }
+
+            return resultado;
+        }
+
+        function formatarData(dataStr) {
+            const data = new Date(dataStr);
+            return data.toLocaleDateString('pt-BR', {
+                weekday: 'long',
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric',
+                hour: 'numeric',
+                minute: 'numeric'
+            });
+        }
+
+        document.getElementById('endereco').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') consultar();
+        });
+
+        // Subdomain Finder
+        function loadWordlist() {
+            const fileInput = document.getElementById('wordlistInput');
+            const file = fileInput.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const text = e.target.result;
+                    commonSubdomains = text.split('\n').map(line => line.trim()).filter(line => line.length > 0);
+                    console.log('Wordlist carregada com sucesso:', commonSubdomains);
+                };
+                reader.readAsText(file);
+            } else {
+                alert('Por favor, selecione um arquivo de wordlist.');
+            }
+        }
+
+        async function findSubdomains() {
+            const domain = document.getElementById('subdomainInput').value.trim();
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '<p id="searching">Buscando</p>';
+
+            if (!domain) {
+                resultsDiv.innerHTML = '<p style="color: #ff5555;">Por favor, insira um domínio válido.</p>';
+                return;
+            }
+
+            if (commonSubdomains.length === 0) {
+                resultsDiv.innerHTML = '<p style="color: #ff5555;">Por favor, carregue uma wordlist antes de buscar.</p>';
+                return;
+            }
+
+            resultsDiv.innerHTML = ''; // Remove o "Buscando..." antes de começar
+
+            // Testa cada subdomínio, priorizando HTTPS
+            for (const sub of commonSubdomains) {
+                const httpsUrl = `https://${sub}.${domain}`;
+                const httpUrl = `http://${sub}.${domain}`;
+                const resultElement = document.createElement('div');
+                resultElement.classList.add('result');
+                resultElement.textContent = `Testando ${httpsUrl} ....`;
+                resultsDiv.appendChild(resultElement);
+
+                try {
+                    // Tenta HTTPS primeiro
+                    const httpsResponse = await fetch(httpsUrl, {
+                        method: 'HEAD',
+                        mode: 'no-cors'
+                    });
+                    resultElement.style.display = 'none'; // Faz o "Testando..." sumir
+                    resultElement.innerHTML = `<a href="${httpsUrl}" target="_blank" class="purple-link">${httpsUrl}</a>`; // Define o texto final como link
+                    resultElement.classList.add('active');
+                    resultElement.style.display = 'block'; // Faz reaparecer com o resultado
+                } catch (httpsError) {
+                    // Se HTTPS falhar, tenta HTTP
+                    try {
+                        const httpResponse = await fetch(httpUrl, {
+                            method: 'HEAD',
+                            mode: 'no-cors'
+                        });
+                        resultElement.style.display = 'none'; // Faz o "Testando..." sumir
+                        resultElement.innerHTML = `<a href="${httpUrl}" target="_blank" class="purple-link">${httpUrl}</a>`; // Define o texto final como link
+                        resultElement.classList.add('active');
+                        resultElement.style.display = 'block'; // Faz reaparecer com o resultado
+                    } catch (httpError) {
+                        // Remove completamente o elemento do DOM se não for encontrado
+                        resultsDiv.removeChild(resultElement);
+                    }
+                }
+            }
+
+            // Verifica e exibe a quantidade de subdomínios encontrados
+            const activeResults = resultsDiv.getElementsByClassName('active');
+            const summaryElement = document.createElement('div');
+            summaryElement.id = 'summary';
+            if (activeResults.length === 0) {
+                summaryElement.textContent = 'Nenhum subdomínio ativo encontrado.';
+                summaryElement.style.color = '#ff5555';
+            } else {
+                summaryElement.textContent = `Total de subdomínios encontrados: ${activeResults.length}`;
+                summaryElement.style.color = '#00ff00';
+            }
+            resultsDiv.appendChild(summaryElement);
+        }
+
         // Iniciar com DNS Enumeração ativa
         showTool('dns');
     </script>
 </body>
 </html>
-
