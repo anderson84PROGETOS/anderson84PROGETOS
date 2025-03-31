@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hacker Investigador & OSINT</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: #1a2526;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            
+        }
+        .mindmap {
+            position: relative;
+            width: 1100px;
+            height: 900px;
+        }
+        .node {
+            position: absolute;
+            background-color: #2c3e50;
+            border: 2px solid #ffffff;
+            border-radius: 8px;
+            padding: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            width: 430px; /* Already increased as per your request */
+            transition: transform 0.3s ease;
+        }
+        .node:hover {
+            transform: scale(1.05);
+        }
+        .node h2 {
+            margin: 0 0 8px;
+            font-size: 14px;
+            color: #ffffff;
+            font-weight: bold;
+        }
+        .link-container {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start; /* Align items to the start */
+            margin: 4px 0;
+            position: relative;
+            flex-wrap: wrap; /* Allow wrapping to the next line if content is too long */
+            gap: 5px; /* Add spacing between elements */
+        }
+        .node a {
+            color: #00ddeb;
+            text-decoration: none;
+            font-size: 12px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 150px; /* Increased to allow more space for the link text */
+        }
+        .node a:hover {
+            text-decoration: underline;
+        }
+        .node button {
+            background-color: #e74c3c;
+            color: #ffffff;
+            border: none;
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-size: 10px;
+            cursor: pointer;
+            margin-left: 5px;
+        }
+        .node button:hover {
+            background-color: #c0392b;
+        }
+        .url-display {
+            color: #00ddeb;
+            font-size: 10px;
+            margin-left: 5px;
+            white-space: normal; /* Allow the URL to wrap if needed */
+            overflow: visible; /* Remove overflow hiding */
+            text-overflow: clip; /* Remove ellipsis */
+            max-width: 100%; /* Allow the full width of the container */
+            word-break: break-all; /* Break long URLs to fit within the container */
+        }
+        .central {
+            left: 25%;
+            width: 510px;
+            top: -1%;
+        }
+
+        
+    </style>
+</head>
+<body>
+    <div class="mindmap">
+        <!-- Nó Central -->
+        <div class="node central">
+            <img src="https://i.postimg.cc/WpxXTXWZ/image.png" alt="Imagem do treinamento" width="510" height="240">
+        </div>
+        
+        <!-- Ramo 1: Fundamentos de Segurança -->
+        <div class="node" style="top: 33%; left: 59%;">
+            <h2>Fundamentos de Segurança</h2>
+            <div class="link-container">
+                <a href="https://www.cybrary.it/course/ethical-hacking" target="_blank">Ethical Hacking Basics</a>
+                <button onclick="showURL(this, 'https://www.cybrary.it/course/ethical-hacking')">URL 🔗</button>
+                <span class="url-display"></span>
+            </div>
+            <div class="link-container">
+                <a href="https://www.sans.org/cyber-security-courses" target="_blank">SANS Security</a>
+                <button onclick="showURL(this, 'https://www.sans.org/cyber-security-courses')">URL 🔗</button>
+                <span class="url-display"></span>
+            </div>
+            <div class="link-container">
+                <a href="https://owasp.org/www-project-top-ten/" target="_blank">OWASP Top 10</a>
+                <button onclick="showURL(this, 'https://owasp.org/www-project-top-ten')">URL 🔗</button>
+                <span class="url-display"></span>
+            </div>
+            <div class="link-container">
+                <a href="https://www.kali.org/docs/" target="_blank">Kali Linux Docs</a>
+                <button onclick="showURL(this, 'https://www.kali.org/docs')">URL 🔗</button>
+                <span class="url-display"></span>
+            </div>
+            <div class="link-container">
+                <a href="https://csrc.nist.gov/publications" target="_blank">NIST Publications</a>
+                <button onclick="showURL(this, 'https://csrc.nist.gov/publications')">URL 🔗</button>
+                <span class="url-display"></span>
+            </div>
+        </div>      
+
+        <!-- Ramo 2: Técnicas de Invasão -->
+        <div class="node" style="top: 54%; right: -0%;">
+            <h2>Técnicas de Invasão</h2>
+            <div class="link-container">
+                <a href="https://www.hackthebox.com/" target="_blank">Hack The Box</a>
+                <button onclick="showURL(this, 'https://www.hackthebox.com')">URL 🔗</button>
+                <span class="url-display"></span>
+            </div>
+            <div class="link-container">
+                <a href="https://tryhackme.com/" target="_blank">TryHackMe</a>
+                <button onclick="showURL(this, 'https://tryhackme.com')">URL 🔗</button>
+                <span class="url-display"></span>
+            </div>
+            <div class="link-container">
+                <a href="https://www.offensive-security.com/pwk-oscp/" target="_blank">OSCP Training</a>
+                <button onclick="showURL(this, 'https://www.offensive-security.com/pwk-oscp')">URL 🔗</button>
+                <span class="url-display"></span>
+            </div>
+            <div class="link-container">
+                <a href="https://www.metasploit.com/" target="_blank">Metasploit Guide</a>
+                <button onclick="showURL(this, 'https://www.metasploit.com')">URL 🔗</button>
+                <span class="url-display"></span>
+            </div>
+            <div class="link-container">
+                <a href="https://www.exploit-db.com/" target="_blank">Exploit Database</a>
+                <button onclick="showURL(this, 'https://www.exploit-db.com')">URL 🔗</button>
+                <span class="url-display"></span>
+            </div>
+        </div>
+
+        <!-- Ramo 3: OSINT -->
+        <div class="node" style="top: 33%; left: 1%;">
+            <h2>OSINT</h2>
+            <div class="link-container">
+                <a href="https://osintframework.com/" target="_blank">OSINT Framework</a>
+                <button onclick="showURL(this, 'https://osintframework.com')">URL 🔗</button>
+                <span class="url-display"></span>
+            </div>
+            <div class="link-container">
+                <a href="https://www.bellingcat.com/resources/" target="_blank">Bellingcat Tools</a>
+                <button onclick="showURL(this, 'https://www.bellingcat.com/resources')">URL 🔗</button>
+                <span class="url-display"></span>
+            </div>
+            <div class="link-container">
+                <a href="https://inteltechniques.com/" target="_blank">Intel Techniques</a>
+                <button onclick="showURL(this, 'https://inteltechniques.com')">URL 🔗</button>
+                <span class="url-display"></span>
+            </div>
+            <div class="link-container">
+                <a href="https://www.maltego.com/" target="_blank">Maltego OSINT</a>
+                <button onclick="showURL(this, 'https://www.maltego.com')">URL 🔗</button>
+                <span class="url-display"></span>
+            </div>
+            <div class="link-container">
+                <a href="https://www.shodan.io/" target="_blank">Shodan Search</a>
+                <button onclick="showURL(this, 'https://www.shodan.io')">URL 🔗</button>
+                <span class="url-display"></span>
+            </div>
+        </div>
+
+        <!-- Ramo 4: Análise Forense -->
+        <div class="node" style="top: 54%; left: 1%;">
+            <h2>Análise Forense</h2>
+            <div class="link-container">
+                <a href="https://www.autopsy.com/" target="_blank">Autopsy Forensics</a>
+                <button onclick="showURL(this, 'https://www.autopsy.com')">URL 🔗</button>
+                <span class="url-display"></span>
+            </div>
+            <div class="link-container">
+                <a href="https://www.sleuthkit.org/" target="_blank">Sleuth Kit</a>
+                <button onclick="showURL(this, 'https://www.sleuthkit.org')">URL 🔗</button>
+                <span class="url-display"></span>
+            </div>
+            <div class="link-container">
+                <a href="https://www.metadata2go.com/" target="_blank">informações de metadados</a>
+                <button onclick="showURL(this, 'https://www.metadata2go.com')">URL 🔗</button>
+                <span class="url-display"></span>
+            </div>
+            <div class="link-container">
+                <a href="https://www.wireshark.org/docs/" target="_blank">Wireshark Guide</a>
+                <button onclick="showURL(this, 'https://www.wireshark.org/docs')">URL 🔗</button>
+                <span class="url-display"></span>
+            </div>
+            <div class="link-container">
+                <a href="https://volatilityfoundation.org/" target="_blank">Volatility Memory</a>
+                <button onclick="showURL(this, 'https://volatilityfoundation.org')">URL 🔗</button>
+                <span class="url-display"></span>
+            </div>
+        </div>
+        
+        <!-- Ramo 5: Prevenção e Defesa -->
+        <div class="node" style="bottom: -10%; right: -0%;">
+            <h2>Prevenção e Defesa</h2>
+            <div class="link-container">
+                <a href="https://www.cisecurity.org/" target="_blank">CIS Security</a>
+                <button onclick="showURL(this, 'https://www.cisecurity.org')">URL 🔗</button>
+                <span class="url-display"></span>
+           
+            </div>
+            <div class="link-container">
+                <a href="https://www.nist.gov/cyberframework" target="_blank">NIST Framework</a>
+                <button onclick="showURL(this, 'https://www.nist.gov/cyberframework')">URL 🔗</button>
+                <span class="url-display"></span>
+            </div>
+            <div class="link-container">
+                <a href="https://www.fireeye.com/solutions.html" target="_blank">FireEye Defense</a>
+                <button onclick="showURL(this, 'https://www.fireeye.com/solutions.html')">URL 🔗</button>
+                <span class="url-display"></span>
+            </div>
+            <div class="link-container">
+                <a href="https://www.crowdstrike.com/cybersecurity-101/" target="_blank">CrowdStrike 101</a>
+                <button onclick="showURL(this, 'https://www.crowdstrike.com/cybersecurity-101')">URL 🔗</button>
+                <span class="url-display"></span>
+            </div>
+            <div class="link-container">
+                <a href="https://www.snort.org/" target="_blank">Snort IDS</a>
+                <button onclick="showURL(this, 'https://www.snort.org')">URL 🔗</button>
+                <span class="url-display"></span>
+            </div>
+        </div>
+
+        <!-- Ramo 6: Automação e Scripting -->
+        <div class="node" style="bottom: 11%; left: 1%;">
+            <h2>Automação e Scripting</h2>
+            <div class="link-container">
+                <a href="https://www.python.org/doc/" target="_blank">Python Docs</a>
+                <button onclick="showURL(this, 'https://www.python.org/doc')">URL 🔗</button>
+                <span class="url-display"></span>
+            </div>
+            <div class="link-container">
+                <a href="https://www.gnu.org/software/bash/manual/" target="_blank">Bash Scripting</a>
+                <button onclick="showURL(this, 'https://www.gnu.org/software/bash/manual')">URL 🔗</button>
+                <span class="url-display"></span>
+            </div>
+            <div class="link-container">
+                <a href="https://github.com/topics/hacking-tool" target="_blank">GitHub Hacking Tools</a>
+                <button onclick="showURL(this, 'https://github.com/topics/hacking-tool')">URL 🔗</button>
+                <span class="url-display"></span>
+            </div>
+            <div class="link-container">
+                <a href="https://www.nmap.org/book/man-nse.html" target="_blank">Nmap Scripting</a>
+                <button onclick="showURL(this, 'https://www.nmap.org/book/man-nse.html')">URL 🔗</button>
+                <span class="url-display"></span>
+            </div>
+        </div>
+
+        <!-- Ramo 7: Engenharia Social -->
+        <div class="node" style="bottom: 11%; right: -0%;">
+            <h2>Engenharia Social</h2>
+            <div class="link-container">
+                <a href="https://www.social-engineer.org/" target="_blank">Social Engineer</a>
+                <button onclick="showURL(this, 'https://www.social-engineer.org')">URL 🔗</button>
+                <span class="url-display"></span>
+            </div>
+            <div class="link-container">
+                <a href="https://www.phishing.org/" target="_blank">Phishing Resources</a>
+                <button onclick="showURL(this, 'https://www.phishing.org')">URL 🔗</button>
+                <span class="url-display"></span>
+            </div>
+            <div class="link-container">
+                <a href="https://blog.neoway.com.br/phishing/" target="_blank">phishing</a>
+                <button onclick="showURL(this, 'https://blog.neoway.com.br/phishing/')">URL 🔗</button>
+                <span class="url-display"></span>
+            </div>
+            <div class="link-container">
+                <a href="https://www.blackhat.com/presentations.html" target="_blank">Black Hat Talks</a>
+                <button onclick="showURL(this, 'https://www.blackhat.com/presentations.html')">URL 🔗</button>
+                <span class="url-display"></span>
+            </div>
+        </div>
+
+        <!-- Ramo 8: Criptografia e Anonimato -->
+        <div class="node" style="bottom: -10%; left: 1%;">
+            <h2>Criptografia e Anonimato</h2>
+            <div class="link-container">
+                <a href="https://www.torproject.org/" target="_blank">Tor Project</a>
+                <button onclick="showURL(this, 'https://www.torproject.org')">URL 🔗</button>
+                <span class="url-display"></span>
+            </div>
+            <div class="link-container">
+                <a href="https://www.openvpn.net/community-resources/" target="_blank">OpenVPN Guide</a>
+                <button onclick="showURL(this, 'https://www.openvpn.net/community-resources')">URL 🔗</button>
+                <span class="url-display"></span>
+            </div>
+            <div class="link-container">
+                <a href="https://gnupg.org/documentation/" target="_blank">GPG Docs</a>
+                <button onclick="showURL(this, 'https://gnupg.org/documentation')">URL 🔗</button>
+                <span class="url-display"></span>
+            </div>
+            <div class="link-container">
+                <a href="https://www.veracrypt.fr/en/Home.html" target="_blank">VeraCrypt</a>
+                <button onclick="showURL(this, 'https://www.veracrypt.fr/en/Home.html')">URL 🔗</button>
+                <span class="url-display"></span>
+            </div>
+            <div class="link-container">
+                <a href="https://ibsec.com.br/o-que-e-criptografia-de-dados/" target="_blank">criptografia é importante</a>
+                <button onclick="showURL(this, 'https://ibsec.com.br/o-que-e-criptografia-de-dados')">URL🔗</button>
+                <span class="url-display"></span>
+            </div>
+        </div>
+
+        <!--  Hacker Investigador & OSINT  -->
+        <div class="node" style="top: 120%; left: 30%;">
+            <h2>🕵️ Hacker Investigador & OSINT 🕵️</h2>            
+
+        <!-- Linhas de Conexão -->
+        <div class="line" style="top: 50%; left: 50%; width: 220px; transform: rotate(-45deg);"></div>
+        <div class="line" style="top: 50%; left: 50%; width: 220px; transform: rotate(45deg);"></div>
+        <div class="line" style="top: 50%; left: 50%; width: 220px; transform: rotate(-135deg);"></div>
+        <div class="line" style="top: 50%; left: 50%; width: 150px; transform: rotate(-110deg);"></div>
+        <div class="line" style="top: 50%; left: 50%; width: 220px; transform: rotate(135deg);"></div>
+        <div class="line" style="top: 50%; left: 50%; width: 180px; transform: rotate(-20deg);"></div>
+        <div class="line" style="top: 50%; left: 50%; width: 180px; transform: rotate(20deg);"></div>
+        <div class="line" style="top: 50%; left: 50%; width: 200px; transform: rotate(110deg);"></div>
+    </div>  
+    
+    <!-- Script para mostrar/esconder a URL -->
+    <script>
+        function showURL(button, url) {
+            const urlDisplay = button.nextElementSibling;
+            if (urlDisplay.textContent === url) {
+                urlDisplay.textContent = ''; // Hide the URL
+            } else {
+                urlDisplay.textContent = url; // Show the URL
+            }
+        }
+    </script>
+    
+</body>
+</html>
