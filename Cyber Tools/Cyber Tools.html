@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyber Tools</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Courier New', Courier, monospace;
+            background: #0a0a0a;
+            color: #00ff00;
+            line-height: 1.6;
+        }
+
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #000000, #1a1a1a);
+            opacity: 0.8;
+            z-index: -1;
+        }
+
+        .matrix {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.1;
+            z-index: -1;
+            animation: fall 15s infinite linear;
+            background: repeating-linear-gradient(
+                to bottom,
+                rgba(0, 255, 0, 0.1),
+                rgba(0, 255, 0, 0.1) 2px,
+                transparent 2px,
+                transparent 4px
+            );
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(-100vh); }
+            100% { transform: translateY(100vh); }
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 0 0 10px #00ff00;
+            margin-bottom: 40px;
+        }
+
+        h2 {
+            color: #00ff00;
+            border-bottom: 2px solid #00ff00;
+            padding-bottom: 10px;
+            margin-top: 40px;
+            text-shadow: 0 0 5px #00ff00;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            margin: 10px 0;
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid #00ff00;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .item:hover {
+            box-shadow: 0 0 15px #00ff00;
+            transform: translateX(5px);
+        }
+
+        .item img {
+            margin-right: 15px;
+            object-fit: contain;
+        }
+
+        .item span {
+            flex-grow: 1;
+            color: #00ff00;
+        }
+
+        .button {
+            background: #000000;
+            border: 2px solid #00ff00;
+            padding: 8px 15px;
+            color: #00ff00;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            font-size: 14px;
+        }
+
+        .button:hover {
+            background: #00ff00;
+            color: #000000;
+            box-shadow: 0 0 10px #00ff00;
+        }
+    </style>
+</head>
+<body>
+    <div class="background">
+        <div class="matrix"></div>
+    </div>
+
+    <div class="container">
+        <h1>Cyber Tools</h1>
+
+       <!-- Fontes de Consultoria de Segurança -->
+    <div class="section">
+        <h2>Fontes de Consultoria de Segurança</h2>
+        <div class="item">
+            <img src="https://goosint.com/wp-content/uploads/2024/02/cert-eu-1.png" alt="Cert-EU Logo" width="120" height="60">
+            <span>| 1 = CERT-UE 🌟 - Avisos de segurança CERT da União Europeia</span>
+            <a href="https://cert.europa.eu/" target="_blank" class="button">Acessar</a>
+        </div>
+        <div class="item">
+            <img src="https://goosint.com/wp-content/uploads/2024/02/capture-decran-2024-02-16-a-23.06.03-1.png" alt="Cert-EU Logo" width="120" height="60">
+            <span>| 2 = CISA 🌟KEV - Conheça o catálogo de vulnerabilidades exploradas</span>
+            <a href="https://www.cisa.gov/" target="_blank" class="button">Acessar</a>
+        </div>
+        <div class="item">
+            <img src="https://goosint.com/wp-content/uploads/2024/02/capture-decran-2024-02-16-a-22.57.21-1.png" alt="Cert-EU Logo" width="120" height="60">
+            <span>| 3 = CERT-FR - Avisos de segurança do CERT francês</span>
+            <a href="https://www.cert.ssi.gouv.fr/" target="_blank" class="button">Acessar</a>
+        </div>
+        <div class="item">
+            <img src="https://goosint.com/wp-content/uploads/2024/02/capture-decran-2024-02-16-a-23.40.08.png" alt="Cert-EU Logo" width="120" height="60">
+            <span>| 4 = Meu CERT - Avisos de segurança do CERT da Malásia</span>
+            <a href="https://www.mycert.org.my/" target="_blank" class="button">Acessar</a>
+        </div>
+    </div>
+
+    <!-- Motores de Superfície de Ataque -->
+    <div class="section">
+        <h2>Motores de Superfície de Ataque</h2>
+        <div class="item">
+            <img src="https://goosint.com/wp-content/uploads/2023/05/shodan.png" alt="Cert-EU Logo" width="120" height="60">
+            <span>| 5 = Shodan 🌟 - Motor de busca de inteligência</span>
+            <a href="https://www.shodan.io/" target="_blank" class="button">Acessar</a>
+        </div>
+        <div class="item">
+            <img src="https://goosint.com/wp-content/uploads/2023/05/censys-1.png?w=1024" alt="Cert-EU Logo" width="120" height="60">
+            <span>| 6 = Censys - Motor de busca de inteligência</span>
+            <a href="https://search.censys.io/" target="_blank" class="button">Acessar</a>
+        </div>
+        <div class="item">
+            <img src="https://goosint.com/wp-content/uploads/2023/05/zoomeye.png" alt="Cert-EU Logo" width="120" height="60">
+            <span>| 7 = ZoomEye - Motor de busca de inteligência</span>
+            <a href="https://www.zoomeye.org/" target="_blank" class="button">Acessar</a>
+        </div>
+        <div class="item">
+            <img src="https://goosint.com/wp-content/uploads/2023/05/intelligencex-4.png" alt="Cert-EU Logo" width="120" height="60">
+            <span>| 8 = Inteligência X - Motor de busca de inteligência</span>
+            <a href="https://intelx.io/" target="_blank" class="button">Acessar</a>
+        </div>
+        <div class="item">
+            <img src="https://goosint.com/wp-content/uploads/2023/05/fullhunt.png" alt="Cert-EU Logo" width="120" height="60">
+            <span>| 9 = Caçada Completa - Gerenciamento de superfície de ataque</span>
+            <a href="https://fullhunt.io/" target="_blank" class="button">Acessar</a>
+        </div>
+        <div class="item">
+            <img src="https://goosint.com/wp-content/uploads/2023/05/intelligencex-3.png" alt="Cert-EU Logo" width="50" height="60">
+            <span>| 10 = Lista Telefônica - Recuperar URLs de um domínio fornecido</span>
+            <a href="https://phonebook.cz/" target="_blank" class="button">Acessar</a>
+        </div>
+        <div class="item">
+            <img src="https://goosint.com/wp-content/uploads/2023/05/onypheicon-1.png" alt="Cert-EU Logo" width="100" height="60">
+            <span>| 11 = Ônife - Mecanismo de busca de defesa cibernética</span>
+            <a href="https://www.onyphe.io/" target="_blank" class="button">Acessar</a>
+        </div>
+        <div class="item">
+            <img src="https://goosint.com/wp-content/uploads/2023/05/greynoise-2.png" alt="Cert-EU Logo" width="120" height="60">
+            <span>| 12 = Ruído Cinzento - Motor de busca de ativos e vulnerabilidades</span>
+            <a href="https://www.greynoise.io/" target="_blank" class="button">Acessar</a>
+        </div>
+        <div class="item">
+            <img src="https://goosint.com/wp-content/uploads/2023/05/shadowserver.png" alt="Cert-EU Logo" width="120" height="60">
+            <span>| 13 = Servidor Sombra - Assinatura de relatórios diários grátis</span>
+            <a href="https://www.shadowserver.org/" target="_blank" class="button">Acessar</a>
+        </div>
+        <div class="item">
+            <img src="https://goosint.com/wp-content/uploads/2023/05/socradar.png" alt="Cert-EU Logo" width="120" height="60">
+            <span>| 14 = SOCRadar - Inteligência de ameaças estendida</span>
+            <a href="https://socradar.io/" target="_blank" class="button">Acessar</a>
+        </div>
+        <div class="item">
+            <img src="https://goosint.com/wp-content/uploads/2023/05/securitytrails.png" alt="Cert-EU Logo" width="120" height="60">
+            <span>| 15 = Trilhas de Segurança - API de inteligência de superfície de ataque</span>
+            <a href="https://securitytrails.com/" target="_blank" class="button">Acessar</a>
+        </div>
+        <div class="item">
+            <img src="https://goosint.com/wp-content/uploads/2023/05/criminalip.png" alt="Cert-EU Logo" width="120" height="60">
+            <span>| 16 = CriminalIP - Busca de inteligência</span>
+            <a href="https://www.criminalip.io/" target="_blank" class="button">Acessar</a>
+        </div>
+        <div class="item">
+            <img src="https://goosint.com/wp-content/uploads/2024/01/hunter.png" alt="Cert-EU Logo" width="100" height="60">
+            <span>| 17 = Caçador - Pesquisa de Hunter na Internet</span>
+            <a href="https://hunter.how/" target="_blank" class="button">Acessar</a>
+        </div>
+        <div class="item">
+            <img src="https://goosint.com/wp-content/uploads/2024/05/fofa.png" alt="Cert-EU Logo" width="120" height="60">
+            <span>| 18 = FOFA - Mecanismo de busca de ativos de rede</span>
+            <a href="https://fofa.info/" target="_blank" class="button">Acessar</a>
+        </div>
+        <div class="item">
+            <img src="https://goosint.com/wp-content/uploads/2024/05/netlas.png" alt="Cert-EU Logo" width="120" height="60">
+            <span>| 19 = Netlas - Mecanismo de descoberta de superfície de ataque</span>
+            <a href="https://netlas.io/" target="_blank" class="button">Acessar</a>
+        </div>
+        <div class="item">
+            <img src="https://goosint.com/wp-content/uploads/2024/05/polyswarm.png" alt="Cert-EU Logo" width="120" height="60">
+            <span>| 20 = Polienxame - Mecanismo de inteligência de malware da Swarm</span>
+            <a href="https://polyswarm.io/" target="_blank" class="button">Acessar</a>
+        </div>
+        <div class="item">
+            <img src="https://goosint.com/wp-content/uploads/2024/09/hudsonrock.png" alt="Cert-EU Logo" width="150" height="80">
+            <span>| 21 = Rocha Hudson - Ferramentas gratuitas de inteligência cibernética</span>
+            <a href="https://hudsonrock.com/" target="_blank" class="button">Acessar</a>
+        </div>
+    </div>
+
+    <!-- Ferramentas de Sandbox e Reputação -->
+    <div class="section">
+        <h2>Ferramentas de Sandbox e Reputação</h2>        
+        </div>
+        <div class="item">
+            <img src="https://goosint.com/wp-content/uploads/2023/05/brozserling.png" alt="Cert-EU Logo" width="120" height="60">
+            <span>| 22 = NavegadorLing - Sandbox do navegador online</span>
+            <a href="https://www.browserling.com/" target="_blank" class="button">Acessar</a>
+        </div>
+        <div class="item">
+            <img src="https://goosint.com/wp-content/uploads/2023/05/virustotal.png" alt="Cert-EU Logo" width="90" height="60">
+            <span>| 23 = Vírus Total 🌟 - Verificador de malware gratuito do Google</span>
+            <a href="https://www.virustotal.com/" target="_blank" class="button">Acessar</a>
+        </div>
+        <div class="item">
+            <img src="https://goosint.com/wp-content/uploads/2023/05/hybridanalysis.png" alt="Cert-EU Logo" width="60" height="60">
+            <span>| 24 = Análise Híbrida - Scanner de malware gratuito da Crowdstrike</span>
+            <a href="https://www.hybrid-analysis.com/" target="_blank" class="button">Acessar</a>
+        </div>
+        <div class="item">
+            <img src="https://goosint.com/wp-content/uploads/2024/05/anyrun-1.png" alt="Cert-EU Logo" width="70" height="60">
+            <span>| 25 = Aplicativo AnyRun - Análise interativa de malware</span>
+            <a href="https://app.any.run/" target="_blank" class="button">Acessar</a>
+        </div>
+        <div class="item">
+            <img src="https://goosint.com/wp-content/uploads/2023/05/urlscanio.png" alt="Cert-EU Logo" width="80" height="60">
+            <span>| 26 = Varredura de URL 🌟 - Sandbox público</span>
+            <a href="https://urlscan.io/" target="_blank" class="button">Acessar</a>
+        </div>
+        <div class="item">
+            <img src="https://goosint.com/wp-content/uploads/2023/05/cuckoocert.png" alt="Cert-EU Logo" width="70" height="60">
+            <span>| 27 = CERTIFICADO DE CUCKO - Ferramenta de análise de malware online</span>
+            <a href="https://cuckoosandbox.org/" target="_blank" class="button">Acessar</a>
+        </div>
+        <div class="item">
+            <img src="https://goosint.com/wp-content/uploads/2023/05/ipqualityscore-1.png" alt="Cert-EU Logo" width="100" height="60">
+            <span>| 28 = Pontuação de Qualidade de IP - Pesquisa de reputação de IP</span>
+            <a href="https://www.ipqualityscore.com/" target="_blank" class="button">Acessar</a>
+        </div>
+        <div class="item">
+            <img src="https://goosint.com/wp-content/uploads/2023/05/google.png" alt="Cert-EU Logo" width="100" height="60">
+            <span>| 29 = Google Seguro - Relatório de Transparência do Google</span>
+            <a href="https://transparencyreport.google.com/" target="_blank" class="button">Acessar</a>
+        </div>
+        <div class="item">
+            <img src="https://goosint.com/wp-content/uploads/2023/05/talos.png" alt="Cert-EU Logo" width="70" height="60">
+            <span>| 30 = Talos - Pesquisa de reputação de ativos pela Cisco</span>
+            <a href="https://talosintelligence.com/" target="_blank" class="button">Acessar</a>
+        </div>
+        <div class="item">
+            <img src="https://goosint.com/wp-content/uploads/2023/05/abuseip.png" alt="Cert-EU Logo" width="100" height="60">
+            <span>| 31 = Abuso de IP - Pesquisa de reputação de ativos</span>
+            <a href="https://www.abuseipdb.com/" target="_blank" class="button">Acessar</a>
+        </div>
+        <div class="item">
+            <img src="https://goosint.com/wp-content/uploads/2023/05/urlvoid.png" alt="Cert-EU Logo" width="70" height="60">
+            <span>| 32 = URLVazio - Pesquisa de reputação do site</span>
+            <a href="https://www.urlvoid.com/" target="_blank" class="button">Acessar</a>
+        </div>
+        <div class="item">
+            <img src="https://goosint.com/wp-content/uploads/2023/05/scamadviser.png" alt="Cert-EU Logo" width="100" height="60">
+            <span>| 33 = Consultor de Fraude - Pesquisa de reputação de site de comércio eletrônico</span>
+            <a href="https://www.scamadviser.com/" target="_blank" class="button">Acessar</a>
+        </div>
+        <div class="item">
+            <img src="https://goosint.com/wp-content/uploads/2023/06/triage.png" alt="Cert-EU Logo" width="100" height="60">
+            <span>| 34 = Triagem - Analisar amostras de malware</span>
+            <a href="https://tria.ge/" target="_blank" class="button">Acessar</a>
+        </div>
+        <div class="item">
+            <img src="https://goosint.com/wp-content/uploads/2023/06/joesandbox-1.png" alt="Cert-EU Logo" width="100" height="60">
+            <span>| 35 = Caixa de Areia do Joe - Sandbox para Windows, MacOS e Android</span>
+            <a href="https://www.joesandbox.com/" target="_blank" class="button">Acessar</a>
+        </div>
+        <div class="item">
+            <img src="https://goosint.com/wp-content/uploads/2023/06/cybergordon.png" alt="Cert-EU Logo" width="120" height="60">
+            <span>| 37 = Cyber Gordon - Verificação de reputação cibernética multi-motor</span>
+            <a href="https://cybergordon.com/" target="_blank" class="button">Acessar</a>
+        </div>
+        <div class="item">
+            <img src="https://goosint.com/wp-content/uploads/2023/07/mobsf.png" alt="Cert-EU Logo" width="100" height="60">
+            <span>| 38 = MobSF - Estrutura de segurança móvel (Android/iOS/Win)</span>
+            <a href="https://mobsf.github.io/" target="_blank" class="button">Acessar</a>
+        </div>
+        <div class="item">
+            <img src="https://goosint.com/wp-content/uploads/2023/07/ibmxforce.png" alt="Cert-EU Logo" width="100" height="60">
+            <span>| 39 = IBM X-Force - Análise de malware pela IBM</span>
+            <a href="https://exchange.xforce.ibmcloud.com/" target="_blank" class="button">Acessar</a>
+        </div>
+        <div class="item">
+            <img src="https://goosint.com/wp-content/uploads/2023/06/paloalto.png?w=1024" alt="Cert-EU Logo" width="100" height="60">
+            <span>| 40 = Filtragem PA - Reputação de URL por Palo Alto</span>
+            <a href="https://www.paloaltonetworks.com/" target="_blank" class="button">Acessar</a>
+        </div>
+        <div class="item">
+            <img src="https://goosint.com/wp-content/uploads/2023/07/bluecoat.png?w=300" alt="Cert-EU Logo" width="80" height="60">
+            <span>| 41 = Avaliação do Bluecoat - Reputação de URL pela Symantec</span>
+            <a href="https://sitereview.bluecoat.com/" target="_blank" class="button">Acessar</a>
+        </div>        
+        <div class="item">
+            <img src="https://goosint.com/wp-content/uploads/2023/07/malwares-1.png" alt="Malwares Logo" width="120" height="60">
+            <span>| 42 = Malwares - Verificação de malware de hash, IP e domínio</span>
+            <a href="https://www.malwares.com/" target="_blank" class="button">Acessar</a>
+        </div>
+        <div class="item">
+            <img src="https://goosint.com/wp-content/uploads/2023/07/docguard.png" alt="DocGuard Logo" width="120" height="60">
+            <span>| 43 = DocGuard - Verificação de ameaças de malware a partir de Hash</span>
+            <a href="https://docguard.io/" target="_blank" class="button">Acessar</a>
+        </div>
+        <div class="item">
+            <img src="https://goosint.com/wp-content/uploads/2023/07/metadefender.png" alt="MetaDefender Logo" width="120" height="40">
+            <span>| 44 = MetaDefender - Digitalize qualquer coisa com OPSWAT</span>
+            <a href="https://metadefender.opswat.com/" target="_blank" class="button">Acessar</a>
+        </div>
+        <div class="item">
+            <img src="https://goosint.com/wp-content/uploads/2023/07/filescanio.png" alt="OPSWAT Logo" width="120" height="60">
+            <span>| 45 = Sandbox por OPSWAT - Verificação de arquivos</span>
+            <a href="https://www.filescan.io/scan" target="_blank" class="button">Acessar</a>     
+
+    </div>
+    <div class="item">
+        <img src="https://static.opswat.com/uploads/google-cloud/images/blog/cybereason-opswat.png" alt="OPSWAT Logo" width="120" height="60">
+        <span>| 46 = Protecting the World's Critical Infrastructure</span>
+        <a href="https://www.opswat.com/" target="_blank" class="button">Acessar</a>
+    </div>
+
+        <div class="item">
+            <img src="https://goosint.com/wp-content/uploads/2023/07/karsperky.png" alt="Kaspersky Logo" width="120" height="60">
+            <span>| 47 = Dica aberta Kaspersky - Análise de arquivos pela Kaspersky</span>
+            <a href="https://opentip.kaspersky.com/#search/" target="_blank" class="button">Acessar</a>
+        </div>
+        <div class="item">
+            <img src="https://goosint.com/wp-content/uploads/2023/08/blacklistchecker-1.png" alt="Blacklist Checker Logo" width="120" height="60">
+            <span>| 48 = Verificador de Lista Negra - Verificação de lista negra de IP,domínio e-mail</span>
+            <a href="https://blacklistchecker.com/" target="_blank" class="button">Acessar</a>
+        </div>
+        <div class="item">
+            <img src="https://goosint.com/wp-content/uploads/2023/12/franceverif.png" alt="France Verif Logo" width="120" height="60">
+            <span>| 49 = França Verif🌟Verificador de reputação de comércio eletrônico</span>
+            <a href="https://franceverif.fr/fr/verifier-site-web/" target="_blank" class="button">Acessar</a>
+        </div>
+        <div class="item">
+            <img src="https://goosint.com/wp-content/uploads/2024/01/rstcloudwhite.png" alt="RST Cloud Logo" width="120" height="60">
+            <span>| 50 = Nuvem RST - Pesquisa de IoC (Indicadores de Compromisso) RST Cloud</span>
+            <a href="https://www.rstcloud.com/ioc-lookup/" target="_blank" class="button">Acessar</a>
+        </div>
+        <div class="item">
+            <img src="https://goosint.com/wp-content/uploads/2024/03/scamalytics.png" alt="Scamalytics Logo" width="120" height="60">
+            <span>| 51 = Scamalytics - Pontuação de fraude de endereço IP</span>
+            <a href="https://scamalytics.com/" target="_blank" class="button">Acessar</a>
+        </div>
+        <div class="item">
+            <img src="https://goosint.com/wp-content/uploads/2024/03/valkyrie_logo_blue.png" alt="Valkyrie Verdict Logo" width="120" height="60">
+            <span>| 52 = Veredito da Valquíria - Análise gratuita de malware para arquivos e sites</span>
+            <a href="https://verdict.valkyrie.comodo.com/" target="_blank" class="button">Acessar</a>
+        </div>
+        <div class="item">
+            <img src="https://goosint.com/wp-content/uploads/2024/03/threatyeti.png" alt="Alpha Mountain Threatyeti Logo" width="130" height="60">
+            <span>| 53 = Ameaças - Investigar pontuação de risco do host</span>
+            <a href="https://www.alphamountain.ai/" target="_blank" class="button">Acessar</a>
+        </div>
+        <div class="item">
+            <img src="https://goosint.com/wp-content/uploads/2024/05/checkphish.png" alt="Check Phish Logo" width="120" height="60">
+            <span>| 54 = Verificar Phish - Verificação gratuita de phishing de URL com captura de tela</span>
+            <a href="https://checkphish.ai/" target="_blank" class="button">Acessar</a>
+        </div>
+        <div class="item">
+            <img src="https://goosint.com/wp-content/uploads/2024/05/expandurl.png" alt="ExpandURL Logo" width="120" height="60">
+            <span>| 55 = ExpandirURL - Expandir URLs encurtados</span>
+            <a href="https://www.expandurl.net/" target="_blank" class="button">Acessar</a>
+        </div>
+       
+
+    <!-- Ferramentas de Inteligência de DNS -->
+    <div class="section">
+        <h2>Ferramentas de Inteligência de DNS</h2>
+        <div class="item">
+            <img src="https://goosint.com/wp-content/uploads/2023/05/dig.png" alt="Cert-EU Logo" width="80" height="60">
+            <span>| 56 = Interface DigWeb 🌟 - DNS Escavação</span>
+            <a href="https://digwebinterface.com/" target="_blank" class="button">Acessar</a>
+        </div>
+        <div class="item">
+            <img src="https://goosint.com/wp-content/uploads/2023/05/dnsdumpster.png" alt="Cert-EU Logo" width="90" height="60">
+            <span>| 57 = DNSDumpster - Pesquisa profunda de DNS</span>
+            <a href="https://dnsdumpster.com/" target="_blank" class="button">Acessar</a>
+        </div>
+        <div class="item">
+            <img src="https://goosint.com/wp-content/uploads/2023/05/securitytrails-1.png?w=1024" alt="Cert-EU Logo" width="100" height="60">
+            <span>| 58 = Trilhas de Segurança - Pesquisa DNS</span>
+            <a href="https://securitytrails.com/" target="_blank" class="button">Acessar</a>
+        </div>
+        <div class="item">
+            <img src="https://goosint.com/wp-content/uploads/2023/05/mxtoolbox.png" alt="Cert-EU Logo" width="100" height="60">
+            <span>| 59 = Caixa de Ferramentas MX 🌟 - Auditoria de DNS MX</span>
+            <a href="https://mxtoolbox.com/" target="_blank" class="button">Acessar</a>
+        </div>
+        <div class="item">
+            <img src="https://goosint.com/wp-content/uploads/2023/05/dnslytics.png" alt="Cert-EU Logo" width="100" height="60">
+            <span>| 60 = DNSlíticos - IP reverso para obter domínios hospedados</span>
+            <a href="https://dnslytics.com/" target="_blank" class="button">Acessar</a>
+        </div>
+        <div class="item">
+            <img src="https://goosint.com/wp-content/uploads/2023/05/where-goes.png" alt="Cert-EU Logo" width="100" height="60">
+            <span>| 61 = Onde Vai - Para onde vai um link</span>
+            <a href="https://wheregoes.com/" target="_blank" class="button">Acessar</a>
+        </div>
+        <div class="item">
+            <img src="https://goosint.com/wp-content/uploads/2023/06/whatmydns.png" alt="Cert-EU Logo" width="100" height="60">
+            <span>| 62 = O que é Meu DNS 🌟 - Detalhes do DNS Whois</span>
+            <a href="https://www.whatsmydns.net/" target="_blank" class="button">Acessar</a>
+        </div>
+        <div class="item">
+            <img src="https://goosint.com/wp-content/uploads/2023/06/domaintools.png" alt="Cert-EU Logo" width="100" height="60">
+            <span>| 63 = Ferramentas de Domínio - Pesquisa DNS Whois</span>
+            <a href="https://whois.domaintools.com/" target="_blank" class="button">Acessar</a>
+        </div>
+        <div class="item">
+            <img src="https://goosint.com/wp-content/uploads/2023/07/completedns.png" alt="Cert-EU Logo" width="100" height="60">
+            <span>| 64 = Histórico de DNS - Histórico de registros DNS de domínio</span>
+            <a href="https://completedns.com/dns-history/" target="_blank" class="button">Acessar</a>
+        </div>
+   
+
+        <!-- Interface Gráfica do Usuário DiG -->
+        <div class="section">            
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2023/08/diggui-temp-logo.png" alt="Cert-EU Logo" width="60" height="60">
+                <span>| 65 = DNS Dig (interface moderna) - Interface gráfica do usuário DiG</span>
+                <a href="https://www.diggui.com/" target="_blank" class="button">Acessar</a>
+            </div>
+        </div>    
+        <!-- Segurança DNS -->
+        <div class="section">           
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2023/12/merox.png" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 66 = Verificação MEROX - Verificação de segurança DNS e DMARC</span>
+                <a href="https://check.merox.io/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2024/05/ismalicious.png" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 67 = É Malicioso? - Verifique se o IP/Domínio está em listas públicas maliciosas</span>
+                <a href="https://ismalicious.com/" target="_blank" class="button">Acessar</a>
+            </div>
+        </div>
+    
+        <!-- Ferramentas de Inteligência de Rede -->
+        <div class="section">
+            <h2>Ferramentas de Inteligência de Rede</h2>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2023/07/ipvoid.png" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 68 = IPvoid - Ferramentas populares de IP</span>
+                <a href="https://www.ipvoid.com/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2023/05/keycdn.png" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 69 = ChaveCDN - Pesquisa de IP</span>
+                <a href="https://tools.keycdn.com/geo" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2023/05/lupovis.png" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 70 = Lupovis - Pesquisa de IP</span>
+                <a href="https://prowl.lupovis.io/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2023/06/ipinfo.png" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 71 = Informações do IP - Dados de endereço IP confiáveis</span>
+                <a href="https://ipinfo.io/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2023/06/hping.png" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 72 = Hping - Enviar Ping personalizado para avaliação de segurança</span>
+                <a href="http://www.hping.org/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2023/06/peeringdb.png" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 73 = PeeringDB - Rede, Internet Exchange e Facility DB</span>
+                <a href="https://www.peeringdb.com/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2023/05/dnsdumpster-1.png" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 74 = Ferramentas de PI - Ferramentas básicas de IP e rede</span>
+                <a href="https://hackertarget.com/ip-tools/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://nmap.online/t/nmap/images/logo.png" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 75 = Nmap Online - Varredura de portas IP do Nmap</span>
+                <a href="https://nmap.online/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2023/05/wigle.png" alt="Cert-EU Logo" width="80" height="60">
+                <span>| 76 = Girar - Mapeamento de Redes Sem Fio</span>
+                <a href="https://wigle.net/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://www.yougetsignal.com/img/site_logo.gif" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 77 = Scanner de Porta - Scanner de porta</span>
+                <a href="https://www.yougetsignal.com/tools/open-ports/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2023/05/whatismyip.png?w=60" alt="Cert-EU Logo" width="80" height="60">
+                <span>| 78 = Scanner de Porta - Scanner de porta</span>
+                <a href="https://www.whatismyip.com/port-scanner/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2023/08/bgptools.png" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 79 = Ferramentas BGP - Informações BGP</span>
+                <a href="https://bgp.tools/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2024/11/calculator-white.png" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 80 = Calculadora de Sub-rede IP - Calculadora de IP</span>
+                <a href="https://www.calculator.net/ip-subnet-calculator.html" target="_blank" class="button">Acessar</a>
+            </div>
+        </div>
+    
+        <!-- Ferramentas de Inteligência de E-mail -->
+        <div class="section">
+            <h2>Ferramentas de Inteligência de E-mail</h2>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2023/05/mxtoolbox-1.png" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 81 = Caixa de Ferramentas MX 🌟 - Analisador de e-mail</span>
+                <a href="https://mxtoolbox.com/EmailHeaders.aspx/"_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2023/05/phishtool.png" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 82 = Ferramenta de Phish - Excelente análise forense de e-mails</span>
+                <a href="https://www.phishtool.com/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://cdn.intelx.io/img/IntelligenceX.svg" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 83 = Lista Telefônica 🌟 - Recuperar e-mails de um domínio fornecido</span>
+                <a href="https://intelx.io/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2023/05/epieos.png?w=1024" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 84 = Epieos - Recuperar informações de um e-mail fornecido</span>
+                <a href="https://epieos.com/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2023/05/hunter.png?w=1024" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 85 = Caçador - Recuperar e-mails de um domínio fornecido ou verificar e-mail</span>
+                <a href="https://hunter.io/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2023/05/dehashed.png" alt="Cert-EU Logo" width="70" height="60">
+                <span>| 86 = Desintegrado 🌟 - Recuperar senhas do domínio</span>
+                <a href="https://www.dehashed.com/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2023/05/phishtank.gif" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 87 = Tanque de Phish - Banco de dados de phishing</span>
+                <a href="https://www.phishtank.com/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2023/05/ncsc.png" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 88 = Segurança de E-mail - Verificação de segurança de e-mail gratuita pelo UK NCSC</span>
+                <a href="https://checkcybersecurity.service.ncsc.gov.uk/email-security-check/form" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2023/06/haveibeenpwned.png" alt="Cert-EU Logo" width="130" height="60">
+                <span>| 89 = HIBP? 🌟 - Verifique se um e-mail vazou</span>
+                <a href="https://haveibeenpwned.com/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2023/07/osint.industries.jpg" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 90 = Indústrias OSINT - Mapa E-mail e Telefone mais de 200 sites</span>
+                <a href="https://osint.industries/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2024/01/predictasearch.png?w=803" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 91 = Predicta Search (KO) - Pegada digital de e-mail e telefone (Não é gratuito)</span>
+                <a href="https://predictasearch.com/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2023/06/haveibeenpwned.png" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 92 = Pesquisa de Domínio - notificado se seu domínio estiver em violação</span>
+                <a href="https://haveibeenpwned.com/DomainSearch" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2024/05/haveibeensquatted.png" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 93 = TenhoIBeenSquatted - Verifique se o domínio foi invadido</span>
+                <a href="https://haveibeensquatted.com/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2024/09/bimi.png" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 94 = Inspetor BIMI - Verifique a conformidade do seu domínio com o BIMI</span>
+                <a href="https://domain-checker.valimail.com/bimi/?utm_source=BIMIGroup&utm_medium=validator" target="_blank" class="button">Acessar</a>
+            </div>
+        </div>   
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2024/09/dmarcly.png?w=1024" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 95 = Verificador de Lista Negra 🌟 - Verifique se seu domínio está na lista negra</span>
+                <a href="https://dmarcly.com/tools/blacklist-checker" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2024/09/dmarcly.png" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 96 = Ferramentas DMARCLY - Várias ferramentas verificação egurança DNS</span>
+                <a href="https://dmarcly.com/tools/" target="_blank" class="button">Acessar</a>
+            </div>
+        </div>
+        <div class="item">
+            <img src="https://www.dmarcly.com/assets/images/logo-light.svg" alt="Cert-EU Logo" width="100" height="60">
+            <span>| 97 = Ferramentas DMARCLY - Várias ferramentas verificação de segurança de DNS</span>
+            <a href="https://www.dmarcly.com/" target="_blank" class="button">Acessar</a>
+        </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2024/09/logo-dmarc.png?w=1024" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 98 = Aprenda DMARC - Um console para aprender e testar DMARC e e-mail</span>
+                <a href="https://learndmarc.com/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2024/09/easydmarc.png" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 99 = DMARC Fácil - Analisador de Segurança de Domínio 1</span>
+                <a href="https://easydmarc.com/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://dmarcian.com/wp-content/themes/_dmarcian/img/logo-w.svg" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 100 = Conselheiro DMARC - Analisador de Segurança de Domínio 2</span>
+                <a href="https://dmarcian.com/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2024/09/logo-merox-dmarc.png" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 101 = Verificação MEROX - Analisador de Segurança de Domínio 3</span>
+                <a href="https://check.merox.io/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2024/09/red.flag_.domains.png" alt="Cert-EU Logo" width="50" height="60">
+                <span>| 102 = Domínios de Bandeira Vermelha 🌟 - Domínios provavelmente maliciosos registrados recentemente</span>
+                <a href="https://red.flag.domains/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2024/09/dkimcorelogo2.png" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 103 = Núcleo DKIM - Gerar chave principal DKIM e auditar DKIM</span>
+                <a href="https://dkimcore.org/tools/" target="_blank" class="button">Acessar</a>
+            </div>
+          
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2024/09/viewdns.png" alt="Cert-EU Logo" width="130" height="60">
+                <span>| 104 = Exibir DNS - Inteligência DNS</span>
+                <a href="https://viewdns.info/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2024/09/emailhippo.png" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 105 = E-mail Hippo - Ferramenta de verificação de endereço de e-mail</span>
+                <a href="https://tools.emailhippo.com/" target="_blank" class="button">Acessar</a>
+            </div>       
+    
+        <!-- Ferramentas de Inteligência de Imagem -->
+        <div class="section">
+            <h2>Ferramentas de Inteligência de Imagem</h2>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2023/05/tineye.png" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 106 = Olho de Lata - Pesquisa reversa de imagens</span>
+                <a href="https://tineye.com/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2023/05/pimeyes.png" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 107 = Olhos Pim - Pesquisa de imagem especializada em face reversa</span>
+                <a href="https://pimeyes.com/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2023/06/pic2map.png" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 108 = Pic2map - Visualizador de dados EXIF de imagem</span>
+                <a href="https://www.pic2map.com/" target="_blank" class="button">Acessar</a>
+            </div>
+        
+    
+        <!-- Scanner de Vulnerabilidades e Tecnologias da Web -->
+        <div class="section">
+            <h2>Scanner de Vulnerabilidades e Tecnologias da Web</h2>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2023/05/qualys.png" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 109 = Laboratórios SSL 🌟 - Scanner de certificado SSL de site da Qualys</span>
+                <a href="https://www.ssllabs.com/ssltest/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2023/05/cloudflare.png?w=1024" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 110 = Radar Cloudflare - Scanner de URL incrível</span>
+                <a href="https://radar.cloudflare.com/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2023/05/openvas2.png" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 111 = OpenVAS Online - Verificador de vulnerabilidades on-line</span>
+                <a href="https://hostedscan.com/openvas-vulnerability-scan" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2023/05/netcraft.jpeg" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 112 = NetCraft 🌟 - Tecnologias de site e scanner de infraestrutura</span>
+                <a href="https://www.netcraft.com/tools/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2023/05/builtwith.png" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 113 = Construído Com - Scanner de tecnologias de ativos</span>
+                <a href="https://builtwith.com/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2023/05/internetarchive-2.png?w=898" alt="Cert-EU Logo" width="60" height="60">
+                <span>| 114 = Arquivo da Web - Máquina de Arquivo da Internet</span>
+                <a href="https://archive.org/web/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://www.sslshopper.com/assets/templates/sslshopper2016/img/ssl-shopper-logo.svg" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 115 = Verificação SSL - Verificação SSL/TLS</span>
+                <a href="https://www.sslshopper.com/ssl-checker.html" target="_blank" class="button">Acessar</a>
+            </div>
+       
+        <div class="item">
+            <img src="https://goosint.com/wp-content/uploads/2023/06/dnsdumpster-2.png" alt="Cert-EU Logo" width="100" height="60">
+            <span>| 116 = Verificação SSL - Verificação SSL/TLS</span>
+            <a href="https://hackertarget.com/ssl-check/" target="_blank" class="button">Acessar</a>
+        </div>
+            <div class="item">
+                <img src="https://www.wappalyzer.com/images/logo/logo-light.png" alt="Cert-EU Logo" width="130" height="60">
+                <span>| 117 = Wappalizador - Scanner de tecnologias de site</span>
+                <a href="https://www.wappalyzer.com/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://download.logo.wine/logo/WordPress.com/WordPress.com-Logo.wine.png" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 118 = Verificação de Segurança do CMS - WordPress Security Scan</span>
+                <a href="https://hackertarget.com/wordpress-security-scan/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2023/05/wafw00f.png" alt="Cert-EU Logo" width="50" height="60">
+                <span>| 119 = WafWoo - Detecção WAF</span>
+                <a href="https://w-e-b.site/?token=03AFcWeA6dOEK8xd77wYyyCR94fIszVwMVZJDONVBHd4OL074YUVOHYv-xv_FsovJCakN_lGpKHLTessylTsbZF6wMwnMTB1lIVXJGT_bQSXvoS4DRnGauc2822gi05V3VfM0pVhG4zDH_Eif6ry5zdYEHHwKlW69TmXf1RmFZSbYNWwLSikm37gRckjhl1QE_wHcUC5xRCYBusfYBeCPxXpBDQW4-6fZzrhT4Qs6Kgab7H8po3cpDHOZ03Pj7HUFw7b_1kBMcEwOPS1X-us-QXlX27hax6yyYW2O6rxu_NvDd5Js7o1XCzLndi1H3Oe1a7Eda4cbVmnbF-KMfVEUI26N-vmVDzp8S8d4nB_f7W9QbPY8S7Gqk-9nkv0LCcGA8qXZElQuzhAsO4xyG_a8r4yds1c9ouq6qNZx7FKStF9dDxVWyUJPPEViXy6_EwjrLdCXf1N8Qm3Gyq_qPgoSbFmmuF4EvLDYDAEqiHBTP9eoJ5MBpshx0Vypdb9_kX7uiK28xqlT0t4vOh1Pverkm4BeocmydAjdx0zH7e4qwfQYkpkXSEiP6Nf3TBDH_l63c_IvRM7EKwBACdv9T85pH91bUncADRMHdxBMiCn8XUSZS9jwmn-fJ8rV-Sszuaa4kQHP5tanjhpROYMk2pybbEIZ11ZATu81KRZs7H2a13OtlVYpMpZUgtaBPSF0roAllTwi-vIEOHKQ4VXmwhlXwSRHdQZHGRY6IBfB-S_VD0E_LboPje6SUCTgTM95nCQ1imHz2NmOpngoP-7NL47Fs0hMWZinMkinmtW6U_e8G5TM2czBWVuna8cBqU29OuZllg7Qir6iTwsG4NERAA_g4Lt2S9LoXvlz-uRJeytALkEb6AOzkBgEoVRrJ7cx32c8LbSsms-OsJ9a_4bDc2blHnac9CG1UEtbqaeOUMerIBGcrbYxhWqNDSPq6lBu5yx1LTiShVXN1Kvyp3QMrfjzSwaDe8QEDUA9eksAVlcc_NPeNB6LrsoNwNyPaN--Rf_eZIysiv1dwxyDbfFrpbfFpNMtSV7Lt0PoECg&act=wafw00f" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2023/06/sucuri.png" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 120 = Sucuri 🌟 - Detectando Payloads, WAF e Patches de Segurança</span>
+                <a href="https://sitecheck.sucuri.net/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2023/08/similarweb.png" alt="Cert-EU Logo" width="112" height="60">
+                <span>| 121 = Web Semelhante - Tráfego e classificação aproximados do site</span>
+                <a href="https://www.similarweb.com/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2023/08/webcheck.png" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 122 = Verificação da Web 🌟 - Ferramenta OSINT de site tudo-em-um</span>
+                <a href="https://web-check.xyz/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2024/03/zscaler.png?w=1024" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 123 = Zulu Zscaler 🌟 - Mecanismo de pontuação de risco de URL</span>
+                <a href="https://zulu.zscaler.com/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2024/05/whatweb.png" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 124 = O que é Web - Reconhecedor de ativos da Web</span>
+                <a href="https://whatweb.net/" target="_blank" class="button">Acessar</a>
+            </div>            
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2024/09/visualping.png" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 125 = Ping Visual - Monitorar alterações em uma página do site</span>
+                <a href="https://visualping.io/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2024/09/pentest-tools.png" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 126 = Ferramentas de Pentests - Várias ferramentas gratuitas de digitalização e descoberta</span>
+                <a href="https://pentest-tools.com/alltools" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2024/09/edpb.png?w=1024" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 127 = Auditoria Web EDPB - Verifique a conformidade do site com o GDPR gratuitamente</span>
+                <a href="https://www.edpb.europa.eu/our-work-tools/our-documents/support-pool-expert-projects/edpb-website-auditing-tool_en" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://www.shutterstock.com/image-illustration/pentest-penetration-test-conceptis-security-260nw-2432572651.jpg" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 128 = Pentestador - Verificação de segurança do site (WAF, tecnologias, SSL/TLS, etc.)</span>
+                <a href="https://pentester.com/" target="_blank" class="button">Acessar</a>
+            </div>
+        </div>
+    
+        <!-- Exploits e Ferramentas CTI -->
+        <div class="section">
+            <h2>Exploits e Ferramentas CTI</h2>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2023/05/leakix.png" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 129 = Vazamento IX - Vazamentos de ativos e incidentes de segurança</span>
+                <a href="https://leakix.net/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2023/05/binaryedge.png?w=1024" alt="Cert-EU Logo" width="60" height="60">
+                <span>| 130 = BinaryEdge - Plataforma de inteligência de ameaças cibernéticas incrível</span>
+                <a href="https://www.binaryedge.io/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2023/05/threatbookcti-1.png" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 131 = Livro de Ameaças CTI - Inteligência eficiente de ameaças cibernéticas</span>
+                <a href="https://www.threatbook.io/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2023/05/pulsedive.png" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 132 = Pulsedive - Inteligência de ameaças gratuita</span>
+                <a href="https://pulsedive.com/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2024/03/cveshield.png?w=44" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 133 = Escudo CVEShield - Encontre informações sobre quaisquer vulnerabilidades</span>
+                <a href="https://cveshield.com/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2024/03/ssc-1.png" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 134 = Detalhes do CVE - Banco de dados de vulnerabilidades por SSC</span>
+                <a href="https://www.cvedetails.com/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2023/05/vulners.png" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 135 = Vulneráveis - Explorar mecanismo de busca</span>
+                <a href="https://www.vulners.com/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2023/05/exploitdb.png" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 136 = Explorar Banco de Dados - Vulnerabilidades Banco de Dados Avançado</span>
+                <a href="https://www.exploit-db.com/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2023/06/alienvaultotx.png" alt="Cert-EU Logo" width="80" height="60">
+                <span>| 137 = Alienvault OTX - Plataforma de troca de ameaças abertas alimentada pela comunidade</span>
+                <a href="https://otx.alienvault.com/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2023/06/opencti.png?w=1024" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 138 = OpenCTI - Plataforma de Estruturação CTI da ANSSI Francesa</span>
+                <a href="https://filigran.io/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2023/06/carbonblack.png" alt="Cert-EU Logo" width="50" height="60">
+                <span>| 139 = Carbono Negro - Dados de pesquisa de ameaças em tempo real do VMware CB</span>
+                <a href="https://community.broadcom.com/home" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2023/06/paloalto.png?w=1024" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 140 = ÁTOMOS de Palo Alto - Objetos de ameaça acionáveis e mitigações</span>
+                <a href="https://unit42.paloaltonetworks.com/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2023/07/riskiq.jpg" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 141 = RiscoIQ 🌟 - Inteligência da Internet pela Microsoft</span>
+                <a href="https://www.riskiq.com/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2023/07/first.org_.png" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 142 = Primeiro.org - Pontuação CVSS adaptada ao seu contexto</span>
+                <a href="https://www.first.org/cvss/calculator/4-0" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2023/07/filesec.png" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 143 = Segurança de Arquivos - Últimas extensões de arquivo de invasores</span>
+                <a href="https://filesec.io/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2023/07/lolbin.png?w=1022" alt="Cert-EU Logo" width="80" height="60">
+                <span>| 144 = LOMBINHO - Binários de atacantes usados fora de seu propósito</span>
+                <a href="https://lolbas-project.github.io/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2023/07/gtfobins.png" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 145 = Caixas GTFO - Binários para contornar sistemas mal configurados</span>
+                <a href="https://gtfobins.github.io/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2023/07/abusech.jpg" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 146 = Abuso.ch 🌟 - Inteligência de ameaças orientada pela comunidade</span>
+                <a href="https://abuse.ch/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2024/03/nuclearleaks.png" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 147 = Vazamentos Nucleares 🌟 - Maior coleção de vazamentos de bancos de dados de sites gratuitos</span>
+                <a href="https://nuclearleaks.com/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2024/05/0daytoday.jpg?w=150" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 148 = 0dia.hoje - Compre e venda Exploits de 0 dias ou ganhe alguns grátis</span>
+                <a href="https://0day.today/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2024/05/vulnchecklogo.png" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 149 = VulnCheck KEV - Maior banco de dados de priorização de vulnerabilidades</span>
+                <a href="https://vulncheck.com/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2024/05/anyrun.png" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 150 = Inteligência Any.Run - Painel de inteligência cibernética da Any Run</span>
+                <a href="https://intelligence.any.run/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2024/09/ransomwarelive.png" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 151 = Ransomware.ao vivo 🌟 - Monitorar a atividade de grupos de ransomware</span>
+                <a href="https://ransomware.live/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2024/09/foxintelligence-byniq2-02-1.png" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 152 = VXInteligência - Encontre senhas comprometidas em servidores C2 vulneráveis</span>
+                <a href="https://vxintelligence.com/" target="_blank" class="button">Acessar</a>
+            </div>
+        </div>
+    
+        <!-- Autenticação e Criptografia -->
+        <div class="section">
+            <h2>Autenticação e Criptografia</h2>
+            <div class="item">
+                <img src="https://i.postimg.cc/L5qn4cWG/12831199.png" alt="Cert-EU Logo" width="100" height="60">    
+                <span> 153 = Crt - Motor de busca de histórico de certificados</span>
+                <a href="https://crt.sh/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://i.postimg.cc/s27FzwKK/d702d669-a182-4056-a759-fdc83eda9778.png" alt="Cert-EU Logo" width="100" height="60">   
+                <span> 154 = Diretório 2FA - Verifique se MFA/2FA é suportado</span>
+                <a href="https://2fa.directory/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://i.postimg.cc/MTHyRr4m/87941629-539ca700-ca93-11ea-8a41-c1910c7745af.png" alt="Cert-EU Logo" width="100" height="60">    
+                <span> 155 = CyberChef - Analisando e codificando dados</span>
+                <a href="https://gchq.github.io/CyberChef/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://i.postimg.cc/dtNDZVFp/ntlmpw-preview.png" alt="Cert-EU Logo" width="100" height="60">   
+                <span> 156 = NTLM 🌟 - Banco de dados de +8,7 bilhões de hashes de senha</span>
+                <a href="https://ntlm.pw/" target="_blank" class="button">Acessar</a>
+            </div>
+        </div>
+    
+        <!-- Ferramentas de Segurança do Active Directory -->
+        <div class="section">
+            <h2>Ferramentas de Segurança do Active Directory</h2>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2023/05/purpleknight.png" alt="Cert-EU Logo" width="120" height="60">
+                <span>| 157 = Cavaleiro Púrpura - Auditoria de segurança do Active Directory pela Semperis</span>
+                <a href="https://www.purple-knight.com/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2023/05/pingcastle-1.png" alt="Cert-EU Logo" width="80" height="60">
+                <span>| 158 = Castelo de Ping 🌟 - Segurança do Active Directory em 80% por Vincent Le Toux</span>
+                <a href="https://www.pingcastle.com/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2023/05/bloodhound.png" alt="Cert-EU Logo" width="80" height="60">
+                <span>| 159 = Cão de Caça Sangrento 🌟 - Auditoria de caminho de ataque complexo AD e AAD</span>
+                <a href="https://github.com/SpecterOps/BloodHound-Legacy" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2023/05/hardenall.png" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 160 = Endurecer AD - Reforço da infraestrutura AD e M365</span>
+                <a href="https://hardenad.net/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2023/06/crowdstrike.png" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 161 = TRC - Ferramenta de relatórios CrowdStrike para Azure AD / O365</span>
+                <a href="https://www.crowdstrike.com/en-us/resources/community-tools/crt-crowdstrike-reporting-tool-for-azure/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2023/07/aadinternals-.png?w=128" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 162 = AAD Internos - Extrair informações abertamente disponíveis sobre os inquilinos</span>
+                <a href="https://aadinternals.com/osint/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2023/12/github.png?w=1024" alt="Cert-EU Logo" width="50" height="60">
+                <span>| 163 = Adalanche - Visualizador de ACL do Active Directory de código aberto</span>
+                <a href="https://github.com/lkarlslund/adalanche" target="_blank" class="button">Acessar</a>
+            </div>
+        </div>
+    
+        <!-- Ferramentas de Segurança de Endpoint -->
+        <div class="section">
+            <h2>Ferramentas de Segurança de Endpoint</h2>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2023/05/qualys-1.png" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 164 = Teste do Navegador - Verificação do navegador da Web</span>
+                <a href="https://www.ssllabs.com/ssltest/viewMyClient.html" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2023/06/zscaler.png?w=1024" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 165 = Risco de Ransomware - Avaliação de risco de ransomware pela Zscaler</span>
+                <a href="https://www.zscaler.com/solutions/ransomware-protection" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2023/06/zscaler-1.png" alt="Cert-EU Logo" width="50" height="60">
+                <span>| 166 = Prévia de Segurança - Análise de exposição a ameaças da Internet</span>
+                <a href="https://securitypreview.com/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2023/06/grabify.png" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 167 = Agarrar - Rastreie cliques em seu URL</span>
+                <a href="https://grabify.link/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2023/06/osisecurity.png?w=108" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 168 = Wicar - Teste seu Antivírus Anti-Malware</span>
+                <a href="http://www.wicar.org/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2023/06/alienvaultotx-1.png" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 169 = Segurança de Ponto de Extremidade - Ferramenta de segurança</span>
+                <a href="https://otx.alienvault.com/endpoint-security/welcome" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2023/07/surfshark.png?w=1024" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 170 = Tubarão-de-surf - Teste de vazamento de DNS</span>
+                <a href="https://surfshark.com/dns-leak-test" target="_blank" class="button">Acessar</a>
+            </div>
+        </div>
+    
+        <!-- Classificação Cibernética e Inteligência de Risco -->
+        <div class="section">
+            <h2>Classificação cibernética e inteligência de risco</h2>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2023/06/coalition.png" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 171 = Coalizão 🌟 - Cyber Score para sua empresa</span>
+                <a href="https://www.coalitioninc.com/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2024/03/bitsight.png" alt="Cert-EU Logo" width="50" height="60">
+                <span>| 172 = Bitsight - Relatório de classificação de segurança personalizado gratuito</span>
+                <a href="https://www.bitsight.com/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2024/03/ssc.png" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 173 = Scorecard de Segurança - Pontuação de segurança (teste de 14 dias)</span>
+                <a href="https://securityscorecard.com/" target="_blank" class="button">Acessar</a>
+            </div>
+        </div>
+    
+        <!-- Plataformas de Pesquisa Avançada -->
+        <div class="section">
+            <h2>Plataformas de Pesquisa Avançada</h2>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2024/05/startpage.png?w=1024" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 174 = Página Inicial - Motor de busca anônimo</span>
+                <a href="https://www.startpage.com/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2023/07/metacrawler.png" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 175 = Metacrawler - Agrega Motores de Busca</span>
+                <a href="https://www.metacrawler.com/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2023/06/pastebin.png" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 176 = Pastebin - Combine com o Google Dorks</span>
+                <a href="https://pastebin.com/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2024/05/dorksearch.png" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 177 = Pesquisa de Idiotas - Gerador de comandos do Google Dorking</span>
+                <a href="https://dorksearch.com/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2024/05/publicwww.png" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 178 = Públicowww - Pesquisar em páginas da web HTML, JS e código CSS</span>
+                <a href="https://publicwww.com/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2024/05/searchcode_logo.png" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 179 = Código de Pesquisa - Maior banco de dados de priorização de vulnerabilidades</span>
+                <a href="https://searchcode.com/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2023/05/grep.png" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 180 = Grep - Pesquisar em repositórios Git</span>
+                <a href="https://grep.app/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2024/04/telemetryapp.png" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 181 = Telemetria - Pesquisa avançada no Telegram</span>
+                <a href="https://telemetryapp.io/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2024/03/instantdatascrapper.png" alt="Cert-EU Logo" width="50" height="60">
+                <span>| 182 = Scraper de Dados Instantâneo 🌟 - Extensão do navegador para extrair dados de sites</span>
+                <a href="https://chromewebstore.google.com/detail/instant-data-scraper/ofaokhiedipichpaobibbnahnkdoiiah" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2024/09/kqlsearch.png" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 183 = Consultas KQL - Motor de busca para amantes de KQL</span>
+                <a href="https://www.kqlsearch.com/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2024/09/filesdigger-on.png" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 184 = Escavadores 🌟 - Pesquisar por vários arquivos públicos em serviços de compartilhamento de arquivos</span>
+                <a href="https://fidigger.com/#gsc.tab=0" target="_blank" class="button">Acessar</a>
+            </div>
+        </div>
+    
+        <!-- Visualizador de Investigações -->
+        <div class="section">
+            <h2>Visualizador de Investigações</h2>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2023/05/osintracker.jpeg" alt="Cert-EU Logo" width="80" height="60">
+                <span>| 185 = Rastreador OSINT 🌟 - Acompanhe suas investigações online</span>
+                <a href="https://osintracker.com/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2024/03/obsidian-logo.png" alt="Cert-EU Logo" width="120" height="60">
+                <span>| 186 = Obsidiana - Crie notas e visualize-as em gráficos</span>
+                <a href="https://obsidian.md/" target="_blank" class="button">Acessar</a>
+            </div>
+        </div>
+         <!-- Candies -->        
+         <div class="section">
+            <h2>Candies</h2>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2024/03/kasm.png" alt="Cert-EU Logo" width="80" height="60">
+                <span>| 187 = Kasm Web - Desktop baseado em navegador para suas investigações</span>
+                <a href="https://www.kasmweb.com/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2023/05/grayhatwarfare.png" alt="Cert-EU Logo" width="120" height="60">
+                <span>| 188 = Guerra do Chapéu Cinza - Localizador de baldes e encurtadores</span>
+                <a href="https://grayhatwarfare.com/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2023/05/blackbird-1.png" alt="Cert-EU Logo" width="80" height="60">
+                <span>| 189 = Pássaro Preto - Contas de mapa por nome de usuário</span>
+                <a href="https://blackbird-osint.herokuapp.com/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://goosint.com/wp-content/uploads/2024/03/opencorporates_logo.jpg" alt="Cert-EU Logo" width="60" height="40">
+                <span>| 190 = Corporações Abertas - Maior banco de dados para busca de profissionais e entidades</span>
+                <a href="https://opencorporates.com/" target="_blank" class="button">Acessar</a>
+            </div>
+        </div>
+
+         <!-- outros sites -->
+         <div class="section">
+            <h2>outros websites</h2>
+            <div class="item">
+                <img src="https://cdn.dm.com.br/img/Artigo-Destaque/120000/Artigo-Destaque_00126070_00.jpg" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 191 = yandex images 🌟</span>
+                <a href="https://yandex.com/images/" target="_blank" class="button">Acessar</a>
+            </div>
+            <div class="item">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjB1qbQgbdHgEz_pkL_BG5E6XpFbznFpYpl75ddfIwJQwFfzk-JXq6CJuw-Pquso3I2qw" alt="Cert-EU Logo" width="100" height="60">
+                <span>| 192 = zoomeye 🌟 </span>
+                <a href="https://www.zoomeye.ai/" target="_blank" class="button">Acessar</a>
+            </div>        
+        <div class="item">
+            <img src="https://uploaddeimagens.com.br/images/004/704/346/full/logo-twitter-removebg-preview.png?1704477953" alt="Cert-EU Logo" width="100" height="60">
+            <span>| 193 = urlscan🌟 </span>
+            <a href="https://urlscan.io/" target="_blank" class="button">Acessar</a>
+        </div>
+        <div class="item">
+            <img src="https://www.aware-online.com/wp-content/uploads/Aware-Online-Logo-1.png" alt="Cert-EU Logo" width="100" height="60">
+            <span>| 194 = osint-tools🌟 </span>
+            <a href="https://www.aware-online.com/en/osint-tools/" target="_blank" class="button">Acessar</a>
+        </div>
+        <div class="item">
+            <img src="https://github.com/osintbrazuca/osint-brazuca/raw/main/assets/logo_profile.png" alt="Cert-EU Logo" width="100" height="60">
+            <span>| 195 = osint-brazuca🌟 </span>
+            <a href="https://github.com/osintbrazuca/osint-brazuca" target="_blank" class="button">Acessar</a>
+        </div>
+        <div class="item">
+            <img src="https://assets.webinfcdn.net/img/info-slide-img/1.png" alt="Cert-EU Logo" width="100" height="60">
+            <span>| 196 = website.informer🌟 </span>
+            <a href="https://website.informer.com/" target="_blank" class="button">Acessar</a>
+        </div>
+        <div class="item">
+            <img src="https://avatars.githubusercontent.com/u/146008552?s=280" alt="Cert-EU Logo" width="100" height="60">
+            <span>| 197 = explorer.globe.engineer🌟 </span>
+            <a href="https://explorer.globe.engineer/" target="_blank" class="button">Acessar</a>
+        </div>
+        <div class="item">
+            <img src="https://uploaddeimagens.com.br/images/004/700/902/full/download-removebg-preview.png" alt="Cert-EU Logo" width="100" height="60">
+            <span>| 198 = informecadastral CNPJ🌟 </span>
+            <a href="https://www.informecadastral.com.br/" target="_blank" class="button">Acessar</a>
+        </div>
+        <div class="item">
+            <img src="https://www.whoxy.com/images/logo.png" alt="Cert-EU Logo" width="100" height="60">
+            <span>| 199 = Whois API / Whois History / Reverse Whois🌟 </span>
+            <a href="https://www.whoxy.com/" target="_blank" class="button">Acessar</a>
+        </div>
+        <div class="item">
+            <img src="https://osintleak.com/_nuxt/logo-300x300.CGqvm1AY.webp" alt="Cert-EU Logo" width="80" height="60">
+            <span>| 200 = cibersegurança com Osintleak🌟 </span>
+            <a href="https://osintleak.com/" target="_blank" class="button">Acessar</a>
+        </div>
+        <div class="item">
+            <img src="https://subdomains.whoisxmlapi.com/products-vue-assets/public/images/subdomains/lookup.png" alt="Cert-EU Logo" width="100" height="60">
+            <span>| 201 = subdomainfinder🌟 </span>
+            <a href="https://subdomainfinder.c99.nl/" target="_blank" class="button">Acessar</a>
+        </div>        
+
+</body>
+</html>
