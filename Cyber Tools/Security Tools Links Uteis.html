@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Tools</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Courier New', Courier, monospace;
+            background: #0d0d0d;
+            color: #00ff00;
+            overflow-x: hidden;
+        }
+
+        /* Fundo estilo hacker com animação */
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #000000, #1a1a1a);
+            opacity: 0.9;
+            z-index: -1;
+        }
+
+        .matrix {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.2;
+            z-index: -1;
+            animation: fall 10s infinite linear;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(-100vh); }
+            100% { transform: translateY(100vh); }
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0px auto;
+            padding: 20px;
+            text-align: center;
+            
+        }
+
+        h1 {
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px #00ff00;
+        }
+
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .btn {
+            background: #000000;
+            border: 2px solid #00ff00;
+            padding: 15px 20px;
+            color: #00ff00;
+            text-decoration: none;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            border-radius: 5px;
+            box-shadow: 0 0 5px #00ff00;
+        }
+
+        .btn:hover {
+            background: #00ff00;
+            color: #000000;
+            box-shadow: 0 0 15px #00ff00;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="background">
+        <div class="matrix"></div>
+    </div>
+
+    <div class="container">
+        <h1>Security Tools Links Uteis</h1>
+        <div class="button-grid">
+            <a href="https://googledorks.neocities.org/Linux.Comando" target="_blank" class="btn">Comandos Linux</a>
+            <a href="https://agente-deep-web.comunidades.net" target="_blank" class="btn">Agente Deep Web</a>
+            <a href="https://github.com/anderson84PROGETOS/anderson84PROGETOS" target="_blank" class="btn">Meu Github</a>
+            <a href="https://googledorks.neocities.org/201OSINTFramework" target="_blank" class="btn">201 OSINT Framework</a>
+            <a href="https://googledorks.neocities.org/GoogleDorksExplorer" target="_blank" class="btn">Google Dorks Explorer</a>
+            <a href="https://googledorks.neocities.org/ComandosdoKaliLinux" target="_blank" class="btn">Comandos Kali Linux</a>
+            <a href="https://googledorks.neocities.org/Lista_de_Google_Dorks" target="_blank" class="btn">Lista de Google Dorks</a>
+            <a href="https://googledorks.neocities.org/nmap" target="_blank" class="btn">Nmap</a>
+            <a href="https://googledorks.neocities.org/QR.Code.Tool" target="_blank" class="btn">QR Code Tool</a>
+            <a href="https://googledorks.neocities.org/SOC" target="_blank" class="btn">O que é um SOC</a>
+            <a href="https://googledorks.neocities.org/LinksUteis" target="_blank" class="btn">Links Úteis</a>
+            <a href="https://googledorks.neocities.org/GuiadeComandosLinuxeWindows" target="_blank" class="btn">Guia de Comandos Linux e Windows</a>       
+            <a href="https://googledorks.neocities.org/Hacker.Investigador.OSINT" target="_blank" class="btn">Hacker Investigador OSINT</a>            
+            <a href="https://www.shodan.io" target="_blank" class="btn">Shodan Motor de busca para Buscar tudo na Internet</a>            
+            <a href="https://urlscan.io" target="_blank" class="btn">URLScan Uma sandbox para a web</a>
+            <a href="https://www.virustotal.com/gui/home/upload" target="_blank" class="btn">VirusTotal Analise detectar malware</a>
+            <a href="https://metadefender.com" target="_blank" class="btn">MetaDefender</a>
+            <a href="https://www.joesandbox.com/#windows" target="_blank" class="btn">Joe Sandbox</a>
+            <a href="https://www.hybrid-analysis.com" target="_blank" class="btn">Hybrid Analysis</a>
+            <a href="https://virusscan.jotti.org" target="_blank" class="btn">Jotti VirusScan</a>
+            <a href="https://www.urlvoid.com" target="_blank" class="btn">URLVoid</a>
+            <a href="https://opentip.kaspersky.com" target="_blank" class="btn">Kaspersky OpenTip</a>
+            <a href="https://haveibeenpwned.com" target="_blank" class="btn">Have I Been Pwned</a>
+            <a href="https://dnsdumpster.com" target="_blank" class="btn">DNSdumpster</a>
+        </div>
+    </div>
+</body>
+</html>
