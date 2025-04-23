@@ -12,8 +12,15 @@ Sou apaixonado por tecnologia, programação e desenvolvimento de projetos que r
 - 🛠️ **Projetos Open Source**
 
 ## 📂 Repositórios em Destaque
+https://github.com/anderson84PROGETOS/anderson84PROGETOS/blob/meu-progetos/cve%20info/cve%20info.py
 
-Aqui estão alguns projetos que talvez você ache interessante:
+https://github.com/anderson84PROGETOS/anderson84PROGETOS/blob/meu-progetos/CNPJ%20Info/CNPJ%20Info.py
+
+https://github.com/anderson84PROGETOS/anderson84PROGETOS/blob/meu-progetos/wifi%20password.py
+
+https://github.com/anderson84PROGETOS/anderson84PROGETOS/blob/meu-progetos/Favicon%20hash/Favicon%20hash.py
+
+Aqui estão alguns projetos que talvez você ache interessante
 
 - 🔍 **Consulta WHOIS personalizada** – Script para buscar e traduzir informações WHOIS em português  
 - 🧰 **Força bruta web com reconhecimento automático** – Ferramenta que detecta e ataca formulários de login  
