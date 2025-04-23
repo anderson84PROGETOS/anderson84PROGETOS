@@ -27,9 +27,9 @@ Aqui estão alguns projetos que talvez você ache interessante:
 - 🎯 [**Favicon Hash Finder**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/blob/meu-progetos/Favicon%20hash/Favicon%20hash.py)  
   Gera o hash de favicons para uso em reconhecimento de tecnologias com ferramentas como Shodan.
 
-- 🌐 [**WHOIS Consulta**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/blob/meu-progetos/WHOIS%20Consulta/WHOIS%20Consulta.py) – Script para buscar e traduzir informações WHOIS em português  
-- 🔐 [**Brute Web**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/blob/meu-progetos/Brute%20Web/Brute%20Web.py) – Ferramenta que detecta e ataca formulários de login automaticamente  
-- 📡 [**Monitor Conexões**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/blob/meu-progetos/Monitor%20Conex%C3%B5es/Monitor%20Conex%C3%B5es.py) – Interface amigável com Tkinter para visualizar conexões de rede em tempo real
+- 🌐 [**WHOIS Consulta**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/blob/meu-progetos/whois%20br/whois%20br.py) – Script para buscar e traduzir informações WHOIS em português  
+- 🔐 [**Wayback Machine**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/blob/meu-progetos/Wayback/Wayback.py) – Ferramenta que busca url no site Wayback Machine 
+- 📡 [**Monitor Conexões**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/blob/meu-progetos/Network%20Monitor/Network%20Monitor.py) – Interface amigável com Tkinter para visualizar conexões de rede em tempo real
 ---
 **Obrigado por visitar!**  
 Sinta-se à vontade para explorar, clonar, contribuir ou dar uma estrela ⭐ nos projetos que achar úteis.
