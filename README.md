@@ -1,4 +1,5 @@
-![46339d0c-c3b9-483c-8f1a-488c9b9805c1](https://github.com/user-attachments/assets/3ef65003-8dc0-4619-8666-f59043b165c7)
+![436327542-3ef65003-8dc0-4619-8666-f59043b165c7](https://github.com/user-attachments/assets/120f97a2-e361-465d-9f67-0c29137c7de1)
+
 
 # 👋 Olá! Eu sou o Anderson
 
