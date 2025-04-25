@@ -34,18 +34,17 @@ servidor_whois_ip_fallback = 'whois.arin.net'
 # Formata datas para o padrão brasileiro DD/MM/AAAA
 def formatar_data_brasileira(data_str):
     try:
-        # Tenta diferentes formatos de entrada
         for fmt in (("%Y%m%d", "%Y-%m-%d", "%Y-%m-%dT%H:%M:%SZ", "%d/%m/%Y")):
             try:
                 data = datetime.strptime(data_str[:10], fmt)
                 return data.strftime("%d/%m/%Y")
             except ValueError:
                 continue
-        return data_str  # Retorna original se não conseguir formatar
+        return data_str
     except Exception:
         return data_str
 
-# Traduz e formata a saída WHOIS para domínios .br com quebra de linha antes de Contato (ID)
+# Traduz e formata a saída WHOIS para domínios .br com alinhamento
 def formatar_whois_br(texto):
     campos_traduzidos = {
         "domain": "Domínio",
@@ -70,6 +69,7 @@ def formatar_whois_br(texto):
     linhas = texto.strip().splitlines()
     resultado_formatado = []
     ultimo_campo = None
+    max_len = max(len(campos_traduzidos.get(chave, chave)) for chave in campos_traduzidos) + 2
 
     for linha in linhas:
         linha = linha.strip()
@@ -80,22 +80,18 @@ def formatar_whois_br(texto):
             chave, valor = partes
             chave = chave.strip().lower()
             chave_formatada = campos_traduzidos.get(chave, chave)
-            # Formata datas específicas
             if chave in ("created", "changed", "expires", "nsstat", "nslastaa"):
                 valor = formatar_data_brasileira(valor.strip())
-
-            # Adiciona quebra de linha antes de Contato (ID)
             if chave == "nic-hdl-br" and ultimo_campo != "nic-hdl-br":
-                resultado_formatado.append("")  # Linha em branco antes do contato
-            resultado_formatado.append(f"{chave_formatada}: {valor.strip()}")
-
+                resultado_formatado.append("")
+            resultado_formatado.append(f"{chave_formatada:<{max_len}}: {valor.strip()}")
             ultimo_campo = chave
         else:
             resultado_formatado.append(linha.strip())
 
     return "\n".join(resultado_formatado)
 
-# Traduz e formata a saída WHOIS para domínios .com/.net com quebra de linha antes de contatos
+# Traduz e formata a saída WHOIS para domínios .com/.net com alinhamento
 def formatar_whois_com(texto):
     campos_traduzidos = {
         "domain name": "Domínio",
@@ -139,6 +135,7 @@ def formatar_whois_com(texto):
     resultado_formatado = []
     ultimo_campo = None
     contato_section = False
+    max_len = max(len(campos_traduzidos.get(chave, chave)) for chave in campos_traduzidos) + 2
 
     for linha in linhas:
         linha = linha.strip()
@@ -149,16 +146,12 @@ def formatar_whois_com(texto):
             chave, valor = partes
             chave = chave.strip().lower()
             chave_formatada = campos_traduzidos.get(chave, chave)
-            # Formata datas específicas
             if chave in ("creation date", "updated date", "registry expiry date"):
                 valor = formatar_data_brasileira(valor.strip())
-
-            # Adiciona quebra de linha antes de seções de contato
             if any(contato in chave for contato in ["registrant name", "admin name", "tech name"]) and not contato_section:
-                resultado_formatado.append("")  # Linha em branco antes do contato
+                resultado_formatado.append("")
                 contato_section = True
-            resultado_formatado.append(f"{chave_formatada}: {valor.strip()}")
-
+            resultado_formatado.append(f"{chave_formatada:<{max_len}}: {valor.strip()}")
             ultimo_campo = chave
         else:
             resultado_formatado.append(linha.strip())
@@ -215,19 +208,17 @@ def requisicao_whois(servidor_whois, endereco_host, padrao=True):
 def encontrar_emails(soup):
     email_regex = r"[\w\.-]+@[\w\.-]+"
     emails = set()
-
     email_section = soup.find("div", class_="row-fluid registry-data")
     if email_section:
         email_text = email_section.find_all("div", class_="row")[1].find("div", class_="span9").get_text()
         email_matches = re.findall(email_regex, email_text)
         emails.update(email_matches)
-
     whois_section = soup.find("pre", class_="df-raw")
     if whois_section:
         whois_text = whois_section.get_text()
+        whois_text = remover_informacoes_extra(whois_text)
         email_matches = re.findall(email_regex, whois_text)
         emails.update(email_matches)
-
     return list(emails)
 
 # Extrai campo específico do WHOIS
@@ -246,18 +237,14 @@ def is_ip_address(endereco):
 
 # Verifica se o resultado WHOIS para IP é válido
 def is_valid_ip_whois(resultado):
-    # Considera o resultado inválido se for vazio, contém erro ou não tem informações úteis
     if not resultado or "Erro" in resultado or "No match" in resultado or len(resultado.strip().splitlines()) < 3:
         return False
-    # Verifica se contém campos comuns em respostas WHOIS de IPs
     return any(keyword in resultado.lower() for keyword in ["inetnum", "netname", "owner", "orgname", "organization", "country"])
 
-# Obtém informações WHOIS para qualquer domínio (exceto .com, .net, .br, .gov)
+# Obtém informações WHOIS para outros domínios com alinhamento
 def obter_whois(endereco):
     url_whois = f"https://www.whois.com/whois/{endereco}"
-
     try:
-        # Consulta WHOIS para domínios que não são .br, .gov, .com ou .net
         if not re.search(r'\.br$|\.gov$|\.com$|\.net$', endereco):
             response_whois = requests.get(url_whois, timeout=10)
             if response_whois.status_code == 200:
@@ -267,18 +254,21 @@ def obter_whois(endereco):
                     whois_text = whois_section.get_text()
                     whois_text = remover_copyright(whois_text)
                     whois_text = remover_informacoes_extra(whois_text)
-                    print(Fore.LIGHTYELLOW_EX + whois_text)
-
+                    linhas = whois_text.strip().splitlines()
+                    if linhas:
+                        max_len = max(len(line.split(":")[0]) for line in linhas if ":" in line) + 2
+                        resultado_formatado = [f"{line.split(':')[0].strip():<{max_len}}: {':'.join(line.split(':')[1:]).strip()}" for line in linhas if ":" in line]
+                        print(Fore.LIGHTYELLOW_EX + "\n".join(resultado_formatado))
+                    else:
+                        print(Fore.LIGHTRED_EX + "Nenhum dado WHOIS relevante encontrado após limpeza.")
                     emails = encontrar_emails(soup_whois)
                     if emails:
                         print("\nE-mails encontrados:")
                         for email in emails:
                             print(email)
-
                     name = extrair_campo(soup_whois, "Registrant Name:")
                     registration_date = extrair_campo(soup_whois, "Creation Date:")
                     expiration_date = extrair_campo(soup_whois, "Registrar Registration Expiration Date:")
-
                     if name:
                         print(f"Nome do Titular: {name}")
                     if registration_date:
@@ -306,44 +296,42 @@ def obter_whois_socket(endereco, tld):
     else:
         print(Fore.LIGHTYELLOW_EX + remover_copyright(resultado))
 
-# Obtém WHOIS para endereços IP
+# Obtém WHOIS para endereços IP com alinhamento
 def obter_whois_ip(endereco):
-    # Tenta consultar no whois.registro.br primeiro
     resultado = requisicao_whois(servidor_whois_ip_br, endereco, False)
     if is_valid_ip_whois(resultado):
-        print(Fore.LIGHTYELLOW_EX + remover_copyright(resultado))
+        linhas = remover_copyright(resultado).strip().splitlines()
+        max_len = max(len(line.split(":")[0]) for line in linhas if ":" in line) + 2
+        resultado_formatado = [f"{line.split(':')[0].strip():<{max_len}}: {':'.join(line.split(':')[1:]).strip()}" for line in linhas if ":" in line]
+        print(Fore.LIGHTYELLOW_EX + "\n".join(resultado_formatado))
     else:
-        # Fallback para whois.arin.net se o resultado não for válido
         resultado = requisicao_whois(servidor_whois_ip_fallback, endereco, False)
-        print(Fore.LIGHTYELLOW_EX + remover_copyright(resultado))
+        linhas = remover_copyright(resultado).strip().splitlines()
+        max_len = max(len(line.split(":")[0]) for line in linhas if ":" in line) + 2
+        resultado_formatado = [f"{line.split(':')[0].strip():<{max_len}}: {':'.join(line.split(':')[1:]).strip()}" for line in linhas if ":" in line]
+        print(Fore.LIGHTYELLOW_EX + "\n".join(resultado_formatado))
 
 # Função principal de consulta WHOIS
 def consulta_whois():
-    endereco = input(Fore.LIGHTMAGENTA_EX + "\nDigite o IP ou Nome do website Para Consultar WHOIS: ").strip()
+    endereco = input(Fore.LIGHTMAGENTA_EX + "\nDigite o Dominio Para Consultar WHOIS: ").strip()
     print("")
     if not endereco:
         print(Fore.LIGHTRED_EX + "Endereço inválido.")
         return
-
-    # Verifica se é um endereço IP
     if is_ip_address(endereco):
         obter_whois_ip(endereco)
-        return
-
-    # Verifica o TLD para domínios
-    tld = None
-    for key in servidores_whois_tld:
-        if endereco.endswith(key):
-            tld = key
-            break
-
-    # Consulta via socket para .br, .gov, .com, .net, ou via web para outros
-    if tld in ('.br', '.gov', '.com', '.net'):
-        obter_whois_socket(endereco, tld)
     else:
-        obter_whois(endereco)
+        tld = None
+        for key in servidores_whois_tld:
+            if endereco.endswith(key):
+                tld = key
+                break
+        if tld in ('.br', '.gov', '.com', '.net'):
+            obter_whois_socket(endereco, tld)
+        else:
+            obter_whois(endereco)
 
 # Executa a consulta WHOIS
 consulta_whois()
 
-input(Fore.LIGHTRED_EX + "\n========== PRESSIONE ENTER PARA SAIR ==========\n\n")
+input(Fore.LIGHTRED_EX + "\n\n========== PRESSIONE ENTER PARA SAIR ==========\n\n")
