@@ -92,19 +92,11 @@ servicos = {
     "threads": "https://www.threads.net/@{}",
     "Bluesky": "https://bsky.app/profile/{}.bsky.social",     
     "Google Search": "https://www.google.com/search?q={}",
-    "Gmail (Google": "https://www.google.com/search?q={}@gmail.com",
-    "Hotmail (Google": "https://www.google.com/search?q={}@hotmail.com",
-    "Hotmail (Bing": "https://www.bing.com/search?q={}@hotmail.com",
-    
-    # sites adicionais
+    "Gmail (Google)": "https://www.google.com/search?q={}@gmail.com",
+    "Hotmail (Google)": "https://www.google.com/search?q={}@hotmail.com",
+    "Hotmail (Bing)": "https://www.bing.com/search?q={}@hotmail.com",    
     "UnrulyAgency": "https://unrulyagency.be/{}",    
-    "KeyMGMT": "https://key-mgmt.com/{}", 
 }
-
-# Separar sites adicionais
-sites_adicionais = {k: v for k, v in servicos.items() if k in [
-    "UnrulyAgency", "KeyMGMT"]}
-sites_normais = {k: v for k, v in servicos.items() if k not in sites_adicionais}
 
 def verificar_nome_usuario(servico, nome_usuario):
     url_base = servicos[servico]
@@ -117,53 +109,40 @@ def verificar_nome_usuario(servico, nome_usuario):
         pass
     return None
 
+
 def obter_nome_usuario():
-    nome_usuario = input(Fore.LIGHTGREEN_EX + Style.BRIGHT + "\nDigite o nome de usuário para pesquisar: ").strip()
+    nome_usuario = input(Fore.LIGHTGREEN_EX + Style.BRIGHT + "\nDigite o nome de usuário para pesquisar: " + Fore.LIGHTYELLOW_EX + Style.BRIGHT + f"").strip()
     if not nome_usuario:
         print(Fore.LIGHTRED_EX + Style.BRIGHT + "\n[-] Nome de usuário não pode ser vazio.")
         sys.exit(1)
     return nome_usuario
 
+
 def main():
     nome_usuario = obter_nome_usuario()
-    print(Fore.LIGHTYELLOW_EX + Style.BRIGHT + f"\n[#] Procurando por: {nome_usuario}\n")
-    encontrados, encontrados_extra = [], []
+    print(Fore.LIGHTGREEN_EX + Style.BRIGHT + f"\n[#] Procurando por: " + Fore.LIGHTYELLOW_EX + Style.BRIGHT + f"{nome_usuario}\n")
+    encontrados = []
 
-    for servico in sites_normais:
+    for servico in servicos:
         url = verificar_nome_usuario(servico, nome_usuario)
         if url:
-            print(Fore.LIGHTGREEN_EX + Style.BRIGHT + f"[+] Encontrado em {servico}:".ljust(45) + f"{Fore.CYAN}{url}")
-            encontrados.append(f"{servico}: {url}")
+            print(Fore.LIGHTGREEN_EX + Style.BRIGHT + f"[+] Encontrado em " + Fore.LIGHTYELLOW_EX + Style.BRIGHT + f"{servico}:".ljust(32) + f"{Fore.CYAN}{url}")
+            encontrados.append(f"[+] Encontrado em {servico}:".ljust(42) + url)
+
         time.sleep(0.5)
 
-    print(Fore.LIGHTMAGENTA_EX + Style.BRIGHT + "\n[!] Verificando sites adicionais\n")
-    for servico in sites_adicionais:
-        url = verificar_nome_usuario(servico, nome_usuario)
-        if url:
-            print(Fore.LIGHTMAGENTA_EX + Style.BRIGHT + Style.BRIGHT + f"[+] Encontrado em {servico}:".ljust(45) + f"{Fore.CYAN}{url}")
-            encontrados_extra.append(f"{servico}: {url}")
-        time.sleep(0.5)
-
-    total = len(encontrados) + len(encontrados_extra)
-    if total == 0:
+    if not encontrados:
         print(Fore.LIGHTRED_EX + Style.BRIGHT + "\n[-] Nenhum perfil encontrado.")
     else:
-        print(Fore.LIGHTYELLOW_EX + Style.BRIGHT + f"\n[#] Total de perfis encontrados: {total}")
+        print(Fore.LIGHTYELLOW_EX + Style.BRIGHT + f"\n[#] Total de perfis Encontrados: {len(encontrados)}")
 
-    salvar = input(Fore.LIGHTMAGENTA_EX + Style.BRIGHT + Style.BRIGHT + "\nDeseja salvar os resultados em um arquivo .txt? (s/n): ").strip().lower()
+    salvar = input(Fore.LIGHTMAGENTA_EX + Style.BRIGHT + "\nDeseja salvar os resultados em um arquivo .txt? (s/n): ").strip().lower()
     if salvar == 's':
         with open(f"{nome_usuario}_osint_resultados.txt", "w", encoding="utf-8") as f:
-            f.write(f"Total de perfis encontrados: {total}\n\n")
-            if encontrados:
-                f.write("Perfis encontrados\n\n")
             for item in encontrados:
                 f.write(f"{item}\n")
-            if encontrados_extra:
-                f.write("\nPerfis encontrados em sites adicionais\n\n")
-            for item in encontrados_extra:
-                f.write(f"{item}\n")
-
-        print(Fore.LIGHTGREEN_EX + Style.BRIGHT + f"\n[✔] Resultados salvos em: {nome_usuario}_osint_resultados.txt")
+            f.write(f"\nTotal de perfis Encontrados: {len(encontrados)}\n")
+        print(Fore.LIGHTGREEN_EX + Style.BRIGHT + f"\n[✔] Resultados salvos em: " + Fore.LIGHTYELLOW_EX + Style.BRIGHT + f"{nome_usuario}_osint_resultados.txt")
 
 if __name__ == "__main__":
     main()
