@@ -1,11 +1,12 @@
-![436327542-3ef65003-8dc0-4619-8666-f59043b165c7](https://github.com/user-attachments/assets/120f97a2-e361-465d-9f67-0c29137c7de1)
-
+![Banner](https://github.com/user-attachments/assets/120f97a2-e361-465d-9f67-0c29137c7de1)
 
 # 👋 Olá! Eu sou o Anderson
 
 Bem-vindo ao meu perfil no GitHub!
 
-Sou apaixonado por tecnologia, programação e desenvolvimento de projetos que realmente fazem a diferença. Aqui você vai encontrar repositórios com scripts, ferramentas, testes, automações e diversos experimentos que venho desenvolvendo no meu tempo livre e profissionalmente.
+Sou apaixonado por tecnologia, programação e desenvolvimento de projetos que realmente fazem a diferença. Aqui você vai encontrar repositórios com **scripts**, **ferramentas**, **testes**, **automações** e diversos **experimentos** que venho desenvolvendo no meu tempo livre e profissionalmente.
+
+---
 
 ## 🚀 Principais Áreas de Interesse
 
@@ -14,25 +15,41 @@ Sou apaixonado por tecnologia, programação e desenvolvimento de projetos que r
 - 🖥️ **Desenvolvimento de Scripts e Utilitários**  
 - 🛠️ **Projetos Open Source**
 
+---
+
 ## 📂 Repositórios em Destaque
 
-Aqui estão alguns projetos que talvez você ache interessante:
+🔍 [**Consulta de CVEs com Exploits**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/blob/meu-progetos/cve%20info/cve%20info.py)  
+Script para buscar informações de vulnerabilidades CVE, com dados detalhados e exploits online.
 
-- 🔍 [**Consulta de CVEs com Exploits**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/blob/meu-progetos/cve%20info/cve%20info.py)  
-  Script para buscar informações de vulnerabilidades CVE, com dados detalhados e exploits online.
+🧾 [**Consulta de Empresas por CNPJ**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/blob/meu-progetos/CNPJ%20Info/CNPJ%20Info.py)  
+Busca de dados públicos de empresas a partir do CNPJ, direto de fontes oficiais.
 
-- 🧾 [**Consulta de Empresas por CNPJ**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/blob/meu-progetos/CNPJ%20Info/CNPJ%20Info.py)  
-  Busca de dados públicos de empresas a partir do CNPJ, direto de fontes oficiais.
+📶 [**Recuperar Senhas de Wi-Fi Salvas**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/blob/meu-progetos/wifi%20password.py)  
+Script para listar as senhas de redes Wi-Fi salvas no sistema.
 
-- 📶 [**Recuperar Senhas de Wi-Fi Salvas**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/blob/meu-progetos/wifi%20password.py)  
-  Script para listar as senhas de redes Wi-Fi salvas no sistema.
+🎯 [**Favicon Hash Finder**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/blob/meu-progetos/Favicon%20hash/Favicon%20hash.py)  
+Gera o hash de favicons para uso em reconhecimento de tecnologias com ferramentas como Shodan.
 
-- 🎯 [**Favicon Hash Finder**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/blob/meu-progetos/Favicon%20hash/Favicon%20hash.py)  
-  Gera o hash de favicons para uso em reconhecimento de tecnologias com ferramentas como Shodan.
+🌐 [**WHOIS Consulta**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/blob/meu-progetos/whois%20br/whois%20br.py)  
+Script para buscar e traduzir informações WHOIS em português.
 
-- 🌐 [**WHOIS Consulta**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/blob/meu-progetos/whois%20br/whois%20br.py) – Script para buscar e traduzir informações WHOIS em português  
-- 🔐 [**Wayback Machine**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/blob/meu-progetos/Wayback/Wayback.py) – Ferramenta que busca url no site Wayback Machine 
-- 📡 [**Monitor Conexões**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/blob/meu-progetos/Network%20Monitor/Network%20Monitor.py) – Interface amigável com Tkinter para visualizar conexões de rede em tempo real
+🔐 [**Wayback Machine**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/blob/meu-progetos/Wayback/Wayback.py)  
+Ferramenta que busca URLs no site Wayback Machine.
+
+📡 [**Monitor Conexões**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/blob/meu-progetos/Network%20Monitor/Network%20Monitor.py)  
+Interface amigável com Tkinter para visualizar conexões de rede em tempo real.
+
+🔗 [**URL Tracking Tools**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/url%20tracking%20Tools)  
+Ferramentas para rastreamento de URLs, útil para campanhas, engenharia reversa e análise de redirecionamentos.
+
+🧠 [**NameChk – Verificador de Nomes de Usuário**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/namechk)  
+Ferramenta OSINT para verificar nomes de usuário em diversas plataformas online.
+
 ---
-**Obrigado por visitar!**  
-Sinta-se à vontade para explorar, clonar, contribuir ou dar uma estrela ⭐ nos projetos que achar úteis.
+
+## 🌟 Contribuições
+
+deixar uma estrela ⭐ nos projetos que achar interessantes ou úteis.
+
+Muito obrigado por visitar meu perfil! 🚀  
