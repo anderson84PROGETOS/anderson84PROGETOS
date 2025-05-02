@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplicativo de Sobreposição de Logotipo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        canvas {
+            border: 1px solid #ccc;
+        }
+        .status-green { color: green; }
+        .status-red { color: red; }
+        .status-blue { color: blue; }
+        .status-orange { color: orange; }
+    </style>
+</head>
+<body class="bg-gray-100 flex flex-col items-center p-4">
+    <h1 class="text-2xl font-bold mb-4">Aplicativo de Sobreposição de Logotipo para Fotografia</h1>
+
+    <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-4xl">
+        <!-- Status and Dimension Labels -->
+        <p id="status" class="status-blue mb-2">Pronto</p>
+        <p id="dimensions" class="mb-2">Dimensões da Imagem: Nenhuma imagem selecionada</p>
+
+        <!-- File Inputs -->
+        <div class="flex flex-col gap-2 mb-4">
+            <label class="block">
+                <input type="file" id="imageInput" accept="image/jpeg,image/png" multiple class="hidden">
+                <button onclick="document.getElementById('imageInput').click()" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Selecionar Fotos</button>
+            </label>
+            <label class="block">
+                <input type="file" id="logoInput" accept="image/png,image/jpeg,image/webp" class="hidden">
+                <button onclick="document.getElementById('logoInput').click()" class="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600">Selecionar Logotipo</button>
+            </label>
+        </div>
+
+        <!-- Logo Size and Position -->
+        <div class="flex gap-4 mb-4">
+            <div>
+                <label for="logoSize" class="block text-sm">Tamanho do Logotipo (px)</label>
+                <input type="number" id="logoSize" min="50" max="900" value="150" class="border rounded px-2 py-1 w-24" onchange="setLogoSize(this.value)">
+            </div>
+            <div>
+                <label for="logoPosition" class="block text-sm">Posição do Logotipo</label>
+                <select id="logoPosition" class="border rounded px-2 py-1">
+                    <option value="custom">Personalizado</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex gap-2 mb-4">
+            
+            <button onclick="zoomIn()" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">+</button>
+            <p class="bg-blue-100 text-blue-900 px-4 py-2 rounded shadow inline-block">Zoom</p>
+            <button onclick="zoomOut()" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">-</button>
+            <button onclick="saveImages()" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Salvar Fotos</button>
+        </div>
+
+        <!-- Canvas -->
+        <canvas id="canvas" width="1000" height="550" class="bg-white"></canvas>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        let images = [];
+        let logo = null;
+        let currentImage = null;
+        let logoPosition = 'custom';
+        let customLogoPos = null;
+        let logoSize = 150;
+        let imageScale = 1.0;
+        let zoomLevel = 1.0;
+        let dragging = false;
+        const canvasWidth = 1000;
+        const canvasHeight = 550;
+
+        // Initialize event listeners
+        document.getElementById('imageInput').addEventListener('change', handleImageUpload);
+        document.getElementById('logoInput').addEventListener('change', handleLogoUpload);
+        canvas.addEventListener('mousedown', setLogoPosition);
+        canvas.addEventListener('mousemove', onDrag);
+        canvas.addEventListener('mouseup', stopDrag);
+        document.addEventListener('keydown', moveLogo);
+
+        function setStatus(message, color) {
+            const status = document.getElementById('status');
+            status.textContent = message;
+            status.className = `status-${color}`;
+        }
+
+        function handleImageUpload(event) {
+            images = Array.from(event.target.files);
+            if (images.length > 0) {
+                loadImage(images[0], (img) => {
+                    currentImage = img;
+                    displayImage();
+                    setStatus(`${images.length} foto(s) selecionada(s)`, 'green');
+                });
+            } else {
+                setStatus('Nenhuma foto selecionada', 'red');
+            }
+        }
+
+        function handleLogoUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                loadImage(file, (img) => {
+                    logo = img;
+                    setStatus('Logotipo selecionado com sucesso', 'green');
+                    if (currentImage) previewLogo();
+                });
+            } else {
+                setStatus('Nenhum logotipo selecionado', 'red');
+            }
+        }
+
+        function loadImage(file, callback) {
+            const img = new Image();
+            img.onload = () => callback(img);
+            img.src = URL.createObjectURL(file);
+        }
+
+        function setLogoSize(size) {
+            size = parseInt(size);
+            if (size >= 50 && size <= 900) {
+                logoSize = size;
+                setStatus(`Tamanho do logotipo definido para: ${logoSize}px`, 'green');
+                if (currentImage && logo) previewLogo();
+            } else {
+                setStatus('O tamanho do logotipo deve estar entre 50 e 900 pixels', 'red');
+            }
+        }
+
+        function zoomIn() {
+            zoomLevel = Math.min(zoomLevel + 0.1, 2.0);
+            setStatus(`Zoom ajustado para ${zoomLevel.toFixed(1)}x`, 'blue');
+            if (currentImage) {
+                displayImage();
+                if (logo) previewLogo();
+            }
+        }
+
+        function zoomOut() {
+            zoomLevel = Math.max(zoomLevel - 0.1, 0.5);
+            setStatus(`Zoom ajustado para ${zoomLevel.toFixed(1)}x`, 'blue');
+            if (currentImage) {
+                displayImage();
+                if (logo) previewLogo();
+            }
+        }
+
+        function displayImage() {
+            if (!currentImage) return;
+            const imgWidth = currentImage.width;
+            const imgHeight = currentImage.height;
+            imageScale = Math.min(canvasWidth / imgWidth, canvasHeight / imgHeight) * zoomLevel;
+            const newWidth = imgWidth * imageScale;
+            const newHeight = imgHeight * imageScale;
+
+            ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+            ctx.drawImage(currentImage, (canvasWidth - newWidth) / 2, (canvasHeight - newHeight) / 2, newWidth, newHeight);
+            document.getElementById('dimensions').textContent = `Dimensões da Imagem: ${imgWidth} x ${imgHeight} pixels`;
+        }
+
+        function getLogoPosition(baseWidth, baseHeight, logoWidth, logoHeight) {
+            if (customLogoPos) {
+                const imgWidth = baseWidth * imageScale;
+                const imgHeight = baseHeight * imageScale;
+                const imgLeft = (canvasWidth - imgWidth) / 2;
+                const imgTop = (canvasHeight - imgHeight) / 2;
+                const scaleX = baseWidth / imgWidth;
+                const scaleY = baseHeight / imgHeight;
+                let { x, y } = customLogoPos;
+                x = (x - imgLeft) * scaleX;
+                y = (y - imgTop) * scaleY;
+                x = Math.max(0, Math.min(x, baseWidth - logoWidth));
+                y = Math.max(0, Math.min(y, baseHeight - logoHeight));
+                return { x, y };
+            }
+            // Posição inicial padrão se customLogoPos ainda não foi definido
+            return { x: baseWidth - logoWidth - 10, y: baseHeight - logoHeight - 10 };
+        }
+
+        function setLogoPosition(event) {
+            if (!currentImage || !logo) return;
+            const rect = canvas.getBoundingClientRect();
+            customLogoPos = { x: event.clientX - rect.left, y: event.clientY - rect.top };
+            setStatus(`Logotipo posicionado em (${Math.round(customLogoPos.x)}, ${Math.round(customLogoPos.y)})`, 'blue');
+            previewLogo();
+        }
+
+        function onDrag(event) {
+            if (!currentImage || !logo) return;
+            if (event.buttons === 1) {
+                dragging = true;
+                const rect = canvas.getBoundingClientRect();
+                customLogoPos = { x: event.clientX - rect.left, y: event.clientY - rect.top };
+                setStatus(`Arrastando logotipo para (${Math.round(customLogoPos.x)}, ${Math.round(customLogoPos.y)})`, 'blue');
+                previewLogo();
+            }
+        }
+
+        function stopDrag() {
+            if (dragging) {
+                dragging = false;
+                setStatus(`Logotipo posicionado em (${Math.round(customLogoPos.x)}, ${Math.round(customLogoPos.y)})`, 'blue');
+            }
+        }
+
+        function moveLogo(event) {
+            if (!currentImage || !logo) return;
+            if (!customLogoPos) customLogoPos = { x: 0, y: 0 };
+            let { x, y } = customLogoPos;
+            const step = 5;
+            if (event.key === 'ArrowUp') y -= step;
+            if (event.key === 'ArrowDown') y += step;
+            if (event.key === 'ArrowLeft') x -= step;
+            if (event.key === 'ArrowRight') x += step;
+
+            const imgWidth = currentImage.width * imageScale;
+            const imgHeight = currentImage.height * imageScale;
+            const imgLeft = (canvasWidth - imgWidth) / 2;
+            const imgTop = (canvasHeight - imgHeight) / 2;
+            const logoCanvasSize = logoSize * imageScale;
+            x = Math.max(imgLeft, Math.min(x, imgLeft + imgWidth - logoCanvasSize));
+            y = Math.max(imgTop, Math.min(y, imgTop + imgHeight - logoCanvasSize));
+
+            customLogoPos = { x, y };
+            setStatus(`Logotipo movido para (${Math.round(x)}, ${Math.round(y)})`, 'blue');
+            previewLogo();
+        }
+
+        function previewLogo() {
+            if (!currentImage || !logo) {
+                alert('Por favor, selecione uma imagem e um logotipo primeiro.');
+                return;
+            }
+
+            displayImage();
+            const logoCanvasSize = logoSize * imageScale;
+            const pos = getLogoPosition(currentImage.width, currentImage.height, logoSize, logoSize);
+            const imgWidth = currentImage.width * imageScale;
+            const imgHeight = currentImage.height * imageScale;
+            const imgLeft = (canvasWidth - imgWidth) / 2;
+            const imgTop = (canvasHeight - imgHeight) / 2;
+            const logoX = imgLeft + pos.x * imgWidth / currentImage.width;
+            const logoY = imgTop + pos.y * imgHeight / currentImage.height;
+
+            ctx.drawImage(logo, logoX, logoY, logoCanvasSize, logoCanvasSize);
+            ctx.strokeStyle = 'white';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(logoX, logoY, logoCanvasSize, logoCanvasSize);
+        }
+
+        function saveImages() {
+            if (!images.length || !logo) {
+                alert('Por favor, selecione imagens e um logotipo antes de salvar.');
+                return;
+            }
+
+            let savedCount = 0;
+            images.forEach((file, index) => {
+                loadImage(file, (img) => {
+                    const tempCanvas = document.createElement('canvas');
+                    tempCanvas.width = img.width;
+                    tempCanvas.height = img.height;
+                    const tempCtx = tempCanvas.getContext('2d');
+                    tempCtx.drawImage(img, 0, 0);
+                    tempCtx.drawImage(logo, ...Object.values(getLogoPosition(img.width, img.height, logoSize, logoSize)), logoSize, logoSize);
+
+                    const link = document.createElement('a');
+                    link.download = `imagem_editada_${index + 1}.png`;
+                    link.href = tempCanvas.toDataURL('image/png');
+                    link.click();
+                    savedCount++;
+
+                    if (savedCount === images.length) {
+                        alert(`${savedCount} foto(s) salva(s) com sucesso!`);
+                        setStatus(`${savedCount} foto(s) salva(s)`, 'green');
+                    }
+                });
+            });
+        }
+    </script>
+</body>
+</html>
