@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Extrator de Geolocalização de Fotos</title>
+  <!-- Google Fonts for hacker-style font -->
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+  <!-- EXIF.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/exif-js@2.3.0/exif.js"></script>
+  <style>
+    body {
+      background: #000;
+      color: #00FF00;
+      font-family: 'VT323', monospace;
+      font-size: 1.2rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      background-image: linear-gradient(rgba(0, 255, 0, 0.1) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(0, 255, 0, 0.1) 1px, transparent 1px);
+      background-size: 20px 20px;
+    }
+
+    .container {
+      background: rgba(0, 0, 0, 0.9);
+      border: 2px solid #00FF00;
+      padding: 20px;
+      width: 90%;
+      max-width: 800px;
+      box-shadow: 0 0 15px #00FF00, 0 0 30px #00FF00;
+      border-radius: 5px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      text-shadow: 0 0 10px #00FF00;
+      animation: glitch 2s linear infinite;
+    }
+
+    @keyframes glitch {
+      2%, 64% {
+        transform: translate(2px, 0) skew(0deg);
+      }
+      4%, 60% {
+        transform: translate(-2px, 0) skew(0deg);
+      }
+      62% {
+        transform: translate(0, 0) skew(5deg);
+      }
+    }
+
+    input[type="file"] {
+      color: #00FF00;
+      background: none;
+      border: 1px solid #00FF00;
+      padding: 10px;
+      width: 100%;
+      margin-bottom: 20px;
+      cursor: pointer;
+    }
+
+    input[type="file"]::-webkit-file-upload-button {
+      background: #00FF00;
+      color: #000;
+      border: none;
+      padding: 5px 10px;
+      cursor: pointer;
+      text-shadow: 0 0 5px #00FF00;
+    }
+
+    input[type="file"]::-webkit-file-upload-button:hover {
+      background: #00FFFF;
+      box-shadow: 0 0 10px #00FFFF;
+    }
+
+    .image-preview {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .image-preview img {
+      max-width: 100%;
+      height: auto;
+      border: 1px solid #00FF00;
+      box-shadow: 0 0 10px #00FF00;
+    }
+
+    #output {
+      margin-top: 20px;
+    }
+
+    #status {
+      color: #00FF00;
+      position: relative;
+    }
+
+    #status::after {
+      content: '_';
+      animation: blink 1s step-end infinite;
+    }
+
+    @keyframes blink {
+      50% {
+        opacity: 0;
+      }
+    }
+
+    #geoData {
+      margin-top: 20px;
+    }
+
+    #geoData p {
+      margin: 5px 0;
+    }
+
+    #geoData a {
+      display: inline-block;
+      color: #000;
+      background: #00FF00;
+      padding: 8px 15px;
+      margin-right: 10px;
+      text-decoration: none;
+      border: 1px solid #00FF00;
+      text-shadow: 0 0 5px #00FF00;
+      transition: all 0.3s;
+    }
+
+    #geoData a:hover {
+      background: #00FFFF;
+      box-shadow: 0 0 10px #00FFFF;
+      color: #000;
+    }
+
+    #exifData {
+      margin-top: 20px;
+    }
+
+    #exifData h2 {
+      margin-bottom: 10px;
+      text-shadow: 0 0 5px #00FF00;
+    }
+
+    #exifData pre {
+      background: #111;
+      padding: 15px;
+      max-height: 2000px;
+      overflow-y: auto;
+      border: 1px solid #00FF00;
+      box-shadow: inset 0 0 10px #00FF00;
+    }
+
+    /* Custom Scrollbar */
+    #exifData pre::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    #exifData pre::-webkit-scrollbar-track {
+      background: #000;
+    }
+
+    #exifData pre::-webkit-scrollbar-thumb {
+      background: #00FF00;
+      box-shadow: 0 0 5px #00FF00;
+    }
+
+    #exifData pre::-webkit-scrollbar-thumb:hover {
+      background: #00FFFF;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Extrator de Geolocalização de Fotos</h1>
+    
+    <!-- File Input -->
+    <input 
+      type="file" 
+      id="imageInput" 
+      accept="image/*"
+    >
+    
+    <!-- Image Preview -->
+<!-- Image Preview -->
+<div class="image-preview">
+    <img id="imagePreview" src="https://i.postimg.cc/d3vCF8hJ/exif.jpg" alt="Preview" width="600" height="600">
+  </div>
+    <!-- Output Section -->
+    <div id="output">
+      <p id="status">Carregue uma imagem para extrair geolocalização e dados EXIF.</p>
+      <div id="geoData" class="hidden">
+        <p id="latitude"></p>
+        <p id="longitude"></p>
+        <div>
+          <a id="mapsLink" href="#" target="_blank">Ver no Google Maps</a>
+          <a id="streetViewLink" href="#" target="_blank">Ver no Google Street View</a>
+        </div>
+      </div>
+      <!-- EXIF Data -->
+      <div id="exifData" class="hidden">
+        <h2>Todos os Metadados EXIF</h2>
+        <pre></pre>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Get DOM elements
+    const imageInput = document.getElementById('imageInput');
+    const imagePreview = document.getElementById('imagePreview');
+    const status = document.getElementById('status');
+    const geoData = document.getElementById('geoData');
+    const latitude = document.getElementById('latitude');
+    const longitude = document.getElementById('longitude');
+    const mapsLink = document.getElementById('mapsLink');
+    const streetViewLink = document.getElementById('streetViewLink');
+    const exifDataElement = document.querySelector('#exifData pre');
+
+    // Translation dictionary for EXIF tags
+    const tagTranslations = {
+      'Make': 'Fabricante',
+      'Model': 'Modelo',
+      'DateTime': 'Data e Hora',
+      'GPSLatitude': 'Latitude GPS',
+      'GPSLongitude': 'Longitude GPS',
+      'GPSLatitudeRef': 'Referência de Latitude GPS',
+      'GPSLongitudeRef': 'Referência de Longitude GPS',
+      'Orientation': 'Orientação',
+      'Software': 'Software',
+      'ExposureTime': 'Tempo de Exposição',
+      'FNumber': 'Número F'
+    };
+
+    // Convert DMS (Degrees, Minutes, Seconds) to Decimal
+    function convertDMSToDecimal(degrees, minutes, seconds, direction) {
+      try {
+        if (!degrees || !minutes || !seconds || !direction) throw new Error('Componentes DMS inválidos');
+        let decimal = degrees + (minutes / 60) + (seconds / 3600);
+        if (direction === 'S' || direction === 'W') {
+          decimal = -decimal;
+        }
+        return decimal;
+      } catch (error) {
+        console.error('Erro ao converter DMS para decimal:', error);
+        throw error;
+      }
+    }
+
+    // Format EXIF data for display with translations
+    function formatExifData(tags) {
+      let output = '';
+      try {
+        if (!tags || typeof tags !== 'object') {
+          return 'Nenhum metadado EXIF disponível.';
+        }
+        for (const [key, value] of Object.entries(tags)) {
+          if (value && typeof value !== 'object' && typeof value !== 'function') {
+            const translatedKey = tagTranslations[key] || key; // Use translation if available, otherwise keep original
+            output += `${translatedKey}: ${value}\n`;
+          }
+        }
+        return output.trim() || 'Nenhum metadado EXIF legível encontrado.';
+      } catch (error) {
+        console.error('Erro ao formatar dados EXIF:', error);
+        return 'Falha ao formatar metadados EXIF.';
+      }
+    }
+
+    // Process EXIF data
+    function processExifData(exifData) {
+      console.log('Iniciando processamento de dados EXIF:', exifData);
+      try {
+        // Display all EXIF tags
+        const allTags = exifData || {};
+        console.log('Todos os tags EXIF extraídos:', allTags);
+        const formattedExif = formatExifData(allTags);
+        exifDataElement.textContent = formattedExif;
+        exifDataElement.parentElement.classList.remove('hidden');
+
+        // Handle GPS data
+        const gpsLatitude = allTags.GPSLatitude;
+        const gpsLatitudeRef = allTags.GPSLatitudeRef;
+        const gpsLongitude = allTags.GPSLongitude;
+        const gpsLongitudeRef = allTags.GPSLongitudeRef;
+
+        console.log('Dados GPS:', { gpsLatitude, gpsLatitudeRef, gpsLongitude, gpsLongitudeRef });
+        if (
+          gpsLatitude && gpsLatitudeRef && gpsLongitude && gpsLongitudeRef &&
+          Array.isArray(gpsLatitude) && Array.isArray(gpsLongitude) &&
+          gpsLatitude.length === 3 && gpsLongitude.length === 3 &&
+          gpsLatitude.every(num => !isNaN(num)) && gpsLongitude.every(num => !isNaN(num))
+        ) {
+          console.log('Convertendo coordenadas GPS...');
+          // Convert to decimal
+          const lat = convertDMSToDecimal(gpsLatitude[0], gpsLatitude[1], gpsLatitude[2], gpsLatitudeRef);
+          const lon = convertDMSToDecimal(gpsLongitude[0], gpsLongitude[1], gpsLongitude[2], gpsLongitudeRef);
+
+          console.log('Coordenadas convertidas:', { lat, lon });
+          // Update UI
+          status.classList.add('hidden');
+          geoData.classList.remove('hidden');
+          latitude.textContent = `Latitude: ${lat.toFixed(6)}°`;
+          longitude.textContent = `Longitude: ${lon.toFixed(6)}°`;
+
+          // Set Google Maps link
+          const mapsUrl = `https://www.google.com/maps?q=${lat},${lon}`;
+          mapsLink.href = mapsUrl;
+
+          // Set Google Street View link
+          const streetViewUrl = `https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${lat},${lon}`;
+          streetViewLink.href = streetViewUrl;
+        } else {
+          status.textContent = 'Nenhum dado de geolocalização válido encontrado na imagem.';
+          status.classList.remove('hidden');
+          geoData.classList.add('hidden');
+          console.log('Nenhum dado GPS válido encontrado.');
+        }
+      } catch (error) {
+        console.error('Erro ao processar dados EXIF:', error);
+        status.textContent = 'Erro ao processar dados EXIF: ' + (error.message || 'Erro desconhecido');
+        status.classList.remove('hidden');
+        geoData.classList.add('hidden');
+      }
+    }
+
+    // Handle file upload
+    imageInput.addEventListener('change', (event) => {
+      const file = event.target.files[0];
+      if (!file) {
+        console.log('Nenhum arquivo selecionado');
+        return;
+      }
+
+      console.log('Arquivo selecionado:', file.name);
+
+      // Reset UI
+      status.textContent = 'Processando...';
+      status.classList.remove('hidden');
+      geoData.classList.add('hidden');
+      exifDataElement.parentElement.classList.add('hidden');
+      imagePreview.classList.add('hidden');
+
+      // Read the image file
+      const reader = new FileReader();
+      reader.onload = () => {
+        console.log('Arquivo lido com sucesso');
+        try {
+          // Set image preview
+          imagePreview.src = reader.result;
+          imagePreview.classList.remove('hidden');
+
+          const img = new Image();
+          img.onload = () => {
+            console.log('Imagem carregada com sucesso');
+            // Extract EXIF data
+            try {
+              console.log('Iniciando extração de dados EXIF...');
+              EXIF.getData(img, function () {
+                console.log('Dados EXIF extraídos com sucesso');
+                const exifData = EXIF.getAllTags(this) || {};
+                console.log('Dados EXIF extraídos:', exifData);
+                if (Object.keys(exifData).length === 0) {
+                  status.textContent = 'Nenhum dado EXIF encontrado na imagem.';
+                  status.classList.remove('hidden');
+                  imagePreview.classList.remove('hidden');
+                  console.log('Nenhum dado EXIF encontrado.');
+                } else {
+                  processExifData.call(this, exifData);
+                }
+              });
+            } catch (error) {
+              console.error('Erro ao extrair dados EXIF:', error);
+              status.textContent = 'Falha ao extrair dados EXIF: ' + error.message;
+              status.classList.remove('hidden');
+              imagePreview.classList.remove('hidden');
+            }
+          };
+          img.onerror = () => {
+            console.error('Erro ao carregar imagem');
+            status.textContent = 'Falha ao carregar a imagem.';
+            status.classList.remove('hidden');
+          };
+          img.src = reader.result;
+        } catch (error) {
+          console.error('Erro ao ler arquivo:', error);
+          status.textContent = 'Erro ao ler o arquivo: ' + error.message;
+          status.classList.remove('hidden');
+        }
+      };
+      reader.onerror = () => {
+        console.error('Erro ao ler arquivo com FileReader');
+        status.textContent = 'Erro ao ler o arquivo.';
+        status.classList.remove('hidden');
+      };
+      reader.readAsDataURL(file);
+    });
+  </script>
+</body>
+</html>
