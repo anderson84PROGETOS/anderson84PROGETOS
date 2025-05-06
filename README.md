@@ -46,10 +46,13 @@ Ferramentas para rastreamento de URLs, útil para campanhas, engenharia reversa 
 🧠 [**NameChk – Verificador de Nomes de Usuário**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/namechk)  
 Ferramenta OSINT para verificar nomes de usuário em diversas plataformas online.
 
+📝 [**Editor de PDF**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Editor%20de%20PDF)  
+Ferramenta simples e útil para edição de arquivos PDF de forma prática e automatizada.
+
 ---
 
 ## 🌟 Contribuições
 
-deixar uma estrela ⭐ nos projetos que achar interessantes ou úteis.
+Deixe uma estrela ⭐ nos projetos que achar interessantes ou úteis.
 
-Muito obrigado por visitar meu perfil! 🚀  
+Muito obrigado por visitar meu perfil! 🚀
