@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editor de PDF</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        .container {
+            display: flex;
+            gap: 20px;
+        }
+        .editor {
+            flex: 1;
+            background: white;
+            padding: 20px;
+            border: 1px solid #ccc;
+            min-height: 600px;
+        }
+        .controls {
+            width: 300px;
+            background: #fff;
+            padding: 20px;
+            border: 1px solid #ccc;
+        }
+        .controls label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+        .controls input, .controls select, .controls button {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+        }
+        .canvas {
+            width: 100%;
+            min-height: 1500px;
+            border: 1px dashed #000;
+            position: relative;
+            overflow: auto;
+        }
+        .text-element, .image-container {
+            position: absolute;
+            cursor: move;
+            user-select: none;
+        }
+        .image-container {
+            border: 1px solid #000;
+            resize: both;
+            overflow: auto;
+        }
+        .image-container.confirmed {
+            border: 2px solid #28a745;
+            cursor: default;
+        }
+        .image-element {
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        .page-controls {
+            margin-top: 10px;
+        }
+        button {
+            background: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #218838;
+        }
+        .delete-button {
+            background: #dc3545;
+        }
+        .delete-button:hover {
+            background: #c82333;
+        }
+        .resize-handle {
+            width: 10px;
+            height: 10px;
+            background: #007bff;
+            position: absolute;
+            right: -5px;
+            bottom: -5px;
+            cursor: se-resize;
+        }
+        .hidden-canvas {
+            position: absolute;
+            top: -9999px;
+            left: -9999px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="editor">
+            <h2>Editor de PDF</h2>
+            <div id="canvas" class="canvas" contenteditable="true"></div>
+            <div class="page-controls">
+                <button onclick="addPage()">Adicionar Página</button>
+                <button onclick="prevPage()">Página Anterior</button>
+                <button onclick="nextPage()">Próxima Página</button>
+                <span id="page-indicator">Página 1</span>
+            </div>
+        </div>
+        <div class="controls">
+            <h3>Controles</h3>
+            <label>Adicionar Texto</label>
+            <input type="text" id="textInput" placeholder="Digite o texto">
+            <label>Cor do Texto</label>
+            <input type="color" id="textColor" value="#000000">
+            <label>Tamanho da Fonte</label>
+            <input type="number" id="fontSize" value="16" min="8" max="72">
+            <label>Fonte</label>
+            <select id="fontFamily">
+                <option value="Arial">Arial</option>
+                <option value="Times New Roman">Times New Roman</option>
+                <option value="Courier New">Courier New</option>
+            </select>
+            <button onclick="confirmText()">Confirmar Texto</button>
+            <button class="delete-button" onclick="deleteText()">Excluir Texto</button>
+            <label>Adicionar Imagem</label>
+            <input type="file" id="imageInput" accept="image/*">
+            <button onclick="confirmImage()">Confirmar Imagem</button>
+            <button class="delete-button" onclick="deleteImage()">Excluir Imagem</button>
+            <label>Tamanho da Imagem (px)</label>
+            <input type="range" id="imageSize" min="100" max="1280" value="100" onchange="resizeSelectedImage()">
+            <label>Cor de Fundo do PDF</label>
+            <input type="color" id="bgColor" value="#ffffff">
+            <button class="delete-button" onclick="deletePage()">Excluir Página</button>
+            <button onclick="generatePDF()">Gerar PDF</button>
+        </div>
+    </div>
+
+    <script>
+        let selectedElement = null;
+        let pages = [{ elements: [], canvas: document.getElementById('canvas') }];
+        let currentPage = 0;
+
+        function confirmText() {
+            const text = document.getElementById('textInput').value;
+            if (!text) {
+                alert('Por favor, insira um texto antes de confirmar.');
+                return;
+            }
+            const color = document.getElementById('textColor').value;
+            const fontSize = document.getElementById('fontSize').value;
+            const fontFamily = document.getElementById('fontFamily').value;
+
+            const textElement = document.createElement('div');
+            textElement.className = 'text-element';
+            textElement.innerText = text;
+            textElement.style.color = color;
+            textElement.style.fontSize = `${fontSize}px`;
+            textElement.style.fontFamily = fontFamily;
+            textElement.style.left = '10px';
+            textElement.style.top = '10px';
+
+            makeDraggable(textElement);
+            pages[currentPage].canvas.appendChild(textElement);
+            pages[currentPage].elements.push(textElement);
+            document.getElementById('textInput').value = '';
+        }
+
+        function confirmImage() {
+            if (selectedElement && selectedElement.className.includes('image-container') && !selectedElement.classList.contains('confirmed')) {
+                selectedElement.classList.add('confirmed');
+                selectedElement = null;
+                updateImageSizeSlider();
+                return;
+            }
+
+            const input = document.getElementById('imageInput');
+            if (!input.files[0]) {
+                alert('Por favor, selecione uma imagem antes de confirmar.');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const container = document.createElement('div');
+                container.className = 'image-container';
+                container.style.width = '100px';
+                container.style.height = '100px';
+                container.style.left = '10px';
+                container.style.top = '10px';
+
+                const img = document.createElement('img');
+                img.className = 'image-element';
+                img.src = e.target.result;
+
+                container.appendChild(img);
+                makeDraggable(container);
+                makeResizable(container);
+                pages[currentPage].canvas.appendChild(container);
+                pages[currentPage].elements.push(container);
+                input.value = '';
+                selectedElement = container;
+                updateImageSizeSlider();
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+
+        function makeDraggable(element) {
+            let isDragging = false;
+            let currentX = 0;
+            let currentY = 0;
+            let initialX;
+            let initialY;
+
+            element.addEventListener('mousedown', (e) => {
+                if (element.classList.contains('confirmed') || e.target.className.includes('resize-handle')) return;
+                initialX = e.clientX - currentX;
+                initialY = e.clientY - currentY;
+                isDragging = true;
+                selectedElement = element;
+                updateImageSizeSlider();
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                if (isDragging) {
+                    e.preventDefault();
+                    currentX = e.clientX - initialX;
+                    currentY = e.clientY - initialY;
+                    selectedElement.style.left = `${currentX}px`;
+                    selectedElement.style.top = `${currentY}px`;
+                }
+            });
+
+            document.addEventListener('mouseup', () => {
+                isDragging = false;
+            });
+        }
+
+        function makeResizable(element) {
+            const handle = document.createElement('div');
+            handle.className = 'resize-handle';
+            element.appendChild(handle);
+
+            let isResizing = false;
+            let initialX, initialY, initialWidth, initialHeight;
+
+            handle.addEventListener('mousedown', (e) => {
+                if (element.classList.contains('confirmed')) return;
+                e.stopPropagation();
+                isResizing = true;
+                initialX = e.clientX;
+                initialY = e.clientY;
+                initialWidth = parseFloat(getComputedStyle(element).width);
+                initialHeight = parseFloat(getComputedStyle(element).height);
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                if (isResizing) {
+                    const newWidth = initialWidth + (e.clientX - initialX);
+                    const newHeight = initialHeight + (e.clientY - initialY);
+                    element.style.width = `${Math.max(50, newWidth)}px`;
+                    element.style.height = `${Math.max(50, newHeight)}px`;
+                    updateImageSizeSlider();
+                }
+            });
+
+            document.addEventListener('mouseup', () => {
+                isResizing = false;
+            });
+        }
+
+        function updateImageSizeSlider() {
+            if (selectedElement && selectedElement.className.includes('image-container') && !selectedElement.classList.contains('confirmed')) {
+                const width = parseFloat(getComputedStyle(selectedElement).width);
+                document.getElementById('imageSize').value = Math.min(width, 1280);
+            } else {
+                document.getElementById('imageSize').value = 100;
+            }
+        }
+
+        function resizeSelectedImage() {
+            if (selectedElement && selectedElement.className.includes('image-container') && !selectedElement.classList.contains('confirmed')) {
+                const newSize = document.getElementById('imageSize').value;
+                selectedElement.style.width = `${newSize}px`;
+                selectedElement.style.height = `${newSize}px`;
+            }
+        }
+
+        function deleteImage() {
+            if (selectedElement && selectedElement.className.includes('image-container')) {
+                pages[currentPage].elements = pages[currentPage].elements.filter(el => el !== selectedElement);
+                selectedElement.remove();
+                selectedElement = null;
+                updateImageSizeSlider();
+            } else {
+                alert('Por favor, selecione uma imagem para excluir.');
+            }
+        }
+
+        function deleteText() {
+            if (selectedElement && selectedElement.className.includes('text-element')) {
+                pages[currentPage].elements = pages[currentPage].elements.filter(el => el !== selectedElement);
+                selectedElement.remove();
+                selectedElement = null;
+                updateImageSizeSlider();
+            } else {
+                alert('Por favor, selecione um texto para excluir.');
+            }
+        }
+
+        function addPage() {
+            const newCanvas = document.createElement('div');
+            newCanvas.id = `canvas-${pages.length}`;
+            newCanvas.className = 'canvas';
+            newCanvas.style.width = '100%';
+            newCanvas.style.minHeight = '1500px';
+            newCanvas.style.border = '1px dashed #000';
+            newCanvas.style.position = 'relative';
+            newCanvas.style.overflow = 'auto';
+            newCanvas.contentEditable = true;
+
+            pages.push({ elements: [], canvas: newCanvas });
+            switchPage(pages.length - 1);
+        }
+
+        function deletePage() {
+            if (pages.length <= 1) {
+                alert('Não é possível excluir a última página.');
+                return;
+            }
+
+            // Remover a página atual
+            pages[currentPage].canvas.remove();
+            pages.splice(currentPage, 1);
+
+            // Ajustar o índice da página atual
+            if (currentPage >= pages.length) {
+                currentPage = pages.length - 1;
+            }
+
+            // Atualizar a exibição para a nova página atual
+            switchPage(currentPage);
+        }
+
+        function switchPage(pageIndex) {
+            currentPage = pageIndex;
+            const editor = document.querySelector('.editor');
+            const currentCanvas = pages[currentPage].canvas;
+            const oldCanvas = document.getElementById('canvas');
+            if (oldCanvas) {
+                oldCanvas.parentNode.replaceChild(currentCanvas, oldCanvas);
+            } else {
+                editor.appendChild(currentCanvas);
+            }
+            currentCanvas.id = 'canvas';
+            document.getElementById('page-indicator').innerText = `Página ${currentPage + 1}`;
+            selectedElement = null;
+            updateImageSizeSlider();
+        }
+
+        function prevPage() {
+            if (currentPage > 0) switchPage(currentPage - 1);
+        }
+
+        function nextPage() {
+            if (currentPage < pages.length - 1) switchPage(currentPage + 1);
+        }
+
+        async function generatePDF() {
+            try {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF({
+                    orientation: 'portrait',
+                    unit: 'mm',
+                    format: 'a4'
+                });
+                const bgColor = document.getElementById('bgColor').value;
+
+                for (let i = 0; i < pages.length; i++) {
+                    if (i > 0) doc.addPage();
+
+                    doc.setFillColor(bgColor);
+                    doc.rect(0, 0, 210, 297, 'F');
+
+                    // Clonar o canvas para garantir que ele seja renderizado
+                    const canvas = pages[i].canvas.cloneNode(true);
+                    canvas.classList.add('hidden-canvas');
+                    document.body.appendChild(canvas);
+
+                    // Remover bordas das imagens antes de capturar
+                    const images = canvas.querySelectorAll('.image-container');
+                    images.forEach(img => {
+                        img.style.border = 'none';
+                    });
+
+                    await new Promise(resolve => setTimeout(resolve, 500));
+
+                    const canvasImage = await html2canvas(canvas, {
+                        scale: 2,
+                        useCORS: true,
+                        logging: false,
+                        windowWidth: canvas.scrollWidth,
+                        windowHeight: canvas.scrollHeight
+                    });
+
+                    // Remover o canvas clonado
+                    canvas.remove();
+
+                    const imgData = canvasImage.toDataURL('image/png');
+                    const imgWidth = 210;
+                    const imgHeight = (canvasImage.height * imgWidth) / canvasImage.width;
+
+                    doc.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+                }
+
+                doc.save('documento.pdf');
+            } catch (error) {
+                console.error('Erro ao gerar PDF:', error);
+                alert('Ocorreu um erro ao gerar o PDF. Verifique o console para mais detalhes.');
+            }
+        }
+
+        document.getElementById('canvas').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('canvas')) {
+                selectedElement = null;
+                updateImageSizeSlider();
+            }
+        });
+    </script>
+</body>
+</html>
