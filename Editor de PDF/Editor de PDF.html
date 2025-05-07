@@ -6,6 +6,7 @@
     <title>Editor de PDF</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Lora:wght@400;700&family=Montserrat:wght@400;700&family=Poppins:wght@400;700&family=Playfair+Display:wght@400;700&family=Open+Sans:wght@400;700&family=Raleway:wght@400;700&family=Merriweather:wght@400;700&family=Cinzel:wght@400;700&family=Pacifico&family=Dancing+Script:wght@400;700&family=Great+Vibes&family=Lato:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -40,16 +41,29 @@
             margin-bottom: 10px;
         }
         .canvas {
-            width: 100%;
-            min-height: 1500px;
+            width: 595px;
+            height: 842px;
             border: 1px dashed #000;
             position: relative;
-            overflow: auto;
+            overflow: hidden;
+            background: var(--canvas-bg-color, #fff);
         }
         .text-element, .image-container {
             position: absolute;
             cursor: move;
             user-select: none;
+        }
+        .text-element {
+            font-family: inherit;
+        }
+        .text-element[contenteditable="true"]:focus {
+            cursor: text;
+            border: 1px dashed #007bff;
+            padding: 2px;
+            outline: none;
+        }
+        .text-element.selected {
+            border: 2px solid #007bff;
         }
         .image-container {
             border: 1px solid #000;
@@ -58,7 +72,9 @@
         }
         .image-container.confirmed {
             border: 2px solid #28a745;
-            cursor: default;
+        }
+        .image-container.selected {
+            border: 2px solid #007bff;
         }
         .image-element {
             width: 100%;
@@ -83,10 +99,15 @@
         .delete-button:hover {
             background: #c82333;
         }
+        .unconfirm-button {
+            background: #007bff;
+        }
+        .unconfirm-button:hover {
+            background: #0056b3;
+        }
         .resize-handle {
             width: 10px;
-            height: 10px;
-            background: #007bff;
+            height: 10px;            
             position: absolute;
             right: -5px;
             bottom: -5px;
@@ -96,6 +117,9 @@
             position: absolute;
             top: -9999px;
             left: -9999px;
+            width: 595px;
+            height: 842px;
+            background: var(--canvas-bg-color, #fff);
         }
     </style>
 </head>
@@ -103,7 +127,7 @@
     <div class="container">
         <div class="editor">
             <h2>Editor de PDF</h2>
-            <div id="canvas" class="canvas" contenteditable="true"></div>
+            <div id="canvas" class="canvas" contenteditable="false"></div>
             <div class="page-controls">
                 <button onclick="addPage()">Adicionar Página</button>
                 <button onclick="prevPage()">Página Anterior</button>
@@ -124,6 +148,28 @@
                 <option value="Arial">Arial</option>
                 <option value="Times New Roman">Times New Roman</option>
                 <option value="Courier New">Courier New</option>
+                <option value="Georgia">Georgia</option>
+                <option value="Garamond">Garamond</option>
+                <option value="Palatino Linotype">Palatino Linotype</option>
+                <option value="Roboto">Roboto</option>
+                <option value="Lora">Lora</option>
+                <option value="Montserrat">Montserrat</option>
+                <option value="Poppins">Poppins</option>
+                <option value="Playfair Display">Playfair Display</option>
+                <option value="Open Sans">Open Sans</option>
+                <option value="Raleway">Raleway</option>
+                <option value="Merriweather">Merriweather</option>
+                <option value="Cinzel">Cinzel</option>
+                <option value="Pacifico">Pacifico</option>
+                <option value="Dancing Script">Dancing Script</option>
+                <option value="Great Vibes">Great Vibes</option>
+                <option value="Lato">Lato</option>
+            </select>
+            <label>Posição</label>
+            <select id="position">
+                <option value="top-left">Canto Superior Esquerdo</option>
+                <option value="center">Centro</option>
+                <option value="bottom-right">Canto Inferior Direito</option>
             </select>
             <button onclick="confirmText()">Confirmar Texto</button>
             <button class="delete-button" onclick="deleteText()">Excluir Texto</button>
@@ -132,9 +178,10 @@
             <button onclick="confirmImage()">Confirmar Imagem</button>
             <button class="delete-button" onclick="deleteImage()">Excluir Imagem</button>
             <label>Tamanho da Imagem (px)</label>
-            <input type="range" id="imageSize" min="100" max="1280" value="100" onchange="resizeSelectedImage()">
+            <input type="range" id="imageSize" min="100" max="595" value="100" onchange="resizeSelectedImage()">
             <label>Cor de Fundo do PDF</label>
             <input type="color" id="bgColor" value="#ffffff">
+            <button onclick="confirmBackgroundColor()">Confirmar Cor de Fundo</button>
             <button class="delete-button" onclick="deletePage()">Excluir Página</button>
             <button onclick="generatePDF()">Gerar PDF</button>
         </div>
@@ -144,6 +191,35 @@
         let selectedElement = null;
         let pages = [{ elements: [], canvas: document.getElementById('canvas') }];
         let currentPage = 0;
+        let confirmedBgColor = '#ffffff';
+        const canvasWidth = 595;
+        const canvasHeight = 842;
+
+        function confirmBackgroundColor() {
+            confirmedBgColor = document.getElementById('bgColor').value;
+            pages.forEach(page => {
+                page.canvas.style.setProperty('--canvas-bg-color', confirmedBgColor);
+            });
+        }
+
+        function getPositionCoordinates(position, elementWidth = 0, elementHeight = 0) {
+            switch (position) {
+                case 'top-left':
+                    return { left: 10, top: 10 };
+                case 'center':
+                    return {
+                        left: (canvasWidth - elementWidth) / 2,
+                        top: (canvasHeight - elementHeight) / 2
+                    };
+                case 'bottom-right':
+                    return {
+                        left: canvasWidth - elementWidth - 10,
+                        top: canvasHeight - elementHeight - 10
+                    };
+                default:
+                    return { left: 10, top: 10 };
+            }
+        }
 
         function confirmText() {
             const text = document.getElementById('textInput').value;
@@ -154,25 +230,43 @@
             const color = document.getElementById('textColor').value;
             const fontSize = document.getElementById('fontSize').value;
             const fontFamily = document.getElementById('fontFamily').value;
+            const position = document.getElementById('position').value;
 
             const textElement = document.createElement('div');
             textElement.className = 'text-element';
             textElement.innerText = text;
+            textElement.contentEditable = true;
             textElement.style.color = color;
             textElement.style.fontSize = `${fontSize}px`;
             textElement.style.fontFamily = fontFamily;
-            textElement.style.left = '10px';
-            textElement.style.top = '10px';
+
+            textElement.style.position = 'absolute';
+            textElement.style.visibility = 'hidden';
+            document.body.appendChild(textElement);
+            const elementWidth = textElement.offsetWidth;
+            const elementHeight = textElement.offsetHeight;
+            document.body.removeChild(textElement);
+            textElement.style.visibility = 'visible';
+
+            const { left, top } = getPositionCoordinates(position, elementWidth, elementHeight);
+            textElement.style.left = `${left}px`;
+            textElement.style.top = `${top}px`;
 
             makeDraggable(textElement);
+            makeEditable(textElement);
             pages[currentPage].canvas.appendChild(textElement);
             pages[currentPage].elements.push(textElement);
             document.getElementById('textInput').value = '';
+            selectedElement = textElement;
+            textElement.classList.add('selected');
+            textElement.focus();
+            updateImageSizeSlider();
         }
 
         function confirmImage() {
             if (selectedElement && selectedElement.className.includes('image-container') && !selectedElement.classList.contains('confirmed')) {
                 selectedElement.classList.add('confirmed');
+                selectedElement.querySelector('.resize-handle')?.remove();
                 selectedElement = null;
                 updateImageSizeSlider();
                 return;
@@ -183,15 +277,19 @@
                 alert('Por favor, selecione uma imagem antes de confirmar.');
                 return;
             }
+            const position = document.getElementById('position').value;
 
             const reader = new FileReader();
             reader.onload = function(e) {
                 const container = document.createElement('div');
                 container.className = 'image-container';
-                container.style.width = '100px';
-                container.style.height = '100px';
-                container.style.left = '10px';
-                container.style.top = '10px';
+                const initialSize = 100;
+                container.style.width = `${initialSize}px`;
+                container.style.height = `${initialSize}px`;
+
+                const { left, top } = getPositionCoordinates(position, initialSize, initialSize);
+                container.style.left = `${left}px`;
+                container.style.top = `${top}px`;
 
                 const img = document.createElement('img');
                 img.className = 'image-element';
@@ -204,6 +302,7 @@
                 pages[currentPage].elements.push(container);
                 input.value = '';
                 selectedElement = container;
+                container.classList.add('selected');
                 updateImageSizeSlider();
             };
             reader.readAsDataURL(input.files[0]);
@@ -217,12 +316,16 @@
             let initialY;
 
             element.addEventListener('mousedown', (e) => {
-                if (element.classList.contains('confirmed') || e.target.className.includes('resize-handle')) return;
+                if (element.contentEditable === 'true' && document.activeElement === element) return;
+                if (e.target.className.includes('resize-handle')) return;
                 initialX = e.clientX - currentX;
                 initialY = e.clientY - currentY;
                 isDragging = true;
                 selectedElement = element;
+                document.querySelectorAll('.text-element, .image-container').forEach(el => el.classList.remove('selected'));
+                element.classList.add('selected');
                 updateImageSizeSlider();
+                e.stopPropagation();
             });
 
             document.addEventListener('mousemove', (e) => {
@@ -230,8 +333,10 @@
                     e.preventDefault();
                     currentX = e.clientX - initialX;
                     currentY = e.clientY - initialY;
-                    selectedElement.style.left = `${currentX}px`;
-                    selectedElement.style.top = `${currentY}px`;
+                    currentX = Math.max(0, Math.min(currentX, canvasWidth - element.offsetWidth));
+                    currentY = Math.max(0, Math.min(currentY, canvasHeight - element.offsetHeight));
+                    element.style.left = `${currentX}px`;
+                    element.style.top = `${currentY}px`;
                 }
             });
 
@@ -240,16 +345,39 @@
             });
         }
 
+        function makeEditable(textElement) {
+            textElement.addEventListener('click', (e) => {
+                selectedElement = textElement;
+                document.querySelectorAll('.text-element, .image-container').forEach(el => el.classList.remove('selected'));
+                textElement.classList.add('selected');
+                textElement.contentEditable = true;
+                textElement.focus();
+                updateImageSizeSlider();
+                e.stopPropagation();
+            });
+
+            textElement.addEventListener('blur', () => {
+                if (textElement.innerText.trim() === '') {
+                    pages[currentPage].elements = pages[currentPage].elements.filter(el => el !== textElement);
+                    textElement.remove();
+                    selectedElement = null;
+                }
+                updateImageSizeSlider();
+            });
+        }
+
         function makeResizable(element) {
-            const handle = document.createElement('div');
-            handle.className = 'resize-handle';
-            element.appendChild(handle);
+            let handle = element.querySelector('.resize-handle');
+            if (!handle) {
+                handle = document.createElement('div');
+                handle.className = 'resize-handle';
+                element.appendChild(handle);
+            }
 
             let isResizing = false;
             let initialX, initialY, initialWidth, initialHeight;
 
             handle.addEventListener('mousedown', (e) => {
-                if (element.classList.contains('confirmed')) return;
                 e.stopPropagation();
                 isResizing = true;
                 initialX = e.clientX;
@@ -262,8 +390,8 @@
                 if (isResizing) {
                     const newWidth = initialWidth + (e.clientX - initialX);
                     const newHeight = initialHeight + (e.clientY - initialY);
-                    element.style.width = `${Math.max(50, newWidth)}px`;
-                    element.style.height = `${Math.max(50, newHeight)}px`;
+                    element.style.width = `${Math.max(50, Math.min(newWidth, canvasWidth))}px`;
+                    element.style.height = `${Math.max(50, Math.min(newHeight, canvasHeight))}px`;
                     updateImageSizeSlider();
                 }
             });
@@ -274,16 +402,16 @@
         }
 
         function updateImageSizeSlider() {
-            if (selectedElement && selectedElement.className.includes('image-container') && !selectedElement.classList.contains('confirmed')) {
+            if (selectedElement && selectedElement.className.includes('image-container')) {
                 const width = parseFloat(getComputedStyle(selectedElement).width);
-                document.getElementById('imageSize').value = Math.min(width, 1280);
+                document.getElementById('imageSize').value = Math.min(width, 595);
             } else {
                 document.getElementById('imageSize').value = 100;
             }
         }
 
         function resizeSelectedImage() {
-            if (selectedElement && selectedElement.className.includes('image-container') && !selectedElement.classList.contains('confirmed')) {
+            if (selectedElement && selectedElement.className.includes('image-container')) {
                 const newSize = document.getElementById('imageSize').value;
                 selectedElement.style.width = `${newSize}px`;
                 selectedElement.style.height = `${newSize}px`;
@@ -316,12 +444,13 @@
             const newCanvas = document.createElement('div');
             newCanvas.id = `canvas-${pages.length}`;
             newCanvas.className = 'canvas';
-            newCanvas.style.width = '100%';
-            newCanvas.style.minHeight = '1500px';
+            newCanvas.style.width = '595px';
+            newCanvas.style.height = '842px';
             newCanvas.style.border = '1px dashed #000';
             newCanvas.style.position = 'relative';
-            newCanvas.style.overflow = 'auto';
-            newCanvas.contentEditable = true;
+            newCanvas.style.overflow = 'hidden';
+            newCanvas.style.setProperty('--canvas-bg-color', confirmedBgColor);
+            newCanvas.contentEditable = false;
 
             pages.push({ elements: [], canvas: newCanvas });
             switchPage(pages.length - 1);
@@ -333,16 +462,13 @@
                 return;
             }
 
-            // Remover a página atual
             pages[currentPage].canvas.remove();
             pages.splice(currentPage, 1);
 
-            // Ajustar o índice da página atual
             if (currentPage >= pages.length) {
                 currentPage = pages.length - 1;
             }
 
-            // Atualizar a exibição para a nova página atual
             switchPage(currentPage);
         }
 
@@ -357,6 +483,7 @@
                 editor.appendChild(currentCanvas);
             }
             currentCanvas.id = 'canvas';
+            currentCanvas.style.setProperty('--canvas-bg-color', confirmedBgColor);
             document.getElementById('page-indicator').innerText = `Página ${currentPage + 1}`;
             selectedElement = null;
             updateImageSizeSlider();
@@ -378,23 +505,31 @@
                     unit: 'mm',
                     format: 'a4'
                 });
-                const bgColor = document.getElementById('bgColor').value;
+                const pdfWidth = 210;
+                const pdfHeight = 297;
 
                 for (let i = 0; i < pages.length; i++) {
                     if (i > 0) doc.addPage();
 
-                    doc.setFillColor(bgColor);
-                    doc.rect(0, 0, 210, 297, 'F');
+                    doc.setFillColor(confirmedBgColor);
+                    doc.rect(0, 0, pdfWidth, pdfHeight, 'F');
 
-                    // Clonar o canvas para garantir que ele seja renderizado
                     const canvas = pages[i].canvas.cloneNode(true);
                     canvas.classList.add('hidden-canvas');
+                    canvas.style.setProperty('--canvas-bg-color', confirmedBgColor);
                     document.body.appendChild(canvas);
 
-                    // Remover bordas das imagens antes de capturar
                     const images = canvas.querySelectorAll('.image-container');
                     images.forEach(img => {
                         img.style.border = 'none';
+                        img.classList.remove('selected');
+                    });
+
+                    const textElements = canvas.querySelectorAll('.text-element');
+                    textElements.forEach(text => {
+                        text.contentEditable = false;
+                        text.style.border = 'none';
+                        text.classList.remove('selected');
                     });
 
                     await new Promise(resolve => setTimeout(resolve, 500));
@@ -403,18 +538,14 @@
                         scale: 2,
                         useCORS: true,
                         logging: false,
-                        windowWidth: canvas.scrollWidth,
-                        windowHeight: canvas.scrollHeight
+                        width: canvasWidth,
+                        height: canvasHeight
                     });
 
-                    // Remover o canvas clonado
                     canvas.remove();
 
                     const imgData = canvasImage.toDataURL('image/png');
-                    const imgWidth = 210;
-                    const imgHeight = (canvasImage.height * imgWidth) / canvasImage.width;
-
-                    doc.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+                    doc.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
                 }
 
                 doc.save('documento.pdf');
@@ -426,6 +557,10 @@
 
         document.getElementById('canvas').addEventListener('click', (e) => {
             if (e.target === document.getElementById('canvas')) {
+                document.querySelectorAll('.text-element, .image-container').forEach(el => {
+                    if (el.className.includes('text-element')) el.blur();
+                    el.classList.remove('selected');
+                });
                 selectedElement = null;
                 updateImageSizeSlider();
             }
