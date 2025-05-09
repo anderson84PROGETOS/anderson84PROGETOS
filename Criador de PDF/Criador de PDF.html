@@ -47,19 +47,26 @@
             position: relative;
             overflow: hidden;
             background: var(--canvas-bg-color, #fff);
+            word-wrap: break-word;
+            white-space: normal;
         }
         .text-element, .image-container {
             position: absolute;
             cursor: move;
             user-select: none;
+            word-wrap: break-word;
+            white-space: normal;
         }
         .text-element {
             font-family: inherit;
+            min-width: 50px;
+            max-width: 575px;
+            min-height: 20px;
+            padding: 2px;
         }
         .text-element[contenteditable="true"]:focus {
             cursor: text;
             border: 1px dashed #007bff;
-            padding: 2px;
             outline: none;
         }
         .text-element.selected {
@@ -148,7 +155,7 @@
     <div class="container">
         <div class="editor">
             <h2>Criador de PDF</h2>
-            <div id="canvas" class="canvas" contenteditable="true"></div>
+            <div id="canvas" class="canvas"></div>
             <div class="page-controls">
                 <button onclick="addPage()">Adicionar Página</button>
                 <button onclick="prevPage()">Página Anterior</button>
@@ -254,6 +261,7 @@
         const canvasWidth = 595;
         const canvasHeight = 842;
 
+        // Confirma a cor de fundo para todas as páginas
         function confirmBackgroundColor() {
             confirmedBgColor = document.getElementById('bgColor').value;
             pages.forEach(page => {
@@ -261,20 +269,21 @@
             });
         }
 
+        // Cria um novo canvas para uma nova página
         function createNewCanvas() {
             const newCanvas = document.createElement('div');
             newCanvas.id = `canvas-${pages.length}`;
             newCanvas.className = 'canvas';
-            newCanvas.style.width = '595px';
-            newCanvas.style.height = '842px';
+            newCanvas.style.width = `${canvasWidth}px`;
+            newCanvas.style.height = `${canvasHeight}px`;
             newCanvas.style.border = '1px dashed #000';
             newCanvas.style.position = 'relative';
             newCanvas.style.overflow = 'hidden';
             newCanvas.style.setProperty('--canvas-bg-color', confirmedBgColor);
-            newCanvas.contentEditable = true;
             return newCanvas;
         }
 
+        // Atualiza o número de páginas
         function updatePageCount() {
             const pageCountInput = document.getElementById('pageCount');
             let newPageCount = parseInt(pageCountInput.value, 10);
@@ -285,15 +294,12 @@
 
             const currentPageCount = pages.length;
             if (newPageCount > currentPageCount) {
-                // Add new pages
                 for (let i = currentPageCount; i < newPageCount; i++) {
                     const newCanvas = createNewCanvas();
                     pages.push({ elements: [], canvas: newCanvas });
                 }
-                // If adding pages, go to the last page to confirm addition
                 currentPage = newPageCount - 1;
             } else if (newPageCount < currentPageCount) {
-                // Remove excess pages
                 pages.slice(newPageCount).forEach(page => page.canvas.remove());
                 pages = pages.slice(0, newPageCount);
                 if (currentPage >= newPageCount) {
@@ -301,12 +307,11 @@
                 }
             }
 
-            // Ensure page count input reflects actual number of pages
             pageCountInput.value = pages.length;
-            // Update the current page display
             switchPage(currentPage);
         }
 
+        // Obtém as coordenadas de posicionamento para elementos
         function getPositionCoordinates(position, elementWidth = 0, elementHeight = 0) {
             switch (position) {
                 case 'top-left':
@@ -326,6 +331,7 @@
             }
         }
 
+        // Confirma a adição de texto ao canvas
         function confirmText() {
             const text = document.getElementById('textInput').value;
             if (!text) {
@@ -344,6 +350,10 @@
             textElement.style.color = color;
             textElement.style.fontSize = `${fontSize}px`;
             textElement.style.fontFamily = fontFamily;
+            textElement.style.minWidth = '50px';
+            textElement.style.maxWidth = '575px';
+            textElement.style.minHeight = '20px';
+            textElement.style.padding = '2px';
 
             textElement.style.position = 'absolute';
             textElement.style.visibility = 'hidden';
@@ -368,6 +378,7 @@
             updateImageSizeSlider();
         }
 
+        // Atualiza a fonte do texto selecionado
         function updateSelectedTextFont() {
             if (selectedElement && selectedElement.className.includes('text-element')) {
                 const fontFamily = document.getElementById('fontFamily').value;
@@ -375,6 +386,7 @@
             }
         }
 
+        // Atualiza o tamanho da fonte do texto selecionado
         function updateSelectedTextSize() {
             if (selectedElement && selectedElement.className.includes('text-element')) {
                 const fontSize = document.getElementById('fontSize').value;
@@ -382,6 +394,7 @@
             }
         }
 
+        // Atualiza a cor do texto selecionado
         function updateSelectedTextColor() {
             if (selectedElement && selectedElement.className.includes('text-element')) {
                 const color = document.getElementById('textColor').value;
@@ -389,6 +402,7 @@
             }
         }
 
+        // Confirma a adição de uma imagem ao canvas
         function confirmImage() {
             if (selectedElement && selectedElement.className.includes('image-container') && !selectedElement.classList.contains('confirmed')) {
                 selectedElement.classList.add('confirmed');
@@ -434,6 +448,7 @@
             reader.readAsDataURL(input.files[0]);
         }
 
+        // Torna um elemento arrastável
         function makeDraggable(element) {
             let isDragging = false;
             let currentX = 0;
@@ -471,6 +486,7 @@
             });
         }
 
+        // Torna um elemento de texto editável
         function makeEditable(textElement) {
             textElement.addEventListener('click', (e) => {
                 selectedElement = textElement;
@@ -490,8 +506,26 @@
                 }
                 updateImageSizeSlider();
             });
+
+            textElement.addEventListener('input', () => {
+                const currentTop = parseFloat(textElement.style.top) || 0;
+                const scrollHeight = textElement.scrollHeight;
+                if (currentTop + scrollHeight > canvasHeight - 10) {
+                    if (currentPage === pages.length - 1) {
+                        addPage();
+                    } else {
+                        switchPage(currentPage + 1);
+                    }
+                    textElement.style.top = '10px';
+                    pages[currentPage].canvas.appendChild(textElement);
+                    pages[currentPage].elements.push(textElement);
+                    pages[currentPage - 1].elements = pages[currentPage - 1].elements.filter(el => el !== textElement);
+                    textElement.focus();
+                }
+            });
         }
 
+        // Torna um elemento redimensionável
         function makeResizable(element) {
             let handle = element.querySelector('.resize-handle');
             if (!handle) {
@@ -527,6 +561,7 @@
             });
         }
 
+        // Atualiza o controle deslizante de tamanho da imagem
         function updateImageSizeSlider() {
             if (selectedElement && selectedElement.className.includes('image-container')) {
                 const width = parseFloat(getComputedStyle(selectedElement).width);
@@ -536,6 +571,7 @@
             }
         }
 
+        // Redimensiona a imagem selecionada
         function resizeSelectedImage() {
             if (selectedElement && selectedElement.className.includes('image-container')) {
                 const newSize = document.getElementById('imageSize').value;
@@ -544,6 +580,7 @@
             }
         }
 
+        // Exclui a imagem selecionada
         function deleteImage() {
             if (selectedElement && selectedElement.className.includes('image-container')) {
                 pages[currentPage].elements = pages[currentPage].elements.filter(el => el !== selectedElement);
@@ -555,6 +592,7 @@
             }
         }
 
+        // Exclui o texto selecionado
         function deleteText() {
             if (selectedElement && selectedElement.className.includes('text-element')) {
                 pages[currentPage].elements = pages[currentPage].elements.filter(el => el !== selectedElement);
@@ -566,6 +604,7 @@
             }
         }
 
+        // Adiciona uma nova página
         function addPage() {
             const newCanvas = createNewCanvas();
             pages.push({ elements: [], canvas: newCanvas });
@@ -573,6 +612,7 @@
             switchPage(pages.length - 1);
         }
 
+        // Exclui a página atual
         function deletePage() {
             if (pages.length <= 1) {
                 alert('Não é possível excluir a última página.');
@@ -590,6 +630,7 @@
             switchPage(currentPage);
         }
 
+        // Troca para a página especificada
         function switchPage(pageIndex) {
             if (pageIndex < 0 || pageIndex >= pages.length) return;
             currentPage = pageIndex;
@@ -610,17 +651,20 @@
             setupCanvasTyping();
         }
 
+        // Navega para a página anterior
         function prevPage() {
             if (currentPage > 0) switchPage(currentPage - 1);
         }
 
+        // Navega para a próxima página
         function nextPage() {
             if (currentPage < pages.length - 1) switchPage(currentPage + 1);
         }
 
+        // Configura a digitação direta no canvas
         function setupCanvasTyping() {
             const canvas = pages[currentPage].canvas;
-            canvas.addEventListener('keydown', (e) => {
+            canvas.addEventListener('click', (e) => {
                 if (e.target === canvas && !selectedElement) {
                     const textElement = document.createElement('div');
                     textElement.className = 'text-element';
@@ -631,6 +675,10 @@
                     textElement.style.color = document.getElementById('textColor').value;
                     textElement.style.fontSize = `${document.getElementById('fontSize').value}px`;
                     textElement.style.fontFamily = document.getElementById('fontFamily').value;
+                    textElement.style.minWidth = '50px';
+                    textElement.style.maxWidth = '575px';
+                    textElement.style.minHeight = '20px';
+                    textElement.style.padding = '2px';
 
                     canvas.appendChild(textElement);
                     pages[currentPage].elements.push(textElement);
@@ -644,6 +692,7 @@
             });
         }
 
+        // Gera o PDF com todas as páginas
         async function generatePDF() {
             try {
                 const { jsPDF } = window.jspdf;
@@ -701,7 +750,6 @@
                     const imgData = canvasImage.toDataURL('image/png');
                     doc.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
 
-                    // Update progress bar
                     const progress = ((i + 1) / pages.length) * 100;
                     progressBar.style.width = `${progress}%`;
                     progressText.innerText = `${Math.round(progress)}%`;
@@ -716,8 +764,11 @@
             }
         }
 
+        // Desseleciona elementos ao clicar no canvas
         document.getElementById('canvas').addEventListener('click', (e) => {
-            if (e.target === document.getElementById('canvas')) {
+            if (e.target === document.getElementById('canvas') && !selectedElement) {
+                setupCanvasTyping();
+            } else if (e.target.className !== 'text-element' && e.target.className !== 'image-container') {
                 document.querySelectorAll('.text-element, .image-container').forEach(el => {
                     if (el.className.includes('text-element')) el.blur();
                     el.classList.remove('selected');
@@ -727,7 +778,7 @@
             }
         });
 
-        // Enable mouse wheel scrolling for font selection
+        // Navegação por roda do mouse para seleção de fonte
         const fontSelect = document.getElementById('fontFamily');
         fontSelect.addEventListener('wheel', (e) => {
             e.preventDefault();
@@ -738,10 +789,10 @@
             } else if (e.deltaY > 0 && currentIndex < options.length - 1) {
                 fontSelect.selectedIndex = currentIndex + 1;
             }
-            updateSelectedTextFont(); // Update font if text is selected
+            updateSelectedTextFont();
         });
 
-        // Enable mouse wheel scrolling for font size adjustment
+        // Ajuste de tamanho da fonte com a roda do mouse
         const fontSizeInput = document.getElementById('fontSize');
         fontSizeInput.addEventListener('wheel', (e) => {
             e.preventDefault();
@@ -751,9 +802,10 @@
             } else if (e.deltaY > 0 && currentSize > 8) {
                 fontSizeInput.value = currentSize - 1;
             }
-            updateSelectedTextSize(); // Update font size if text is selected
+            updateSelectedTextSize();
         });
 
+        // Inicializa a configuração de digitação
         setupCanvasTyping();
     </script>
 </body>
