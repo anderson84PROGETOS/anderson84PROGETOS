@@ -54,7 +54,7 @@ def get_ip_whois_server(ip):
             data = socket_obj.recv(65500)
             if not data:
                 break
-            response += data.decode('utf-8')
+            response += data.decode('latin-1')
         socket_obj.close()
 
         for line in response.splitlines():
@@ -100,7 +100,7 @@ def requisicao_whois(servidor_whois, endereco, padrao):
                 dados = socket_objeto.recv(65500)
                 if not dados:
                     break
-                resultado += dados.decode('utf-8')
+                resultado += dados.decode('latin-1')
         else:
             print(Fore.LIGHTRED_EX + f"Erro ao conectar ao servidor WHOIS {servidor_whois}.")
         socket_objeto.close()
