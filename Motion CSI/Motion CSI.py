@@ -10,7 +10,7 @@ from matplotlib.animation import FuncAnimation
 import os
 
 # === CONFIGURAÇÕES ===
-USE_REAL_DEVICE = True            # Mude para True se estiver usando dispositivo real    False, o código não tentará se conectar a um dispositivo
+USE_REAL_DEVICE = False            # Mude para True se estiver usando dispositivo real    False, o código não tentará se conectar a um dispositivo
 SERIAL_PORT = 'COM1'                # Ex: COM3 no Windows ou /dev/ttyUSB0 no Linux
 BAUD_RATE = 115200
 NUM_SAMPLES = 200
@@ -135,6 +135,10 @@ def update(frame):
 
         if movement_detected:
             last_movement_time = current_time
+            # Salva a imagem quando o movimento é detectado
+            filename = f"movement_{datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
+            fig.savefig(filename)
+            print(f"\n[✓] Imagem salva como: {filename}\n")
 
         ax1.clear()
         ax2.clear()
