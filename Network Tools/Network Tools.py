@@ -12,7 +12,6 @@ import asyncio
 import subprocess
 import re
 from colorama import init, Fore, Style
-
 # Inicializando o colorama
 init(autoreset=True)
 
