@@ -1,0 +1,29 @@
+{
+  "manifest_version": 3,
+  "name": "Scraper",
+  "version": "1.0",
+  "description": "Coleta todas as URLs encontradas no código-fonte do site atual.",
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "tabs"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": "icon-16.png"
+  },
+  "icons": {
+    "16": "icon-16.png",
+    "48": "icon-48.png",
+    "128": "icon-128.png"
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "scraper-hacker123@projeto.com",
+      "strict_min_version": "109.0"
+    }
+  }
+}
