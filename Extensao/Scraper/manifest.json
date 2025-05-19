@@ -1,0 +1,20 @@
+{
+  "manifest_version": 3,
+  "name": "Scraper",
+  "version": "1.0",
+  "description": "Coleta todas as URLs encontradas no c\u00f3digo-fonte do site atual.",
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "tabs"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": "icon.png"
+  },
+  "icons": {
+    "16": "icon.png",
+    "48": "icon.png",
+    "128": "icon.png"
+  }
+}
