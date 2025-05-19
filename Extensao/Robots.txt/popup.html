@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Robots.txt Explorer</title>
+  <style>
+    html, body {
+      width: 800px;
+      height: 500px;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 10px;
+      background-color: #f5f7fa;
+      box-sizing: border-box;
+    }
+    h1 {
+      font-size: 18px;
+      margin-bottom: 8px;
+      color: #2c3e50;
+    }
+    pre {
+      white-space: pre-wrap;
+      background-color: #0a0a0a;
+      color: #07ed82;
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 14px;
+      height: 400px; /* altura aumentada */
+      overflow-y: auto;
+    }
+    button {
+      margin-top: 10px;
+      padding: 10px;
+      font-size: 14px;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <h1>Robots.txt Explorer</h1>
+  <pre id="robots-content">Carregando...</pre>
+  <button id="save-button">Salvar em .txt</button>
+  <script src="popup.js"></script>
+</body>
+</html>
