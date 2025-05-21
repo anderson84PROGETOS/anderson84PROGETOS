@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editor de Fotos Múltiplas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #f0f0f0;
+        }
+        #container {
+            display: flex;
+            flex-direction: column;
+            width: 90%;
+            max-width: 1600px;
+            margin: 20px auto;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        }
+        #editor {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        #toolbar {
+            width: 100%;
+            background: #333;
+            color: white;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        #toolbar button, #toolbar input {
+            margin: 5px;
+            padding: 8px 12px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        #adjustments {
+            width: 100%;
+            background: #444;
+            color: white;
+            padding: 15px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        #adjustments label {
+            margin: 10px;
+            font-size: 16px;
+        }
+        #adjustments input[type="range"] {
+            width: 200px;
+        }
+        #canvasArea {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #eee;
+            padding: 20px;
+            overflow: auto;
+        }
+        #myCanvas {
+            border: 2px solid #000;
+            max-width: 100%;
+            max-height: 80vh;
+            width: auto;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+        #layers {
+            width: 100%;
+            background: #f0f0f0;
+            padding: 15px;
+            text-align: center;
+        }
+        #layerList {
+            list-style: none;
+            padding: 0;
+        }
+        #layerList li {
+            padding: 8px;
+            background: #ddd;
+            margin: 5px 0;
+            cursor: pointer;
+        }
+        #layerList li:hover {
+            background: #ccc;
+        }
+        #layerList .selected {
+            background: #bbb;
+            font-weight: bold;
+        }
+        #sizeModal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        #sizeModalContent {
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+        }
+        #sizeModalContent button {
+            margin: 5px;
+            padding: 8px 16px;
+            font-size: 14px;
+            cursor: pointer;
+            background: #333;
+            color: white;
+            border: none;
+            border-radius: 3px;
+        }
+        #sizeModalContent button:hover {
+            background: #555;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <div id="editor">
+            <div id="toolbar">
+                <input type="file" id="imageLoader" accept="image/*" multiple onchange="loadImage(event)">
+                <button onclick="document.getElementById('watermarkLoader').click()">Marca d'água</button>
+                <input type="file" id="watermarkLoader" accept="image/*" onchange="loadWatermark(event)" style="display: none;">
+                <button onclick="removeWatermark()">Remover Marca d'água</button>
+                <button onclick="rotateLayer(90)">Girar 90° ↻</button>
+                <button onclick="rotateLayer(-90)">Girar 90° ↺</button>
+                <button onclick="rotateLayer(180)">Girar 180°</button>
+                <button onclick="showSizeModal()">Salvar como PNG</button>
+                <button onclick="deleteLayer()">Excluir Camada</button>
+                <button onclick="resetAllAdjustments()">Redefinir Todos os Ajustes</button>
+                <button onclick="resetCurrentAdjustment()">Redefinir Ajuste Atual</button>
+            </div>
+            <div id="adjustments">
+                <h3>Ajustes</h3>
+                <label>Brilho: <input type="range" id="brightness" min="-100" max="100" value="0" oninput="applyAdjustments('brightness')"></label>
+                <label>Contraste: <input type="range" id="contrast" min="-100" max="100" value="0" oninput="applyAdjustments('contrast')"></label>
+                <label>Gama: <input type="range" id="levels" min="0.1" max="2" value="1" step="0.1" oninput="applyAdjustments('levels')"></label>
+                <label>Exposição: <input type="range" id="exposure" min="-2" max="2" value="0" step="0.1" oninput="applyAdjustments('exposure')"></label>
+                <label>Curvas: <input type="range" id="curves" min="0.1" max="2" value="1" step="0.1" oninput="applyAdjustments('curves')"></label>
+                <label>Nitidez: <input type="range" id="sharpen" min="0" max="2" value="0" step="0.1" oninput="applyAdjustments('sharpen')"></label>
+                <label>Tamanho da Marca d'água: <input type="range" id="watermarkScale" min="0.1" max="0.5" value="0.3" step="0.01" oninput="applyAdjustments('watermarkScale')"></label>
+            </div>
+            <div id="canvasArea">
+                <canvas id="myCanvas" width="1200" height="800"></canvas>
+            </div>
+            <div id="layers">
+                <h3>Camadas</h3>
+                <ul id="layerList"></ul>
+            </div>
+        </div>
+    </div>
+    <div id="sizeModal">
+        <div id="sizeModalContent">
+            <h3>Escolha o tamanho para salvar</h3>
+            <div id="sizeOptions"></div>
+            <button onclick="hideSizeModal()">Cancelar</button>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('myCanvas');
+        const ctx = canvas.getContext('2d');
+        let layers = [];
+        let currentLayerIndex = -1;
+        let lastAdjusted = null;
+        let isDragging = false;
+        let dragStartX = 0;
+        let dragStartY = 0;
+
+        class Layer {
+            constructor(image, name, width, height) {
+                this.image = image;
+                this.name = name;
+                this.width = width;
+                this.height = height;
+                this.rotation = 0;
+                this.originalImageData = null;
+                this.watermark = null;
+                this.watermarkX = 0;
+                this.watermarkY = 0;
+                this.watermarkScale = 0.3;
+                this.scaleFactor = 1;
+                this.adjustments = {
+                    brightness: 0,
+                    contrast: 0,
+                    levels: 1,
+                    exposure: 0,
+                    curves: 1,
+                    sharpen: 0
+                };
+            }
+        }
+
+        const sizeOptions = [
+            { label: 'Original', width: null, height: null },
+
+            // Proporção 4:3
+            { label: '160x120', width: 160, height: 120 },
+            { label: '320x240', width: 320, height: 240 },
+            { label: '640x480', width: 640, height: 480 },
+            { label: '800x600', width: 800, height: 600 },
+            { label: '1024x768', width: 1024, height: 768 },
+
+            // Proporção 16:9 (HD, Full HD, etc.)
+            { label: '1280x720 (HD)', width: 1280, height: 720 },
+            { label: '1366x768', width: 1366, height: 768 },
+            { label: '1600x900', width: 1600, height: 900 },
+            { label: '1920x1080 (Full HD)', width: 1920, height: 1080 },
+            { label: '2560x1440 (QHD)', width: 2560, height: 1440 },
+            { label: '3840x2160 (4K UHD)', width: 3840, height: 2160 },
+
+            // Proporção 3:2 (usado em tablets e alguns laptops)
+            { label: '960x640', width: 960, height: 640 },
+            { label: '1440x960', width: 1440, height: 960 },
+
+            // Proporção 1:1 (quadrado)
+            { label: '100x100', width: 100, height: 100 },
+            { label: '500x500', width: 500, height: 500 },
+            { label: '1080x1080 (Instagram)', width: 1080, height: 1080 },
+
+            // Outras proporções úteis
+            { label: '1200x628 (Facebook Link)', width: 1200, height: 628 },
+            { label: '1080x1920 (Stories/Vertical)', width: 1080, height: 1920 },
+        ];
+
+
+        function showSizeModal() {
+            if (currentLayerIndex === -1) {
+                alert('Selecione uma camada para salvar.');
+                return;
+            }
+            const modal = document.getElementById('sizeModal');
+            const sizeOptionsDiv = document.getElementById('sizeOptions');
+            sizeOptionsDiv.innerHTML = '';
+            sizeOptions.forEach((option, index) => {
+                const button = document.createElement('button');
+                button.textContent = option.label;
+                button.onclick = () => {
+                    saveCanvasWithSize(option.width, option.height);
+                    hideSizeModal();
+                };
+                sizeOptionsDiv.appendChild(button);
+            });
+            modal.style.display = 'flex';
+        }
+
+        function hideSizeModal() {
+            document.getElementById('sizeModal').style.display = 'none';
+        }
+
+        async function loadImage(event) {
+            const files = event.target.files;
+            if (!files || files.length === 0) return;
+
+            const loadImagePromise = (file) => {
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const img = new Image();
+                        img.onload = function() {
+                            const maxWidth = window.innerWidth * 0.8;
+                            const maxHeight = window.innerHeight * 0.6;
+                            let width = img.width;
+                            let height = img.height;
+
+                            if (width > maxWidth || height > maxHeight) {
+                                const ratio = Math.min(maxWidth / width, maxHeight / height);
+                                width = Math.round(width * ratio);
+                                height = Math.round(height * ratio);
+                            }
+
+                            const tempCanvas = document.createElement('canvas');
+                            tempCanvas.width = width;
+                            tempCanvas.height = height;
+                            const tempCtx = tempCanvas.getContext('2d');
+                            tempCtx.drawImage(img, 0, 0, width, height);
+
+                            const layerName = file.name;
+                            const newLayer = new Layer(img, layerName, width, height);
+                            newLayer.originalImageData = tempCtx.getImageData(0, 0, width, height);
+                            resolve(newLayer);
+                        };
+                        img.onerror = reject;
+                        img.src = e.target.result;
+                    };
+                    reader.onerror = reject;
+                    reader.readAsDataURL(file);
+                });
+            };
+
+            try {
+                const newLayers = await Promise.all(Array.from(files).map(loadImagePromise));
+                layers.push(...newLayers);
+                currentLayerIndex = layers.length - 1;
+                updateLayerList();
+                updateAdjustmentsUI();
+                renderCurrentLayer();
+            } catch (error) {
+                console.error('Erro ao carregar imagens:', error);
+                alert('Ocorreu um erro ao carregar uma ou mais imagens.');
+            }
+        }
+
+        async function loadWatermark(event) {
+            if (currentLayerIndex === -1) {
+                alert('Selecione uma camada antes de adicionar uma marca d\'água.');
+                return;
+            }
+
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const watermarkImg = new Image();
+                watermarkImg.onload = function() {
+                    const layer = layers[currentLayerIndex];
+                    layer.watermark = watermarkImg;
+                    layer.watermarkScale = 0.3;
+                    const drawWidth = Math.abs(layer.rotation % 180) === 90 ? layer.height : layer.width;
+                    const drawHeight = Math.abs(layer.rotation % 180) === 90 ? layer.width : layer.height;
+                    layer.watermarkX = 0;
+                    layer.watermarkY = 0;
+                    updateAdjustmentsUI();
+                    renderCurrentLayer();
+                };
+                watermarkImg.onerror = function() {
+                    console.error('Erro ao carregar a marca d\'água.');
+                    alert('Ocorreu um erro ao carregar a marca d\'água.');
+                };
+                watermarkImg.src = e.target.result;
+            };
+            reader.onerror = function() {
+                console.error('Erro ao ler o arquivo da marca d\'água.');
+                alert('Ocorreu um erro ao ler o arquivo da marca d\'água.');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function removeWatermark() {
+            if (currentLayerIndex === -1) {
+                alert('Selecione uma camada para remover a marca d\'água.');
+                return;
+            }
+            const layer = layers[currentLayerIndex];
+            layer.watermark = null;
+            layer.watermarkX = 0;
+            layer.watermarkY = 0;
+            layer.watermarkScale = 0.3;
+            updateAdjustmentsUI();
+            renderCurrentLayer();
+        }
+
+        function rotateLayer(angle) {
+            if (currentLayerIndex === -1) {
+                alert('Selecione uma camada para girar.');
+                return;
+            }
+            const layer = layers[currentLayerIndex];
+            layer.rotation = (layer.rotation + angle) % 360;
+            if (layer.rotation < 0) layer.rotation += 360;
+
+            if (Math.abs(layer.rotation % 180) === 90) {
+                [layer.width, layer.height] = [layer.height, layer.width];
+            }
+
+            const tempCanvas = document.createElement('canvas');
+            tempCanvas.width = layer.width;
+            tempCanvas.height = layer.height;
+            const tempCtx = tempCanvas.getContext('2d');
+            tempCtx.translate(layer.width / 2, layer.height / 2);
+            tempCtx.rotate((layer.rotation * Math.PI) / 180);
+            tempCtx.drawImage(layer.image, -layer.image.width / 2, -layer.image.height / 2);
+            layer.originalImageData = tempCtx.getImageData(0, 0, layer.width, layer.height);
+
+            if (layer.watermark) {
+                const drawWidth = Math.abs(layer.rotation % 180) === 90 ? layer.height : layer.width;
+                const drawHeight = Math.abs(layer.rotation % 180) === 90 ? layer.width : layer.height;
+                const watermarkWidth = drawWidth * layer.watermarkScale;
+                const watermarkHeight = (layer.watermark.height / layer.watermark.width) * watermarkWidth;
+                layer.watermarkX = 0;
+                layer.watermarkY = 0;
+            }
+
+            renderCurrentLayer();
+        }
+
+        function updateLayerList() {
+            const layerList = document.getElementById('layerList');
+            layerList.innerHTML = '';
+            layers.forEach((layer, index) => {
+                const li = document.createElement('li');
+                li.textContent = `${layer.name} (Camada ${index + 1})`;
+                if (index === currentLayerIndex) {
+                    li.classList.add('selected');
+                }
+                li.onclick = () => selectLayer(index);
+                layerList.appendChild(li);
+            });
+        }
+
+        function selectLayer(index) {
+            if (index < 0 || index >= layers.length) return;
+            currentLayerIndex = index;
+            updateLayerList();
+            updateAdjustmentsUI();
+            renderCurrentLayer();
+        }
+
+        function deleteLayer() {
+            if (currentLayerIndex === -1 || layers.length === 0) return;
+            layers.splice(currentLayerIndex, 1);
+            if (layers.length > 0) {
+                currentLayerIndex = Math.min(currentLayerIndex, layers.length - 1);
+            } else {
+                currentLayerIndex = -1;
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            }
+            updateLayerList();
+            updateAdjustmentsUI();
+            if (currentLayerIndex !== -1) {
+                renderCurrentLayer();
+            }
+        }
+
+        function resetAllAdjustments() {
+            if (currentLayerIndex === -1) return;
+            const layer = layers[currentLayerIndex];
+            layer.adjustments = {
+                brightness: 0,
+                contrast: 0,
+                levels: 1,
+                exposure: 0,
+                curves: 1,
+                sharpen: 0
+            };
+            layer.watermark = null;
+            layer.watermarkX = 0;
+            layer.watermarkY = 0;
+            layer.watermarkScale = 0.3;
+            layer.rotation = 0;
+            updateAdjustmentsUI();
+            renderCurrentLayer();
+        }
+
+        function resetCurrentAdjustment() {
+            if (currentLayerIndex === -1 || !lastAdjusted) return;
+            const layer = layers[currentLayerIndex];
+            switch (lastAdjusted) {
+                case 'brightness':
+                    layer.adjustments.brightness = 0;
+                    document.getElementById('brightness').value = 0;
+                    break;
+                case 'contrast':
+                    layer.adjustments.contrast = 0;
+                    document.getElementById('contrast').value = 0;
+                    break;
+                case 'levels':
+                    layer.adjustments.levels = 1;
+                    document.getElementById('levels').value = 1;
+                    break;
+                case 'exposure':
+                    layer.adjustments.exposure = 0;
+                    document.getElementById('exposure').value = 0;
+                    break;
+                case 'curves':
+                    layer.adjustments.curves = 1;
+                    document.getElementById('curves').value = 1;
+                    break;
+                case 'sharpen':
+                    layer.adjustments.sharpen = 0;
+                    document.getElementById('sharpen').value = 0;
+                    break;
+                case 'watermarkScale':
+                    layer.watermarkScale = 0.3;
+                    document.getElementById('watermarkScale').value = 0.3;
+                    break;
+            }
+            renderCurrentLayer();
+        }
+
+        function updateAdjustmentsUI() {
+            if (currentLayerIndex === -1) {
+                document.getElementById('brightness').value = 0;
+                document.getElementById('contrast').value = 0;
+                document.getElementById('levels').value = 1;
+                document.getElementById('exposure').value = 0;
+                document.getElementById('curves').value = 1;
+                document.getElementById('sharpen').value = 0;
+                document.getElementById('watermarkScale').value = 0.3;
+                return;
+            }
+            const layer = layers[currentLayerIndex];
+            document.getElementById('brightness').value = layer.adjustments.brightness;
+            document.getElementById('contrast').value = layer.adjustments.contrast;
+            document.getElementById('levels').value = layer.adjustments.levels;
+            document.getElementById('exposure').value = layer.adjustments.exposure;
+            document.getElementById('curves').value = layer.adjustments.curves;
+            document.getElementById('sharpen').value = layer.adjustments.sharpen;
+            document.getElementById('watermarkScale').value = layer.watermarkScale;
+        }
+
+        function applyAdjustments(adjustmentType) {
+            if (currentLayerIndex === -1) return;
+            lastAdjusted = adjustmentType;
+            const layer = layers[currentLayerIndex];
+
+            layer.adjustments.brightness = parseFloat(document.getElementById('brightness').value);
+            layer.adjustments.contrast = parseFloat(document.getElementById('contrast').value);
+            layer.adjustments.levels = parseFloat(document.getElementById('levels').value);
+            layer.adjustments.exposure = parseFloat(document.getElementById('exposure').value);
+            layer.adjustments.curves = parseFloat(document.getElementById('curves').value);
+            layer.adjustments.sharpen = parseFloat(document.getElementById('sharpen').value);
+            layer.watermarkScale = parseFloat(document.getElementById('watermarkScale').value);
+
+            renderCurrentLayer();
+        }
+
+        function applySharpen(imageData, width, height, sharpenAmount) {
+            if (sharpenAmount <= 0) return imageData;
+
+            const kernel = [
+                [0, -1, 0],
+                [-1, 5, -1],
+                [0, -1, 0]
+            ];
+            const output = ctx.createImageData(imageData);
+            const pixels = imageData.data;
+            const outPixels = output.data;
+
+            const sharpened = ctx.createImageData(imageData);
+            const sharpPixels = sharpened.data;
+
+            for (let y = 1; y < height - 1; y++) {
+                for (let x = 1; x < width - 1; x++) {
+                    let r = 0, g = 0, b = 0;
+                    for (let ky = -1; ky <= 1; ky++) {
+                        for (let kx = -1; kx <= 1; kx++) {
+                            const pixelIndex = ((y + ky) * width + (x + kx)) * 4;
+                            const weight = kernel[ky + 1][kx + 1];
+                            r += pixels[pixelIndex] * weight;
+                            g += pixels[pixelIndex + 1] * weight;
+                            b += pixels[pixelIndex + 2] * weight;
+                        }
+                    }
+                    const index = (y * width + x) * 4;
+                    sharpPixels[index] = Math.min(255, Math.max(0, r));
+                    sharpPixels[index + 1] = Math.min(255, Math.max(0, g));
+                    sharpPixels[index + 2] = Math.min(255, Math.max(0, b));
+                    sharpPixels[index + 3] = pixels[index + 3];
+                }
+            }
+
+            for (let i = 0; i < pixels.length; i += 4) {
+                outPixels[i] = pixels[i] + sharpenAmount * (sharpPixels[i] - pixels[i]);
+                outPixels[i + 1] = pixels[i + 1] + sharpenAmount * (sharpPixels[i + 1] - pixels[i + 1]);
+                outPixels[i + 2] = pixels[i + 2] + sharpenAmount * (sharpPixels[i + 2] - pixels[i + 2]);
+                outPixels[i + 3] = pixels[i + 3];
+                outPixels[i] = Math.min(255, Math.max(0, outPixels[i]));
+                outPixels[i + 1] = Math.min(255, Math.max(0, outPixels[i + 1]));
+                outPixels[i + 2] = Math.min(255, Math.max(0, outPixels[i + 2]));
+            }
+
+            return output;
+        }
+
+        function renderCurrentLayer() {
+            if (currentLayerIndex === -1) {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                canvas.style.cursor = 'default';
+                return;
+            }
+            const layer = layers[currentLayerIndex];
+
+            let originalWidth = Math.abs(layer.rotation % 180) === 90 ? layer.height : layer.width;
+            let originalHeight = Math.abs(layer.rotation % 180) === 90 ? layer.width : layer.height;
+
+            canvas.width = originalWidth;
+            canvas.height = originalHeight;
+
+            const maxWidth = window.innerWidth * 0.8;
+            const maxHeight = window.innerHeight * 0.6;
+            let scaleFactor = 1;
+            if (canvas.width > maxWidth || canvas.height > maxHeight) {
+                scaleFactor = Math.min(maxWidth / canvas.width, maxHeight / canvas.height);
+                canvas.width = Math.round(canvas.width * scaleFactor);
+                canvas.height = Math.round(canvas.height * scaleFactor);
+            }
+            layer.scaleFactor = scaleFactor;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const tempCanvas = document.createElement('canvas');
+            tempCanvas.width = layer.width;
+            tempCanvas.height = layer.height;
+            const tempCtx = tempCanvas.getContext('2d');
+
+            tempCtx.drawImage(layer.image, 0, 0, layer.width, layer.height);
+
+            let imageData = tempCtx.getImageData(0, 0, layer.width, layer.height);
+            let tempPixels = imageData.data;
+
+            for (let i = 0; i < tempPixels.length; i += 4) {
+                let r = tempPixels[i];
+                let g = tempPixels[i + 1];
+                let b = tempPixels[i + 2];
+
+                r += layer.adjustments.brightness;
+                g += layer.adjustments.brightness;
+                b += layer.adjustments.brightness;
+
+                const contrastFactor = (1 + layer.adjustments.contrast / 100);
+                r = ((r - 128) * contrastFactor) + 128;
+                g = ((g - 128) * contrastFactor) + 128;
+                b = ((b - 128) * contrastFactor) + 128;
+
+                r = 255 * Math.pow(r / 255, 1 / layer.adjustments.levels);
+                g = 255 * Math.pow(g / 255, 1 / layer.adjustments.levels);
+                b = 255 * Math.pow(b / 255, 1 / layer.adjustments.levels);
+
+                const exposureFactor = Math.pow(2, layer.adjustments.exposure);
+                r *= exposureFactor;
+                g *= exposureFactor;
+                b *= exposureFactor;
+
+                r = 255 * Math.pow(r / 255, 1 / layer.adjustments.curves);
+                g = 255 * Math.pow(g / 255, 1 / layer.adjustments.curves);
+                b = 255 * Math.pow(b / 255, 1 / layer.adjustments.curves);
+
+                imageData.data[i] = Math.min(255, Math.max(0, r));
+                imageData.data[i + 1] = Math.min(255, Math.max(0, g));
+                imageData.data[i + 2] = Math.min(255, Math.max(0, b));
+                imageData.data[i + 3] = tempPixels[i + 3];
+            }
+
+            imageData = applySharpen(imageData, layer.width, layer.height, layer.adjustments.sharpen);
+            tempCtx.putImageData(imageData, 0, 0);
+
+            ctx.save();
+            ctx.translate(canvas.width / 2, canvas.height / 2);
+            ctx.rotate((layer.rotation * Math.PI) / 180);
+
+            const drawWidth = Math.abs(layer.rotation % 180) === 90 ? layer.height : layer.width;
+            const drawHeight = Math.abs(layer.rotation % 180) === 90 ? layer.width : layer.height;
+            ctx.drawImage(tempCanvas, -drawWidth / 2, -drawHeight / 2, drawWidth, drawHeight);
+
+            if (layer.watermark) {
+                const watermarkWidth = drawWidth * layer.watermarkScale;
+                const watermarkHeight = (layer.watermark.height / layer.watermark.width) * watermarkWidth;
+
+                layer.watermarkX = Math.max(-drawWidth / 2, Math.min(layer.watermarkX, drawWidth / 2 - watermarkWidth));
+                layer.watermarkY = Math.max(-drawHeight / 2, Math.min(layer.watermarkY, drawHeight / 2 - watermarkHeight));
+
+                ctx.globalAlpha = 0.6;
+                ctx.drawImage(layer.watermark, layer.watermarkX, layer.watermarkY, watermarkWidth, watermarkHeight);
+                ctx.globalAlpha = 1.0;
+            }
+
+            ctx.restore();
+            canvas.style.cursor = layer.watermark ? 'default' : 'default';
+        }
+
+        function saveCanvasWithSize(targetWidth, targetHeight) {
+            if (currentLayerIndex === -1) {
+                alert('Selecione uma camada para salvar.');
+                return;
+            }
+
+            const layer = layers[currentLayerIndex];
+            let drawWidth = Math.abs(layer.rotation % 180) === 90 ? layer.height : layer.width;
+            let drawHeight = Math.abs(layer.rotation % 180) === 90 ? layer.width : layer.height;
+
+            if (targetWidth === null || targetHeight === null) {
+                targetWidth = drawWidth;
+                targetHeight = drawHeight;
+            } else {
+                const ratio = Math.min(targetWidth / drawWidth, targetHeight / drawHeight);
+                targetWidth = Math.round(drawWidth * ratio);
+                targetHeight = Math.round(drawHeight * ratio);
+            }
+
+            const saveCanvas = document.createElement('canvas');
+            saveCanvas.width = targetWidth;
+            saveCanvas.height = targetHeight;
+            const saveCtx = saveCanvas.getContext('2d');
+
+            saveCtx.drawImage(layer.image, 0, 0, targetWidth, targetHeight);
+            let imageData = saveCtx.getImageData(0, 0, targetWidth, targetHeight);
+            let tempPixels = imageData.data;
+
+            for (let i = 0; i < tempPixels.length; i += 4) {
+                let r = tempPixels[i];
+                let g = tempPixels[i + 1];
+                let b = tempPixels[i + 2];
+
+                r += layer.adjustments.brightness;
+                g += layer.adjustments.brightness;
+                b += layer.adjustments.brightness;
+
+                const contrastFactor = (1 + layer.adjustments.contrast / 100);
+                r = ((r - 128) * contrastFactor) + 128;
+                g = ((g - 128) * contrastFactor) + 128;
+                b = ((b - 128) * contrastFactor) + 128;
+
+                r = 255 * Math.pow(r / 255, 1 / layer.adjustments.levels);
+                g = 255 * Math.pow(g / 255, 1 / layer.adjustments.levels);
+                b = 255 * Math.pow(b / 255, 1 / layer.adjustments.levels);
+
+                const exposureFactor = Math.pow(2, layer.adjustments.exposure);
+                r *= exposureFactor;
+                g *= exposureFactor;
+                b *= exposureFactor;
+
+                r = 255 * Math.pow(r / 255, 1 / layer.adjustments.curves);
+                g = 255 * Math.pow(g / 255, 1 / layer.adjustments.curves);
+                b = 255 * Math.pow(b / 255, 1 / layer.adjustments.curves);
+
+                imageData.data[i] = Math.min(255, Math.max(0, r));
+                imageData.data[i + 1] = Math.min(255, Math.max(0, g));
+                imageData.data[i + 2] = Math.min(255, Math.max(0, b));
+                imageData.data[i + 3] = tempPixels[i + 3];
+            }
+
+            imageData = applySharpen(imageData, targetWidth, targetHeight, layer.adjustments.sharpen);
+            saveCtx.putImageData(imageData, 0, 0);
+
+            const finalCanvas = document.createElement('canvas');
+            finalCanvas.width = targetWidth;
+            finalCanvas.height = targetHeight;
+            const finalCtx = finalCanvas.getContext('2d');
+
+            finalCtx.translate(targetWidth / 2, targetHeight / 2);
+            finalCtx.rotate((layer.rotation * Math.PI) / 180);
+            finalCtx.drawImage(saveCanvas, -targetWidth / 2, -targetHeight / 2, targetWidth, targetHeight);
+
+            if (layer.watermark) {
+                const watermarkWidth = targetWidth * layer.watermarkScale;
+                const watermarkHeight = (layer.watermark.height / layer.watermark.width) * watermarkWidth;
+                const watermarkX = layer.watermarkX * (targetWidth / drawWidth);
+                const watermarkY = layer.watermarkY * (targetHeight / drawHeight);
+                finalCtx.globalAlpha = 0.6;
+                finalCtx.drawImage(layer.watermark, watermarkX, watermarkY, watermarkWidth, watermarkHeight);
+                finalCtx.globalAlpha = 1.0;
+            }
+
+            const link = document.createElement('a');
+            link.download = `imagem_editada_${layer.name}`;
+            link.href = finalCanvas.toDataURL('image/png');
+            link.click();
+        }
+
+        function isMouseOverWatermark(x, y) {
+            if (currentLayerIndex === -1 || !layers[currentLayerIndex].watermark) return false;
+            const layer = layers[currentLayerIndex];
+            const drawWidth = Math.abs(layer.rotation % 180) === 90 ? layer.height : layer.width;
+            const drawHeight = Math.abs(layer.rotation % 180) === 90 ? layer.width : layer.height;
+            const watermarkWidth = drawWidth * layer.watermarkScale;
+            const watermarkHeight = (layer.watermark.height / layer.watermark.width) * watermarkWidth;
+
+            const canvasRect = canvas.getBoundingClientRect();
+            const canvasX = (x - canvasRect.left - canvas.width / 2) / layer.scaleFactor;
+            const canvasY = (y - canvasRect.top - canvas.height / 2) / layer.scaleFactor;
+
+            const angle = (layer.rotation * Math.PI) / 180;
+            const rotatedX = canvasX * Math.cos(angle) + canvasY * Math.sin(angle);
+            const rotatedY = -canvasX * Math.sin(angle) + canvasY * Math.cos(angle);
+
+            return (
+                rotatedX >= layer.watermarkX &&
+                rotatedX <= layer.watermarkX + watermarkWidth &&
+                rotatedY >= layer.watermarkY &&
+                rotatedY <= layer.watermarkY + watermarkHeight
+            );
+        }
+
+        canvas.addEventListener('mousemove', (event) => {
+            if (currentLayerIndex === -1 || !layers[currentLayerIndex].watermark) {
+                canvas.style.cursor = 'default';
+                return;
+            }
+
+            const isOverWatermark = isMouseOverWatermark(event.clientX, event.clientY);
+            canvas.style.cursor = isOverWatermark ? 'move' : 'default';
+
+            if (isDragging) {
+                const layer = layers[currentLayerIndex];
+                const canvasRect = canvas.getBoundingClientRect();
+                const canvasX = (event.clientX - canvasRect.left - canvas.width / 2) / layer.scaleFactor;
+                const canvasY = (event.clientY - canvasRect.top - canvas.height / 2) / layer.scaleFactor;
+
+                const angle = (layer.rotation * Math.PI) / 180;
+                const rotatedX = canvasX * Math.cos(angle) + canvasY * Math.sin(angle);
+                const rotatedY = -canvasX * Math.sin(angle) + canvasY * Math.cos(angle);
+
+                const drawWidth = Math.abs(layer.rotation % 180) === 90 ? layer.height : layer.width;
+                const drawHeight = Math.abs(layer.rotation % 180) === 90 ? layer.width : layer.height;
+                const watermarkWidth = drawWidth * layer.watermarkScale;
+                const watermarkHeight = (layer.watermark.height / layer.watermark.width) * watermarkWidth;
+
+                layer.watermarkX = rotatedX - (dragStartX - layer.watermarkX);
+                layer.watermarkY = rotatedY - (dragStartY - layer.watermarkY);
+
+                layer.watermarkX = Math.max(-drawWidth / 2, Math.min(layer.watermarkX, drawWidth / 2 - watermarkWidth));
+                layer.watermarkY = Math.max(-drawHeight / 2, Math.min(layer.watermarkY, drawHeight / 2 - watermarkHeight));
+
+                renderCurrentLayer();
+            }
+        });
+
+        canvas.addEventListener('mousedown', (event) => {
+            if (currentLayerIndex === -1 || !layers[currentLayerIndex].watermark) return;
+
+            if (isMouseOverWatermark(event.clientX, event.clientY)) {
+                isDragging = true;
+                const layer = layers[currentLayerIndex];
+                const canvasRect = canvas.getBoundingClientRect();
+                const canvasX = (event.clientX - canvasRect.left - canvas.width / 2) / layer.scaleFactor;
+                const canvasY = (event.clientY - canvasRect.top - canvas.height / 2) / layer.scaleFactor;
+
+                const angle = (layer.rotation * Math.PI) / 180;
+                dragStartX = canvasX * Math.cos(angle) + canvasY * Math.sin(angle);
+                dragStartY = -canvasX * Math.sin(angle) + canvasY * Math.cos(angle);
+            }
+        });
+
+        canvas.addEventListener('mouseup', () => {
+            isDragging = false;
+        });
+
+        canvas.addEventListener('mouseleave', () => {
+            isDragging = false;
+            canvas.style.cursor = 'default';
+        });
+
+        document.addEventListener('keydown', (event) => {
+            if (currentLayerIndex === -1) return;
+
+            if (event.key === 'Delete') {
+                deleteLayer();
+            }
+        });
+
+        updateLayerList();
+    </script>
+</body>
+</html>
