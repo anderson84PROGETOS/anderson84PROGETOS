@@ -94,7 +94,7 @@ Ferramenta para Escanear toda a rede.
 🖥️ [**3 Ferramentas em 1 Network Tools**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Network%20Tools)
 3 Ferramentas em 1 Network Tools.
 
-[**Editor de Fotos Múltiplas**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Editor%20de%20Fotos%20M%C3%BAltiplas)
+📸 [**Editor de Fotos Múltiplas**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Editor%20de%20Fotos%20M%C3%BAltiplas)
 Editor de Fotos Múltiplas.
 
 ---
