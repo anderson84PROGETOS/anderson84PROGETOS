@@ -72,7 +72,7 @@ def criar_linha(nome_pasta, comando_abrir, comando_excluir):
     tk.Button(frame, text="🗑", command=comando_excluir, **botao_pequeno).pack(side="left")
 
 # Linhas
-criar_linha(r"C:\Users\Nome\AppData\Local\Temp", abrir_temp, lambda: limpar_pasta("C:\\Users\\Anderson\\AppData\\Local\\Temp", os.environ.get("TEMP")))
+criar_linha("%TEMP%", abrir_temp, lambda: limpar_pasta("%TEMP%", os.environ.get("TEMP")))
 criar_linha(r"C:\Windows\Prefetch", abrir_prefetch, lambda: limpar_pasta("Prefetch", r"C:\Windows\Prefetch"))
 criar_linha(r"C:\Windows\Temp", abrir_windows_temp, lambda: limpar_pasta("Windows Temp", r"C:\Windows\Temp"))
 
