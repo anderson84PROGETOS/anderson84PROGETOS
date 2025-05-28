@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Website Geolocation</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    body {
+      background-color: #f4f4f9;
+    }
+    .map {
+      height: 500px;
+      width: 100%;
+      margin-top: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    .container {
+      max-width: 1200px;
+      margin-top: 30px;
+    }
+    .card {
+      border: none;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .btn-primary {
+      background-color: #007bff;
+      border: none;
+      transition: background-color 0.3s;
+    }
+    .btn-primary:hover {
+      background-color: #0056b3;
+    }
+    #result {
+      margin-top: 20px;
+    }
+    .alert {
+      display: none;
+    }
+    .map-label {
+      text-align: center;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card p-4">
+      <h2 class="text-center mb-4">Geolocalização de Domínio ou IP</h2>
+      <div class="input-group mb-3">
+        <input type="text" id="domainInput" class="form-control" placeholder="Digite o domínio ou IP (ex: google.com)">
+        <button class="btn btn-primary" onclick="getGeo()">Buscar Localização</button>
+      </div>
+      <div id="alert" class="alert alert-danger" role="alert"></div>
+      <div id="result" class="mt-3"></div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="map-label">Map</div>
+          <div id="map1" class="map"></div>
+        </div>
+        <div class="col-md-6">
+          <div class="map-label">Map</div>
+          <div id="map2" class="map"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    let map1, map2, marker1, marker2;
+
+    async function getGeo() {
+      const domain = document.getElementById('domainInput').value.trim();
+      const alertBox = document.getElementById('alert');
+      const resultDiv = document.getElementById('result');
+
+      // Reset previous alerts and results
+      alertBox.style.display = 'none';
+      resultDiv.innerHTML = '';
+
+      if (!domain) {
+        alertBox.innerText = 'Por favor, insira um domínio ou IP válido.';
+        alertBox.style.display = 'block';
+        return;
+      }
+
+      try {
+        const response = await fetch(`http://ip-api.com/json/${domain}`);
+        const data = await response.json();
+
+        if (data.status !== 'success') {
+          alertBox.innerText = `Erro: ${data.message}`;
+          alertBox.style.display = 'block';
+          return;
+        }
+
+        const { lat, lon, city, country, isp, query, as } = data;
+
+        // Split AS field into AS number and organization name
+        let asNumber = '';
+        let orgName = '';
+        let bgpLink = '';
+        if (as && as.match(/^AS\d+/)) {
+          const match = as.match(/^(AS\d+)\s*(.*)$/);
+          if (match) {
+            asNumber = match[1]; // e.g., AS15256
+            orgName = match[2] || ''; // e.g., Itau Unibanco S.A.
+            bgpLink = `<a href="https://bgp.he.net/${asNumber}" target="_blank">https://bgp.he.net/${asNumber}</a>`;
+          }
+        }
+
+        const googleMapsLink = `https://www.google.com/maps/place/${lat},${lon}`;
+        const streetViewLink = `https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${lat},${lon}&heading=-45&pitch=38&fov=80`;
+
+        // Build result HTML, only include AS fields if asNumber is present
+        let resultHTML = `
+          <h5>Resultado da Geolocalização</h5>
+          <p><strong>IP:</strong> ${query}</p>
+          <p><strong>Cidade:</strong> ${city}</p>
+          <p><strong>País:</strong> ${country}</p>
+          
+        `;
+        if (asNumber) {
+          resultHTML += `
+            <p><strong>Organização:</strong> ${orgName || 'Não disponível'}</p>
+            <p><strong>Número AS:</strong> ${asNumber}</p>            
+            <p><strong>Detalhes AS:</strong> ${bgpLink}</p>
+          `;
+        }
+        resultHTML += `
+          <p><strong>Latitude:</strong> ${lat}</p>
+          <p><strong>Longitude:</strong> ${lon}</p>
+          <p><strong>Geolocalização:</strong> ${lat},${lon}</p>
+          <p><strong>Google Maps:</strong> <a href="${googleMapsLink}" target="_blank">${googleMapsLink}</a></p>
+          <p><strong>Google Street View:</strong> <a href="${streetViewLink}" target="_blank">${streetViewLink}</a></p>
+        `;
+        resultDiv.innerHTML = resultHTML;
+
+        // Build popup content, only include AS fields if asNumber is present
+        let popupContent = `<b>${city}, ${country}</b><br>IP: ${query}`;
+        if (asNumber) {
+          popupContent += `<br>AS: ${asNumber}<br>Org: ${orgName || 'Não disponível'}<br><a href="https://bgp.he.net/${asNumber}" target="_blank">Detalhes AS</a>`;
+        }
+
+        if (!map1) {
+          // Initialize Google Maps
+          map1 = L.map('map1').setView([lat, lon], 10);
+          L.tileLayer('https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+            attribution: '© <a href="https://www.google.com/maps">Google Maps</a>'
+          }).addTo(map1);
+          marker1 = L.marker([lat, lon]).addTo(map1)
+            .bindPopup(popupContent).openPopup();
+        } else {
+          map1.setView([lat, lon], 10);
+          marker1.setLatLng([lat, lon])
+            .bindPopup(popupContent).openPopup();
+        }
+
+        if (!map2) {
+          // Initialize OpenStreetMap
+          map2 = L.map('map2').setView([lat, lon], 10);
+          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+          }).addTo(map2);
+          marker2 = L.marker([lat, lon]).addTo(map2)
+            .bindPopup(popupContent).openPopup();
+        } else {
+          map2.setView([lat, lon], 10);
+          marker2.setLatLng([lat, lon])
+            .bindPopup(popupContent).openPopup();
+        }
+
+      } catch (error) {
+        console.error('Erro na requisição:', error);
+        alertBox.innerText = 'Erro ao buscar dados. Verifique sua conexão ou o domínio/IP informado.';
+        alertBox.style.display = 'block';
+      }
+    }
+  </script>
+</body>
+</html>
