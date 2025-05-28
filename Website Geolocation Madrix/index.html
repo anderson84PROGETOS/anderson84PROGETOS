@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geolocalização de Domínio ou IP</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+</head>
+<body>
+<canvas id="matrix-bg"></canvas>
+<div class="container mt-1" style="padding-top: 10px;">
+    <h1 style="margin-top: 0; padding-top: 10px;">Geolocalização de Domínio ou IP</h1>
+    <div class="clock text-center" id="clock"></div>
+    <form id="geolocationForm" class="mb-4">
+        <div class="input-group">
+            <input type="text" class="form-control" id="domainInput" placeholder="Digite o Domínio ou IP" required>
+            <button class="btn btn-primary" type="submit">Buscar Localização</button>
+        </div>
+    </form>
+    <div id="alert" class="alert" role="alert"></div>
+    <div id="result" class="card"></div>
+    <div class="row">
+        <div class="col-md-6">
+            <h3 class="map-label">Map</h3>
+            <div id="map1" class="map"></div>
+        </div>
+        <div class="col-md-6">
+            <h3 class="map-label">Map</h3>
+            <div id="map2" class="map"></div>
+        </div>
+    </div>
+</div>
+<footer class="footer mt-5 py-3 text-center">
+    <div class="container">
+        <span>© 2025 - Projeto de Geolocalização Por Domínio ou IP</span>
+    </div>
+</footer>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="script.js"></script>
+<script>
+  function updateClock() {
+    const now = new Date();
+    const timeStr = now.toLocaleTimeString();
+    document.getElementById("clock").textContent = timeStr;
+  }
+  setInterval(updateClock, 1000);
+  updateClock();
+</script>
+<script>
+  const canvas = document.getElementById('matrix-bg');
+  const ctx = canvas.getContext('2d');
+  function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+  canvas.width = window.innerWidth;
+  let letters = Array(256).join("1").split("");
+  const draw = () => {
+    ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "#0f0";
+    ctx.font = "14pt Courier";
+    letters.map((y_pos, index) => {
+      const text = String.fromCharCode(3e4 + Math.random() * 33);
+      const x_pos = index * 10;
+      ctx.fillText(text, x_pos, y_pos);
+      letters[index] = (y_pos > 758 + Math.random() * 1e4) ? 0 : y_pos + 10;
+    });
+  };
+  setInterval(draw, 33);
+</script>
+</body>
+</html>
