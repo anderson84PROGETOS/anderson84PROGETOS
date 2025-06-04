@@ -2,12 +2,13 @@ import tkinter as tk
 from tkinter import messagebox
 import requests
 import folium
-import os
 import webbrowser
 from datetime import datetime
 import time
 import random
 import threading
+import tempfile
+import os
 
 class GeolocationApp:
     def __init__(self, root):
@@ -65,12 +66,12 @@ class GeolocationApp:
 
         self.map1_button = tk.Button(self.map_button_frame, text="Abrir OpenStreetMap", font=self.font_style,
                                      bg="#000000", fg="#00ff00", activebackground="#00ff00",
-                                     activeforeground="#000000", command=lambda: self.open_map("map1.html"))
+                                     activeforeground="#000000", command=self.open_temp_map1)
         self.map1_button.pack(side=tk.LEFT, padx=10)
 
         self.map2_button = tk.Button(self.map_button_frame, text="Abrir Google Maps Style", font=self.font_style,
                                      bg="#000000", fg="#00ff00", activebackground="#00ff00",
-                                     activeforeground="#000000", command=lambda: self.open_map("map2.html"))
+                                     activeforeground="#000000", command=self.open_temp_map2)
         self.map2_button.pack(side=tk.LEFT, padx=10)
 
         self.google_maps_button = tk.Button(self.map_button_frame, text="Abrir Google Maps (Link)", font=self.font_style,
@@ -94,6 +95,8 @@ class GeolocationApp:
         self.current_lat = None
         self.current_lon = None
         self.current_as_number = None
+        self.temp_file_map1 = None
+        self.temp_file_map2 = None
 
     def draw_matrix(self):
         while True:
@@ -119,6 +122,8 @@ class GeolocationApp:
         self.result_label.delete(1.0, tk.END)
         self.current_as_number = None
         self.bgp_button.config(state=tk.DISABLED)
+        self.temp_file_map1 = None
+        self.temp_file_map2 = None
 
         if not domain or domain == "Digite o domínio ou IP":
             messagebox.showerror("Erro", "Por favor, insira um domínio ou IP válido.")
@@ -173,7 +178,8 @@ class GeolocationApp:
 
             map1 = folium.Map(location=[lat, lon], zoom_start=10)
             folium.Marker([lat, lon], popup=f"{city}, {country} | {query}").add_to(map1)
-            map1.save("map1.html")
+            self.temp_file_map1 = tempfile.NamedTemporaryFile(delete=False, suffix=".html")
+            map1.save(self.temp_file_map1.name)
 
             map2 = folium.Map(location=[lat, lon], zoom_start=10, tiles=None)
             folium.TileLayer(
@@ -184,16 +190,23 @@ class GeolocationApp:
                 control=False
             ).add_to(map2)
             folium.Marker([lat, lon], popup=f"{city}, {country} | {query}").add_to(map2)
-            map2.save("map2.html")
+            self.temp_file_map2 = tempfile.NamedTemporaryFile(delete=False, suffix=".html")
+            map2.save(self.temp_file_map2.name)
 
         except Exception as e:
             messagebox.showerror("Erro", f"Erro ao buscar dados: {str(e)}")
 
-    def open_map(self, filename):
-        if os.path.exists(filename):
-            webbrowser.open(f"file://{os.path.abspath(filename)}")
+    def open_temp_map1(self):
+        if self.temp_file_map1:
+            webbrowser.open(f"file://{self.temp_file_map1.name}")
         else:
-            messagebox.showwarning("Aviso", f"Mapa {filename} ainda não foi gerado.")
+            messagebox.showwarning("Aviso", "O mapa ainda não foi gerado.")
+
+    def open_temp_map2(self):
+        if self.temp_file_map2:
+            webbrowser.open(f"file://{self.temp_file_map2.name}")
+        else:
+            messagebox.showwarning("Aviso", "O mapa ainda não foi gerado.")
 
     def open_google_maps_link(self):
         if self.current_lat is not None and self.current_lon is not None:
