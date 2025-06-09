@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geolocalização de Domínio ou IP</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #000;
+            font-family: 'Courier New', Courier, monospace;
+            color: #00ff00;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin-top: 20px;
+            padding: 20px;
+            margin-top: 50px;
+        }
+
+        .map {
+            height: 500px;
+            width: 100%;
+            margin-top: 20px;
+            border: 2px solid #0f0;
+            border-radius: 8px;
+            box-shadow: 0 0 10px #00ff00;
+        }
+
+        .card {
+            border: 1px solid #0f0;
+            border-radius: 10px;
+            background-color: #111;
+            color: #0f0;
+            box-shadow: 0 0 10px #00ff00;
+            margin-top: 20px;
+            padding: 20px;
+        }
+
+        .btn-primary {
+            background-color: #000;
+            border: 1px solid #0f0;
+            color: #00ff00;
+            box-shadow: 0 0 5px #00ff00;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .btn-primary:hover {
+            background-color: #00ff00;
+            color: #000;
+            box-shadow: 0 0 10px #00ff00;
+        }
+
+        .input-group {
+            max-width: 600px;
+            margin: 0 auto;
+            margin-top: 10px;
+        }
+
+        #result p {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        #result a {
+            color: #00ff00;
+            text-decoration: underline;
+            word-break: break-all;
+            font-weight: bold;
+        }
+
+        .alert {
+            display: none;
+            max-width: 800px;
+            margin: 0 auto 20px;
+            background-color: #330000;
+            color: #ff3333;
+            border: 1px solid #ff0000;
+        }
+
+        .map-label {
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #00ff00;
+            text-shadow: 0 0 5px #00ff00;
+        }
+
+        h1 {
+            color: #00ff00;
+            font-weight: bold;
+            text-align: center;
+            text-shadow: 0 0 10px #00ff00;
+            margin-top: -50px;
+        }
+
+        @media (max-width: 767px) {
+            .col-md-6 {
+                margin-bottom: 20px;
+            }
+        }
+
+        #matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .footer {
+            text-align: center;
+            font-size: 1.3rem;
+            margin: 30px 0;
+            margin-top: 40px;
+        }
+
+        #clock {
+            text-align: center;
+            font-size: 2rem;
+            margin: 10px 0;
+            color: #00ff00;
+            text-shadow: 0 0 5px #00ff00;
+            margin-top: -0px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="matrix-bg"></canvas>
+    <div id="clock"></div>
+    <div class="container">
+        <h1>Geolocalização de Domínio ou IP Ler Coordenadas</h1>
+        <div class="input-group mb-3">
+            <form id="geolocationForm" class="w-100">
+                <div class="input-group">
+                    <input type="text" class="form-control" id="domainInput" placeholder="Digite o domínio ou IP" aria-label="Domínio ou IP">
+                    <button class="btn btn-primary" type="submit">Buscar Localização</button>
+                </div>
+            </form>
+        </div>
+        <div class="input-group mb-3">
+            <input type="file" class="form-control" id="fileInput" accept=".txt" aria-label="Selecionar arquivo .txt">
+            <button class="btn btn-primary" type="button" id="readFileBtn">Ler Coordenadas do Arquivo</button>
+        </div>
+        <div id="alert" class="alert" role="alert"></div>
+        <div class="card">
+            <div id="result"></div>
+        </div>
+        <div id="mapsContainer" class="row"></div>
+        <div class="footer"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // Matrix background effect
+        const canvas = document.getElementById('matrix-bg');
+        const ctx = canvas.getContext('2d');
+        canvas.height = window.innerHeight;
+        canvas.width = window.innerWidth;
+        const chars = '01';
+        const fontSize = 14;
+        const columns = canvas.width / fontSize;
+        const drops = Array(Math.floor(columns)).fill(1);
+
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#0f0';
+            ctx.font = fontSize + 'px monospace';
+            drops.forEach((y, i) => {
+                const text = chars.charAt(Math.floor(Math.random() * chars.length));
+                const x = i * fontSize;
+                ctx.fillText(text, x, y * fontSize);
+                if (y * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+                drops[i]++;
+            });
+        }
+        setInterval(drawMatrix, 33);
+
+        // Clock
+        function updateClock() {
+            const now = new Date();
+            const options = { timeZone: 'America/Sao_Paulo', hour12: false };
+            document.getElementById('clock').innerText = now.toLocaleTimeString('pt-BR', options);
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // Geolocation script
+        let maps = [];
+        let markers = [];
+
+        async function getGeo() {
+            const domain = document.getElementById('domainInput').value.trim();
+            const alertBox = document.getElementById('alert');
+            const resultDiv = document.getElementById('result');
+            const mapsContainer = document.getElementById('mapsContainer');
+
+            // Reset previous alerts, results, and maps
+            alertBox.style.display = 'none';
+            resultDiv.innerHTML = '';
+            mapsContainer.innerHTML = '';
+            maps.forEach(map => map.remove());
+            maps = [];
+            markers = [];
+
+            if (!domain) {
+                alertBox.innerText = 'Por favor, insira um domínio ou IP válido.';
+                alertBox.style.display = 'block';
+                return;
+            }
+
+            try {
+                const response = await fetch(`http://ip-api.com/json/${domain}`);
+                const data = await response.json();
+
+                if (data.status !== 'success') {
+                    alertBox.innerText = `Erro: ${data.message}`;
+                    alertBox.style.display = 'block';
+                    return;
+                }
+
+                const { lat, lon, city, country, isp, query, as } = data;
+
+                // Split AS field into AS number and organization name
+                let asNumber = '';
+                let orgName = '';
+                let bgpLink = '';
+                if (as && as.match(/^AS\d+/)) {
+                    const match = as.match(/^(AS\d+)\s*(.*)$/);
+                    if (match) {
+                        asNumber = match[1];
+                        orgName = match[2] || '';                        
+                        bgpLink = `<a href="https://bgp.he.net/${asNumber}" target="_blank">https://bgp.he.net/${asNumber}</a>`;
+                    }
+                }
+
+                const googleMapsLink = `https://www.google.com/maps/place/${lat},${lon}`;
+                const streetViewLink = `https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${lat},${lon}&heading=-45&pitch=38&fov=80`;
+
+                // Build result HTML
+                let resultHTML = `
+                    <h5>Resultado da Geolocalização</h5>
+                    <p><strong>IP:</strong> ${query}</p>
+                    <p><strong>Cidade:</strong> ${city}</p>
+                    <p><strong>País:</strong> ${country}</p>
+                `;
+                if (asNumber) {
+                    resultHTML += `
+                        <p><strong>Organização:</strong> ${orgName || 'Não disponível'}</p>
+                        <p><strong>Número AS:</strong> ${asNumber}</p>
+                        <p><strong>Detalhes AS:</strong> ${bgpLink}</p>                        
+                    `;
+                }
+                resultHTML += `
+                    <p><strong>Latitude:</strong> ${lat}</p>
+                    <p><strong>Longitude:</strong> ${lon}</p>
+                    <p><strong>Geolocalização:</strong> ${lat},${lon}</p>
+                    <p><strong>Google Map:</strong> <a href="${googleMapsLink}" target="_blank">${googleMapsLink}</a></p>
+                    <p><strong>Street View:</strong> <a href="${streetViewLink}" target="_blank">${streetViewLink}</a></p>
+                `;
+                resultDiv.innerHTML = resultHTML;
+
+                // Create maps
+                mapsContainer.innerHTML = `
+                    <div class="col-md-6">
+                        <div class="map-label">Map 1</div>
+                        <div id="map1" class="map"></div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="map-label">Map 2</div>
+                        <div id="map2" class="map"></div>
+                    </div>
+                `;
+
+                // Initialize maps
+                const map1 = L.map('map1').setView([lat, lon], 10);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                }).addTo(map1);
+                const marker1 = L.marker([lat, lon]).addTo(map1)
+                    .bindPopup(`<b>${city}, ${country}</b><br>IP: ${query}${asNumber ? `<br>Organização: ${orgName || 'Não disponível'}<br>AS: ${asNumber}<br>${bgpLink}` : ''}<br><a href="${googleMapsLink}" target="_blank">Google Map</a><br><a href="${streetViewLink}" target="_blank">Street View</a>`)
+                    .openPopup();
+                map1.on('click', () => window.open(googleMapsLink, '_blank'));
+                maps.push(map1);
+                markers.push(marker1);
+
+                const map2 = L.map('map2').setView([lat, lon], 10);
+                L.tileLayer('https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+                    attribution: '© <a href="https://www.google.com/maps">Google Maps</a>'
+                }).addTo(map2);
+                const marker2 = L.marker([lat, lon]).addTo(map2)
+                    .bindPopup(`<b>${city}, ${country}</b><br>IP: ${query}${asNumber ? `<br>Organização: ${orgName || 'Não disponível'}<br>AS: ${asNumber}<br>${bgpLink}` : ''}<br><a href="${googleMapsLink}" target="_blank">Google Map</a><br><a href="${streetViewLink}" target="_blank">Street View</a>`)
+                    .openPopup();
+                map2.on('click', () => window.open(googleMapsLink, '_blank'));
+                maps.push(map2);
+                markers.push(marker2);
+            } catch (error) {
+                console.error('Erro na requisição:', error);
+                alertBox.innerText = 'Erro ao buscar dados. Verifique sua conexão ou o domínio/IP informado.';
+                alertBox.style.display = 'block';
+            }
+        }
+
+        // Function to read coordinates from .txt file
+        function readCoordinatesFromFile(file) {
+            const reader = new FileReader();
+            const alertBox = document.getElementById('alert');
+            const resultDiv = document.getElementById('result');
+            const mapsContainer = document.getElementById('mapsContainer');
+
+            reader.onload = function (e) {
+                const text = e.target.result;
+                // Parse coordinates from text
+                const lines = text.split('\n').map(line => line.trim()).filter(line => line);
+                const coordinates = [];
+                let currentLat = null;
+
+                lines.forEach(line => {
+                    // Case-insensitive check for Latitude
+                    if (/^latitude:/i.test(line)) {
+                        currentLat = parseFloat(line.replace(/^latitude:/i, '').trim());
+                    } else if (/^longitude:/i.test(line) && currentLat !== null) {
+                        const lon = parseFloat(line.replace(/^longitude:/i, '').trim());
+                        if (!isNaN(currentLat) && !isNaN(lon)) {
+                            coordinates.push({ lat: currentLat, lon: lon });
+                        }
+                        currentLat = null;
+                    }
+                });
+
+                if (coordinates.length === 0) {
+                    alertBox.innerText = 'Erro: Nenhum par de coordenadas válido encontrado. Certifique-se de que o arquivo contém "latitude: número" seguido de "longitude: número" (não é sensível a maiúsculas/minúsculas).';
+                    alertBox.style.display = 'block';
+                    return;
+                }
+
+                // Clear previous alerts, results, and maps
+                alertBox.style.display = 'none';
+                resultDiv.innerHTML = '';
+                mapsContainer.innerHTML = '';
+                maps.forEach(map => map.remove());
+                maps = [];
+                markers = [];
+
+                // Build result HTML for all coordinates
+                let resultHTML = '<h5>Coordenadas do Arquivo</h5>';
+                coordinates.forEach((coord, index) => {
+                    const googleMapsLink = `https://www.google.com/maps/place/${coord.lat},${coord.lon}`;
+                    const streetViewLink = `https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${coord.lat},${coord.lon}&heading=-45&pitch=38&fov=80`;
+                    resultHTML += `
+                        <p style="text-align: center;">---------------------------------------------------------------------------------------------------------------------------</p>
+                        <h6>Coordenadas ${index + 1}</h6>
+                        <p><strong>Latitude:</strong> ${coord.lat}</p>
+                        <p><strong>Longitude:</strong> ${coord.lon}</p>
+                        <p><strong>Geolocalização:</strong> ${coord.lat},${coord.lon}</p>
+                        <p><strong>Google Map:</strong> <a href="${googleMapsLink}" target="_blank">${googleMapsLink}</a></p>
+                        <p><strong>Street View:</strong> <a href="${streetViewLink}" target="_blank">${streetViewLink}</a></p>
+                    `;
+                });
+                resultDiv.innerHTML = resultHTML;
+
+                // Create all map containers first
+                let mapsHTML = '';
+                coordinates.forEach((coord, index) => {
+                    const mapIndex = index * 2;
+                    mapsHTML += `
+                        <div class="col-md-6">
+                            <div class="map-label">Map ${mapIndex + 1}</div>
+                            <div id="map${mapIndex + 1}" class="map"></div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="map-label">Map ${mapIndex + 2}</div>
+                            <div id="map${mapIndex + 2}" class="map"></div>
+                        </div>
+                    `;
+                });
+                mapsContainer.innerHTML = mapsHTML;
+
+                // Initialize maps after DOM is updated
+                coordinates.forEach((coord, index) => {
+                    const mapIndex = index * 2;
+                    const googleMapsLink = `https://www.google.com/maps/place/${coord.lat},${coord.lon}`;
+                    const streetViewLink = `https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${coord.lat},${coord.lon}&heading=-45&pitch=38&fov=80`;
+
+                    // Initialize OpenStreetMap
+                    const map1 = L.map(`map${mapIndex + 1}`, { preferCanvas: true }).setView([coord.lat, coord.lon], 10);
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                    }).addTo(map1);
+                    const marker1 = L.marker([coord.lat, coord.lon]).addTo(map1)
+                        .bindPopup(`<b>Coordenadas ${index + 1}</b><br>Latitude: ${coord.lat}<br>Longitude: ${coord.lon}<br><a href="${googleMapsLink}" target="_blank">Google Map</a><br><a href="${streetViewLink}" target="_blank">Street View</a>`)
+                        .openPopup();
+                    map1.on('click', () => window.open(googleMapsLink, '_ spat="_blank">Google Maps</a>'));
+                    maps.push(map1);
+                    markers.push(marker1);
+
+                    // Initialize Google Maps
+                    const map2 = L.map(`map${mapIndex + 2}`, { preferCanvas: true }).setView([coord.lat, coord.lon], 10);
+                    L.tileLayer('https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+                        attribution: '© <a href="https://www.google.com/maps">Google Maps</a>'
+                    }).addTo(map2);
+                    const marker2 = L.marker([coord.lat, coord.lon]).addTo(map2)
+                        .bindPopup(`<b>Coordenadas ${index + 1}</b><br>Latitude: ${coord.lat}<br>Longitude: ${coord.lon}<br><a href="${googleMapsLink}" target="_blank">Google Map</a><br><a href="${streetViewLink}" target="_blank">Street View</a>`)
+                        .openPopup();
+                    map2.on('click', () => window.open(googleMapsLink, '_blank'));
+                    maps.push(map2);
+                    markers.push(marker2);
+                });
+
+                // Force map refresh
+                setTimeout(() => {
+                    maps.forEach(map => map.invalidateSize());
+                }, 100);
+            };
+
+            reader.onerror = function () {
+                alertBox.innerText = 'Erro ao ler o arquivo. Tente novamente.';
+                alertBox.style.display = 'block';
+            };
+
+            reader.readAsText(file);
+        }
+
+        // Attach form submit event for domain/IP
+        document.getElementById('geolocationForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            getGeo();
+        });
+
+        // Attach event for file input button
+        document.getElementById('readFileBtn').addEventListener('click', function () {
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+            if (!file) {
+                const alertBox = document.getElementById('alert');
+                alertBox.innerText = 'Por favor, selecione um arquivo .txt.';
+                alertBox.style.display = 'block';
+                return;
+            }
+            readCoordinatesFromFile(file);
+        });
+    </script>
+</body>
+</html>
