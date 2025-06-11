@@ -109,3 +109,4 @@ rescue Interrupt
 rescue => e
   puts "Erro: #{e.message}".red
 end
+
