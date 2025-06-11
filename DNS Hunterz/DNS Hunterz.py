@@ -120,3 +120,4 @@ if __name__ == "__main__":
         print(Fore.LIGHTRED_EX + Style.BRIGHT + "\n⚠️ Resultados não foram salvos.")
 
     input(Fore.LIGHTRED_EX + "\n\n  ========== PRESSIONE ENTER PARA SAIR ==========\n")
+
