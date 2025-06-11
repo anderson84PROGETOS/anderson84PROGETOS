@@ -5,7 +5,6 @@ require 'timeout'
 require 'thread'
 require 'colorize'
 
-# Função para resolver nome de domínio para IP
 def resolve_to_ip(target)
   begin
     return Socket.getaddrinfo(target, nil, :INET)[0][3]
@@ -15,7 +14,6 @@ def resolve_to_ip(target)
   end
 end
 
-# Função para verificar se uma porta está aberta
 def scan_port(ip, port)
   begin
     Timeout::timeout(1) do
@@ -28,19 +26,26 @@ def scan_port(ip, port)
   end
 end
 
-# Função para parsear o intervalo de portas no formato "21-65665"
-def parse_port_range(input)
-  if input =~ /\A(\d+)-(\d+)\z/
+def parse_ports(input)
+  ports = []
+
+  # Ex: "21,22,23,80,443"
+  if input =~ /^[\d,\s]+$/
+    ports = input.split(',').map(&:strip).map(&:to_i).select { |p| p > 0 && p <= 65535 }
+  # Ex: "20-1000"
+  elsif input =~ /\A(\d+)-(\d+)\z/
     start_port = $1.to_i
     end_port = $2.to_i
-    return [start_port, end_port] if start_port <= end_port && start_port >= 21 && end_port <= 65665
+    ports = (start_port..end_port).to_a if start_port <= end_port && start_port >= 1 && end_port <= 65535
+  else
+    puts "Entrada inválida de portas. Use formato '21-80' ou '21,22,23'.".red
+    exit
   end
-  return nil
+
+  ports
 end
 
-# Função principal
-def main(target, start_port, end_port)
-  # Texto ASCII com cor azul
+def main(target, ports)
   ascii_art = ["\n",
     "██████╗  ██████╗ ██████╗ ████████╗    ███████╗ ██████╗ █████╗ ███╗   ██╗███╗   ██╗███████╗██████╗ ",
     "██╔══██╗██╔═══██╗██╔══██╗╚══██╔══╝    ██╔════╝██╔════╝██╔══██╗████╗  ██║████╗  ██║██╔════╝██╔══██╗",
@@ -51,39 +56,26 @@ def main(target, start_port, end_port)
     "                                                                                                  "
   ]
   ascii_art.each { |line| puts line.blue }
-  
+
   if target.nil? || target.empty?
     print "\nDigite o IP ou nome do website: ".green
     target = gets.chomp
   end
 
   target_ip = target =~ /\A\d+\.\d+\.\d+\.\d+\z/ ? target : resolve_to_ip(target)
-  puts "\n\nIP: #{target_ip}".yellow # Exibe o IP após a resolução
+  puts "\n\nIP: #{target_ip}".yellow
 
-  if start_port.nil? || end_port.nil? || start_port <= 0 || end_port <= 0
-    print "\n\nDigite o intervalo de portas (ex: 21-80 ou 21-65665): ".blue    
-    range_input = gets.chomp
-    puts "\n\nAguarde...\n\n".yellow
-    
-    if ports = parse_port_range(range_input)
-      start_port, end_port = ports
-    else
-      # Definindo todas as portas como padrão
-      start_port = 21
-      end_port = 65665
-    end
+  if ports.nil? || ports.empty?
+    print "\nDigite o intervalo ou lista de portas (ex: 21-65665 ou 21,22,23,53,80,111,443): ".blue
+    ports_input = gets.chomp
+    ports = parse_ports(ports_input)
   end
 
-  if target_ip.empty? || start_port > end_port
-    puts "Erro: Entrada inválida! Uso: ruby #{$0} [IP ou website] [porta_inicial] [porta_final]".red
-    exit
-  end
-
+  puts "\n\nAguarde...\n\n".yellow
   open_ports = []
-  max_threads = 100 # Limite de threads simultâneas
+  max_threads = 100
 
-  # Dividindo o intervalo em lotes
-  (start_port..end_port).each_slice(max_threads) do |batch|
+  ports.each_slice(max_threads) do |batch|
     threads = []
     batch.each do |port|
       threads << Thread.new do
@@ -102,18 +94,16 @@ def main(target, start_port, end_port)
     end
   end
 
-  # Adicionando a mensagem final para pressionar Enter
   print "\n\n========== PRESSIONE ENTER PARA SAIR ==========".light_red.bold
-  gets # Aguarda o usuário pressionar Enter
+  gets
 end
 
-# Pega argumentos da linha de comando ou usa valores padrão
+# Entrada via argumentos
 target = ARGV[0]
-start_port = ARGV[1] ? ARGV[1].to_i : nil
-end_port = ARGV[2] ? ARGV[2].to_i : nil
+ports = ARGV[1] ? parse_ports(ARGV[1]) : nil
 
 begin
-  main(target, start_port, end_port)
+  main(target, ports)
 rescue Interrupt
   puts "\nScan interrompido pelo usuário".red
 rescue => e
