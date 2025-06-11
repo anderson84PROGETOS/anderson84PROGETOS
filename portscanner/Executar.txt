@@ -1,0 +1,23 @@
+INSTALAÇÃO DAS DEPENDÊNCIAS PARA O SCRIPT RUBY
+
+1. Certifique-se de que o Ruby está instalado no seu sistema.
+   Para verificar:
+      ruby -v
+
+   Caso não esteja instalado:
+      Linux (Debian/Ubuntu/Kali):
+         sudo apt update
+         sudo apt install ruby-full
+
+      Windows:
+         Baixe e instale via: https://rubyinstaller.org/
+
+2. Instalar a gem 'colorize', usada para colorir textos no terminal:
+
+      gem install colorize
+
+3. Pronto! Agora você pode rodar o script com:
+
+      ruby portscanner.rb
+
+
