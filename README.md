@@ -106,6 +106,9 @@ Wifi modo_monitor.
 🧹 [**Limpador de Arquivos Temporários**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Limpador%20de%20Arquivos%20Tempor%C3%A1rios)
 Limpador de Arquivos Temporários.
 
+🔏 [**Criptografia**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Criptografia)
+Criptografia.
+
 ---
 
 ## 🌟 Contribuições
