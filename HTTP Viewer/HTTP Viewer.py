@@ -55,7 +55,7 @@ def buscar_dados():
         # Screenshot completa (sem crop)
         screenshot_url = f"https://image.thum.io/get/fullpage/{url}"
         try:
-            screen_response = requests.get(screenshot_url, timeout=15)
+            screen_response = requests.get(screenshot_url, timeout=60)
             img_data = BytesIO(screen_response.content)
             img = Image.open(img_data)
 
