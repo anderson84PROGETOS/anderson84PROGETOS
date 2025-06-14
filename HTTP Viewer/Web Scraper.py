@@ -255,7 +255,7 @@ def buscar_dados():
         # Aba Visualização (Screenshot)
         screenshot_url = f"https://image.thum.io/get/fullpage/{url}"
         try:
-            screen_response = requests.get(screenshot_url, timeout=15)
+            screen_response = requests.get(screenshot_url, timeout=60)
             screen_response.raise_for_status()
             img_data = BytesIO(screen_response.content)
             img_original = Image.open(img_data)
