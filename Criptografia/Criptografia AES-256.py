@@ -172,3 +172,4 @@ campo_decifrado = tk.Text(janela, width=90, height=10, state='disabled', font=("
 campo_decifrado.pack(pady=5)
 
 janela.mainloop()
+
