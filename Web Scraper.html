@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Web Scraper</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    html, body {
+      height: 100%;
+      margin: 0;
+      font-family: monospace;
+      background-color: #0e0e0e;
+      color: #00ff88;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+    }
+
+    .container {
+      width: 95%;
+      max-width: 1200px;
+      padding: 20px;
+      background-color: #1a1a1a;
+      border-radius: 10px;
+      box-shadow: 0 0 20px #00ff88;
+    }
+
+    h1 {
+      font-size: 24px;
+      margin-bottom: 15px;
+      text-align: center;
+      color: #00ff88;
+    }
+
+    input, button {
+      font-size: 14px;
+      padding: 10px;
+      margin: 5px 0;
+      width: 100%;
+      border-radius: 5px;
+      border: none;
+    }
+
+    input {
+      background: #1f1f1f;
+      color: #00ff88;
+    }
+
+    button {
+      background-color: #007bff;
+      color: white;
+      cursor: pointer;
+    }
+
+    pre {
+      white-space: pre-wrap;
+      background-color: #111;
+      color: #00ff88;
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 14px;
+      height: 500px;
+      overflow-y: auto;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Web Scraper</h1>
+
+    <input type="text" id="urlInput" placeholder="Digite a URL do site (ex: https://exemplo.com)" />
+    <button id="btn-manual">Coletar da URL Digitada</button>
+
+    <pre id="resultado">Aguardando...</pre>
+    <button id="btn-save">Salvar em .txt</button>
+
+    <script>
+      // Função para normalizar URL (minúsculas e sem barra final)
+      function normalizarURL(url) {
+        try {
+          let u = new URL(url.trim().toLowerCase());
+          return u.href.replace(/\/$/, ""); // remove barra final
+        } catch (e) {
+          return null;
+        }
+      }
+
+      document.getElementById("btn-manual").addEventListener("click", async () => {
+        const url = document.getElementById("urlInput").value.trim();
+        const resultado = document.getElementById("resultado");
+
+        if (!url.startsWith("http://") && !url.startsWith("https://")) {
+          resultado.textContent = "URL inválida. Comece com http:// ou https://";
+          return;
+        }
+
+        resultado.textContent = "Carregando da URL digitada...";
+
+        try {
+          const proxy = "https://api.allorigins.win/raw?url=" + encodeURIComponent(url);
+          const resposta = await fetch(proxy);
+          const html = await resposta.text();
+
+          const baseURL = new URL(url);
+          const urls = new Set();
+
+          // DOM Parsing
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(html, "text/html");
+
+          doc.querySelectorAll("[href], [src], [action], meta[content]").forEach(el => {
+            ['href', 'src', 'action', 'content'].forEach(attr => {
+              const val = el.getAttribute(attr);
+              if (val) {
+                try {
+                  const abs = new URL(val, baseURL).href;
+                  const norm = normalizarURL(abs);
+                  if (norm && (norm.startsWith("http://") || norm.startsWith("https://"))) {
+                    urls.add(norm);
+                  }
+                } catch (_) {}
+              }
+            });
+          });
+
+          // Regex: URLs no HTML bruto
+          const regex = /(https?:\/\/[^\s"'<>]+)/gi;
+          const matches = html.match(regex);
+          if (matches) {
+            matches.forEach(link => {
+              const norm = normalizarURL(link);
+              if (norm && (norm.startsWith("http://") || norm.startsWith("https://"))) {
+                urls.add(norm);
+              }
+            });
+          }
+
+          const lista = Array.from(urls);
+          resultado.textContent = lista.length
+            ? `Total de URL Encontradas: ${lista.length}\n\n${lista.join("\n")}`
+            : "Nenhuma URL Encontrada.";
+        } catch (e) {
+          resultado.textContent = "Erro ao coletar da URL digitada: " + e.message;
+        }
+      });
+
+      // Botão de salvar em .txt
+      document.getElementById("btn-save").addEventListener("click", () => {
+        const content = document.getElementById("resultado").textContent;
+        const blob = new Blob([content], { type: "text/plain" });
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = "urls.txt";
+        a.style.display = "none";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      });
+    </script>
+  </div>
+</body>
+</html>
