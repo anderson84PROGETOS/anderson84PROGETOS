@@ -135,13 +135,7 @@ def mostrar_strings():
 
     def string_valida(s_bytes):
         s_lower = s_bytes.lower()
-        # Não mostrar strings que terminam com '.dll'
-        if s_lower.endswith(b'.dll'):
-            return False
-        # Não mostrar strings que começam com 'dll'
-        if s_lower.startswith(b'dll'):
-            return False
-        return True
+        return not (s_lower.endswith(b'.dll') or s_lower.startswith(b'dll'))
 
     if func:
         rva_atual = func["rva"]
@@ -176,19 +170,14 @@ def mostrar_strings():
         if strings_filtradas:
             texto_saida.insert(tk.END, "Strings Encontradas\n\n")
             for s in strings_filtradas:
-                try:
-                    texto_saida.insert(tk.END, s.decode('utf-8', errors='replace') + "\n")
-                except:
-                    continue
+                texto_saida.insert(tk.END, s.decode('utf-8', errors='replace') + "\n")
         else:
             texto_saida.insert(tk.END, "Nenhuma string visível encontrada.")
     else:
-        # Função não encontrada: buscar strings na DLL inteira, filtrando strings que terminam com '.dll' e que começam com 'dll'
         try:
             pe.__data__.seek(0)
             dados = pe.__data__.read()
             strings = re.findall(rb'[\x20-\x7E]{4,}', dados)
-
             strings_filtradas = [s for s in strings if string_valida(s)]
 
             if not strings_filtradas:
@@ -196,10 +185,7 @@ def mostrar_strings():
             else:
                 texto_saida.insert(tk.END, "Strings encontradas na DLL (sem nomes de DLLs e strings iniciadas com 'Dll'):\n\n")
                 for s in strings_filtradas:
-                    try:
-                        texto_saida.insert(tk.END, s.decode('utf-8', errors='replace') + "\n")
-                    except:
-                        continue
+                    texto_saida.insert(tk.END, s.decode('utf-8', errors='replace') + "\n")
         except Exception as e:
             messagebox.showerror("Erro", f"Erro ao extrair strings:\n{e}")
 
@@ -248,10 +234,23 @@ def mostrar_hex_dump():
         messagebox.showerror("Erro", f"Erro ao ler dados:\n{e}")
         return
 
-    hex_str = ' '.join(f"{b:02X}" for b in dados)
+    def byte_para_ascii(b):
+        if 32 <= b < 127:
+            return chr(b)
+        else:
+            return '.'
+
     texto_saida.delete(1.0, tk.END)
-    texto_saida.insert(tk.END, f"Hex dump completo da função '{nome_func}' ({tamanho} bytes):\n\n")
-    texto_saida.insert(tk.END, hex_str)
+    texto_saida.insert(tk.END, f"Hex dump formatado da função: {nome_func}    ({tamanho} bytes)\n\n")
+    texto_saida.insert(tk.END, f"{'Offset':<8} {'Bytes Hexadecimal':<39} ASCII\n\n")
+
+    for i in range(0, len(dados), 8):
+        bloco = dados[i:i+8]
+        offset_str = f"{i:04X}"
+        hex_str = ' '.join(f"{b:02X}" for b in bloco)
+        ascii_str = ''.join(byte_para_ascii(b) for b in bloco)
+        texto_saida.insert(tk.END, f"{offset_str:<8} {hex_str:<39} {ascii_str}\n")
+
 
 # Interface Gráfica
 janela = tk.Tk()
