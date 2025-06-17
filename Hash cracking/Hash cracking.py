@@ -34,7 +34,7 @@ def listar_arquivos_txt():
     arquivos_txt = [f for f in os.listdir(diretorio_atual) if f.lower().endswith('.txt')]
     if not arquivos_txt:
         print(Fore.LIGHTRED_EX + Style.BRIGHT + "\nNenhum arquivo .txt encontrado no diretório atual.")
-        sys.exit(1)
+        
     print(Fore.LIGHTYELLOW_EX + Style.BRIGHT + "\nSelecione um arquivo de wordlist:\n")
     for idx, arquivo in enumerate(arquivos_txt, start=1):
         print(Fore.LIGHTMAGENTA_EX + Style.BRIGHT + f"{idx} = {arquivo}")
@@ -55,10 +55,10 @@ def carregar_wordlist(caminho_arquivo):
             return [linha.strip() for linha in f if linha.strip()]
     except FileNotFoundError:
         print(Fore.LIGHTRED_EX + Style.BRIGHT + f"\nErro: Arquivo '{caminho_arquivo}' não encontrado.")
-        sys.exit(1)
+        
     except Exception as e:
         print(Fore.LIGHTRED_EX + Style.BRIGHT + f"\nErro ao ler a wordlist: {e}")
-        sys.exit(1)
+        
 
 # Função para calcular hash MD5 (fornecida anteriormente)
 def calcular_md5(palavra):
@@ -137,12 +137,11 @@ def main():
         tipo_hash = identificar_hash(hash_a_quebrar)
         print(Fore.LIGHTYELLOW_EX + Style.BRIGHT + f"\nTipo de hash identificado: {tipo_hash}")
     except ValueError as e:
-        print(Fore.LIGHTRED_EX + Style.BRIGHT + f"\nErro: {e}")
-        sys.exit(1)
+        print(Fore.LIGHTRED_EX + Style.BRIGHT + f"\n{e}")   
 
     # Modo verbose sempre ativado
     verbose = True
-
+    
     # Quebra o hash
     print(Fore.LIGHTGREEN_EX + Style.BRIGHT + f"\nIniciando quebra do hash {tipo_hash} usando {arquivo_wordlist}\n")
     tempo_inicio = time.time()
@@ -161,7 +160,6 @@ def main():
                 print(Fore.LIGHTYELLOW_EX + Style.BRIGHT + f"\nSenha Encontrada na linha {idx}: " +
                       Fore.LIGHTGREEN_EX + Style.BRIGHT + f"{variacao}")
                 print(Fore.LIGHTCYAN_EX + Style.BRIGHT + f"\nTempo gasto: {time.time() - tempo_inicio:.2f} segundos")
-                input(Fore.LIGHTRED_EX + Style.BRIGHT + "\n\n========== PRESSIONE ENTER PARA SAIR ==========\n\n")
                 return
         
         # Exibe progresso a cada 1000 palavras
@@ -170,15 +168,14 @@ def main():
     
     # Se não encontrar correspondência
     print(Fore.LIGHTRED_EX + Style.BRIGHT + f"\nSenha não encontrada na wordlist ou suas variações para {tipo_hash}.")
-    print(Fore.LIGHTCYAN_EX + Style.BRIGHT + f"Tempo gasto: {time.time() - tempo_inicio:.2f} segundos")
-    input(Fore.LIGHTRED_EX + Style.BRIGHT + "\n\n========== PRESSIONE ENTER PARA SAIR ==========\n\n")
+    print(Fore.LIGHTCYAN_EX + Style.BRIGHT + f"Tempo gasto: {time.time() - tempo_inicio:.2f} segundos")    
 
 if __name__ == "__main__":
     try:
         main()
     except KeyboardInterrupt:
-        print(Fore.LIGHTRED_EX + Style.BRIGHT + "\n\nProcesso interrompido pelo usuário.")
-        sys.exit(1)
+        print(Fore.LIGHTRED_EX + Style.BRIGHT + "\n\nProcesso interrompido pelo usuário.")        
     except Exception as e:
-        print(Fore.LIGHTRED_EX + Style.BRIGHT + f"\nErro inesperado: {e}")
-        sys.exit(1)
+        pass        
+
+input(Fore.LIGHTRED_EX + Style.BRIGHT + "\n\n========== PRESSIONE ENTER PARA SAIR ==========\n\n")        
