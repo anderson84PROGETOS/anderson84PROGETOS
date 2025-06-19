@@ -109,6 +109,9 @@ Limpador de Arquivos Temporários.
 🔏 [**Criptografia**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Hash%20Automatic%20e%20Hash%20manual)
 Hash Automatic e Hash manual.
 
+📶 [**Geo Wifi geomac**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Wifi%20Geo)
+Geo Wifi geomac
+
 ---
 
 ## 🌟 Contribuições
