@@ -1,0 +1,15 @@
+https://drygdryg.github.io/geomac-webpage/#usage
+
+Kali Linux: Script para instalar o Geomac em sistemas Debian/Kali Linux
+
+cd ~/Downloads
+sudo dpkg -i geomac-amd64.deb
+sudo apt --fix-broken install -y
+
+Exemplo uso
+geomac 54:a6:5c:8e:4f:3f
+
+geomac -P 54:a6:5c:8e:4f:3f
+
+
+
