@@ -65,4 +65,4 @@ def main():
 if __name__ == "__main__":
     main()
     
-input(Fore.LIGHTRED_EX + "\n\n========== PRESSIONE ENTER PARA SAIR ==========\n")    
+input(Fore.LIGHTRED_EX + "\n\n========== PRESSIONE ENTER PARA SAIR ==========\n") 
