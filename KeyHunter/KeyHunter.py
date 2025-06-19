@@ -94,4 +94,4 @@ if senha_correta:
 else:
     print(Fore.LIGHTRED_EX + "\n❌ Nenhuma senha funcionou.\n")
 
-input(Fore.LIGHTRED_EX + "\n========== PRESSIONE ENTER PARA SAIR ==========\n")
+input(Fore.LIGHTRED_EX + "\n========== PRESSIONE ENTER PARA SAIR ==========\n") 
