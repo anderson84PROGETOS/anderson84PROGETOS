@@ -112,6 +112,9 @@ Hash Automatic e Hash manual.
 📶 [**Geo Wifi geomac**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Wifi%20Geo)
 Geo Wifi geomac
 
+👨‍💻 [**Esteganografia Payload**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Esteganografia%20Payload)
+Esteganografia Payload
+
 ---
 
 ## 🌟 Contribuições
