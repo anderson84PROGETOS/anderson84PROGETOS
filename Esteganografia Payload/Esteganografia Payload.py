@@ -99,4 +99,4 @@ area_status.pack()
 scrollbar.config(command=area_status.yview)
 
 # Executar a aplicação
-janela.mainloop()
+janela.mainloop() 
