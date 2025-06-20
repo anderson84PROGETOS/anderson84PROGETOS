@@ -118,6 +118,9 @@ Esteganografia Payload
 🔐🗝️ [**KeyHunter**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/KeyHunter)
 Quebrando senhas de arquivos .pdf .zip .rar .7z
 
+🗝️ [**Quebrando Hashes**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Quebrando%20Hashes)
+Quebrando Hashes
+
 ---
 
 ## 🌟 Contribuições
