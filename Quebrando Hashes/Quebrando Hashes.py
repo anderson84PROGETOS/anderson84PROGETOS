@@ -132,4 +132,4 @@ tk.Label(janela, textvariable=resultados_label_text).pack(pady=(10, 0))
 txt_resultados = scrolledtext.ScrolledText(janela, width=130, height=15, bg="#e7ffe7")
 txt_resultados.pack(padx=10, pady=(0, 10))
 
-janela.mainloop()
+janela.mainloop() 
