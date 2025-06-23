@@ -292,4 +292,4 @@ output_box = scrolledtext.ScrolledText(janela, wrap=tk.WORD, width=160, height=4
 output_box.pack(padx=10, pady=10)
 output_box.tag_config("alert", foreground="red")
 
-janela.mainloop()
+janela.mainloop() 
