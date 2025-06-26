@@ -127,4 +127,4 @@ barra_progresso.pack(pady=10)
 texto_arquivos = ScrolledText(janela, wrap=tk.WORD, width=140, height=35)
 texto_arquivos.pack(padx=10, pady=10)
 
-janela.mainloop()
+janela.mainloop() 
