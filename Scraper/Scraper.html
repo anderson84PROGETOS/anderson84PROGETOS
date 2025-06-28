@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>URL Scraper</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 20px;
+      line-height: 1.6;
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      font-size: 16px;
+    }
+    button {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    pre {
+      background-color: #f8f8f8;
+      padding: 15px;
+      border-radius: 5px;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+    #loading {
+      display: none;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <h1>URL Scraper</h1>
+  <input type="text" id="url-input" placeholder="Enter website URL (e.g., https://example.com)">
+  <button id="scrape-button" style="margin-bottom: 10px;">Scrape URLs</button><p></p>
+  <button id="save-button" style="display: none;">Save as .txt</button><br>
+  <p id="loading">Loading...</p>
+  <pre id="url-list">Results will appear here...</pre>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const scrapeButton = document.getElementById('scrape-button');
+      const saveButton = document.getElementById('save-button');
+      const urlInput = document.getElementById('url-input');
+      const urlList = document.getElementById('url-list');
+      const loading = document.getElementById('loading');
+
+      scrapeButton.addEventListener('click', async () => {
+        const url = urlInput.value.trim();
+        if (!url || !url.startsWith('http')) {
+          urlList.textContent = 'Please enter a valid URL starting with http or https';
+          return;
+        }
+
+        loading.style.display = 'block';
+        urlList.textContent = '';
+        saveButton.style.display = 'none';
+
+        try {
+          // Use a proxy to handle CORS (in a real scenario, you'd need a proper backend or CORS proxy)
+          const response = await fetch(`https://corsproxy.io/?${encodeURIComponent(url)}`);
+          const html = await response.text();
+
+          // Parse the HTML content
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(html, 'text/html');
+
+          const allLinks = [];
+
+          // Collect links from href and src attributes
+          doc.querySelectorAll('[href], [src]').forEach(el => {
+            const link = el.getAttribute('href') || el.getAttribute('src');
+            if (link && link.startsWith('http')) {
+              allLinks.push(link.trim());
+            }
+          });
+
+          // Collect links from meta tags
+          doc.querySelectorAll('meta[content]').forEach(meta => {
+            const content = meta.getAttribute('content');
+            if (content && content.startsWith('http')) {
+              allLinks.push(content.trim());
+            }
+          });
+
+          const uniqueUrls = Array.from(new Set(allLinks));
+
+          // File extensions to detect
+          const fileExtensions = ['.pdf', '.json', '.xml', '.csv', '.txt', '.doc', '.docx', '.xls', '.xlsx', '.zip', '.rar', '.7z'];
+
+          // Detect files within unique URLs
+          const fileUrls = uniqueUrls.filter(url =>
+            fileExtensions.some(ext => url.toLowerCase().includes(ext))
+          );
+
+          const result = {
+            urlsUnicas: uniqueUrls,
+            arquivos: fileUrls,
+            totalUrlsUnicas: uniqueUrls.length,
+            totalArquivos: fileUrls.length,
+            totalSomado: uniqueUrls.length + fileUrls.length
+          };
+
+          // Display results
+          let output = `Unique URL: ${result.totalUrlsUnicas}\n\nDetected Files: ${result.totalArquivos}\n\nTotal: ${result.totalSomado}\n`;
+
+          if (result.totalArquivos > 0) {
+            output += `\n\n\nDetected Files: ${result.totalArquivos}\n\n${result.arquivos.join('\n\n')}\n\n=========================\n`;
+          }
+
+          output += `\n\nAll Unique URL: ${result.totalUrlsUnicas}\n\n=========================\n\n${result.urlsUnicas.join('\n\n')}`;
+
+          urlList.textContent = output;
+          saveButton.style.display = 'block';
+        } catch (e) {
+          urlList.textContent = `Error fetching or processing the page: ${e.message}`;
+        } finally {
+          loading.style.display = 'none';
+        }
+      });
+
+      saveButton.addEventListener('click', () => {
+        const content = urlList.textContent;
+        const blob = new Blob([content], { type: 'text/plain' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'urls.txt';
+        a.style.display = 'none';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      });
+    });
+  </script>
+</body>
+</html>
