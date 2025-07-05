@@ -180,4 +180,4 @@ meta_text.pack(pady=5)
 
 scrollbar.config(command=meta_text.yview)
 
-root.mainloop()
+root.mainloop() 
