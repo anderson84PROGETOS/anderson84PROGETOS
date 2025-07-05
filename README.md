@@ -124,6 +124,9 @@ Quebrando Hashes
 📸 [**Multi Convert**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/MultiConvert)
 Multi Convert
 
+📸 [**Baixar / Abrir Foto + Metadados EXIF (exiftool)**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Baixar%20Foto%20exiftool)
+Baixar / Abrir Foto + Metadados EXIF (exiftool)
+
 ---
 
 ## 🌟 Contribuições
