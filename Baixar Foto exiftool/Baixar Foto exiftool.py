@@ -1,11 +1,13 @@
 import tkinter as tk
 from tkinter import filedialog, messagebox
 from PIL import Image, ImageTk
-import requests
 import subprocess
 import io
 import webbrowser
 import re
+import mimetypes
+import os
+import tempfile
 
 def baixar_imagem():
     url = url_entry.get().strip()
@@ -14,18 +16,40 @@ def baixar_imagem():
         return
     
     try:
-        response = requests.get(url)
-        response.raise_for_status()
-        img_data = response.content
+        # Criar um arquivo temporário para salvar a imagem baixada com wget
+        temp_dir = tempfile.gettempdir()
+        temp_file = os.path.join(temp_dir, "temp_image")
+        
+        # Baixar a imagem usando wget
+        subprocess.run(
+            ['wget', '-O', temp_file, url],
+            check=True,
+            capture_output=True
+        )
 
-        img = Image.open(io.BytesIO(img_data))
-        mostrar_imagem_e_salvar(img)
+        # Determinar o formato original da imagem
+        mime_type, _ = mimetypes.guess_type(temp_file)
+        original_ext = mimetypes.guess_extension(mime_type, strict=False) if mime_type else '.png'
+        original_format = original_ext.lstrip('.').upper() if original_ext else 'PNG'
 
+        # Abrir a imagem com Pillow para exibição e salvamento
+        img = Image.open(temp_file)
+        mostrar_imagem_e_salvar(img, original_format, temp_file)
+
+    except subprocess.CalledProcessError as e:
+        messagebox.showerror("Erro", f"Falha ao baixar imagem com wget:\n{e}")
     except Exception as e:
-        messagebox.showerror("Erro", f"Falha ao baixar ou processar imagem:\n{e}")
+        messagebox.showerror("Erro", f"Falha ao processar imagem:\n{e}")
+    finally:
+        # Limpar o arquivo temporário
+        if os.path.exists(temp_file):
+            try:
+                os.remove(temp_file)
+            except Exception:
+                pass
 
 def abrir_imagem_local():
-    file_path = filedialog.askopenfilename(filetypes=[("Imagens", "*.jpg *.jpeg *.png *.tiff *.bmp")])
+    file_path = filedialog.askopenfilename(filetypes=[("Imagens", "*.jpg *.jpeg *.png *.tiff *.bmp *.webp")])
     if not file_path:
         return
     try:
@@ -35,22 +59,69 @@ def abrir_imagem_local():
     except Exception as e:
         messagebox.showerror("Erro", f"Erro ao abrir ou processar imagem:\n{e}")
 
-def mostrar_imagem_e_salvar(img):
+def mostrar_imagem_e_salvar(img, original_format, temp_file):
     img_preview = img.copy()
     img_preview.thumbnail((300, 300))
     img_tk = ImageTk.PhotoImage(img_preview)
     img_label.config(image=img_tk)
     img_label.image = img_tk
 
-    file_path = filedialog.asksaveasfilename(defaultextension=".png",
-                                             filetypes=[("PNG", "*.png")])
+    # Lista de formatos disponíveis para salvar
+    filetypes = [
+        ("PNG", "*.png"),
+        
+    ]
+
+    # Incluir o formato original se for suportado
+    if original_format.lower() in ['png', 'jpg', 'jpeg', 'tiff', 'bmp', 'webp']:
+        if original_format.lower() == 'jpeg':
+            original_format = 'JPG'
+        filetypes.append(("Original Format ({})".format(original_format), f"*.{original_format.lower()}"))
+
+    # Abrir diálogo para escolher nome e formato
+    file_path = filedialog.asksaveasfilename(
+        defaultextension=".png",
+        filetypes=filetypes,
+        title="Salvar imagem como"
+    )
     if not file_path:
+        messagebox.showwarning("Aviso", "Nenhum arquivo selecionado para salvar.")
         return
 
-    img.save(file_path, format='PNG')
-    messagebox.showinfo("Sucesso", f"Imagem salva em:\n{file_path}")
+    # Extrair a extensão do caminho escolhido
+    ext = os.path.splitext(file_path)[1].lstrip('.').lower()
+    if ext == 'jpg':
+        ext = 'jpeg'
+    elif ext == '':
+        ext = 'png'  # Fallback para PNG se nenhuma extensão for especificada
 
-    exibir_metadados(file_path)
+    # Mapear extensões para formatos Pillow
+    format_map = {
+        'png': 'PNG',
+        'jpeg': 'JPEG',
+        'jpg': 'JPEG',
+        'tiff': 'TIFF',
+        'bmp': 'BMP',
+        'webp': 'WEBP'
+    }
+
+    save_format = format_map.get(ext, 'PNG')  # Default para PNG se formato inválido
+
+    try:
+        # Se o formato escolhido for o original, copiar diretamente o arquivo baixado
+        if save_format == original_format.upper():
+            with open(temp_file, 'rb') as src, open(file_path, 'wb') as dst:
+                dst.write(src.read())
+        else:
+            # Converter para RGB se necessário (JPEG e BMP não suportam RGBA)
+            if save_format in ['JPEG', 'BMP'] and img.mode != 'RGB':
+                img = img.convert('RGB')
+            img.save(file_path, format=save_format)
+        
+        messagebox.showinfo("Sucesso", f"Imagem salva em:\n{file_path}")
+        exibir_metadados(file_path)
+    except Exception as e:
+        messagebox.showerror("Erro", f"Erro ao salvar imagem:\n{e}")
 
 def mostrar_imagem(img):
     img_preview = img.copy()
@@ -78,7 +149,6 @@ def exibir_metadados(caminho_imagem):
             lat_dec = dms_para_decimal(*lat_dms, lat_ref)
             lon_dec = dms_para_decimal(*lon_dms, lon_ref)
 
-            # Montar string personalizada para mostrar no campo de metadados
             gps_info_str = (
                 f"GPS Latitude: {lat_dms}\n"
                 f"GPS Longitude: {lon_dms}\n\n"
@@ -112,7 +182,6 @@ def extrair_dms(texto, chave):
     Extrai DMS e referência (N/S/E/W) dos metadados.
     Retorna ((graus, minutos, segundos), ref) ou (None, None).
     """
-    # Exemplo linha: GPS Latitude                    : 22 deg 33' 20.00" S
     regex = rf'{chave}\s+:\s+(\d+)\s+deg\s+(\d+)\'\s+([\d.]+)"\s+([NSEW])'
     m = re.search(regex, texto)
     if m:
@@ -127,7 +196,7 @@ def dms_para_decimal(graus, minutos, segundos, ref):
     dec = graus + minutos/60 + segundos/3600
     if ref in ['S', 'W']:
         dec = -dec
-    return round(dec, 13)  # arredonda para 13 casas decimais
+    return round(dec, 13)
 
 def abrir_google_maps():
     lat = btn_google_maps.lat
@@ -180,4 +249,4 @@ meta_text.pack(pady=5)
 
 scrollbar.config(command=meta_text.yview)
 
-root.mainloop() 
+root.mainloop()
