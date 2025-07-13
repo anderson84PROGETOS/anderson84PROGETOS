@@ -4,6 +4,13 @@ import tkinter as tk
 from tkinter import messagebox
 import subprocess
 
+# Função para abrir a limpeza de disco manualmente
+def abrir_limpeza_disco():
+    try:
+        subprocess.Popen("cleanmgr")
+    except Exception as e:
+        messagebox.showerror("Erro", f"Não foi possível abrir a Limpeza de Disco:\n{e}")
+
 # Funções para abrir pastas
 def abrir_temp():
     temp_path = os.environ.get("TEMP")
@@ -17,6 +24,11 @@ def abrir_prefetch():
 
 def abrir_windows_temp():
     path = r"C:\Windows\Temp"
+    if os.path.exists(path):
+        subprocess.Popen(f'explorer "{path}"')
+
+def abrir_crashdumps():
+    path = r"C:\Users\Anderson\AppData\Local\CrashDumps"
     if os.path.exists(path):
         subprocess.Popen(f'explorer "{path}"')
 
@@ -48,13 +60,14 @@ def limpar_arquivos():
     erros_total += limpar_pasta_sem_confirmacao("%TEMP%", os.environ.get("TEMP"))
     erros_total += limpar_pasta_sem_confirmacao("Windows Temp", r"C:\Windows\Temp")
     erros_total += limpar_pasta_sem_confirmacao("Prefetch", r"C:\Windows\Prefetch")
+    erros_total += limpar_pasta_sem_confirmacao("CrashDumps", r"C:\Users\Anderson\AppData\Local\CrashDumps")
 
     if erros_total:
         messagebox.showwarning("Aviso", f"Limpeza concluída com erros:\n\n" + "\n".join(erros_total[:5]))
     else:
         messagebox.showinfo("Sucesso", "Todas as pastas foram limpas com sucesso!")
 
-# Função de limpeza com confirmação individual (usada nos botões individuais)
+# Função de limpeza com confirmação individual
 def limpar_pasta(pasta_nome, pasta_caminho):
     confirm = messagebox.askyesno("Confirmação", f"Deseja limpar a pasta {pasta_nome}?")
     if not confirm:
@@ -70,7 +83,7 @@ def limpar_pasta(pasta_nome, pasta_caminho):
 # Janela principal
 janela = tk.Tk()
 janela.title("🧹 Limpador de Arquivos Temporários")
-janela.geometry("650x400")
+janela.geometry("650x500")
 janela.configure(bg="black")
 
 # Estilo dos botões
@@ -92,14 +105,36 @@ def criar_linha(nome_pasta, comando_abrir, comando_excluir):
 criar_linha("%TEMP%", abrir_temp, lambda: limpar_pasta("%TEMP%", os.environ.get("TEMP")))
 criar_linha(r"C:\Windows\Temp", abrir_windows_temp, lambda: limpar_pasta("Windows Temp", r"C:\Windows\Temp"))
 criar_linha(r"C:\Windows\Prefetch", abrir_prefetch, lambda: limpar_pasta("Prefetch", r"C:\Windows\Prefetch"))
+criar_linha("CrashDumps", abrir_crashdumps, lambda: limpar_pasta("CrashDumps", r"C:\Users\Anderson\AppData\Local\CrashDumps"))
 
-# Botão para limpar tudo (vermelho)
+
+# Título
+tk.Label(janela, text="🧽 Abrir Limpeza de Disco (Manual)", fg="white", bg="black", font=("Arial", 14, "bold")).pack(pady=20)
+
+# Botão para abrir a limpeza de disco
 tk.Button(
     janela,
-    text="🗑  Limpar TODAS Pastas  %temp%   temp   prefetch ",
+    text="🧹 Abrir Limpeza de Disco",
+    command=abrir_limpeza_disco,
+    font=("Arial", 12),
+    bg="#333",
+    fg="lime",
+    width=30,
+    height=2
+).pack(pady=10)
+
+
+tk.Button(
+    janela,
+    text="🗑  Limpar TODAS Pastas  %temp%   temp   prefetch   CrashDumps",
     command=limpar_arquivos,
-    **botao_lixeira
+    width=60,  # largura em caracteres
+    height=2,  # altura em linhas de texto
+    font=("Arial", 14),
+    bg="#900",
+    fg="white"
 ).pack(pady=20)
+
 
 # Iniciar interface
 janela.mainloop()
