@@ -338,4 +338,4 @@ def main():
     input(Fore.LIGHTRED_EX + "========== PRESSIONE ENTER PARA SAIR ==========\n\n")
 
 if __name__ == "__main__":
-    main()
+    main() 
