@@ -1,3 +1,4 @@
+# Nome do arquivo: web_capture_total.py
 import tkinter as tk
 from tkinter import filedialog, scrolledtext, messagebox, END
 import threading
@@ -21,7 +22,7 @@ class WebCaptureApp:
     def __init__(self, root):
         self.root = root
         self.root.title("Web Capture Total")
-        self.root.geometry("1000x720")
+        self.root.geometry("1140x860")
 
         self.driver = None
         self.is_capturing = False
@@ -36,16 +37,16 @@ class WebCaptureApp:
         frame = tk.Frame(self.root)
         frame.pack(pady=10)
 
-        tk.Label(frame, text="URL:").grid(row=0, column=0)
+        tk.Label(frame, text="Digite a URL").grid(row=0, column=0)
         self.url_entry = tk.Entry(frame, width=60)
         self.url_entry.grid(row=0, column=1, padx=10)
 
-        tk.Button(frame, text="Abrir Navegador", command=self.open_browser).grid(row=0, column=2)
-        tk.Button(frame, text="Iniciar Captura Total", command=self.start_capture_all).grid(row=1, column=0, pady=5)
-        tk.Button(frame, text="Parar Captura", command=self.stop_capture_all).grid(row=1, column=1)
-        tk.Button(frame, text="Salvar Tudo em PCAPNG", command=self.save_all_pcapng).grid(row=1, column=2)
+        tk.Button(frame, text="Abrir Navegador", command=self.open_browser, bg="#03fcf4").grid(row=0, column=2)
+        tk.Button(frame, text="Iniciar Captura Total", command=self.start_capture_all, bg="#1cfc03").grid(row=1, column=0, pady=5)
+        tk.Button(frame, text="Parar Captura", command=self.stop_capture_all, bg="#fc0317").grid(row=1, column=1)
+        tk.Button(frame, text="Salvar Tudo em PCAPNG", command=self.save_all_pcapng, bg="#fce303").grid(row=1, column=2)
 
-        self.log_area = scrolledtext.ScrolledText(self.root, width=120, height=35)
+        self.log_area = scrolledtext.ScrolledText(self.root, width=130, height=45)
         self.log_area.pack(pady=10)
 
     def setup_selenium(self):
