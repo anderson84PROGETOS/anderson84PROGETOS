@@ -127,6 +127,9 @@ Multi Convert
 📸 [**Baixar / Abrir Foto + Metadados EXIF (exiftool)**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Baixar%20Foto%20exiftool)
 Baixar / Abrir Foto + Metadados EXIF (exiftool)
 
+👨‍💻 [**Conversor de Texto e Hexadecimal**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Conversor%20de%20Texto%20e%20Hexadecimal)
+Conversor de Texto e Hexadecimal
+
 ---
 
 ## 🌟 Contribuições
