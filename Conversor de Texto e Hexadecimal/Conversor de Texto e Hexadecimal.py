@@ -250,3 +250,4 @@ texto_decodificado.pack(pady=5)
 scroll_texto_decodificado.config(command=texto_decodificado.yview)
 
 janela.mainloop()
+ 
