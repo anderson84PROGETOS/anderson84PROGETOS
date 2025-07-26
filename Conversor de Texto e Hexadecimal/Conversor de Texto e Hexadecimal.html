@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text and Hexadecimal Converter</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            width: 400px;
+            text-align: center;
+        }
+        textarea {
+            resize: none;
+        }
+    </style>
+</head>
+<body class="p-4">
+    <h1 class="text-2xl font-bold text-center mb-4">Text and Hexadecimal Converter</h1>
+    <div class="bg-white shadow-md rounded">
+        <div class="flex border-b">
+            <button id="tab1" class="tab-button px-4 py-2 font-semibold text-gray-700 bg-gray-200 border-r">Text Converter</button>
+            <button id="tab2" class="tab-button px-4 py-2 font-semibold text-gray-700 bg-gray-100 border-r">Open File in Hex</button>
+            <button id="tab3" class="tab-button px-4 py-2 font-semibold text-gray-700 bg-gray-100">Decode Hex Text</button>
+        </div>
+        <div id="content1" class="tab-content p-4 active">
+            <label class="block text-lg font-semibold mb-2">Enter Your Text</label>
+            <textarea id="textInput" class="w-full h-40 p-2 border rounded font-mono text-base" placeholder="Type your text here..."></textarea>
+            <button id="convertButton" class="mt-2 px-4 py-2 bg-green-500 text-black font-semibold rounded hover:bg-green-600">Convert</button>
+            <label class="block text-lg font-bold mt-4 mb-2">Text in Hexadecimal</label>
+            <textarea id="hexOutput" class="w-full h-64 p-2 border rounded font-mono text-green-600" readonly></textarea>
+        </div>
+        <div id="content2" class="tab-content p-4">
+            <div class="mb-4">
+                <button id="openFileButton" class="px-4 py-2 bg-green-500 text-black font-semibold rounded hover:bg-green-600">Open File (any type)</button>
+                <input type="file" id="fileInput" class="hidden" accept="*/*">
+            </div>
+            <progress id="progressBar" value="0" max="100" class="w-full h-6 mb-4"></progress>
+            <textarea id="hexViewer" class="w-full h-96 p-2 border rounded font-mono text-base" readonly></textarea>
+        </div>
+        <div id="content3" class="tab-content p-4">
+            <div class="mb-4">
+                <button id="openTextFileButton" class="px-4 py-2 bg-green-500 text-black font-semibold rounded hover:bg-green-600">Open Text File (.txt)</button>
+                <input type="file" id="textFileInput" class="hidden" accept=".txt,*/*">
+            </div>
+            <progress id="textProgressBar" value="0" max="100" class="w-full h-6 mb-4"></progress>
+            <label class="block text-lg font-semibold mb-2">Hexadecimal File Content</label>
+            <textarea id="hexTextInput" class="w-full h-40 p-2 border rounded font-mono text-base" readonly></textarea>
+            <label class="block text-lg font-bold mt-4 mb-2">Decoded Text</label>
+            <textarea id="decodedText" class="w-full h-48 p-2 border rounded font-mono text-green-600" readonly></textarea>
+        </div>
+    </div>
+
+    <div id="errorModal" class="modal">
+        <div class="modal-content">
+            <h2 id="errorTitle" class="text-xl font-bold text-red-600"></h2>
+            <p id="errorMessage" class="mt-2 text-base"></p>
+            <button id="closeModal" class="mt-4 px-4 py-2 bg-green-500 text-black font-semibold rounded hover:bg-green-600">OK</button>
+        </div>
+    </div>
+
+    <script>
+        // Tab switching logic
+        const tabs = document.querySelectorAll('.tab-button');
+        const contents = document.querySelectorAll('.tab-content');
+        tabs.forEach((tab, index) => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.add('bg-gray-100'));
+                tab.classList.remove('bg-gray-100');
+                tab.classList.add('bg-gray-200');
+                contents.forEach(c => c.classList.remove('active'));
+                contents[index].classList.add('active');
+            });
+        });
+
+        // Error modal function
+        function showError(title, message) {
+            document.getElementById('errorTitle').textContent = title;
+            document.getElementById('errorMessage').textContent = message;
+            document.getElementById('errorModal').style.display = 'flex';
+        }
+
+        document.getElementById('closeModal').addEventListener('click', () => {
+            document.getElementById('errorModal').style.display = 'none';
+        });
+
+        // Text to Hex Converter
+        document.getElementById('convertButton').addEventListener('click', () => {
+            const text = document.getElementById('textInput').value.trim();
+            if (!text) {
+                showError('Warning', 'Please enter some text.');
+                return;
+            }
+            const hex = Array.from(new TextEncoder().encode(text))
+                .map(byte => byte.toString(16).padStart(2, '0')).join('');
+            document.getElementById('hexOutput').value = hex;
+        });
+
+        // Hex File Viewer
+        document.getElementById('openFileButton').addEventListener('click', () => {
+            document.getElementById('fileInput').click();
+        });
+
+        document.getElementById('fileInput').addEventListener('change', async (event) => {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            if (file.size === 0) {
+                showError('Info', 'File is empty.');
+                return;
+            }
+
+            const hexViewer = document.getElementById('hexViewer');
+            const progressBar = document.getElementById('progressBar');
+            hexViewer.value = '';
+            progressBar.value = 0;
+
+            const chunkSize = 4096;
+            let offset = 0;
+            const reader = file.stream().getReader();
+
+            async function processChunk() {
+                const { done, value } = await reader.read();
+                if (done) {
+                    progressBar.value = 100;
+                    return;
+                }
+
+                const lines = [];
+                for (let i = 0; i < value.length; i += 16) {
+                    const segment = value.slice(i, i + 16);
+                    const hexPart = Array.from(segment)
+                        .map(byte => byte.toString(16).padStart(2, '0').toUpperCase())
+                        .join(' ');
+                    const textPart = Array.from(segment)
+                        .map(byte => (byte >= 32 && byte <= 126) ? String.fromCharCode(byte) : '.')
+                        .join('');
+                    lines.push(`${hexPart.padEnd(48)}  ${textPart}\n`);
+                }
+                hexViewer.value += lines.join('');
+                offset += value.length;
+                progressBar.value = (offset / file.size) * 100;
+                hexViewer.scrollTop = hexViewer.scrollHeight;
+
+                requestAnimationFrame(processChunk);
+            }
+
+            try {
+                await processChunk();
+            } catch (e) {
+                showError('Error', `Error opening file: ${e.message}`);
+            }
+        });
+
+        // Hex Text Decoder
+        document.getElementById('openTextFileButton').addEventListener('click', () => {
+            document.getElementById('textFileInput').click();
+        });
+
+        document.getElementById('textFileInput').addEventListener('change', async (event) => {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            if (file.size === 0) {
+                showError('Info', 'File is empty.');
+                return;
+            }
+
+            const hexTextInput = document.getElementById('hexTextInput');
+            const decodedText = document.getElementById('decodedText');
+            const progressBar = document.getElementById('textProgressBar');
+            hexTextInput.value = '';
+            decodedText.value = '';
+            progressBar.value = 0;
+
+            try {
+                const text = await file.text();
+                if (!text.trim()) {
+                    showError('Info', 'File is empty or contains no valid content.');
+                    return;
+                }
+
+                hexTextInput.value = text;
+                progressBar.value = 50;
+
+                try {
+                    const hex = text.replace(/\s+/g, '');
+                    const bytes = new Uint8Array(hex.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
+                    const decoder = new TextDecoder('utf-8');
+                    decodedText.value = decoder.decode(bytes);
+                    progressBar.value = 100;
+                } catch (e) {
+                    if (e instanceof TypeError) {
+                        showError('Error', 'The file content is not valid hexadecimal.');
+                    } else if (e instanceof DOMException) {
+                        showError('Error', 'Unable to decode hexadecimal to UTF-8 text.');
+                    } else {
+                        showError('Error', `Error processing file: ${e.message}`);
+                    }
+                }
+            } catch (e) {
+                showError('Error', `Error opening file: ${e.message}`);
+            }
+        });
+    </script>
+</body>
+</html>
