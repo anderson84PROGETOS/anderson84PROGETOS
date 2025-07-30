@@ -34,7 +34,7 @@ def decode_file():
         filetypes=[("Arquivos de texto", "*.txt"), ("Todos os arquivos", "*.*")]
     )
     if not file_path:
-        return  # usuário cancelou
+        return
 
     try:
         with open(file_path, 'r', encoding='utf-8') as f:
@@ -67,7 +67,7 @@ def encode_file():
         filetypes=[("Todos os arquivos", "*.*")]
     )
     if not file_path:
-        return  # usuário cancelou
+        return
 
     try:
         with open(file_path, "rb") as f:
@@ -75,20 +75,32 @@ def encode_file():
 
         encoded = base64.b64encode(file_bytes).decode('utf-8')
 
-        # Exibir o resultado na área de texto de saída
         output_text.delete("1.0", tk.END)
         output_text.insert(tk.END, encoded)
 
-        messagebox.showinfo("Sucesso", f"Arquivo codificado em Base64 com sucesso.")
+        messagebox.showinfo("Sucesso", "Arquivo codificado em Base64 com sucesso.")
 
     except Exception as e:
         messagebox.showerror("Erro", f"Erro ao abrir ou codificar o arquivo:\n{e}")
+
+def encode_base64():
+    text = input_text.get("1.0", tk.END).strip()
+    if not text:
+        messagebox.showwarning("Aviso", "Digite um texto para codificar.")
+        return
+
+    try:
+        encoded = base64.b64encode(text.encode('utf-8')).decode('utf-8')
+        output_text.delete("1.0", tk.END)
+        output_text.insert(tk.END, encoded)
+    except Exception as e:
+        messagebox.showerror("Erro", f"Erro ao codificar o texto:\n{e}")
 
 root = tk.Tk()
 root.title("Decodificador Codificador Base64")
 root.geometry("1100x910")
 
-ttk.Label(root, text="Texto Base64").pack(pady=5)
+ttk.Label(root, text="Texto Base64 ou Texto Normal").pack(pady=5)
 input_text = tk.Text(root, width=120, height=23)
 input_text.pack()
 
@@ -97,7 +109,8 @@ frame_buttons.pack(pady=10)
 
 tk.Button(frame_buttons, text="Decodificar Base64", command=decode_base64, bg="#fccf05", fg="black").grid(row=0, column=0, padx=5)
 tk.Button(frame_buttons, text="Decodificar de Arquivo Base64", command=decode_file, bg="#05fc3f", fg="black").grid(row=0, column=1, padx=5)
-tk.Button(frame_buttons, text="Codificar Arquivo para Base64", command=encode_file, bg="#05c3fc", fg="black").grid(row=0, column=2, padx=5, pady=10)
+tk.Button(frame_buttons, text="Codificar Arquivo para Base64", command=encode_file, bg="#05c3fc", fg="black").grid(row=0, column=2, padx=5)
+tk.Button(frame_buttons, text="Codificar Texto para Base64", command=encode_base64, bg="#fc035e", fg="black").grid(row=0, column=3, padx=5)
 
 ttk.Label(root, text="Resultado").pack()
 output_text = tk.Text(root, width=120, height=23)
