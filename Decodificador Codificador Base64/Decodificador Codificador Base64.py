@@ -134,7 +134,7 @@ tk.Button(frame_buttons, text="Decodificar Base64", command=decode_base64, bg="#
 tk.Button(frame_buttons, text="Codificar Arquivo para Base64", command=encode_file, bg="#05c3fc", fg="black").grid(row=0, column=1, padx=5)
 tk.Button(frame_buttons, text="Codificar Texto para Base64", command=encode_base64, bg="#fc035e", fg="black").grid(row=0, column=2, padx=5)
 tk.Button(frame_buttons, text="Salvar Texto Codificado em .txt", command=save_encoded_base64, bg="#fc5895", fg="black").grid(row=0, column=3, padx=5)
-tk.Button(frame_buttons, text="Decodificar de Arquivo Base64 .txt", command=decode_file, bg="#05fc3f", fg="black").grid(row=0, column=4, padx=5)
+tk.Button(frame_buttons, text="Decodificar de Arquivo Base64 .txt", command=decode_file, bg="#05fc3f", fg="black").grid(row=0, column=4, padx=5, pady=5)
 
 ttk.Label(root, text="Resultado").pack()
 output_text = tk.Text(root, width=120, height=23)
