@@ -635,4 +635,4 @@ botao_abrir_texto_hex.pack()
 progresso_texto_hex = ttk.Progressbar(aba4, orient='horizontal', mode='determinate', length=500)
 progresso_texto_hex.pack(pady=10)
 
-root.mainloop()
+root.mainloop() 
