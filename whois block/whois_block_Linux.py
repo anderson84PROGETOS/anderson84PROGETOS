@@ -1,12 +1,13 @@
 import subprocess
 import re
-import requests
 import ipaddress
-from bs4 import BeautifulSoup
 from socket import *
+from colorama import Fore, Style, init
 
-print("""
+# Inicializa colorama
+init(autoreset=True)
 
+print(Fore.LIGHTCYAN_EX + Style.BRIGHT + """
     ██╗    ██╗██╗  ██╗ ██████╗ ██╗███████╗    ██████╗ ██╗      ██████╗  ██████╗██╗  ██╗
     ██║    ██║██║  ██║██╔═══██╗██║██╔════╝    ██╔══██╗██║     ██╔═══██╗██╔════╝██║ ██╔╝
     ██║ █╗ ██║███████║██║   ██║██║███████╗    ██████╔╝██║     ██║   ██║██║     █████╔╝ 
@@ -14,7 +15,7 @@ print("""
     ╚███╔███╔╝██║  ██║╚██████╔╝██║███████║    ██████╔╝███████╗╚██████╔╝╚██████╗██║  ██╗
      ╚══╝╚══╝ ╚═╝  ╚═╝ ╚═════╝ ╚═╝╚══════╝    ╚═════╝ ╚══════╝ ╚═════╝  ╚═════╝╚═╝  ╚═╝
 
-""")
+""" + Style.RESET_ALL)
 
 servidores_whois_tdl = {
     '.com': 'whois.verisign-grs.com',
@@ -69,7 +70,7 @@ def obter_whois_br(endereco):
 
     linhas_filtradas = [linha for linha in resultado.splitlines() if not linha.startswith('%')]
     resultado_filtrado = '\n'.join(linhas_filtradas)
-    print(resultado_filtrado)
+    print(Fore.LIGHTGREEN_EX + Style.BRIGHT + resultado_filtrado)
 
 def consulta_whois(endereco):
     obter_whois_br(endereco)
@@ -78,57 +79,57 @@ def list_subnet_ips(subnet):
     try:
         network = ipaddress.ip_network(subnet)
     except ValueError:
-        print("\nErro: Insira um bloco de IP válido. Exemplo: 200.196.144.0/20\n")
+        print(Fore.LIGHTRED_EX + Style.BRIGHT + "\nErro: Insira um bloco de IP válido. Exemplo: 200.196.144.0/20\n")
         return
 
-    print("\nEndereços IP disponíveis na sub-rede\n")
+    print(Fore.LIGHTGREEN_EX + Style.BRIGHT + "\nEndereços IP disponíveis na sub-rede\n")
     ips = []
 
     for ip in network.hosts():
         ips.append(str(ip))
-        print(ip)
+        print(Fore.LIGHTYELLOW_EX + str(ip))
 
-    save = input("\nDeseja salvar os IP em um arquivo? (s/n): ")
+    save = input(Fore.LIGHTMAGENTA_EX + Style.BRIGHT +  "\nDeseja salvar os IP em um arquivo? (s/n): ")
     if save.lower() == 's':
-        filename = input("\nDigite o nome do arquivo para salvar os IP: ")
+        filename = input(Fore.LIGHTCYAN_EX + "\nDigite o nome do arquivo para salvar os IP: ")
         try:
             with open(filename, 'w') as f:
                 for ip in ips:
                     f.write(ip + '\n')
-            print(f"\nIP salvos no arquivo: {filename}")
+            print(Fore.LIGHTGREEN_EX + Style.BRIGHT + f"\nIP salvos no arquivo: {filename}")
         except Exception as e:
-            print(f"\nErro ao salvar os IP no arquivo: {e}\n")
+            print(Fore.LIGHTRED_EX + Style.BRIGHT + f"\nErro ao salvar os IP no arquivo: {e}\n")
 
 def main():
-    domain = input("Digite o nome do Website: ")
+    domain = input(Fore.LIGHTGREEN_EX + Style.BRIGHT + Style.BRIGHT + "Digite o nome do Website: " + Style.RESET_ALL)
     print()    
     mx_records = get_mx_records(domain)   
-    print(f"\nRegistros MX para website: {domain}\n")
+    print(Fore.LIGHTYELLOW_EX + Style.BRIGHT + f"\nRegistros MX para website: {domain}\n" + Style.RESET_ALL)
     
     for line in mx_records.splitlines():
         if line:
             mx_host = line.split()[-1].strip()
             ping_result = ping_host(mx_host)
             ip_address = obter_ip_do_ping(ping_result)
-            print(f"{domain}     MX = {mx_host}    IP: {ip_address}")
+            print(Fore.LIGHTMAGENTA_EX + Style.BRIGHT +  f"{domain}     MX = {mx_host}    IP: {ip_address}" + Style.RESET_ALL)
     
     for line in mx_records.splitlines():
         if line:
             mx_host = line.split()[-1].strip()
-            print(f"\n\nPinging no website: {mx_host}\n")
+            print(Fore.LIGHTYELLOW_EX + Style.BRIGHT + f"\n\nPinging no website: {mx_host}\n" + Style.RESET_ALL)
             ping_result = ping_host(mx_host)
 
             ip_address = obter_ip_do_ping(ping_result)
             if ip_address:
-                print(f"Consultando WHOIS para IP: {ip_address}")
+                print(Fore.LIGHTMAGENTA_EX + Style.BRIGHT +  f"Consultando WHOIS para IP: {ip_address}" + Style.RESET_ALL)
                 consulta_whois(ip_address)
             else:
-                print(f"\nNão foi possível obter o IP do host: {mx_host}\n")
+                print(Fore.LIGHTRED_EX + Style.BRIGHT + f"\nNão foi possível obter o IP do host: {mx_host}\n" + Style.RESET_ALL)
 
-    subnet = input("\nDigite o bloco de IP do inetnum: (exemplo: 200.196.144.0/20): ")
+    subnet = input(Fore.LIGHTMAGENTA_EX + Style.BRIGHT +  "\nDigite o bloco de IP do inetnum: (exemplo: 200.196.144.0/20): " + Style.RESET_ALL)
     list_subnet_ips(subnet)
 
 if __name__ == "__main__":
     main()
 
-input("\n\nPRESSIONE ENTER PARA SAIR\n=========================\n")
+input(Fore.LIGHTRED_EX + Style.BRIGHT + "\n\nPRESSIONE ENTER PARA SAIR\n=========================\n" + Style.RESET_ALL)
