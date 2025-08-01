@@ -1,6 +1,27 @@
 import tkinter as tk
 from tkinter import ttk, messagebox, filedialog
 import base64
+import re
+
+def decode_base64_content(content):
+    try:
+        # Remove todos os caracteres que não fazem parte do alfabeto Base64
+        cleaned = re.sub(r'[^A-Za-z0-9+/=]', '', content)
+
+        # Corrigir padding se possível
+        remainder = len(cleaned) % 4
+        if remainder == 1:
+            # Corrigir irrecuperável — remove o último caractere para tentar decodificar o resto
+            cleaned = cleaned[:-1]
+        elif remainder > 0:
+            cleaned += '=' * (4 - remainder)
+
+        # Tenta decodificar
+        decoded_bytes = base64.b64decode(cleaned)
+        return decoded_bytes.decode("utf-8", errors="replace")
+
+    except Exception as e:
+        return f"❌ Erro na decodificação: {str(e)}"
 
 def decode_base64():
     text = input_text.get("1.0", tk.END).strip()
@@ -15,15 +36,8 @@ def decode_base64():
         linha = linha.strip()
         if not linha:
             continue
-        try:
-            decoded_bytes = base64.b64decode(linha)
-            try:
-                decoded = decoded_bytes.decode('utf-8')
-            except UnicodeDecodeError:
-                decoded = decoded_bytes.hex()
-            resultados.append(decoded)
-        except Exception:
-            resultados.append(f"[Erro ao decodificar]: {linha}")
+        resultado = decode_base64_content(linha)
+        resultados.append(resultado)
 
     output_text.delete("1.0", tk.END)
     output_text.insert(tk.END, "\n\n".join(resultados))
@@ -37,7 +51,7 @@ def decode_file():
         return
 
     try:
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
             lines = f.readlines()
 
         resultados = []
@@ -45,15 +59,8 @@ def decode_file():
             line = line.strip()
             if not line:
                 continue
-            try:
-                decoded_bytes = base64.b64decode(line)
-                try:
-                    decoded = decoded_bytes.decode('utf-8')
-                except UnicodeDecodeError:
-                    decoded = decoded_bytes.hex()
-                resultados.append(decoded)
-            except Exception as e:
-                resultados.append(f"[Erro ao decodificar linha]: {line}")
+            resultado = decode_base64_content(line)
+            resultados.append(resultado)
 
         output_text.delete("1.0", tk.END)
         output_text.insert(tk.END, "\n\n".join(resultados))
