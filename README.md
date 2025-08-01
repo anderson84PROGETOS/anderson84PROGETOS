@@ -130,6 +130,9 @@ Baixar / Abrir Foto + Metadados EXIF (exiftool)
 👨‍💻 [**Conversor de Texto e Hexadecimal**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Conversor%20de%20Texto%20e%20Hexadecimal)
 Conversor de Texto e Hexadecimal
 
+🤹 [**Multi-Tool: Brute Force, Hash, Base64, Hex**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Multi-Tool:%20Brute%20Force,%20Hash,%20Base64,%20Hex)
+Multi-Tool: Brute Force, Hash, Base64, Hex
+
 ---
 
 ## 🌟 Contribuições
