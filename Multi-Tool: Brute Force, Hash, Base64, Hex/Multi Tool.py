@@ -30,14 +30,14 @@ def detectar_tipo_hash(hash_str):
     else:
         return None
 
-def update_label_testando(pwd):
-    label_testando.config(text=f"Wordlist atual: Testando: {pwd}")
+def update_label_testando(index, pwd):
+    label_testando.config(text=f"Wordlist atual: Testando:       Número: {index:<20}    Senha: {pwd}")
     root.update_idletasks()
     time.sleep(0.2)
 
 def try_crack_hash(target_hash, hash_func_name, passwords):
-    for pwd in passwords:
-        update_label_testando(pwd)
+    for index, pwd in enumerate(passwords, start=1):
+        update_label_testando(index, pwd)
         h = getattr(hashlib, hash_func_name)(pwd.encode()).hexdigest()
         if h == target_hash.lower():
             label_testando.config(text=f"Senha Encontrada: {pwd}")
@@ -45,8 +45,8 @@ def try_crack_hash(target_hash, hash_func_name, passwords):
     return None
 
 def try_crack_pdf(pdf_path, passwords):
-    for pwd in passwords:
-        update_label_testando(pwd)
+    for index, pwd in enumerate(passwords, start=1):
+        update_label_testando(index, pwd)
         try:
             with pikepdf.open(pdf_path, password=pwd):
                 label_testando.config(text=f"Senha Encontrada: {pwd}")
@@ -60,8 +60,8 @@ def try_crack_pdf(pdf_path, passwords):
 def try_crack_zip(zip_path, passwords):
     try:
         with pyzipper.AESZipFile(zip_path) as zf:
-            for pwd in passwords:
-                update_label_testando(pwd)
+            for index, pwd in enumerate(passwords, start=1):
+                update_label_testando(index, pwd)
                 try:
                     zf.pwd = pwd.encode('utf-8')
                     zf.namelist()
@@ -635,4 +635,4 @@ botao_abrir_texto_hex.pack()
 progresso_texto_hex = ttk.Progressbar(aba4, orient='horizontal', mode='determinate', length=500)
 progresso_texto_hex.pack(pady=10)
 
-root.mainloop() 
+root.mainloop()
