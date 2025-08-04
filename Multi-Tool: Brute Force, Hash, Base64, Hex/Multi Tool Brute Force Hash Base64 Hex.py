@@ -63,7 +63,7 @@ def try_crack_pdf(pdf_path, passwords):
             with pikepdf.open(pdf_path, password=pwd):
                 label_testando.config(text=f"Senha Encontrada: {pwd}")
                 return pwd
-        except pikepdf._qpdf.PasswordError:
+        except pikepdf.PasswordError:  # Corrected exception path
             continue
         except Exception:
             break
@@ -101,6 +101,8 @@ def iniciar():
     progress_bar["maximum"] = total_entradas
     resultado_text.insert(tk.END, f"[INFO] Total de entradas: {total_entradas}\n\n")
     resultado_text.insert(tk.END, "[INFO] Análise das Entradas\n\n")
+    resultado_text.tag_configure("red", foreground="#f70a55")
+    resultado_text.tag_configure("blue", foreground="#0000FF")
     for idx, entrada in enumerate(entradas, start=1):
         entrada = entrada.strip()
         pwd = None
@@ -138,9 +140,9 @@ def iniciar():
                 resultado_text.see(tk.END)
                 root.update_idletasks()
         if pwd:
-            resultado_text.insert(tk.END, f" [+] Senha Encontrada: {pwd}\n\n")
+            resultado_text.insert(tk.END, f" [+] Senha Encontrada: {pwd}\n\n", "red")
         else:
-            resultado_text.insert(tk.END, f" [-] Senha Não Encontrada\n\n")
+            resultado_text.insert(tk.END, f" [-] Senha Não Encontrada\n\n", "blue")
         resultado_text.see(tk.END)
         root.update_idletasks()
         progress_bar["value"] = idx
@@ -472,7 +474,7 @@ def abrir_arquivo_hex_texto():
                 root.after(0, erro_unicode)
     except Exception as e:
         def mostra_erro():
-            pass
+            mostrar_erro_personalizado("Erro", f"Erro ao abrir arquivo:\n{e}")
         root.after(0, mostra_erro)
 
 # GUI
