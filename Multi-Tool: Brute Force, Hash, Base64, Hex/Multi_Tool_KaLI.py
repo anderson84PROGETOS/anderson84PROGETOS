@@ -9,6 +9,18 @@ import time
 import base64
 import re
 
+# Global variable for scan speed (in seconds)
+scan_speed = 0.05  # Default: Rápido (0.05s)
+
+def set_scan_speed(speed):
+    global scan_speed
+    if speed == "Rápido":
+        scan_speed = 0.05
+    elif speed == "Médio":
+        scan_speed = 0.2
+    elif speed == "Lento":
+        scan_speed = 0.5
+
 def load_wordlist(path):
     try:
         with open(path, 'r', encoding='utf-8', errors='ignore') as f:
@@ -33,7 +45,7 @@ def detectar_tipo_hash(hash_str):
 def update_label_testando(index, pwd):
     label_testando.config(text=f"Wordlist atual: Testando:       Número: {index:<20}    Senha: {pwd}")
     root.update_idletasks()
-    time.sleep(0.2)
+    time.sleep(scan_speed)  # Use global scan_speed variable
 
 def try_crack_hash(target_hash, hash_func_name, passwords):
     for index, pwd in enumerate(passwords, start=1):
@@ -51,7 +63,7 @@ def try_crack_pdf(pdf_path, passwords):
             with pikepdf.open(pdf_path, password=pwd):
                 label_testando.config(text=f"Senha Encontrada: {pwd}")
                 return pwd
-        except pikepdf._qpdf.PasswordError:
+        except pikepdf.PasswordError:  # Corrected exception path
             continue
         except Exception:
             break
@@ -89,6 +101,8 @@ def iniciar():
     progress_bar["maximum"] = total_entradas
     resultado_text.insert(tk.END, f"[INFO] Total de entradas: {total_entradas}\n\n")
     resultado_text.insert(tk.END, "[INFO] Análise das Entradas\n\n")
+    resultado_text.tag_configure("red", foreground="#f70a55")
+    resultado_text.tag_configure("blue", foreground="#0000FF")
     for idx, entrada in enumerate(entradas, start=1):
         entrada = entrada.strip()
         pwd = None
@@ -126,9 +140,9 @@ def iniciar():
                 resultado_text.see(tk.END)
                 root.update_idletasks()
         if pwd:
-            resultado_text.insert(tk.END, f" [+] Senha Encontrada: {pwd}\n\n")
+            resultado_text.insert(tk.END, f" [+] Senha Encontrada: {pwd}\n\n", "red")
         else:
-            resultado_text.insert(tk.END, f" [-] Senha Não Encontrada\n\n")
+            resultado_text.insert(tk.END, f" [-] Senha Não Encontrada\n\n", "blue")
         resultado_text.see(tk.END)
         root.update_idletasks()
         progress_bar["value"] = idx
@@ -364,11 +378,7 @@ def converter_para_hex():
     if not texto.strip():
         messagebox.showwarning("Aviso", "Digite algum texto.")
         return
-
-    # Hexadecimal da string (em letras maiúsculas)
     resultado_hex = ' '.join(f"{b:02X}" for b in texto.encode("utf-8"))
-
-    # Exibir somente o resultado hexadecimal
     texto_resultado_hex.delete("1.0", tk.END)
     texto_resultado_hex.insert(tk.END, resultado_hex)
 
@@ -429,60 +439,48 @@ def abrir_arquivo_hex_texto():
         if tamanho_arquivo == 0:
             messagebox.showinfo("Info", "Arquivo vazio.")
             return
-
         def reset_interface():
             hex_texto_entrada.delete("1.0", tk.END)
             texto_decodificado.delete("1.0", tk.END)
             progresso_texto_hex['value'] = 0
         root.after(0, reset_interface)
-
         with open(caminho, "r", encoding="utf-8") as f:
             conteudo = f.read().strip()
             if not conteudo:
                 messagebox.showinfo("Info", "Arquivo vazio ou sem conteúdo válido.")
                 return
-
-            # Limpar espaços e quebras de linha, e forçar letras maiúsculas
             conteudo_limpo = conteudo.replace(" ", "").replace("\n", "").upper()
-
             if len(conteudo_limpo) % 2 != 0:
                 raise ValueError("Hexadecimal incompleto (quantidade ímpar de caracteres).")
-
             conteudo_formatado = ' '.join(conteudo_limpo[i:i+2] for i in range(0, len(conteudo_limpo), 2))
-
             def atualizar_entrada():
                 hex_texto_entrada.insert(tk.END, conteudo_formatado)
             root.after(0, atualizar_entrada)
-
             try:
                 decoded_bytes = bytes.fromhex(conteudo_limpo)
                 decoded_text = decoded_bytes.decode("utf-8")
-
                 def atualizar_resultado():
                     texto_decodificado.delete("1.0", tk.END)
                     texto_decodificado.insert(tk.END, decoded_text)
                     progresso_texto_hex['value'] = 100
                 root.after(0, atualizar_resultado)
-
             except ValueError:
                 def erro_decodificacao():
                     mostrar_erro_personalizado("Erro", "O conteúdo do arquivo não é um hexadecimal válido.")
                 root.after(0, erro_decodificacao)
-
             except UnicodeDecodeError:
                 def erro_unicode():
                     mostrar_erro_personalizado("Erro", "Não foi possível decodificar o hexadecimal para texto UTF-8.")
                 root.after(0, erro_unicode)
-
     except Exception as e:
         def mostra_erro():
-            pass
+            mostrar_erro_personalizado("Erro", f"Erro ao abrir arquivo:\n{e}")
         root.after(0, mostra_erro)
 
 # GUI
 root = tk.Tk()
 root.title("Multi-Tool: Brute Force, Hash, Base64, Hex")
-root.geometry("1280x900")
+root.geometry("1280x950")
 
 # Notebook com abas
 abas = ttk.Notebook(root)
@@ -497,7 +495,7 @@ frame_hashes = tk.Frame(aba1)
 frame_hashes.pack()
 tk.Button(frame_hashes, text="Selecionar Arquivo de Hashes", command=selecionar_arquivo_hashes, bg="#c7ffb6").pack(side=tk.LEFT, padx=5, pady=10)
 tk.Button(frame_hashes, text="Selecionar PDF/ZIP", command=adicionar_arquivo, bg="#fa5f9a").pack(side=tk.LEFT, padx=5, pady=10)
-input_text = scrolledtext.ScrolledText(aba1, width=145, height=8)
+input_text = scrolledtext.ScrolledText(aba1, width=145, height=7)
 input_text.pack()
 tk.Label(aba1, text="Wordlist (.txt)").pack()
 frame_wordlist = tk.Frame(aba1)
@@ -507,6 +505,14 @@ entry_wordlist.pack(side=tk.LEFT)
 tk.Button(frame_wordlist, text="Selecionar", command=selecionar_wordlist, bg="#03f4fc").pack(side=tk.LEFT, padx=10)
 label_palavras = tk.Label(aba1, text="Total de palavras na wordlist: 0")
 label_palavras.pack(pady=5)
+# Speed control dropdown
+frame_speed = tk.Frame(aba1)
+frame_speed.pack(pady=5)
+tk.Label(frame_speed, text="Velocidade do Scan:").pack(side=tk.LEFT)
+speed_var = tk.StringVar(value="Rápido")
+speed_menu = ttk.Combobox(frame_speed, textvariable=speed_var, values=["Rápido", "Médio", "Lento"], state="readonly", width=10)
+speed_menu.pack(side=tk.LEFT, padx=5)
+speed_menu.bind("<<ComboboxSelected>>", lambda event: set_scan_speed(speed_var.get()))
 btn_iniciar = tk.Button(aba1, text="Iniciar Brute Force", command=iniciar_thread, bg="#059e07", fg="black")
 btn_iniciar.pack(pady=10)
 btn_salvar = tk.Button(aba1, text="Salvar Senhas Encontradas", command=salvar_resultados, bg="#eda705", fg="black")
@@ -529,7 +535,7 @@ tk.Button(frame_botoes_hash, text="Gerar MD5", command=lambda: gerar_hash("md5")
 tk.Button(frame_botoes_hash, text="Gerar SHA1", command=lambda: gerar_hash("sha1"), bg="#c4fce8").pack(side=tk.LEFT, padx=5)
 tk.Button(frame_botoes_hash, text="Gerar SHA256", command=lambda: gerar_hash("sha256"), bg="#fcd7c4").pack(side=tk.LEFT, padx=5)
 tk.Button(frame_botoes_hash, text="Gerar SHA512", command=lambda: gerar_hash("sha512"), bg="#fbc4f7").pack(side=tk.LEFT, padx=5)
-saida_hash = tk.Text(aba1, width=146, height=4, fg="blue")
+saida_hash = tk.Text(aba1, width=146, height=3, fg="blue")
 saida_hash.pack(pady=5)
 
 # Aba 2 - Analisador de Assinatura Digital
@@ -571,7 +577,7 @@ tk.Button(frame_buttons_base64, text="Codificar Texto para Base64", command=enco
 tk.Button(frame_buttons_base64, text="Salvar Texto Codificado em .txt", command=save_encoded_base64, bg="#fc5895", fg="black").grid(row=0, column=3, padx=5)
 tk.Button(frame_buttons_base64, text="Decodificar de Arquivo Base64 .txt", command=decode_file, bg="#05fc3f", fg="black").grid(row=0, column=4, padx=5, pady=5)
 tk.Label(aba3, text="Resultado").pack()
-output_text_base64 = tk.Text(aba3, width=120, height=20)
+output_text_base64 = tk.Text(aba3, width=120, height=19)
 output_text_base64.pack()
 
 # Aba 4 - Conversor de Texto e Hexadecimal
