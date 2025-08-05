@@ -214,4 +214,4 @@ resultado_texto.pack(padx=10, pady=10)
 
 resultado_texto.bind("<Double-Button-1>", abrir_url_ao_clicar)
 
-janela.mainloop()
+janela.mainloop() 
