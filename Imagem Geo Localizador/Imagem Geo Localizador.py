@@ -39,7 +39,7 @@ def get_coordinates(gps_info):
         return lat, lon
     except Exception:
         return None
-
+        
 def abrir_navegador(url):
     chrome_options = Options()
     chrome_options.add_experimental_option("detach", True)
