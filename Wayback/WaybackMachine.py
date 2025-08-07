@@ -110,7 +110,6 @@ def on_close():
         window.destroy()
 
 # ============ GUI ============
-
 window = tk.Tk()
 window.title("Capturador de URL do Wayback Machine")
 window.geometry("1280x950")
