@@ -69,7 +69,7 @@ Gera o hash de favicons para uso em reconhecimento de tecnologias com ferramenta
 🌐 [**WHOIS Consulta**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/blob/meu-progetos/whois%20br/whois%20br.py)  
 Script para buscar e traduzir informações WHOIS em português.
 
-🔐 [**Wayback Machine**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/blob/meu-progetos/Wayback/Wayback%20Machine.py)
+🔐 [**Wayback Machine**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Wayback)
 Ferramenta que busca URL no site Wayback Machine.
 
 📡 [**Monitor Conexões**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/blob/meu-progetos/Network%20Monitor/Network%20Monitor.py)  
