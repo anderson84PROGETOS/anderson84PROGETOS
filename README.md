@@ -139,6 +139,9 @@ Extrator de TODAS as URL do index.html ou URL do website
 🗺️ [**Imagem Geo Localizador**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Imagem%20Geo%20Localizador)
 Imagem Geo Localizador
 
+📊 [**Instagram Investigar**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Instagram%20Investigar)
+Instagram Investigar
+
 ---
 
 ## 🌟 Contribuições
