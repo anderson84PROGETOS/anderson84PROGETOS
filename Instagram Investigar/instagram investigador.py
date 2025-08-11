@@ -10,8 +10,8 @@ import time
 class InstagramInvestigatorGUI:
     def __init__(self, root):
         self.root = root
-        self.root.title("Instagram Investigator")
-        self.root.geometry("850x600")
+        self.root.title("instagram investigador")
+        self.root.geometry("1020x830")
         self.current_data = None
         self.setup_gui()
 
@@ -40,13 +40,13 @@ class InstagramInvestigatorGUI:
         button_frame = ttk.Frame(self.main_frame)
         button_frame.grid(row=1, column=0, sticky=(tk.W, tk.E), pady=5)
 
-        ttk.Button(button_frame, text="Investigar", command=self.investigate).grid(row=0, column=0, padx=5)
-        ttk.Button(button_frame, text="Ver Tutorial", command=self.show_tutorial).grid(row=0, column=1, padx=5)
-        ttk.Button(button_frame, text="Exportar Dados", command=self.export_data).grid(row=0, column=2, padx=5)
-        ttk.Button(button_frame, text="Sair", command=self.root.quit).grid(row=0, column=3, padx=5)
+        tk.Button(button_frame, text="Investigar", bg="#05fc32", fg="black", command=self.investigate).grid(row=0, column=0, padx=5)
+        tk.Button(button_frame, text="Ver Tutorial", bg="#ffcc00", fg="black", command=self.show_tutorial).grid(row=0, column=1, padx=5)
+        tk.Button(button_frame, text="Exportar Dados", bg="#00ccff", fg="black", command=self.export_data).grid(row=0, column=2, padx=5)
+        tk.Button(button_frame, text="Sair", bg="#ff3300", fg="black", command=self.root.quit).grid(row=0, column=3, padx=5)
 
         # Results text area
-        self.results_text = tk.Text(self.main_frame, height=20, width=80, wrap=tk.WORD)
+        self.results_text = tk.Text(self.main_frame, height=40, width=120, wrap=tk.WORD)
         self.results_text.grid(row=2, column=0, sticky=(tk.W, tk.E, tk.N, tk.S), pady=5)
         scrollbar = ttk.Scrollbar(self.main_frame, orient=tk.VERTICAL, command=self.results_text.yview)
         scrollbar.grid(row=2, column=1, sticky=(tk.N, tk.S))
@@ -72,22 +72,26 @@ class InstagramInvestigatorGUI:
 
     def show_tutorial(self):
         tutorial_window = tk.Toplevel(self.root)
-        tutorial_window.title("Tutorial: Obter Session ID")
-        tutorial_window.geometry("700x300")
+        tutorial_window.title("Tutorial: Obter Session ID   →  sessionid")
+        tutorial_window.geometry("700x310")
 
-        tutorial_text = tk.Text(tutorial_window, height=15, width=60, wrap=tk.WORD)
+        tutorial_text = tk.Text(tutorial_window, height=15, width=60, wrap=tk.WORD, font=("Arial", 12))
         tutorial_text.pack(padx=10, pady=10, fill=tk.BOTH, expand=True)
         scrollbar = ttk.Scrollbar(tutorial_window, orient=tk.VERTICAL, command=tutorial_text.yview)
         scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
         tutorial_text['yscrollcommand'] = scrollbar.set
 
         tutorial_content = """
-📋 Como obter o Session ID do Instagram:
+📋 Como obter o Session ID do Instagram   →  sessionid
 
 1. Abra o Instagram no navegador e faça login
+
 2. Pressione F12 para abrir as ferramentas de desenvolvedor
-3. Vá na aba "Application" ou "Aplicação"
+
+3. Vá na aba "Aplicativo"  ou  "Aplicação"  ou  "Application"
+
 4. No menu lateral, clique em "Cookies" → "https://www.instagram.com"
+
 5. Procure por "sessionid" e copie o valor
 
 ⚠️ IMPORTANTE: Mantenha seu session ID seguro e não compartilhe!
@@ -215,9 +219,9 @@ class InstagramInvestigatorGUI:
             self.update_text(f"❌ Falha na investigação: {str(e)}", "error")
 
     def display_results(self, data):
-        self.update_text("="*70, "header")
+        self.update_text("="*106, "header")
         self.update_text("📊 RESULTADOS DA INVESTIGAÇÃO", "header")
-        self.update_text("="*70, "header")
+        self.update_text("="*106, "header")
         self.update_text("\n👤 INFORMAÇÕES BÁSICAS:", "bold")
         self.update_text(f"   Username: {data.get('username', 'N/A')}", "success")
         self.update_text(f"   User ID: {data.get('userID', 'N/A')}", "success")
@@ -248,18 +252,18 @@ class InstagramInvestigatorGUI:
         self.update_text(f"   WhatsApp Vinculado: {'Sim' if data.get('is_whatsapp_linked') else 'Não'}", 
                         "success" if data.get('is_whatsapp_linked') else "error")
 
-        self.update_text("\n🔗 OUTRAS INFORMAÇÕES:", "bold")
+        self.update_text("\n🔗OUTRAS INFORMAÇÕES:", "bold")
         if data.get('external_url'):
-            self.update_text(f"   URL Externa: {data['external_url']}", "#0606bf")
+            self.update_text(f" URL Externa: {data['external_url']}", "#0606bf")
         if data.get('biography'):
             bio = data['biography'][:100] + "..." if len(data.get('biography', '')) > 100 else data.get('biography', '')
-            self.update_text(f"   Biografia: {bio}", "#0606bf")
+            self.update_text(f"\n Biografia: {bio}", "#0606bf")
         if data.get('hd_profile_pic_url_info', {}).get('url'):
-            self.update_text(f"   Foto de Perfil: {data['hd_profile_pic_url_info']['url']}", "#0606bf")
+            self.update_text(f"\n Foto de Perfil: {data['hd_profile_pic_url_info']['url']}", "#0606bf")
 
-        self.update_text("\n"+"="*70, "header")
+        self.update_text("\n"+"="*106, "header")
         self.update_text(f"⏰ Investigação concluída em: {datetime.now().strftime('%d/%m/%Y %H:%M:%S')}", "header")
-        self.update_text("="*70, "header")
+        self.update_text("="*106, "header")
 
     def export_data(self):
         if not self.current_data:
