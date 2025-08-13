@@ -142,6 +142,9 @@ Imagem Geo Localizador
 📊 [**instagram investigador**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Instagram%20Investigar)
 instagram investigador
 
+🔏🗝️ [**Criptografia AES-256  e Criptografia AES-256**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Criptografia_AES-256)
+Criptografia AES-256  e Criptografia AES-256
+
 ---
 
 ## 🌟 Contribuições
