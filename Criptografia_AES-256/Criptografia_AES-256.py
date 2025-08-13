@@ -17,7 +17,7 @@ def gerar_chave():
     campo_chave_gerada.delete(0, tk.END)
     campo_chave_gerada.insert(0, chave_base64)
 
-    messagebox.showinfo("Chave Gerada", "Chave AES-256 gerada com sucesso!")
+    messagebox.showinfo("Gerada AES-256.txt ", "AES-256.txt  Gerada com sucesso!")
 
 # Função para criptografar usando a chave gerada
 def criptografar():
@@ -59,7 +59,12 @@ def salvar():
         messagebox.showwarning("Atenção", "Não há chave gerada para salvar.")
         return
 
-    caminho_mensagem = filedialog.asksaveasfilename(defaultextension=".txt", filetypes=[("Text files", "*.txt")], title="Salvar mensagem criptografada")
+    caminho_mensagem = filedialog.asksaveasfilename(
+        defaultextension=".txt",
+        filetypes=[("Text files", "*.txt")],
+        title="Salvar mensagem criptografada",
+        initialfile="chave.txt"
+   )
     if caminho_mensagem:
         with open(caminho_mensagem, "w") as f:
             f.write(criptografado_base64)
@@ -130,8 +135,8 @@ def descriptografar():
 
 # Interface gráfica
 janela = tk.Tk()
-janela.title("Criptografia AES-256")
-janela.geometry("920x800")
+janela.title("Criptografia AES-256  Descriptografar AES-256")
+janela.geometry("900x800")
 
 tk.Label(janela, text="Digite sua mensagem", font=("Arial", 12)).pack()
 entrada_mensagem = tk.Text(janela, width=90, height=10, font=("Arial", 12))
@@ -165,7 +170,7 @@ tk.Label(janela, text="Colar a chave manualmente ou selecionar o arquivo AES-256
 campo_chave_carregada = tk.Entry(janela, width=90, font=("Arial", 12))
 campo_chave_carregada.pack(pady=5)
 
-tk.Button(janela, text="Selecionar chave (AES-256.txt) e Descriptografar", command=carregar_chave, bg="#03fc24", fg="black", font=("Arial", 12)).pack(pady=10)
+tk.Button(janela, text="Selecionar (AES-256.txt) Descriptografar", command=carregar_chave, bg="#03fc24", fg="black", font=("Arial", 12)).pack(pady=10)
 
 tk.Label(janela, text="Mensagem Original (descriptografada)").pack()
 campo_decifrado = tk.Text(janela, width=90, height=10, state='disabled', font=("Arial", 12))
