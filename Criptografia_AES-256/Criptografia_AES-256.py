@@ -176,4 +176,4 @@ tk.Label(janela, text="Mensagem Original (descriptografada)").pack()
 campo_decifrado = tk.Text(janela, width=90, height=10, state='disabled', font=("Arial", 12))
 campo_decifrado.pack(pady=5)
 
-janela.mainloop()
+janela.mainloop() 
