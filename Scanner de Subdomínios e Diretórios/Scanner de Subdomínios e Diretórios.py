@@ -170,4 +170,4 @@ tk.Button(janela, text="Salvar Resultados", bg="#fcc603", fg="black", font=("Ari
 text_box = scrolledtext.ScrolledText(janela, width=120, height=33)
 text_box.pack(pady=5)
 
-janela.mainloop()
+janela.mainloop() 
