@@ -145,6 +145,9 @@ instagram investigador
 🔏🗝️ [**Criptografia AES-256  e Criptografia AES-256**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Criptografia_AES-256)
 Criptografia AES-256  e Criptografia AES-256
 
+🗝️ [**Criptografar Descriptografar Binário**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Criptografar%20Descriptografar%20Bin%C3%A1rio)
+Criptografar Descriptografar Binário
+
 ---
 
 ## 🌟 Contribuições
