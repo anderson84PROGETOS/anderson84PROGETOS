@@ -148,6 +148,9 @@ Criptografia AES-256  e Criptografia AES-256
 🗝️ [**Criptografar Descriptografar Binário**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Criptografar%20Descriptografar%20Bin%C3%A1rio)
 Criptografar Descriptografar Binário
 
+🖼️ [**Metadados Imagem GPS**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Metadados%20Imagem%20GPS)
+Metadados Imagem GPS
+
 ---
 
 ## 🌟 Contribuições
