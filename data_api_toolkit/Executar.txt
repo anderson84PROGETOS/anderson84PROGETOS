@@ -1,0 +1,29 @@
+https://github.com/pallets/flask/issues
+
+
+"/repos/pallets/flask/issues"
+
+
+fetch   Fetch data from an HTTP API salvar em JSON
+
+python3 data_api_toolkit.py fetch --api github --endpoint "/repos/pallets/flask/issues" --outfile repo.json
+
+
+
+Exportar para Parquet
+
+python3 data_api_toolkit.py export --infile repo.json --outfile repo.parquet
+
+python3 data_api_toolkit.py export --infile repo.json --outfile repo.csv
+
+
+Analyze → funciona com JSON, CSV ou Parquet
+
+# JSON
+python3 data_api_toolkit.py analyze --infile repo.json
+
+# CSV
+python3 data_api_toolkit.py analyze --infile repo.csv
+
+# Parquet
+python3 data_api_toolkit.py analyze --infile repo.parquet
