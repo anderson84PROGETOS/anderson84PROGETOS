@@ -3,7 +3,6 @@
 # instalar o   pip install pyarrow
 
 # ou instalar  pip install pyarrow  --break-system-packages
-
 """
 Kit de Ferramentas de Dados e API — um utilitário Python de arquivo único para:
 • Buscar dados de APIs HTTP (com novas tentativas, paginação e tratamento de limite de taxa)
