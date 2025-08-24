@@ -117,7 +117,7 @@ def abrir_url_no_chrome_anonima(event):
 
 # --- GUI ---
 root = tk.Tk()
-root.title("Busca Wikileaks")
+root.title("Buscar Wikileaks")
 root.geometry("1250x885")
 
 frame = tk.Frame(root)
