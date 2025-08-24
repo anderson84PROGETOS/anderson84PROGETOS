@@ -151,6 +151,9 @@ Criptografar Descriptografar Binário
 🖼️ [**Metadados Imagem GPS**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Metadados%20Imagem%20GPS)
 Metadados Imagem GPS
 
+🕵️ [**Buscar Wikileaks**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Busca%20Wikileaks)
+Buscar Wikileaks
+
 ---
 
 ## 🌟 Contribuições
