@@ -157,6 +157,9 @@ Buscar Wikileaks
 🕵️ [**data_api_toolkit**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/data_api_toolkit)
 data_api_toolkit
 
+🗃️ [**Scraper PDF**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Scraper%20PDF)
+Scraper PDF
+
 ---
 
 ## 🌟 Contribuições
