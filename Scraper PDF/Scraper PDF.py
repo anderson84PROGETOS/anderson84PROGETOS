@@ -22,7 +22,6 @@ def sanitize_filename(name: str) -> str:
     name = re.sub(r'[\\/:*?"<>|]', '_', name).strip()
     return name or 'arquivo.pdf'
 
-
 def filename_from_response(response, url: str) -> str:
     cd = response.headers.get('Content-Disposition', '')
     match = re.search(r"filename\*=(?:UTF-8'')?([^;\n]+)", cd)
@@ -39,7 +38,6 @@ def filename_from_response(response, url: str) -> str:
         fname += '.pdf'
 
     return sanitize_filename(fname)
-
 
 def process_url(user_url, max_pdfs, progress_callback):
     if not user_url.startswith(('http:', 'https:')):
@@ -75,10 +73,8 @@ def process_url(user_url, max_pdfs, progress_callback):
 
     return scrapped_urls
 
-
 def start_scraping_thread():
     threading.Thread(target=start_scraping, daemon=True).start()
-
 
 def start_scraping():
     global found_pdfs
@@ -114,7 +110,6 @@ def start_scraping():
     else:
         result_text.insert(tk.END, 'Nenhum PDF Encontrado.')
 
-
 def save_results():
     content = result_text.get(1.0, tk.END).strip()
     if not content:
@@ -127,10 +122,8 @@ def save_results():
             f.write(content)
         messagebox.showinfo('Salvo', f'Resultados salvos em: {file_path}')
 
-
 def download_pdfs_thread():
     threading.Thread(target=download_pdfs, daemon=True).start()
-
 
 def download_pdfs():
     if not found_pdfs:
@@ -178,7 +171,6 @@ def download_pdfs():
         root.update_idletasks()
 
     messagebox.showinfo('Download Concluído', f"Sucesso: {ok} | Falhas: {fail}\nPasta: {folder}")
-
 
 # ==== GUI Tkinter ====
 root = tk.Tk()
