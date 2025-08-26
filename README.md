@@ -163,6 +163,9 @@ Scraper PDF
 🕵️ 🔍 [**Advanced Vulnerability Scanner**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Advanced%20Vulnerability%20Scanner)
 Advanced Vulnerability Scanner
 
+🔍 [**Web Recon**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Web%20Recon)
+Web Recon
+
 ---
 
 ## 🌟 Contribuições
