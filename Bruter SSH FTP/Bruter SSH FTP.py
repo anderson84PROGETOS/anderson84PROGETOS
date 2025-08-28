@@ -234,3 +234,4 @@ log_text.tag_config("erro", foreground="purple")
 log_text.tag_config("info", foreground="blue")
 
 root.mainloop()
+ 
