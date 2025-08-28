@@ -139,4 +139,4 @@ tk.Button(root, text="Salvar Senha", bg="#f5ad05", fg="black", command=save_pass
 log_output = scrolledtext.ScrolledText(root, width=82, height=30)
 log_output.grid(row=6, column=0, columnspan=3, padx=10, pady=10)
 
-root.mainloop()
+root.mainloop() 
