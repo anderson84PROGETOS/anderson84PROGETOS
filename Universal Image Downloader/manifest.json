@@ -1,0 +1,23 @@
+{
+  "manifest_version": 3,
+  "name": "Universal Image Downloader",
+  "version": "1.0.0",
+  "description": "Liste e baixe imagens de qualquer site (menu de contexto e popup).",
+  "permissions": [
+    "downloads",
+    "contextMenus",
+    "activeTab",
+    "scripting",
+    "storage"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Universal Image Downloader"
+  }
+}
