@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Coletar URL Imagens</title>
+  <style>
+    body { font-family: Arial, sans-serif; width: 772px; padding: 10px; }
+    button { margin: 5px 0; padding: 5px; width: 100%; }
+    textarea { width: 100%; height: 350px; margin-top: 10px; }
+    #contador { margin-top: 5px; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h2>Imagens da Página</h2>
+  <button id="coletar">Coletar URL Imagens</button>
+  <button id="salvar">Salvar .txt</button>
+  <div id="contador">URL Encontradas: 0</div>
+  <textarea id="resultado" readonly></textarea>
+
+  <script src="popup.js"></script>
+</body>
+</html>
