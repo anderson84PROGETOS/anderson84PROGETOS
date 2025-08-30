@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Universal Image Downloader</title>
+  <style>
+    body { font-family: Arial, sans-serif; width: 420px; padding: 10px; }
+    h2 { margin: 0 0 8px; }
+    button { padding: 10px; font-size: 14px; margin: 6px 0; width: 100%; cursor: pointer; }
+    #status { margin-top: 8px; font-weight: bold; }
+    #grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 10px; }
+    .card { border: 1px solid #ddd; border-radius: 8px; padding: 6px; display: flex; flex-direction: column; align-items: center; }
+    .thumb { width: 100%; height: 90px; object-fit: cover; border-radius: 4px; }
+    .url { font-size: 10px; word-break: break-all; margin-top: 4px; }
+    .row { display:flex; gap:8px; }
+    .row > button { flex:1; }
+  </style>
+</head>
+<body>
+  <h2>Universal Image Downloader</h2>
+  <div class="row">
+    <button id="listar">Listar imagens desta página</button>
+    
+  </div>
+  <div class="row">
+    <button id="baixarSelecionadas">Baixar selecionadas</button>
+    <button id="copiarLinks">Copiar links</button>
+    <button id="desmarcarTodas">Desmarcar todas</button>
+  </div>
+  <div id="status">Pronto.</div>
+  <div id="grid"></div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>
