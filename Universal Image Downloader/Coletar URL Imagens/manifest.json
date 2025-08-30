@@ -1,0 +1,10 @@
+{
+  "manifest_version": 3,
+  "name": "Coletor de Imagens",
+  "version": "1.0",
+  "description": "Lista todas as URLs de imagens da página e permite salvar em .txt",
+  "permissions": ["activeTab", "scripting"],
+  "action": {
+    "default_popup": "popup.html"
+  }
+}
