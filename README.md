@@ -178,6 +178,9 @@ Baixar Imagens de URL
 🤳 [**Instagram Downloader imagem**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Instagram%20Downloader%20imagem)
 Instagram Downloader imagem
 
+🖼️ [**Extensões chrome**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Universal%20Image%20Downloader)
+Extensões chrome
+
 ---
 
 ## 🌟 Contribuições
