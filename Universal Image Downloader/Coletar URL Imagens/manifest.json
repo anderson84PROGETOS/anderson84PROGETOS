@@ -5,6 +5,25 @@
   "description": "Lista todas as URLs de imagens da página e permite salvar em .txt",
   "permissions": ["activeTab", "scripting"],
   "action": {
-    "default_popup": "popup.html"
-  }
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "imagem.png",
+      "48": "imagem.png",
+      "128": "imagem.png"
+    }
+  },
+  "icons": {
+    "16": "imagem.png",
+    "48": "imagem.png",
+    "128": "imagem.png"
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self';"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["js/jszip.min.js", "js/jsp.min.js"],
+      "matches": ["<all_urls>"]
+    }
+  ]
 }
