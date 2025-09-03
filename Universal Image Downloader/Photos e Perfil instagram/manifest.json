@@ -1,0 +1,42 @@
+{
+  "manifest_version": 3,
+  "name": "Photos e Perfil instagram",
+  "version": "1.0.0",
+  "description": "Liste e baixe imagens de qualquer site (menu de contexto e popup).",
+  "permissions": [
+    "downloads",
+    "contextMenus",
+    "activeTab",
+    "scripting",
+    "storage"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Photos e Perfil instagram",
+    "default_icon": {
+      "16": "imagem.png",
+      "48": "imagem.png",
+      "128": "imagem.png"
+    }
+  },
+  "icons": {
+    "16": "imagem.png",
+    "48": "imagem.png",
+    "128": "imagem.png"
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self';"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["js/jszip.min.js", "js/jsp.min.js"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}
