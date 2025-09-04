@@ -30,13 +30,13 @@ def buscar_cve_info(cve_id):
     response = requests.get(url, headers=headers)
 
     if response.status_code != 200:
-        print(Fore.LIGHTRED_EX + Style.BRIGHT + f"Erro ao acessar {url} (Status Code: {response.status_code})")
+        print(Fore.LIGHTRED_EX + Style.BRIGHT + f"\nErro ao acessar: {url} (Status Code: {response.status_code})")
         return
 
     try:
         data = response.json()
     except ValueError:
-        print(Fore.LIGHTRED_EX + Style.BRIGHT + "Erro ao interpretar a resposta como JSON.")
+        print(Fore.LIGHTRED_EX + Style.BRIGHT + "\nErro ao interpretar a resposta como JSON.")
         return
 
     print(Fore.LIGHTYELLOW_EX + Style.BRIGHT + f"\nInformações para: " + Fore.LIGHTGREEN_EX + Style.BRIGHT + f"{cve_id}\n")
@@ -51,7 +51,7 @@ def buscar_cve_info(cve_id):
         descricao_pt = GoogleTranslator(source='auto', target='pt').translate(descricao)
     except Exception as e:
         descricao_pt = "Erro na tradução automática."
-        print(Fore.LIGHTRED_EX + Style.BRIGHT + f"Erro ao traduzir: {e}")
+        print(Fore.LIGHTRED_EX + Style.BRIGHT + f"\nErro ao traduzir: {e}")
 
     print(Fore.LIGHTYELLOW_EX + Style.BRIGHT + "\nDescrição Traduzida (Português-BR)\n")
     print(Fore.LIGHTGREEN_EX + Style.BRIGHT + descricao_pt + "\n")
@@ -80,7 +80,7 @@ def buscar_cve_info(cve_id):
             cor = Fore.LIGHTMAGENTA_EX + Style.BRIGHT
         print(cor + Style.BRIGHT + f"\nNível de Severidade: {nivel}\n")
     except:
-        print(Fore.LIGHTRED_EX + Style.BRIGHT + + "\nNível de Severidade: Indefinido\n")
+        print(Fore.LIGHTRED_EX + Style.BRIGHT + "\nNível de Severidade: Indefinido\n")
 
     # Referências formatadas apenas com número e link
     referencias = data.get("references", [])
@@ -92,10 +92,10 @@ def buscar_cve_info(cve_id):
             print(Fore.LIGHTGREEN_EX + Style.BRIGHT + f"{i} = {ref}")
             print(Fore.LIGHTMAGENTA_EX + Style.BRIGHT + "-" * 75)
     else:
-        print(Fore.LIGHTRED_EX + Style.BRIGHT + + "Nenhuma referência encontrada.")
+        print(Fore.LIGHTRED_EX + Style.BRIGHT + "\nNenhuma referência encontrada.")
 
 if __name__ == "__main__":
-    cve = input(Fore.LIGHTGREEN_EX + Style.BRIGHT + "Digite a CVE (ex: 2006-3530): ").strip().upper()
+    cve = input(Fore.LIGHTGREEN_EX + Style.BRIGHT +"Digite a CVE (ex: 2006-3530): ").strip().upper()
     buscar_cve_info(cve)
 
 input(Fore.LIGHTRED_EX + Style.BRIGHT + "\n\n========== PRESSIONE ENTER PARA SAIR ==========\n")
