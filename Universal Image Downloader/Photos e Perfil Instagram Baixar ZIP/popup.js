@@ -98,7 +98,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       urls = result.sort((a,b)=>b.length-a.length);
       selected = new Set(urls);
-      setStatus(`Imagens encontradas: ${urls.length}`);
+      setStatus(`Todas imagens Encontradas: ${urls.length}`);
       render();
 
     } catch (err) {
@@ -153,7 +153,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       urls = result.sort((a,b)=>b.length-a.length);
       selected = new Set(urls);
-      setStatus(`TODAS as imagens encontradas: ${urls.length}`);
+      setStatus(`Imagens Encontradas: ${urls.length}`);
       render();
 
     } catch (err) {
@@ -197,7 +197,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (!selecionadas.length) { alert("Nenhuma imagem selecionada."); return; }
 
-    const content = `Imagens Encontradas: ${selecionadas.length}\n\n${selecionadas.join("\n\n")}`;
+    const content = `imagens Encontradas: ${selecionadas.length}\n\n${selecionadas.join("\n\n")}`;
     const blob = new Blob([content], { type: "text/plain" });
     const url = URL.createObjectURL(blob);
 
