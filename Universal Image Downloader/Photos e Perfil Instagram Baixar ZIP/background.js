@@ -1,16 +1,11 @@
 importScripts("js/jszip.min.js");
 
-// Menu de contexto
+// ---------- Menu de contexto ----------
 chrome.runtime.onInstalled.addListener(() => {
   chrome.contextMenus.create({
     id: "uid-download-image",
-    title: "Baixar esta imagem",
+    title: "⬇️ Baixar esta imagem",
     contexts: ["image"]
-  });
-  chrome.contextMenus.create({
-    id: "uid-download-link-image",
-    title: "Baixar imagem do link",
-    contexts: ["link"]
   });
 });
 
@@ -18,13 +13,9 @@ chrome.contextMenus.onClicked.addListener((info) => {
   if (info.menuItemId === "uid-download-image" && info.srcUrl) {
     downloadUrl(adjustUrl(info.srcUrl));
   }
-  if (info.menuItemId === "uid-download-link-image" && info.linkUrl) {
-    const isImg = /\.(png|jpe?g|gif|webp|bmp|svg|avif)(\?|#|$)/i.test(info.linkUrl);
-    if (isImg) downloadUrl(adjustUrl(info.linkUrl));
-  }
 });
 
-// Mensagens do popup
+// ---------- Mensagens do popup ----------
 chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
   if (req.type === "UID_DOWNLOAD_ZIP" && Array.isArray(req.urls)) {
     const tabId = sender.tab?.id;
@@ -58,6 +49,7 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
 // ---------- Utilitários ----------
 function adjustUrl(url) {
   try {
+    // Remove redimensionamento do Instagram (/s150x150/, /s320x320/, etc)
     return url.replace(/\/s\d+x\d+\//, "/");
   } catch (e) {
     return url;
@@ -84,12 +76,11 @@ function downloadUrl(url) {
   });
 }
 
-// ---------- Função ZIP completa ----------
+// ---------- Função ZIP ----------
 async function criarZip(urls, tabId) {
   try {
     if (!tabId) throw new Error("tabId não fornecido");
 
-    // Executa script na aba para pegar blobs como base64
     const [{ result }] = await chrome.scripting.executeScript({
       target: { tabId },
       func: async (urls) => {
@@ -113,10 +104,21 @@ async function criarZip(urls, tabId) {
             if (!/\.[a-z0-9]{2,5}$/i.test(name)) name += ".jpg";
             out.push({ name, data: base64 });
 
-            chrome.runtime.sendMessage({ type:"UID_ZIP_PROGRESS", url: urls[i], index:i+1, total:urls.length });
-          } catch(e) {
+            chrome.runtime.sendMessage({
+              type: "UID_ZIP_PROGRESS",
+              url: urls[i],
+              index: i + 1,
+              total: urls.length
+            });
+          } catch (e) {
             console.error("Falhou:", urls[i], e);
-            chrome.runtime.sendMessage({ type:"UID_ZIP_PROGRESS", url: urls[i], index:i+1, total:urls.length, failed:true });
+            chrome.runtime.sendMessage({
+              type: "UID_ZIP_PROGRESS",
+              url: urls[i],
+              index: i + 1,
+              total: urls.length,
+              failed: true
+            });
           }
         }
         return out;
@@ -127,17 +129,17 @@ async function criarZip(urls, tabId) {
     const zip = new JSZip();
     for (const file of result || []) {
       const base64 = file.data.split(",")[1];
-      zip.file(file.name, base64, { base64:true });
+      zip.file(file.name, base64, { base64: true });
     }
 
-    const base64zip = await zip.generateAsync({ type:"base64" });
+    const base64zip = await zip.generateAsync({ type: "base64" });
     chrome.downloads.download({
-      url:"data:application/zip;base64,"+base64zip,
-      filename:"imagens.zip",
-      saveAs:true
+      url: "data:application/zip;base64," + base64zip,
+      filename: "imagens.zip",
+      saveAs: true
     });
 
-  } catch(err) {
+  } catch (err) {
     console.error("Erro no criarZip:", err);
     throw err;
   }
