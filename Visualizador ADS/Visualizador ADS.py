@@ -87,4 +87,4 @@ texto.pack()
 # Variável global para armazenar o arquivo atual
 FIXED_FILE = None
 
-root.mainloop()
+root.mainloop() 
