@@ -110,4 +110,4 @@ text_area = scrolledtext.ScrolledText(root, width=145, height=30)
 text_area.pack(padx=10, pady=10)
 
 # Executa a interface
-root.mainloop()
+root.mainloop() 
