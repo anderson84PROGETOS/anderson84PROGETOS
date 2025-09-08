@@ -184,6 +184,9 @@ Extensões chrome
 🖼️ [**Visualizador ADS**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Visualizador%20ADS)
 Visualizador ADS
 
+🕸️ [**Calculadora de Hashes**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Calculadora%20de%20Hashes)
+Calculadora de Hashes
+
 ---
 
 ## 🌟 Contribuições
