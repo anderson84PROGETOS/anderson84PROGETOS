@@ -241,4 +241,4 @@ text_area.tag_config("ip", foreground="purple")
 text_area.tag_config("porta", foreground="red")
 text_area.tag_config("destaque", foreground="red", font=("Arial", 10, "bold"))
 
-root.mainloop()
+root.mainloop() 
