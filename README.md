@@ -78,9 +78,6 @@ Interface amigável com Tkinter para visualizar conexões de rede em tempo real.
 🔗 [**URL Tracking Tools**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/url%20tracking%20Tools)  
 Ferramentas para rastreamento de URLs, útil para campanhas, engenharia reversa e análise de redirecionamentos.
 
-🧠 [**NameChk – Verificador de Nomes de Usuário**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/namechk)  
-Ferramenta OSINT para verificar nomes de usuário em diversas plataformas online.
-
 📙 [**Editor de PDF**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Criador%20de%20PDF)  
 Ferramenta simples e útil para edição de arquivos PDF de forma prática e automatizada.
 
@@ -189,6 +186,9 @@ Calculadora de Hashes
 
 𒁈 [**Strings Hex**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Strings%20Hex)
 Strings Hex
+
+🧠 [**Social Searcher NameChk – Verificador de Nomes de Usuário**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/namechk)  
+Ferramenta OSINT para verificar nomes de usuário em diversas plataformas online. Social Searcher
 
 ---
 
