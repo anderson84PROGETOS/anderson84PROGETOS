@@ -227,4 +227,4 @@ progress.pack(pady=10)
 text_area = scrolledtext.ScrolledText(root, width=100, height=26, font=("Consolas", 12))
 text_area.pack(pady=10)
 
-root.mainloop()
+root.mainloop() 
