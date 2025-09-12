@@ -190,6 +190,9 @@ Strings Hex
 🧠 [**Social Searcher NameChk – Verificador de Nomes de Usuário**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/namechk)  
 Ferramenta OSINT para verificar nomes de usuário em diversas plataformas online. Social Searcher
 
+🖥️ ⌨️ [**DNS Recon*](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/DNS%20Recon)
+DNS Recon
+
 ---
 
 ## 🌟 Contribuições
