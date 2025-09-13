@@ -943,4 +943,4 @@ status_label = tk.Label(aba6, text="Aguardando ação...", fg="black", font=("Ar
 status_label.pack(pady=5)
 
 # Executa a interface
-root.mainloop()
+root.mainloop() 
