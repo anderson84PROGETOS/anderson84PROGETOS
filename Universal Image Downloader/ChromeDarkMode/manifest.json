@@ -1,0 +1,24 @@
+{
+  "manifest_version": 3,
+  "name": "Dark Mode com Botões",
+  "version": "1.0",
+  "description": "Ativar ou desativar Dark Mode com botões",
+  "permissions": ["activeTab", "scripting"],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Dark Mode",
+    "default_icon": {
+      "16": "imagem.png",
+      "48": "imagem.png",
+      "128": "imagem.png"
+    }
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "icons": {
+    "16": "imagem.png",
+    "48": "imagem.png",
+    "128": "imagem.png"
+  }
+}
