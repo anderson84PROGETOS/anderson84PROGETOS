@@ -196,6 +196,9 @@ DNS Recon
 ⌨️ [**Multi Tool**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Multi%20Tool)
 Multi Tool
 
+💽 [**Analisar Disco**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Analisar%20Disco)
+Analisar Disco
+
 ---
 
 ## 🌟 Contribuições
