@@ -89,6 +89,9 @@ def scan_disk_thread(folder):
     progress.stop()
     progress["value"] = 0
 
+    # Mensagem de conclusão
+    messagebox.showinfo("Concluído", "O escaneamento foi finalizado com sucesso!")
+
 # ---------- Função chamada ao clicar no botão ----------
 def scan_disk():
     folder = filedialog.askdirectory(title="Selecione o disco (ex: C:\\)")
@@ -139,4 +142,4 @@ text_area.tag_config("blue", foreground="blue")
 text_area.tag_config("green", foreground="green")
 text_area.tag_config("red", foreground="red")
 
-root.mainloop() 
+root.mainloop()
