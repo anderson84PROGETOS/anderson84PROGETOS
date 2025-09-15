@@ -139,4 +139,4 @@ text_area.tag_config("blue", foreground="blue")
 text_area.tag_config("green", foreground="green")
 text_area.tag_config("red", foreground="red")
 
-root.mainloop()
+root.mainloop() 
