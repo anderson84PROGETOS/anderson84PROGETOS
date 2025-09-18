@@ -199,6 +199,9 @@ Multi Tool
 💽 [**Analisar Disco**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Analisar%20Disco)
 Analisar Disco
 
+🔍 [**Scan Fuzz**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Scan%20Fuzz)
+Scan Fuzz
+
 ---
 
 ## 🌟 Contribuições
