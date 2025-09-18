@@ -205,6 +205,9 @@ Scanner de Subdomínios
 🔍 [**Scan Fuzz**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Scan%20Fuzz)
 Scan Fuzz
 
+🗝️ [**Descriptografar Binário**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Descriptografar%20Bin%C3%A1rio)
+Descriptografar Binário
+
 ---
 
 ## 🌟 Contribuições
