@@ -251,4 +251,4 @@ lbl_status = tk.Label(root, textvariable=status, anchor='w')
 lbl_status.pack(fill='x', padx=10, pady=(0, 10))
 
 root.minsize(700, 600)
-root.mainloop()
+root.mainloop() 
