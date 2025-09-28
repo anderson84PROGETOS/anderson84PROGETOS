@@ -208,6 +208,9 @@ Scan Fuzz
 🗝️ [**Descriptografar Binário**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Descriptografar%20Bin%C3%A1rio)
 Descriptografar Binário
 
+🔏 [**Brute Force PDF ZIP**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Brute%20Force%20PDF%20ZIP)
+Brute Force PDF ZIP
+
 ---
 
 ## 🌟 Contribuições
