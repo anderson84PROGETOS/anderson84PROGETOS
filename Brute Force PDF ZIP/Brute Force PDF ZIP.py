@@ -363,4 +363,4 @@ result_text.tag_config("success", foreground="green", font=("Courier", 10, "bold
 result_text.tag_config("error", foreground="red")
 
 # Run the GUI
-root.mainloop()
+root.mainloop() 
