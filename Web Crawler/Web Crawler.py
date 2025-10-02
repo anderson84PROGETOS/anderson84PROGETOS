@@ -118,11 +118,41 @@ def requisicao_whois(dominio):
         resultado = f"⚠️ Erro: {e}"
     finally:
         s.close()
-    # Remove linhas de comentário que começam com %
     resultado = "\n".join(l for l in resultado.splitlines() if not l.strip().startswith("%"))
-    # Extrai emails do WHOIS
     emails_whois = set(re.findall(r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}', resultado))
     return emails_whois
+
+# ---------------- Função para mostrar todos os resultados ----------------
+def mostrar_todos_resultados():
+    global links_encontrados, dominios, subdominios, emails_encontrados, telefones_encontrados
+
+    txt_output.insert(tk.END, "\n\n================ TODOS OS RESULTADOS =================\n\n")
+
+    txt_output.insert(tk.END, "\n====LINKS ENCONTRADOS ====\n")
+    for item in sorted(links_encontrados):
+        txt_output.insert(tk.END, item + "\n")
+    txt_output.insert(tk.END, "\n")
+
+    txt_output.insert(tk.END, "\n==== DOMÍNIOS ====\n")
+    for item in sorted(dominios):
+        txt_output.insert(tk.END, item + "\n")
+    txt_output.insert(tk.END, "\n")
+
+    txt_output.insert(tk.END, "\n==== SUBDOMÍNIOS ====\n")
+    for item in sorted(subdominios):
+        txt_output.insert(tk.END, item + "\n")
+    txt_output.insert(tk.END, "\n")
+
+    txt_output.insert(tk.END, "\n==== EMAILS ====\n")
+    for item in sorted(emails_encontrados):
+        txt_output.insert(tk.END, item + "\n")
+    txt_output.insert(tk.END, "\n")
+
+    txt_output.insert(tk.END, "\n==== TELEFONES ====\n")
+    for item in sorted(telefones_encontrados):
+        txt_output.insert(tk.END, item + "\n")
+    txt_output.insert(tk.END, "\n======================================================\n")
+    txt_output.see(tk.END)
 
 # ---------------- Função principal do rastreamento ----------------
 def rastrear_gui(start_url, headers, max_profundidade, mesmo_dominio, atraso, max_paginas, text_widget, progress):
@@ -160,11 +190,9 @@ def rastrear_gui(start_url, headers, max_profundidade, mesmo_dominio, atraso, ma
 
         soup = BeautifulSoup(html, "html.parser")
 
-        # Extrai emails e telefones do site
         emails_encontrados.update(extrair_emails(html, soup))
         telefones_encontrados.update(extrair_telefones(html))
 
-        # Extrai emails do WHOIS (apenas .br)
         dominio, sub = extrair_dominio_subdominio(url)
         if dominio and dominio.endswith(".br"):
             try:
@@ -214,6 +242,7 @@ def rastrear_gui(start_url, headers, max_profundidade, mesmo_dominio, atraso, ma
     progress['value'] = 100
     progress.update()
     messagebox.showinfo("Concluído", f"Rastreamento finalizado!\nLinks: {len(links_encontrados)}\nDomínios: {len(dominios)}\nSubdomínios: {len(subdominios)}\nEmails: {len(emails_encontrados)}\nTelefones: {len(telefones_encontrados)}")
+    mostrar_todos_resultados()
     progress['value'] = 0
 
 # ---------------- Função salvar resultados ----------------
