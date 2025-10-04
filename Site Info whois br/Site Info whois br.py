@@ -9,6 +9,7 @@ from tkinter import filedialog
 from tkinter import ttk
 from tkinter.scrolledtext import ScrolledText
 from datetime import datetime
+import webbrowser
 
 # Traduções completas para WHOIS registro.br
 traducoes_completas = {
@@ -192,11 +193,26 @@ class App:
         self.clear_btn = Button(frame, text="Limpar", bg="#fc9d03", fg="black", command=self.on_clear)
         self.clear_btn.grid(row=0, column=1, padx=6)
 
-        self.save_btn = Button(frame, text="Salvar relatório", bg="#03e8fc", fg="black", command=self.save_report)
+        self.save_btn = Button(frame, text="Salvar relatório", bg="#f54242", fg="black", command=self.save_report)
         self.save_btn.grid(row=0, column=2, padx=6)
+
+        # Novo botão para abrir no Google Maps
+        self.map_btn = Button(frame, text="Abrir no Google Maps", bg="#03e8fc", fg="black", command=self.open_map)
+        self.map_btn.grid(row=0, column=3, padx=6)
+        self.map_btn.config(state="disabled")
 
         self.text_area = ScrolledText(root, width=145, height=50)
         self.text_area.pack(pady=10)
+
+        self.last_coords = None
+
+    def open_map(self):
+        if self.last_coords:
+            lat, lon = self.last_coords
+            url = f"https://www.google.com/maps?q={lat},{lon}"
+            webbrowser.open(url)
+        else:
+            messagebox.showinfo("Google Maps", "Nenhuma coordenada disponível.")
 
     def on_clear(self):
         self.text_area.delete(1.0, END)
@@ -226,6 +242,8 @@ class App:
 
     def _run_lookup(self, domain: str):
         self.search_btn.config(state="disabled")
+        self.map_btn.config(state="disabled")
+        self.last_coords = None
         self.text_area.delete(1.0, END)
         self.text_area.insert(END, f"Consultando: {domain}\n\n")
         try:
@@ -251,15 +269,17 @@ class App:
         if ip_api:
             p(f"País: {ip_api.get('country')}, {ip_api.get('countryCode')}")
             p(f"Região/Estado: {ip_api.get('regionName')} ({ip_api.get('region')})")
-            p(f"Cidade: {ip_api.get('city')}")
-            p(f"Lat/Lon: {ip_api.get('lat')}, {ip_api.get('lon')}")
+            p(f"Cidade: {ip_api.get('city')}")           
+            self.last_coords = (ip_api.get('lat'), ip_api.get('lon'))
+            self.map_btn.config(state="normal")  # ✅ Ativa o botão Google Maps
             p(f"ISP: {ip_api.get('isp')}")
             p(f"Org: {ip_api.get('org')}")
             p(f"AS: {ip_api.get('as')}")
             p(f"Timezone: {ip_api.get('timezone')}")
+            p(f"\nLat/Lon: {ip_api.get('lat')}, {ip_api.get('lon')}")
             if ip_api.get('as'):
                 asn = ip_api.get('as').split()[0].replace("AS", "")
-                p(f"Detalhes AS: https://bgp.he.net/AS{asn}")
+                p(f"\nDetalhes AS: https://bgp.he.net/AS{asn}")
         else:
             if 'ip_api_error' in r:
                 p(f"ip-api error: {r.get('ip_api_error')}")
