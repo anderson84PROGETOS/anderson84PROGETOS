@@ -211,6 +211,9 @@ Descriptografar Binário
 🔏 [**Brute Force PDF ZIP**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Brute%20Force%20PDF%20ZIP)
 Brute Force PDF ZIP
 
+🗝️ [**Passe Chrome**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Chrome%20Pass)
+Passe Chrome
+
 ---
 
 ## 🌟 Contribuições
