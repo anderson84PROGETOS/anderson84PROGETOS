@@ -258,4 +258,4 @@ if __name__ == "__main__":
     root = tk.Tk()
     root.state("zoomed")
     app = VisualizadorHistoricoChrome(root)
-    root.mainloop()
+    root.mainloop() 
