@@ -254,7 +254,6 @@ class VisualizadorHistoricoChrome:
         except Exception as erro:
             messagebox.showerror("Erro", f"Erro ao salvar arquivo\n{erro}")
 
-
 if __name__ == "__main__":
     root = tk.Tk()
     root.state("zoomed")
