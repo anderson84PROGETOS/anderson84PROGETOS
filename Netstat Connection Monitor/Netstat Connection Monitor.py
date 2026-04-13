@@ -22,7 +22,7 @@ class NetstatGUI:
 
         tk.Label(top_frame, text="Buscar:").pack(side="left")
 
-        self.busca_entry = tk.Entry(top_frame)
+        self.busca_entry = tk.Entry(top_frame, width=30)
         self.busca_entry.pack(side="left", padx=5)
         self.busca_entry.bind("<KeyRelease>", lambda e: self.filtrar())
 
@@ -32,12 +32,19 @@ class NetstatGUI:
         self.status_combo = ttk.Combobox(
             top_frame,
             textvariable=self.status_var,
+            width=30,  # 👈 aumenta aqui
             values=[
                 "TODOS",
                 "ESCUTANDO",
                 "ESTABELECIDA",
                 "TEMPO_ESPERA",
                 "AGUARDANDO_FECHAMENTO",
+                "CONECTANDO",
+                "RECEBENDO_CONEXAO",
+                "FINALIZANDO_1",
+                "FINALIZANDO_2",
+                "ULTIMO_ACK",
+                "FECHANDO",
                 "SEM_STATUS"
             ]
         )
@@ -87,6 +94,9 @@ class NetstatGUI:
 
         self.tree.bind("<<TreeviewSelect>>", self.mostrar_caminho)
 
+        # 🆕 DUPLO CLIQUE PARA COPIAR
+        self.tree.bind("<Double-1>", self.copiar_celula)
+
         # 📄 CAMINHO
         self.caminho_label = tk.Label(root, text="Caminho do arquivo:", anchor="w")
         self.caminho_label.pack(fill="x", padx=10, pady=5)
@@ -95,7 +105,7 @@ class NetstatGUI:
         botoes = tk.Frame(root)
         botoes.pack(pady=5)
 
-        tk.Button(botoes, text="Copiar", bg="#03e8fc", command=self.copiar_caminho).grid(row=0, column=0, padx=5)
+        tk.Button(botoes, text="Copiar o Caminho", bg="#03e8fc", command=self.copiar_caminho).grid(row=0, column=0, padx=5)
         tk.Button(botoes, text="Salvar TXT", bg="#fc9d03", command=self.salvar_txt).grid(row=0, column=1, padx=5)
         tk.Button(botoes, text="Salvar Excel", bg="#6a5acd", fg="white", command=self.salvar_excel).grid(row=0, column=2, padx=5)
         tk.Button(botoes, text="Atualizar", bg="#03fc0b", command=self.atualizar).grid(row=0, column=3, padx=5)
@@ -106,12 +116,35 @@ class NetstatGUI:
 
         self.carregar_conexoes()
 
+    # 🆕 COPIAR CELULA
+    def copiar_celula(self, event):
+        item = self.tree.identify_row(event.y)
+        coluna = self.tree.identify_column(event.x)
+
+        if not item:
+            return
+
+        valores = self.tree.item(item, "values")
+        col_index = int(coluna.replace("#", "")) - 1
+
+        if col_index < len(valores):
+            valor = str(valores[col_index])
+            self.root.clipboard_clear()
+            self.root.clipboard_append(valor)
+            messagebox.showinfo("Copiado", f"Valor copiado:\n{valor}")
+
     def traduzir_status(self, status):
         mapa = {
             "LISTEN": "ESCUTANDO",
             "ESTABLISHED": "ESTABELECIDA",
             "TIME_WAIT": "TEMPO_ESPERA",
             "CLOSE_WAIT": "AGUARDANDO_FECHAMENTO",
+            "SYN_SENT": "CONECTANDO",
+            "SYN_RECV": "RECEBENDO_CONEXAO",
+            "FIN_WAIT1": "FINALIZANDO_1",
+            "FIN_WAIT2": "FINALIZANDO_2",
+            "LAST_ACK": "ULTIMO_ACK",
+            "CLOSING": "FECHANDO",
             "NONE": "SEM_STATUS"
         }
         return mapa.get(status, status)
@@ -213,7 +246,6 @@ class NetstatGUI:
 
         messagebox.showinfo("Sucesso", "Arquivo salvo!")
 
-    # 📊 NOVO: SALVAR EXCEL
     def salvar_excel(self):
         caminho = filedialog.asksaveasfilename(defaultextension=".xlsx")
 
@@ -226,7 +258,6 @@ class NetstatGUI:
 
         headers = ["Processo", "Porta", "Endereço", "PID", "Status", "Classificação", "Caminho"]
 
-        # Estilo cabeçalho
         header_fill = PatternFill(start_color="000000", end_color="000000", fill_type="solid")
         header_font = Font(color="FFFFFF", bold=True)
 
@@ -236,20 +267,17 @@ class NetstatGUI:
             cell.font = header_font
             cell.alignment = Alignment(horizontal="center")
 
-        # Dados
         for row_idx, item in enumerate(self.tree.get_children(), start=2):
             valores = self.tree.item(item)["values"]
 
             for col_idx, valor in enumerate(valores, start=1):
                 cell = ws.cell(row=row_idx, column=col_idx, value=valor)
 
-                # Cor por classificação
                 if valores[5] == "Suspeito":
                     cell.fill = PatternFill(start_color="FF9999", end_color="FF9999", fill_type="solid")
                 else:
                     cell.fill = PatternFill(start_color="CCFFCC", end_color="CCFFCC", fill_type="solid")
 
-        # Ajustar largura automática
         for col in ws.columns:
             max_length = 0
             col_letter = col[0].column_letter
