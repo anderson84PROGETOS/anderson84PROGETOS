@@ -116,7 +116,73 @@ ANIMAIS = {
 
 # 🔥 categorização
 def format_cat(cat, name):
-    name = name.lower()
+    name = name.lower()    
+
+# 🥷 GHILLIE SYSTEM COMPLETO
+
+    # 🧥 ATTACHMENT
+    if "ghillieatt" in name:
+        if "mossy" in name:
+            return "🟢 Anexo Ghillie - Floresta"
+        if "tan" in name:
+            return "🟤 Anexo Ghillie - Deserto"
+        if "winter" in name:
+            return "⚪ Anexo Ghillie - Neve"
+        if "woodland" in name:
+            return "🌲 Anexo Ghillie - Mata Fechada"
+        return "🧥 Anexo Ghillie"
+
+
+    # 🧢 CAPUZ
+    if "ghilliehood" in name:
+        if "mossy" in name:
+            return "🟢 Capuz Ghillie - Floresta"
+        if "tan" in name:
+            return "🟤 Capuz Ghillie - Deserto"
+        if "winter" in name:
+            return "⚪ Capuz Ghillie - Neve"
+        if "woodland" in name:
+            return "🌲 Capuz Ghillie - Mata Fechada"
+        return "🧢 Capuz Ghillie"
+
+
+    # 🥋 TRAJE COMPLETO
+    if "ghilliesuit" in name:
+        if "mossy" in name:
+            return "🟢 Traje Ghillie - Floresta"
+        if "tan" in name:
+            return "🟤 Traje Ghillie - Deserto"
+        if "winter" in name:
+            return "⚪ Traje Ghillie - Neve"
+        if "woodland" in name:
+            return "🌲 Traje Ghillie - Mata Fechada"
+        return "🥋 Traje Ghillie"
+
+
+    # 👕 PARTE SUPERIOR
+    if "ghillietop" in name:
+        if "mossy" in name:
+            return "🟢 Parte Superior Ghillie - Floresta"
+        if "tan" in name:
+            return "🟤 Parte Superior Ghillie - Deserto"
+        if "winter" in name:
+            return "⚪ Parte Superior Ghillie - Neve"
+        if "woodland" in name:
+            return "🌲 Parte Superior Ghillie - Mata Fechada"
+        return "👕 Parte Superior Ghillie"
+
+
+    # 🥷 BUSHRAG (capa de vegetação)
+    if "ghilliebushrag" in name:
+        if "mossy" in name:
+            return "🟢 Bushrag Ghillie - Floresta"
+        if "tan" in name:
+            return "🟤 Bushrag Ghillie - Deserto"
+        if "winter" in name:
+            return "⚪ Bushrag Ghillie - Neve"
+        if "woodland" in name:
+            return "🌲 Bushrag Ghillie - Mata Fechada"
+        return "🥷 Bushrag Ghillie"
 
     # 🔑 chaves (colocar acima)
     if any(x in name for x in ["key", "dimplekey"]):
@@ -297,29 +363,31 @@ class App:
 
         Button(top, text="Abrir XML",
                bg="#00aa66", fg="black",
+               font=("Arial", 10, "bold"),
                command=self.load_xml).pack(side=LEFT, padx=5, pady=5)
 
-        Button(top, text="Salvar XML",
-               bg="#444", fg="white",
+        Button(top,text="Salvar XML", 
+               bg="#fc054f", fg="black",
+               font=("Arial", 10, "bold"),
                command=self.save_xml).pack(side=LEFT, padx=5)
 
         # ✅ BOTÃO COPIAR (AGORA NO LUGAR CERTO)
         Button(top, text="📋 Copiar Item",
-               bg="#0088ff", fg="white",
+               bg="#05fafa", fg="black",
+               font=("Arial", 10, "bold"),
                command=self.copy_selected).pack(side=LEFT, padx=5)
 
         self.search_var = StringVar()
 
         Entry(top,
-              textvariable=self.search_var,
-              bg="#111",
-              fg="white",
-              insertbackground="white").pack(side=LEFT, fill=X, expand=True, padx=10)
+            textvariable=self.search_var, bg="#ffffff", fg="black", insertbackground="black", font=("Arial", 12, "bold"),
+            width=60
+            ).pack(side=LEFT, padx=10)
 
         self.search_var.trace_add("write", self.filter_items)
 
-        self.count_label = Label(top, text="0 itens", bg="#000", fg="white")
-        self.count_label.pack(side=RIGHT, padx=10)
+        self.count_label = Label(top, text="0 itens", bg="#000", fg="white",font=("Arial", 12, "bold"))
+        self.count_label.pack(side=RIGHT, padx=(0, 230))
 
         # 📋 TABELA
         frame = Frame(root, bg="#000")
@@ -453,7 +521,7 @@ class App:
 
         def field(label, value):
             Label(win, text=label, bg="#111", fg="white").pack()
-            e = Entry(win, bg="#222", fg="white")
+            e = Entry(win, bg="#05f244", fg="#020303", font=("Arial", 14, "bold"))
             e.insert(0, value)
             e.pack(fill=X, padx=20, pady=3)
             return e
@@ -467,25 +535,30 @@ class App:
         def salvar():
             if item["node"].find("nominal") is not None:
                 item["node"].find("nominal").text = nominal.get()
+                item["nominal"] = nominal.get()
 
             if item["node"].find("min") is not None:
                 item["node"].find("min").text = min_v.get()
+                item["min"] = min_v.get()
 
             if item["node"].find("max") is not None:
                 item["node"].find("max").text = max_v.get()
+                item["max"] = max_v.get()
 
             if item["node"].find("lifetime") is not None:
                 item["node"].find("lifetime").text = lifetime.get()
+                item["lifetime"] = lifetime.get()
 
             if item["node"].find("restock") is not None:
                 item["node"].find("restock").text = restock.get()
+                item["restock"] = restock.get()
 
             self.update_table()
             messagebox.showinfo("Sucesso", "Item atualizado com sucesso!")
             win.destroy()
 
-        Button(win, text="Salvar", bg="#00aa66", fg="black", command=salvar).pack(pady=10)
-        Button(win, text="Cancelar", bg="#444", fg="white", command=win.destroy).pack()
+        Button(win, text="Salvar", bg="#00aa66", fg="black", font=("Arial", 10, "bold"), command=salvar).pack(pady=10)
+        Button(win, text="Cancelar", bg="#444", fg="white", font=("Arial", 10, "bold"), command=win.destroy).pack()
 
     def save_xml(self):
         if not self.tree_xml:
