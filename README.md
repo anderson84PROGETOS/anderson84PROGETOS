@@ -214,6 +214,9 @@ Brute Force PDF ZIP
 🗝️ [**Passe Chrome**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Chrome%20Pass)
 Passe Chrome
 
+🗝️ [**Passe Chrome**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/PROGRAMAS%20INSTALADOS%20WINDOWS)
+Programas windows 10
+
 ---
 
 ## 🌟 Contribuições
