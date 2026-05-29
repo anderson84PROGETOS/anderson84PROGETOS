@@ -228,7 +228,7 @@ class SecretScanner:
 
             r"authorization",
 
-            r"eyJ[A-Za-z0-9_\-]+\.[A-Za-z0-9_\-]+\.[A-Za-z0-9_\-]+"
+            r"eyJ[A-Za-z0-9_\-]+\.[A-Za-z0-9_\-]+\.[A-Za-z0-9_\-]+",
 
             # =====================================================
             # SENHAS / TOKENS
