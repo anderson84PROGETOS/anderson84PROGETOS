@@ -1,0 +1,300 @@
+import warnings
+import logging
+
+# Oculta TODOS os warnings
+warnings.simplefilter("ignore")
+
+# Oculta logs do Scapy
+logging.getLogger("scapy").setLevel(logging.CRITICAL)
+logging.getLogger("scapy.runtime").setLevel(logging.CRITICAL)
+
+# Somente depois importe o Scapy
+from scapy.all import sniff
+from scapy.layers.dns import DNSQR
+
+import tkinter as tk
+from tkinter import scrolledtext, filedialog, messagebox
+from scapy.all import sniff
+from scapy.layers.dns import DNSQR
+import threading
+from datetime import datetime
+import socket
+import subprocess
+import re
+
+capturando = False
+dominios_vistos = set()
+contador = 0
+
+def adicionar_log(texto):
+    output.after(
+        0,
+        lambda: (
+            output.insert(tk.END, texto + "\n"),
+            output.see(tk.END)
+        )
+    )
+
+
+def processar_pacote(pkt):
+    global contador
+
+    if not pkt.haslayer(DNSQR):
+        return
+
+    try:
+        dominio = pkt[DNSQR].qname.decode(
+            "utf-8",
+            errors="ignore"
+        ).rstrip(".")
+
+        # Evita repetir o mesmo domínio
+        if dominio in dominios_vistos:
+            return
+
+        dominios_vistos.add(dominio)
+
+        try:
+            ip = socket.gethostbyname(dominio)
+        except Exception:
+            ip = "IP não resolvido"
+
+        contador += 1
+
+        data_hora = datetime.now().strftime(
+            "%d/%m/%Y %H:%M:%S"
+        )
+
+        adicionar_log(
+            f"[{contador}] DATA: {data_hora}\n"
+            f"    SITE: {dominio}\n"
+            f"    IP  : {ip}\n"
+            f"{'=' * 80}"
+        )
+
+    except Exception as e:
+        adicionar_log(f"ERRO: {e}")
+
+
+def captura_dns():
+    global capturando
+
+    while capturando:
+        sniff(
+            filter="udp port 53",
+            prn=processar_pacote,
+            store=False,
+            timeout=1
+        )
+
+
+def iniciar():
+    global capturando
+
+    if capturando:
+        return
+
+    capturando = True
+
+    threading.Thread(
+        target=captura_dns,
+        daemon=True
+    ).start()
+
+    adicionar_log(
+        f"\n[+] Monitor iniciado em "
+        f"{datetime.now().strftime('%d/%m/%Y %H:%M:%S')}\n"
+    )
+
+
+def parar():
+    global capturando
+
+    capturando = False
+
+    adicionar_log(
+        f"\n[-] Monitor parado em "
+        f"{datetime.now().strftime('%d/%m/%Y %H:%M:%S')}\n"
+    )
+
+
+def limpar():
+    global contador
+
+    contador = 0
+    dominios_vistos.clear()
+
+    output.delete(1.0, tk.END)
+
+    output.insert(
+        tk.END,
+        "=== DNS MONITOR ===\n"
+        "Aguardando captura...\n\n"
+    )
+
+
+def salvar_txt():
+    try:
+        caminho = filedialog.asksaveasfilename(
+            title="Salvar relatório DNS",
+            defaultextension=".txt",
+            filetypes=[
+                ("Arquivo TXT", "*.txt"),
+                ("Todos os arquivos", "*.*")
+            ]
+        )
+
+        if not caminho:
+            return
+
+        with open(
+            caminho,
+            "w",
+            encoding="utf-8"
+        ) as arquivo:
+
+            arquivo.write(
+                "========================================\n"
+            )
+            arquivo.write(
+                "DNS MONITOR\n"
+            )
+            arquivo.write(
+                f"Gerado em: "
+                f"{datetime.now().strftime('%d/%m/%Y %H:%M:%S')}\n"
+            )
+            arquivo.write(
+                "========================================\n\n"
+            )
+
+            arquivo.write(
+                output.get(
+                    1.0,
+                    tk.END
+                )
+            )
+
+        messagebox.showinfo(
+            "Sucesso",
+            f"Arquivo salvo com sucesso!\n\n{caminho}"
+        )
+
+    except Exception as e:
+        messagebox.showerror(
+            "Erro",
+            f"Falha ao salvar:\n{e}"
+        )
+
+def abrir_virustotal(event):
+    try:
+        indice = output.index(f"@{event.x},{event.y}")
+
+        linha = output.get(f"{indice} linestart", f"{indice} lineend").strip()
+
+        chrome = (r"C:\Program Files\Google\Chrome\Application\chrome.exe")
+
+        if "IP  :" in linha:
+
+            ip = linha.split("IP  :")[1].strip()
+
+            if ip == "IP não resolvido":
+                return
+
+            url = (f"https://www.virustotal.com/gui/ip-address/{ip}")
+
+            subprocess.Popen([chrome, "--incognito",url])
+
+        elif "SITE:" in linha:
+
+            dominio = linha.split("SITE:")[1].strip()
+
+            url = (f"https://www.virustotal.com/gui/domain/{dominio}")
+
+            subprocess.Popen([chrome, "--incognito", url])
+
+    except Exception:
+        pass
+
+# ======================
+# INTERFACE
+# ======================
+
+root = tk.Tk()
+
+root.title("Analisador DNS em Tempo Real Virus Total Scan")
+root.geometry("1200x800")
+root.state("zoomed")
+root.configure(bg="black")
+
+titulo = tk.Label(root, text="Analisador DNS em Tempo Real Virus Total Scan", font=("Consolas", 24, "bold"), bg="black", fg="#00FF00")
+
+titulo.pack(pady=10)
+
+subtitulo = tk.Label(root, text="Virus Total Scan - Clique Duas Vezes no IP ou no Site: www.google.com  Para Abrir e Análisar", font=("Consolas", 12, "bold"), bg="black", fg="#00FFFF")
+
+subtitulo.pack(pady=(0, 10))
+
+frame = tk.Frame(root, bg="black")
+
+frame.pack(pady=5)
+
+btn_iniciar = {
+    "font": ("Consolas", 11, "bold"),
+    "bg": "#00AA00",      # Verde
+    "fg": "black",
+    "activebackground": "#008800",
+    "activeforeground": "white",
+    "width": 15,
+    "bd": 1,
+    "cursor": "hand2"
+}
+
+btn_parar = {
+    "font": ("Consolas", 11, "bold"),
+    "bg": "#CC0000",      # Vermelho
+    "fg": "black",
+    "activebackground": "#990000",
+    "activeforeground": "white",
+    "width": 15,
+    "bd": 1,
+    "cursor": "hand2"
+}
+
+btn_limpar = {
+    "font": ("Consolas", 11, "bold"),
+    "bg": "#FF8800",      # Laranja
+    "fg": "black",
+    "activebackground": "#CC6600",
+    "activeforeground": "white",
+    "width": 15,
+    "bd": 1,
+    "cursor": "hand2"
+}
+
+btn_salvar = {
+    "font": ("Consolas", 11, "bold"),
+    "bg": "#0066CC",      # Azul
+    "fg": "black",
+    "activebackground": "#004C99",
+    "activeforeground": "white",
+    "width": 15,
+    "bd": 1,
+    "cursor": "hand2"
+}
+
+tk.Button(frame, text="INICIAR", command=iniciar, **btn_iniciar).grid(row=0, column=0, padx=10)
+
+tk.Button(frame, text="PARAR", command=parar, **btn_parar).grid(row=0, column=1, padx=10)
+
+tk.Button(frame, text="LIMPAR", command=limpar, **btn_limpar).grid(row=0, column=2, padx=10)
+
+tk.Button(frame, text="SALVAR TXT", command=salvar_txt, **btn_salvar).grid(row=0, column=3, padx=10)
+
+output = scrolledtext.ScrolledText(root, wrap=tk.WORD, bg="black", fg="#00FF00", insertbackground="#00FF00", font=("Consolas", 11))
+
+output.pack(fill="both", expand=True, padx=10, pady=10)
+
+output.bind("<Double-Button-1>", abrir_virustotal)
+
+root.mainloop()
+
