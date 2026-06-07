@@ -10,7 +10,6 @@ import threading
 import re
 import random
 
-
 class NetworkAnalyzerGUI:
     def __init__(self, root):
         self.root = root
