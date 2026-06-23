@@ -835,4 +835,4 @@ progresso_texto_hex = ttk.Progressbar(aba4, orient='horizontal', mode='determina
                                       length=700, style="Green.Horizontal.TProgressbar")
 progresso_texto_hex.pack(pady=10)
 
-root.mainloop()
+root.mainloop() 
