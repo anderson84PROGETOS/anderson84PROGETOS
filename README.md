@@ -220,6 +220,9 @@ Programas windows 10
 🖥️ [**Monitor DNS em Tempo Real**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Monitor%20DNS%20em%20Tempo%20Real)
 Monitor DNS em Tempo Real
 
+🗝️🔏 [**Advanced Hash Base64 Hex File Security Toolkit**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Advanced%20Hash%20Base64%20Hex%20File%20Security%20Toolkit)
+Advanced Hash Base64 Hex File Security Toolkit
+
 ---
 
 ## 🌟 Contribuições
