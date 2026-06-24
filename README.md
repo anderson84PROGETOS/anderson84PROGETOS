@@ -226,6 +226,12 @@ Advanced Hash Base64 Hex File Security Toolkit
 🕵️🕵️ [**CNPJ CONSULTAR**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/CNPJ%20CONSULTAR)
 CNPJ CONSULTAR
 
+🕵️ [**HEADER PROBE ANONYMOUS**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/HEADER%20PROBE%20%20ANONYMOUS)
+HEADER PROBE ANONYMOUS
+
+🔍 [**SCANNER WEBSITE**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/SCANNER%20WEBSITE)
+SCANNER WEBSITE
+
 ---
 
 ## 🌟 Contribuições
