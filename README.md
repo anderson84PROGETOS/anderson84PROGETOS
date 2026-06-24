@@ -223,6 +223,9 @@ Monitor DNS em Tempo Real
 🗝️🔏 [**Advanced Hash Base64 Hex File Security Toolkit**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Advanced%20Hash%20Base64%20Hex%20File%20Security%20Toolkit)
 Advanced Hash Base64 Hex File Security Toolkit
 
+🕵️🕵️ [**CNPJ CONSULTAR**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/CNPJ%20CONSULTAR)
+CNPJ CONSULTAR
+
 ---
 
 ## 🌟 Contribuições
