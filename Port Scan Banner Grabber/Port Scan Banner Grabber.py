@@ -6,7 +6,6 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 import random
 from datetime import datetime
 
-
 class NmapSimulator:
     def __init__(self, root):
         self.root = root
