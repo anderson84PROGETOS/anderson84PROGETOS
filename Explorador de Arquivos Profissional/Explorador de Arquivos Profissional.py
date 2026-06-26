@@ -321,7 +321,6 @@ class ProfessionalFileExplorer:
         except Exception as e:
             self.status.config(text=f"❌ Erro: {e}")
 
-
 if __name__ == "__main__":
     root = tk.Tk()
     app = ProfessionalFileExplorer(root)
