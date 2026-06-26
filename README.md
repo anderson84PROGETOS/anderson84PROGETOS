@@ -247,6 +247,9 @@ DIRECTORY BRUTEFORCE
 📠 [***SUBDOMAIN SCANNER***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/SUBDOMAIN%20SCANNER)
 SUBDOMAIN SCANNER
 
+🗃️ [***Explorador de Arquivos Profissional***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Explorador%20de%20Arquivos%20Profissional)
+Explorador de Arquivos Profissional
+
 ---
 
 ## 🌟 Contribuições
