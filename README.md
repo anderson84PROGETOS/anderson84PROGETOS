@@ -250,6 +250,9 @@ SUBDOMAIN SCANNER
 🗃️ [***Explorador de Arquivos Profissional***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Explorador%20de%20Arquivos%20Profissional)
 Explorador de Arquivos Profissional
 
+🎪 [***WAYBACK MACHINE URL CAPTURATOR***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/WAYBACK%20MACHINE%20URL%20CAPTURATOR)
+WAYBACK MACHINE URL CAPTURATOR
+
 ---
 
 ## 🌟 Contribuições
