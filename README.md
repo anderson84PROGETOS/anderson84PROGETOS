@@ -253,6 +253,10 @@ Explorador de Arquivos Profissional
 🎪 [***WAYBACK MACHINE URL CAPTURATOR***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/WAYBACK%20MACHINE%20URL%20CAPTURATOR)
 WAYBACK MACHINE URL CAPTURATOR
 
+📂🗂️ [***BUSCADOR DE ARQUIVOS .TXT***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/BUSCADOR%20DE%20ARQUIVOS%20.TXT)
+BUSCADOR DE ARQUIVOS .TXT
+
+
 ---
 
 ## 🌟 Contribuições
