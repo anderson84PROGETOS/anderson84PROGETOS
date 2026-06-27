@@ -14,7 +14,6 @@ def clean_url(url):
     url = url.rstrip('/')
     return url
 
-
 def search_wayback_machine(from_year=None, to_year=None):
     search_button["state"] = "disabled"
     period_button["state"] = "disabled"
