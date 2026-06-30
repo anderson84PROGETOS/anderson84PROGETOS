@@ -226,3 +226,4 @@ class HackerWiFiScanner:
 if __name__ == "__main__":
     app = HackerWiFiScanner()
     app.root.mainloop()
+ 
