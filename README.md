@@ -66,7 +66,7 @@ Script para listar as senhas de redes Wi-Fi salvas no sistema.
 🎯 [**Favicon Hash Finder**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/blob/meu-progetos/Favicon%20hash/Favicon%20hash.py)  
 Gera o hash de favicons para uso em reconhecimento de tecnologias com ferramentas como Shodan.
 
-🌐 [**WHOIS Consulta**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/blob/meu-progetos/whois%20br/whois%20br.py)  
+🌐 [**WHOIS Consulta**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/whois%20br) 
 Script para buscar e traduzir informações WHOIS em português.
 
 🔐 [**Wayback Machine**](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Wayback)
