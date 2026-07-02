@@ -262,6 +262,10 @@ BUSCADOR DE ARQUIVOS MULTI-TIPOS
 🎯 [***WIFI SCANNER***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/WIFI%20SCANNER)
 WIFI SCANNER
 
+👨‍💻 [***Programas o Windows 10***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Programas%20o%20Windows%2010)
+Programas o Windows 10
+
+
 ---
 
 ## 🌟 Contribuições
