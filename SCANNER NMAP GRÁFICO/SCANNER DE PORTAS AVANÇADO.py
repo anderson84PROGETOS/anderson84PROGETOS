@@ -3,7 +3,7 @@ from tkinter import ttk, scrolledtext, messagebox, simpledialog, filedialog
 import subprocess
 import threading
 import re
-from datetime import datetime
+from datetime import datetime 
 
 class ZenmapClone:
     def __init__(self):
