@@ -5,7 +5,7 @@ import tkinter as tk
 from tkinter import ttk, scrolledtext, messagebox, filedialog
 from datetime import datetime
 
-# =========================================================
+# ========================================================= 
 # VARIÁVEIS GLOBAIS
 # =========================================================
 
