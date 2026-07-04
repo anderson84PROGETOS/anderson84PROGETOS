@@ -3,7 +3,7 @@ import warnings
 import sys
 import io
 
-# ====================== SUPRESSÃO DE AVISOS ======================
+# ====================== SUPRESSÃO DE AVISOS ====================== 
 os.environ["SCAPY_NO_WIRESHARK"] = "1"
 warnings.filterwarnings("ignore")
 try:
