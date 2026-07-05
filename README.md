@@ -280,6 +280,10 @@ MONITOR DE LOGS WINDOWS
 🗝️ 🔏 [***WIFI VIEWER PASSWORD***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/WIFI%20VIEWER%20PASSWORD)
 WIFI VIEWER PASSWORD
 
+🔍🔎 [***WHOIS Avançado  CNPJ***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/WHOIS%20Avan%C3%A7ado%20%20CNPJ)
+WHOIS Avançado CNPJ
+
+
 ---
 
 ## 🌟 Contribuições
