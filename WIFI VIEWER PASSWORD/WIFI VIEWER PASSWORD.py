@@ -188,4 +188,4 @@ tk.Label(root, text="Execute o programa como Administrador", font=("Consolas", 9
 
 root.results = {}
 
-root.mainloop()
+root.mainloop() 
