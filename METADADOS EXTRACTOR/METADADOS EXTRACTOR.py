@@ -5,6 +5,7 @@ from datetime import datetime
 import win32com.client
 import webbrowser
 from zoneinfo import ZoneInfo
+import pypdf
 
 # Dependências opcionais
 try:
@@ -12,13 +13,10 @@ try:
     PIL_AVAILABLE = True
 except:
     PIL_AVAILABLE = False
-
-try:
-    import pypdf
+try:    
     PDF_AVAILABLE = True
 except:
     PDF_AVAILABLE = False
-
 
 def get_brazil_time():
     tz = ZoneInfo("America/Sao_Paulo")
