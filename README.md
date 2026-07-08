@@ -289,6 +289,9 @@ EXPLORADOR DE PASTAS E ARQUIVOS DO WINDOWS
 📊 [***METADADOS EXTRACTOR***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/METADADOS%20EXTRACTOR)
 METADADOS EXTRACTOR
 
+🗂️ [***Analisador de Downloads Chrome Firefox VirusTotal***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Analisador%20de%20Downloads%20Chrome%20Firefox%20VirusTotal)
+Analisador de Downloads Chrome Firefox VirusTotal
+
 
 ---
 
