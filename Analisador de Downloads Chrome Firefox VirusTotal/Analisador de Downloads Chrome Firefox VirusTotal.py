@@ -126,7 +126,7 @@ def analisar_pasta():
                                        caminho))
 
     total_bytes = sum(x[2] for x in arquivos)
-    lbl_status.config(text=f"✅ {len(arquivos)} arquivo(s) | Total: {formatar_tamanho(total_bytes)}")
+    lbl_status.config(text=f"✅ {len(arquivos)} Arquivos | Total: {formatar_tamanho(total_bytes)}")
     progress_bar['value'] = 100
 
 # Funções restantes (abrir, excluir, VirusTotal, etc.)
