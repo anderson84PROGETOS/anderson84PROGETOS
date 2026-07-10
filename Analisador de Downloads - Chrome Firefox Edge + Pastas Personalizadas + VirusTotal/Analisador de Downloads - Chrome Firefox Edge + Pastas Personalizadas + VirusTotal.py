@@ -6,7 +6,7 @@ import hashlib
 import webbrowser
 import threading
 
-# ==================== CONFIGURAÇÕES ====================
+# ==================== CONFIGURAÇÕES ==================== 
 def get_chrome_default():
     return os.path.join(
         os.environ.get("LOCALAPPDATA", ""),
