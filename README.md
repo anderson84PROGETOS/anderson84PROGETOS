@@ -301,6 +301,9 @@ Analisador de Downloads - Chrome Firefox Edge + Pastas Personalizadas + VirusTot
 🔗🔗 [***AVANÇADO EXTRATOR DE URL WEBSITE***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/AVAN%C3%87ADO%20EXTRATOR%20DE%20URL%20WEBSITE)
 AVANÇADO EXTRATOR DE URL WEBSITE
 
+📩 [***EMAIL OSINT Username Recon***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Analisador%20de%20Rede%20-%20Estilo%20DevTools)
+EMAIL OSINT Username Recon
+
 
 ---
 
