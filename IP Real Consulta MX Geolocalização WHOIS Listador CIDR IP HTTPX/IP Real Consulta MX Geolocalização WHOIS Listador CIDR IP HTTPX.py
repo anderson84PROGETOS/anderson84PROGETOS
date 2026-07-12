@@ -13,7 +13,7 @@ from urllib.parse import urljoin
 from bs4 import BeautifulSoup
 import time
 
-# ===================== PRIMEIRA FERRAMENTA: IP Real + MX + Geo =====================
+# ===================== PRIMEIRA FERRAMENTA: IP Real + MX + Geo ===================== 
 last_entrada = ""
 
 def get_ip_info(ip):
