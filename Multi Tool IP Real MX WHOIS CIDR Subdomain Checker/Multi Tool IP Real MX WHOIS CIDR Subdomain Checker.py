@@ -14,7 +14,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 import sys
 import os
 
-# ===================== PRIMEIRA FERRAMENTA: IP Real + MX + Geo =====================
+# ===================== PRIMEIRA FERRAMENTA: IP Real + MX + Geo ===================== 
 last_entrada = ""
 
 def get_ip_info(ip):
