@@ -319,6 +319,9 @@ SCANNER ANALISADOR DE REDE
 🔍 [***Network Recon Scanner***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Network%20Recon%20Scanner)
 Network Recon Scanner
 
+#️⃣ [***VISUALIZADOR DE PROGRAMAS INSTALADOS WINDOWS***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/VISUALIZADOR%20DE%20PROGRAMAS%20INSTALADOS%20WINDOWS)
+ VISUALIZADOR DE PROGRAMAS INSTALADOS WINDOWS
+
 
 ---
 
