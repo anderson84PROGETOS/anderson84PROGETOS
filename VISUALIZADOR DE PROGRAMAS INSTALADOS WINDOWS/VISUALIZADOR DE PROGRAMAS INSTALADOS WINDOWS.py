@@ -392,5 +392,4 @@ status_var = tk.StringVar(); status_var.set("Pronto. Pressione ESCANEAR PROGRAMA
 status = tk.Label(janela, textvariable=status_var, bg="#111111", fg="lime", anchor="w", font=("Consolas",10))
 status.pack(fill="x", side="bottom")
 
-
 janela.mainloop()
