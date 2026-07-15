@@ -322,6 +322,9 @@ Network Recon Scanner
 #️⃣ [***VISUALIZADOR DE PROGRAMAS INSTALADOS WINDOWS***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/VISUALIZADOR%20DE%20PROGRAMAS%20INSTALADOS%20WINDOWS)
  VISUALIZADOR DE PROGRAMAS INSTALADOS WINDOWS
 
+ [***🔎 IP Real | 📧 MX | 🌍 Geo | 🌐 WHOIS | 📋 CIDR | 🔗 HTTX Scanner***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/IP%20Real%20MX%20Geo%20WHOIS%20CIDR%20HTTX%20Scanner)
+🔎 IP Real | 📧 MX | 🌍 Geo | 🌐 WHOIS | 📋 CIDR | 🔗 HTTX Scanner
+
 
 ---
 
