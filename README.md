@@ -326,6 +326,10 @@ Network Recon Scanner
 🔎 IP Real | 📧 MX | 🌍 Geo | 🌐 WHOIS | 📋 CIDR | 🔗 HTTX Scanner
 
 
+🔎 [***Scanner Arquivos***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Scanner%20Arquivos)
+Scanner Arquivos
+
+
 ---
 
 ## 🌟 Contribuições
