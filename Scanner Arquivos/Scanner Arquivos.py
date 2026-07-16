@@ -855,7 +855,6 @@ class ScannerGUI:
         self._update_progress_from_thread(100, "✅ Scan concluído!")
         self.scan_btn.config(text="▶ INICIAR SCAN", bg=self.COLORS["scan_btn_idle_bg"], fg=self.COLORS["scan_btn_idle_fg"], state=tk.NORMAL)
 
-
 def main():
     root = tk.Tk()
     app = ScannerGUI(root)
