@@ -329,6 +329,8 @@ Network Recon Scanner
 🔎 [***Scanner Arquivos***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Scanner%20Arquivos)
 Scanner Arquivos
 
+🔍 [***Visualizador de Eventos do Windows 10***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Visualizador%20de%20Eventos%20do%20Windows%2010)
+Visualizador de Eventos do Windows 10
 
 ---
 
