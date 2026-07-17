@@ -332,6 +332,10 @@ Scanner Arquivos
 🔍 [***Visualizador de Eventos do Windows 10***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Visualizador%20de%20Eventos%20do%20Windows%2010)
 Visualizador de Eventos do Windows 10
 
+#️⃣ [***Monitor de Lentidão em Tempo Real***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Monitor%20de%20Lentid%C3%A3o%20em%20Tempo%20Real)
+Monitor de Lentidão em Tempo Real
+
+
 ---
 
 ## 🌟 Contribuições
