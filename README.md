@@ -335,6 +335,8 @@ Visualizador de Eventos do Windows 10
 #️⃣ [***Monitor de Lentidão em Tempo Real***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Monitor%20de%20Lentid%C3%A3o%20em%20Tempo%20Real)
 Monitor de Lentidão em Tempo Real
 
+🔍 [***SCANNER DETECÇAO COMPORTAMENTAL***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/SCANNER%20DETEC%C3%87AO%20COMPORTAMENTAL)
+SCANNER DETECÇAO COMPORTAMENTAL
 
 ---
 
