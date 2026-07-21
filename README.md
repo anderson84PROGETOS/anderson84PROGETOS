@@ -349,6 +349,9 @@ IP Real MX Geo WHOIS CIDR Recon Scanner
 
 🔍 [***DNS Recon Pentest DNS***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/DNS%20Recon%20Pentest%20DNS)
 
+🔍 [***Process Explorer***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Process%20Explorer)
+Process Explorer
+
 
 ---
 
