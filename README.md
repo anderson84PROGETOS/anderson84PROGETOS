@@ -347,6 +347,8 @@ Monitor de Conexões de Rede TCP
 🔍 [***IP Real MX Geo WHOIS CIDR Recon Scanner***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/IP%20Real%20MX%20Geo%20WHOIS%20CIDR%20Recon%20Scanner)
 IP Real MX Geo WHOIS CIDR Recon Scanner
 
+🔍 [***DNS Recon Pentest DNS***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/DNS%20Recon%20Pentest%20DNS)
+
 
 ---
 
