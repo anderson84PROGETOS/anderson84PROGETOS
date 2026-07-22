@@ -115,7 +115,7 @@ class DNSReconGUI:
                                       insertbackground=CORES['fg'],
                                       font=('Courier', 10), relief='flat', bd=2)
         self.entry_dominio.pack(side='left', padx=(0, 15))
-        self.entry_dominio.insert(0, "businesscorp.com.br")
+        self.entry_dominio.insert(0, "zonetransfer.me")
 
         # Linha 2: Wordlist + Threads
         linha2 = tk.Frame(entry_frame, bg=CORES['bg'])
@@ -694,7 +694,7 @@ class DNSReconGUI:
             zona = dns.zone.from_xfr(dns.query.xfr(alvo, dominio, timeout=15, lifetime=30))
 
             if zona and len(zona.nodes) > 0:
-                self.log(f"\n    [✔] TRANSFERÊNCIA DE ZONA BEM-SUCEDIDA\n", 'success')
+                self.log(f"\n    [✔] TRANSFERÊNCIA DE ZONA BEM SUCEDIDA [✔]\n", 'success')
 
                 registros_axfr = []
                 for nome, node in zona.nodes.items():
@@ -772,7 +772,7 @@ class DNSReconGUI:
 
     def brute_force_subdominios(self, dominio, wordlist_path):
         if not wordlist_path or not os.path.exists(wordlist_path):
-            self.log("[!] Wordlist não encontrada. Pulando brute force \n", 'warning')
+            self.log("\n\n[!] Wordlist não encontrada. Pulando brute force \n\n", 'warning')
             return
 
         self.log(f"\n[*] Iniciando brute force de subdomínios...\n", 'info')
@@ -979,6 +979,7 @@ def main():
     root.geometry(f'{width}x{height}+{x}+{y}')
 
     root.mainloop()
+
 
 if __name__ == "__main__":
     main()
