@@ -352,6 +352,8 @@ IP Real MX Geo WHOIS CIDR Recon Scanner
 🔍 [***Process Explorer***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Process%20Explorer)
 Process Explorer
 
+📊 [***TRANSFERENCIA DE ZONA***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/TRANSFERENCIA%20DE%20ZONA)
+TRANSFERENCIA DE ZONA
 
 ---
 
