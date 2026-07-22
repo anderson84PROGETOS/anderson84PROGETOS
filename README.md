@@ -355,6 +355,10 @@ Process Explorer
 📊 [***TRANSFERENCIA DE ZONA***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/TRANSFERENCIA%20DE%20ZONA)
 TRANSFERENCIA DE ZONA
 
+🧹 [***Cleaner Limpeza de Sistema Windows***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Cleaner%20Limpeza%20de%20Sistema%20Windows)
+Cleaner Limpeza de Sistema Windows
+
+
 ---
 
 ## 🌟 Contribuições
