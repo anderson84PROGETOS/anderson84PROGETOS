@@ -358,6 +358,8 @@ TRANSFERENCIA DE ZONA
 🧹 [***Cleaner Limpeza de Sistema Windows***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Cleaner%20Limpeza%20de%20Sistema%20Windows)
 Cleaner Limpeza de Sistema Windows
 
+🖼️ [***ExifTool Master BR v3.2.1 — Hex Dump com Seletor de Limite***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/ExifTool%20Master)
+ExifTool Master BR v3.2.1 — Hex Dump com Seletor de Limite
 
 ---
 
