@@ -4,7 +4,7 @@
 ExifTool Master BR — Leitor Universal + Editor EXIF + VirusTotal
 Versão: 3.2.1 (Hex Dump com seletor de limite)
 Idioma: Português (Brasil)
-Formato de Data: DD/MM/AAAA 
+Formato de Data: DD/MM/AAAA
 """
 
 import os
@@ -1283,7 +1283,7 @@ class ExifToolMaster:
             ),
             anchor="center",
             justify="center"
-        ).pack(fill="x", pady=(0, 40))
+        ).pack(fill="x", pady=(10, 40))
 
 
     def _salvar_relatorio(self, texto):
@@ -1520,7 +1520,7 @@ class ExifToolMaster:
             ),
             anchor="center",
             justify="center"
-        ).pack(fill="x", pady=(0, 40))  
+        ).pack(fill="x", pady=(10, 40))   
 
 
     def _salvar_comparacao(self, texto, n1, n2):
