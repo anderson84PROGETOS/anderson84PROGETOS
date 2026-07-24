@@ -361,6 +361,10 @@ Cleaner Limpeza de Sistema Windows
 🖼️ [***ExifTool Master BR v3.2.1 — Hex Dump com Seletor de Limite***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/ExifTool%20Master)
 ExifTool Master BR v3.2.1 — Hex Dump com Seletor de Limite
 
+#️⃣ [***MONITOR PID PATH***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/MONITOR%20PID%20PATH)
+MONITOR PID PATH
+
+
 ---
 
 ## 🌟 Contribuições
