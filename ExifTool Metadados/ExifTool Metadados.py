@@ -4,7 +4,7 @@
 ExifTool Master BR — Leitor Universal + Editor EXIF + VirusTotal
 Versão: 3.2.1 (Hex Dump com seletor de limite)
 Idioma: Português (Brasil)
-Formato de Data: DD/MM/AAAA
+Formato de Data: DD/MM/AAAA 
 """
 
 import os
