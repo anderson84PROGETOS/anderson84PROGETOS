@@ -367,6 +367,8 @@ MONITOR PID PATH
 🖼 📸 [***ExifTool Metadados***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/ExifTool%20Metadados)
 ExifTool Metadados
 
+🗺 [***NETSTAT DNS REVERSO GEOLOCALIZAÇÃO***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/NETSTAT%20DNS%20REVERSO%20GEOLOCALIZA%C3%87%C3%83O)
+NETSTAT DNS REVERSO GEOLOCALIZAÇÃO
 
 ---
 
