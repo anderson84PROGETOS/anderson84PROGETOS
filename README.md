@@ -370,6 +370,10 @@ ExifTool Metadados
 🗺 [***NETSTAT DNS REVERSO GEOLOCALIZAÇÃO***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/NETSTAT%20DNS%20REVERSO%20GEOLOCALIZA%C3%87%C3%83O)
 NETSTAT DNS REVERSO GEOLOCALIZAÇÃO
 
+🎈 [***Transfer Zone DNS Enumerator Tempo Real***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Transfer%20Zone%20DNS%20Enumerator%20Tempo%20Real)
+Transfer Zone DNS Enumerator Tempo Real
+
+
 ---
 
 ## 🌟 Contribuições
