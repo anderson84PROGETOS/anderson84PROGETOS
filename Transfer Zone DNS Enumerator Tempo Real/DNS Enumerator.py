@@ -16,6 +16,17 @@ from datetime import datetime
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from ipaddress import ip_address, ip_network
 
+if sys.platform == "win32":
+    try:
+        import ctypes
+        kernel32 = ctypes.windll.kernel32
+        user32 = ctypes.windll.user32
+        hwnd = kernel32.GetConsoleWindow()
+        if hwnd:
+            user32.ShowWindow(hwnd, 0)  # SW_HIDE
+    except Exception:
+        pass
+
 try:
     import dns.resolver
     import dns.query
