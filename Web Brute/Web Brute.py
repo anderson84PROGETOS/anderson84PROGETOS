@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 WebBrute GUI - Gobuster-like directory bruteforcer with graphical interface
-Uso exclusivo para testes de penetração autorizados.
+Uso exclusivo para testes de penetração autorizados. 
 """
 
 import tkinter as tk
