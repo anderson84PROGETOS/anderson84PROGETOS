@@ -385,6 +385,9 @@ Scanner Detecção de Mineradores de Criptomoedas Modo Somente Leitura
 💴💲 [***Scanner de Detecção de Mineradores de Criptomoedas***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Scanner%20de%20Detec%C3%A7%C3%A3o%20de%20Mineradores%20de%20Criptomoedas)
 Scanner de Detecção de Mineradores de Criptomoedas
 
+🔎 [***AES Toolkit Cryptography Password Recovery Toolkit***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/AES%20Toolkit%20Cryptography%20Password%20Recovery%20Toolkit)
+AES Toolkit Cryptography Password Recovery Toolkit
+
 
 ---
 
