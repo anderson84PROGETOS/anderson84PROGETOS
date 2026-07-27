@@ -379,6 +379,8 @@ ADVANCED HASH PASSWORD PDF ZIP ANALYZER HEX BASE64 IDENTIFICADOR HASH
 🚀🔐 [***🚀 3 SCRIPTS PODEROSOS PARA PENTEST E SEGURANÇA DA INFORMAÇÃO 🔐***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/%F0%9F%9A%80%203%20SCRIPTS%20PODEROSOS%20PARA%20PENTEST%20E%20SEGURAN%C3%87A%20DA%20INFORMA%C3%87%C3%83O%20%F0%9F%94%90)
 🚀 3 SCRIPTS PODEROSOS PARA PENTEST E SEGURANÇA DA INFORMAÇÃO 🔐
 
+🔎💴💲👛 [***Scanner Detecção de Mineradores de Criptomoedas Modo Somente Leitura***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Scanner%20Detec%C3%A7%C3%A3o%20de%20Mineradores%20de%20Criptomoedas%20Modo%20Somente%20Leitura)
+Scanner Detecção de Mineradores de Criptomoedas Modo Somente Leitura
 
 
 ---
