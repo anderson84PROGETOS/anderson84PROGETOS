@@ -382,6 +382,9 @@ ADVANCED HASH PASSWORD PDF ZIP ANALYZER HEX BASE64 IDENTIFICADOR HASH
 🔎💴💲👛 [***Scanner Detecção de Mineradores de Criptomoedas Modo Somente Leitura***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Scanner%20Detec%C3%A7%C3%A3o%20de%20Mineradores%20de%20Criptomoedas%20Modo%20Somente%20Leitura)
 Scanner Detecção de Mineradores de Criptomoedas Modo Somente Leitura
 
+💴💲 [***Scanner de Detecção de Mineradores de Criptomoedas***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Scanner%20de%20Detec%C3%A7%C3%A3o%20de%20Mineradores%20de%20Criptomoedas)
+Scanner de Detecção de Mineradores de Criptomoedas
+
 
 ---
 
