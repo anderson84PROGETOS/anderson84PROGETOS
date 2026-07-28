@@ -388,6 +388,9 @@ Scanner de Detecção de Mineradores de Criptomoedas
 🔎 [***AES Toolkit Cryptography Password Recovery Toolkit***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/AES%20Toolkit%20Cryptography%20Password%20Recovery%20Toolkit)
 AES Toolkit Cryptography Password Recovery Toolkit
 
+🗂️📑[***Temporary Folder Explorer****](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Temporary%20Folder%20Explorer)
+Temporary Folder Explorer
+
 
 ---
 
