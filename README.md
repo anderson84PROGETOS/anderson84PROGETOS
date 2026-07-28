@@ -391,6 +391,9 @@ AES Toolkit Cryptography Password Recovery Toolkit
 🗂️📑[***Temporary Folder Explorer****](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Temporary%20Folder%20Explorer)
 Temporary Folder Explorer
 
+📑 [***WHOIS + CNPJ + OSINT Extractor***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/WHOIS%20+%20CNPJ%20+%20OSINT%20Extractor)
+WHOIS + CNPJ + OSINT Extractor
+
 
 ---
 
