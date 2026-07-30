@@ -397,8 +397,10 @@ WHOIS + CNPJ + OSINT Extractor
 ⚙🚃 [***AES Toolkit***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/AES%20Toolkit)
 AES Toolkit
 
-🗑🆑 [***WINGET UNINSTALL & INSTALL***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/WINGET%20UNINSTALL%20%26%20INSTALL)
-WINGET UNINSTALL & INSTALL
+🗑🆑 [***WINGET UNINSTALL & INSTALL + FILTRO CATEGORIA***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/WINGET%20UNINSTALL%20&%20INSTALL%20+%20FILTRO%20CATEGORIA)
+WINGET UNINSTALL & INSTALL + FILTRO CATEGORIA
+
+
 
 
 ---
