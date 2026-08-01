@@ -410,6 +410,8 @@ CNPJ OSINT ANALYZER
 🧿🧿 [***WHOIS  CNPJ OSINT TOOLKIT***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/WHOIS%20%20CNPJ%20OSINT%20TOOLKIT)
 WHOIS  CNPJ OSINT TOOLKIT
 
+🚃 [***NSLookup Consultas DNS***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/NSLookup%20Consultas%20DNS)
+NSLookup Consultas DNS
 
 ---
 
