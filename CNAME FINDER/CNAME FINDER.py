@@ -10,7 +10,7 @@ import html as html_lib
 import webbrowser
 import os
 
-# ================= TEMA HACKER =================
+# ================= TEMA =================
 BG          = "#050505"          # fundo geral
 VERDE       = "#00FF00"          # verde padrão
 VERDE_FORTE = "#33FF66"          # verde do [LIVE] / destaques
