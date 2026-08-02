@@ -416,6 +416,9 @@ NSLookup Consultas DNS
 🔍[***CNAME FINDER***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/CNAME%20FINDER)
 CNAME FINDER
 
+🚃 🔍 [***Recon Scanner FUZZ Toolkit***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Recon%20Scanner%20FUZZ%20Toolkit)
+Recon Scanner FUZZ Toolkit
+
 
 ---
 
