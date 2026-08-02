@@ -413,6 +413,10 @@ WHOIS  CNPJ OSINT TOOLKIT
 🚃 [***NSLookup Consultas DNS***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/NSLookup%20Consultas%20DNS)
 NSLookup Consultas DNS
 
+🔍[***CNAME FINDER***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/CNAME%20FINDER)
+CNAME FINDER
+
+
 ---
 
 ## 🌟 Contribuições
