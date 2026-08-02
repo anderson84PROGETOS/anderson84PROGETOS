@@ -18,7 +18,7 @@ import urllib3
 import os
 import warnings
 import atexit
-import html          # ★ NOVO: para escapar caracteres no HTML
+import html          # ★ NOVO: para escapar caracteres no HTML 
 
 # Suprime janela do console no Windows
 _startupinfo = None
