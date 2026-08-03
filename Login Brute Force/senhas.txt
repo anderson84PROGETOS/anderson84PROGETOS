@@ -35,6 +35,7 @@ root
 SuperSecretPassword!
 secret_sauce
 test
+admin123
 teste
 demo
 senhafoda
