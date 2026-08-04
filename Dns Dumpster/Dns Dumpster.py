@@ -8,7 +8,7 @@ Relatório HTML completo COM mapa interativo embutido + exportação TXT.
 v6.3: RESULTADOS EM TEMPO REAL + BARRA DE PROGRESSO 0-100%.
 v6.4: NOVO registro HINFO (CPU/SO) + varredura de SERVIÇOS SRV comuns
       (SIP, XMPP, LDAP, Kerberos, IMAP, POP3, SMTP, H.323...).
-Requisitos: pip install dnspython requests pillow
+Requisitos: pip install dnspython requests pillow 
 """
 import io
 import random
