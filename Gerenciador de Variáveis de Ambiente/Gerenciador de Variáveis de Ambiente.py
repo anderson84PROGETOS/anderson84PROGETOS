@@ -6,7 +6,7 @@ import subprocess
 import tkinter as tk
 from tkinter import filedialog, messagebox, scrolledtext, ttk
 
-# ==================== CORES ====================
+# ==================== CORES ==================== 
 BG        = "#1e1e1e"
 FG        = "#ffffff"
 CINZA     = "#0ce6ee"
