@@ -431,6 +431,9 @@ Dns Dumpster
 🖼️ 🕵️ [***ESTEGANOGRAFIA STEALTH ENCODE ESTEGO***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/ESTEGANOGRAFIA%20STEALTH%20ENCODE%20ESTEGO)
 ESTEGANOGRAFIA STEALTH ENCODE ESTEGO
 
+🕵️ [***Gerenciador de Variáveis de Ambiente***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Gerenciador%20de%20Vari%C3%A1veis%20de%20Ambiente)
+Gerenciador de Variáveis de Ambiente
+
 
 ---
 
