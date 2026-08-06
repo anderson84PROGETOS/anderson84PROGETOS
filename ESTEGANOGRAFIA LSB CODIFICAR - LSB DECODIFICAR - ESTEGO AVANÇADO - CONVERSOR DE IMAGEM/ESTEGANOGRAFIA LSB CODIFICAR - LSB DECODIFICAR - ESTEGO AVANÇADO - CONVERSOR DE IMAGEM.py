@@ -140,7 +140,7 @@ def decode_lsb_compatible(image_path):
 # ============================================================
 BS = 8
 REPEAT = 7
-Q_STEP = 4
+Q_STEP = 4            # robustez VISUAL: 4 (sutil) → 8 → 12 → 20 (forte, sobrevive mais)
 ENCODE_W, ENCODE_H = 1024, 1024
 PREVIEW_MAX = 300
 # capacidade real calculada: (128*128 blocos // repeticao - 24) // 8
@@ -535,13 +535,39 @@ class UnifiedStegoApp:
             font=mono_font(9), bg=PANEL, fg=DIM)
         self.adv_capacity_label.pack(side="left", padx=10)
 
+        # robustez VISUAL (Q_STEP): mais alto = sobrevive melhor a JPEG/redes sociais
+        qrow = tk.Frame(term, bg=PANEL)
+        qrow.pack(fill="x", pady=(6, 0))
+        tk.Label(qrow, text="resistência", font=mono_font(10, True), bg=PANEL,
+                 fg=DIM, width=8, anchor="w").pack(side="left")
+        
+        self.adv_qstep_var = tk.StringVar(value="4")
+        self.adv_qstep_menu = tk.OptionMenu(qrow, self.adv_qstep_var,
+                                            "4", "8", "12", "20", "32", "48", "64",
+                                            command=self._adv_on_qstep_change)
+        
+        self.adv_qstep_menu.config(bg=BTN_BG, fg=GREEN, activebackground=GREEN,
+                                   activeforeground=BG, relief="solid", bd=1,
+                                   highlightthickness=0, font=mono_font(10, True))
+        self.adv_qstep_menu["menu"].config(bg=BTN_BG, fg=GREEN,
+                                           activebackground=GREEN, activeforeground=BG,
+                                           font=mono_font(10))
+        self.adv_qstep_menu.pack(side="left")
+        self.adv_qstep_label = tk.Label(
+            qrow,
+            text="4 = sutil (só PNG sem perdas)  ·  8/12 = JPEG leve  ·  20 = redes sociais (visível)",
+            font=mono_font(9), bg=PANEL, fg=DIM)
+        self.adv_qstep_label.pack(side="left", padx=10)
+
         # botões
         act = tk.Frame(term, bg=PANEL)
         act.pack(fill="x", pady=(12, 0))
         self.adv_encode_btn = self._make_btn(act, "Ocultar Mensagem", self._adv_on_encode)
         self.adv_decode_btn = self._make_btn(act, "Extrair Mensagem", self._adv_on_decode)
+        self.adv_sim_btn = self._make_btn(act, "SIMULAR REDE SOCIAL (teste JPEG)", self._adv_on_simulate)
         self.adv_encode_btn.pack(side="left", expand=True, fill="x")
         self.adv_decode_btn.pack(side="left", expand=True, fill="x", padx=(10, 0))
+        self.adv_sim_btn.pack(side="left", expand=True, fill="x", padx=(10, 0))
 
         # status interno
         tk.Frame(term, bg="#1a1a1a", height=1).pack(fill="x", pady=(12, 8))
@@ -602,11 +628,12 @@ class UnifiedStegoApp:
 
     def _adv_set_busy(self, busy):
         state = "disabled" if busy else "normal"
-        for b in (self.adv_select_btn, self.adv_encode_btn, self.adv_decode_btn):
+        for b in (self.adv_select_btn, self.adv_encode_btn, self.adv_decode_btn, self.adv_sim_btn):
             b.config(state=state)
             b.config(bg=BTN_BG, fg=GREEN_D if busy else GREEN)
         try:
             self.adv_repeat_menu.config(state=state)
+            self.adv_qstep_menu.config(state=state)
         except Exception:
             pass
 
@@ -783,6 +810,77 @@ class UnifiedStegoApp:
         self.adv_capacity_label.config(
             text=f"capacidade atual: {MAX_BYTES} bytes (utf-8) · repetição {REPEAT}× · use a MESMA robustez para extrair")
         self._check_capacity()
+
+    def _adv_on_qstep_change(self, value=None):
+        global Q_STEP
+        try:
+            Q_STEP = int(str(self.adv_qstep_var.get()))
+        except Exception:
+            return
+        
+        label_map = {4: "sutil (só PNG)", 8: "JPEG leve", 12: "JPEG médio",
+             20: "forte (redes sociais)", 32: "extremo 1", 48: "extremo 2",
+             64: "brutal (visível)"}
+        
+        self.adv_qstep_label.config(
+            text=f"Q_STEP={Q_STEP} · {label_map.get(Q_STEP, '')} · use a MESMA resistência para extrair")
+        self._adv_status(f"robustez visual alterada para Q_STEP={Q_STEP}", "")
+
+    def _adv_on_simulate(self):
+        """Simula o re-encode de uma rede social (JPEG q80) e verifica se a mensagem sobrevive."""
+        if self.adv_current_image is None:
+            self._adv_status("nenhuma imagem selecionada", "error")
+            return
+        msg = self.adv_msg.get("1.0", "end-1c")
+        if not msg.strip():
+            self._adv_status("digite a mensagem primeiro", "error")
+            return
+        if len(msg.encode("utf-8")) > MAX_BYTES:
+            self._adv_status("mensagem não cabe (veja o limite de robustez)", "error")
+            return
+
+        self._adv_set_busy(True)
+        self._adv_status("simulando rede social (JPEG qualidade 80)...", "")
+
+        def work():
+            out = encode_image_advanced(self.adv_current_image, msg)
+            # simula o que FB/IG fazem: reconverter para JPEG com perdas
+            import io
+            buf = io.BytesIO()
+            out.save(buf, "JPEG", quality=80, subsampling=0)
+            buf.seek(0)
+            recompressed = Image.open(buf).convert("RGB")
+            recovered = decode_image_advanced(recompressed)
+            return recovered, recovered == msg
+
+        def done(result):
+            recovered, ok = result
+            if ok:
+                self._adv_status(
+                    f"✔ SOBREVIVEU à simulação (Q_STEP={Q_STEP}, JPEG q80). Pode postar!", "success")
+                messagebox.showinfo("SIMULAÇÃO OK",
+                                    f"A mensagem sobreviveu ao re-encode de rede social "
+                                    f"(Q_STEP={Q_STEP}, JPEG qualidade 80).\n\n"
+                                    f"Mensagem recuperada: {recovered!r}")
+            else:
+                self._adv_status(
+                    "✘ NÃO sobreviveu. Aumente a 'resistência' para 20, 32 ou 48 e tente de novo.", "error")
+                messagebox.showerror(
+                    "SIMULAÇÃO FALHOU",
+                    "A mensagem foi DESTRUÍDA pelo re-encode JPEG.\n\n"
+                    "Isso é o que acontece no Facebook/Instagram.\n\n"
+                    "Solução:\n"
+                    "1. Aumente a resistência para 20, 32 ou 48 (seletor no ESTEGO AVANÇADO)\n"
+                    "2. Codifique de novo e rode SIMULAR REDE SOCIAL\n"
+                    "3. Só poste quando aparecer 'SOBREVIVEU'\n\n"
+                    f"(recuperado após JPEG: {recovered!r})")
+            self._adv_set_busy(False)
+
+        def fail(err):
+            self._adv_status("erro: " + str(err), "error")
+            self._adv_set_busy(False)
+
+        self._adv_runner(work, done, fail)
 
     # ==========================================================
     #  ABA 4 – CONVERSOR / NORMALIZADOR DE IMAGEM
