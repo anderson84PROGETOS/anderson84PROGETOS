@@ -437,6 +437,9 @@ Gerenciador de Variáveis de Ambiente
 🕵️🕵️ [***WebVuln Scanner Segurança Web***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/WebVuln%20Scanner%20Seguran%C3%A7a%20Web)
 WebVuln Scanner Segurança Web
 
+👨‍💻 [***ESTEGANOGRAFIA LSB CODIFICAR - LSB DECODIFICAR - ESTEGO AVANÇADO - CONVERSOR DE IMAGEM***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/ESTEGANOGRAFIA%20LSB%20CODIFICAR%20-%20LSB%20DECODIFICAR%20-%20ESTEGO%20AVAN%C3%87ADO%20-%20CONVERSOR%20DE%20IMAGEM)
+ESTEGANOGRAFIA LSB CODIFICAR - LSB DECODIFICAR - ESTEGO AVANÇADO - CONVERSOR DE IMAGEM
+
 
 ---
 
