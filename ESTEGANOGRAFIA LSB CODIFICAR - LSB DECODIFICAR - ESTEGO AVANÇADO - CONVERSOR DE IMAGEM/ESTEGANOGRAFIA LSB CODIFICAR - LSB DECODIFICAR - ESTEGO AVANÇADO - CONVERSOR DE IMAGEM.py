@@ -6,7 +6,7 @@ STEALTH-ENCODE + Estego Avançado  —  ferramenta unificada
 Abas:
   1. LSB Codificar   (compatível Stylesuxx + compressão)
   2. LSB Decodificar
-  3. Estego Avançado (método Ztegonograph – blocos 8x8 + quantização de luma)
+  3. Estego Avançado (blocos 8x8 + quantização de luma)
   4. Conversor de Imagem (normaliza QUALQUER foto para PNG 1024x1024 sem perdas)
 
 Detecção automática: ao carregar uma imagem no ESTEGO AVANÇADO,
@@ -136,7 +136,7 @@ def decode_lsb_compatible(image_path):
 
 
 # ============================================================
-#  NÚCLEO ESTEGO AVANÇADO (Ztegonograph / blocos 8x8)
+#  NÚCLEO ESTEGO AVANÇADO (blocos 8x8)
 # ============================================================
 BS = 8
 REPEAT = 7
