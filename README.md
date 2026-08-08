@@ -443,6 +443,9 @@ ESTEGANOGRAFIA LSB CODIFICAR - LSB DECODIFICAR - ESTEGO AVANÇADO - CONVERSOR DE
 🕵️ [***cpf_hunter***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/cpf_hunter)
 cpf_hunter
 
+⚡ [***POWER MONITOR PRO***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/POWER%20MONITOR%20PRO)
+POWER MONITOR PRO
+
 
 ---
 
