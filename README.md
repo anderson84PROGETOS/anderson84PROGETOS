@@ -449,6 +449,8 @@ POWER MONITOR PRO
 🛠⛲ [***REPARO DO WINDOWS DISM + SFC***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/REPARO%20DO%20WINDOWS%20DISM%20+%20SFC)
 REPARO DO WINDOWS DISM + SFC
 
+🎵 🗣️ [***Conversor TXT MP3 Leitor de Texto***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Conversor%20TXT%20MP3%20Leitor%20de%20Texto)
+Conversor TXT MP3 Leitor de Texto
 
 ---
 
