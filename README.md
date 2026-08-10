@@ -446,6 +446,9 @@ cpf_hunter
 ⚡ [***POWER MONITOR PRO***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/POWER%20MONITOR%20PRO)
 POWER MONITOR PRO
 
+🛠⛲ [***REPARO DO WINDOWS DISM + SFC***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/REPARO%20DO%20WINDOWS%20DISM%20+%20SFC)
+REPARO DO WINDOWS DISM + SFC
+
 
 ---
 
