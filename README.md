@@ -473,6 +473,10 @@ Email Scan Website
 👨‍💻 [***VARIÁVEIS DE AMBIENTE WINDOWS***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/VARI%C3%81VEIS%20DE%20AMBIENTE%20WINDOWS)
 VARIÁVEIS DE AMBIENTE WINDOWS
 
+🕵️ [***Dork Google Hacking***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Dork%20Google%20Hacking)
+Dork Google Hacking
+
+
 
 ---
 
