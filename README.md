@@ -479,6 +479,8 @@ Dork Google Hacking
 🦊 [***Remover IA Firefox***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Remover%20IA%20Firefox)
 Remover IA Firefox
 
+🌐 [***Desativador IA do Google Chrome***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Desativador%20%20IA%20do%20Google%20ChromeDesativador%20IA%20do%20Google%20Chrome)
+Desativador IA do Google Chrome
 
 
 ---
