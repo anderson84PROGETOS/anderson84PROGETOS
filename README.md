@@ -476,6 +476,9 @@ VARIÁVEIS DE AMBIENTE WINDOWS
 🕵️ [***Dork Google Hacking***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Dork%20Google%20Hacking)
 Dork Google Hacking
 
+🦊 [***Remover IA Firefox***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Remover%20IA%20Firefox)
+Remover IA Firefox
+
 
 
 ---
