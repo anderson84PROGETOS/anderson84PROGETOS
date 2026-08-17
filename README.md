@@ -482,6 +482,9 @@ Remover IA Firefox
 🌐 [***Desativador IA do Google Chrome***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Desativador%20%20IA%20do%20Google%20ChromeDesativador%20IA%20do%20Google%20Chrome)
 Desativador IA do Google Chrome
 
+🦈 [***PCAP Analyzer Pro***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/PCAP%20Analyzer%20Pro)
+PCAP Analyzer Pro
+
 
 ---
 
