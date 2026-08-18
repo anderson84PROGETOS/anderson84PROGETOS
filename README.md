@@ -485,6 +485,9 @@ Desativador IA do Google Chrome
 🦈 [***PCAP Analyzer Pro***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/PCAP%20Analyzer%20Pro)
 PCAP Analyzer Pro
 
+🤵 [***Google Hacking Dork PRO***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Google%20Hacking%20Dork%20PRO)
+Google Hacking Dork PRO
+
 
 ---
 
