@@ -491,6 +491,10 @@ Google Hacking Dork PRO
 🦊 [***ProxyChecker***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/ProxyChecker)
 ProxyChecker
 
+🔍 [***Scan httpx custom***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Scan%20httpx%20custom)
+Scan httpx custom
+
+
 
 ---
 
