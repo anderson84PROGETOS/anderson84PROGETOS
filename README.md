@@ -497,6 +497,9 @@ Scan httpx custom
 🔍🔍 [***Domínio e Subdomínios***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Dom%C3%ADnio%20e%20Subdom%C3%ADnios)
 Domínio e Subdomínios
 
+🕵️ [***WPS Attack Pin Tool***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/WPS%20Attack%20Pin%20Tool)
+WPS Attack Pin Tool
+
 
 ---
 
