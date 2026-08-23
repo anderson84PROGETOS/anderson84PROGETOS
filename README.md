@@ -500,6 +500,9 @@ Domínio e Subdomínios
 🕵️ [***WPS Attack Pin Tool***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/WPS%20Attack%20Pin%20Tool)
 WPS Attack Pin Tool
 
+📶 [***WPS Attack Pin Kali Linux & Windows WiFi Scanner***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/WPS%20Attack%20Pin%20Kali%20Linux%20&%20Windows%20WiFi%20Scanner)
+WPS Attack Pin Kali Linux & Windows WiFi Scanner
+
 
 ---
 
