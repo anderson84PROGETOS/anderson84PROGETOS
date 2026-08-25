@@ -506,6 +506,8 @@ WPS Attack Pin Kali Linux & Windows WiFi Scanner
 🕵️ [***DNS Scanner***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/DNS%20Scanner)
 DNS Scanner
 
+📶 📡 [***WiFi Scanner Windows***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/WiFi%20Scanner%20Windows)
+📡 WiFi Scanner Windows
 
 
 ---
