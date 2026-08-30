@@ -515,6 +515,8 @@ Arpspoof inspector
 📁📁 [***Robocopy Copiar Pasta Detectando Hardware***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Robocopy%20Copiar%20Pasta%20Detectando%20Hardware)
 Robocopy Copiar Pasta Detectando Hardware
 
+💻 [***Hardware Detector Pro***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Hardware%20Detector%20Pro)
+Hardware Detector Pro
 
 ---
 
