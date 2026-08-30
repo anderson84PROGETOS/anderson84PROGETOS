@@ -512,6 +512,8 @@ DNS Scanner
 📡 [***Arpspoof inspector***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Arpspoof%20inspector)
 Arpspoof inspector
 
+📁📁 [***Robocopy Copiar Pasta Detectando Hardware***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Robocopy%20Copiar%20Pasta%20Detectando%20Hardware)
+Robocopy Copiar Pasta Detectando Hardware
 
 
 ---
