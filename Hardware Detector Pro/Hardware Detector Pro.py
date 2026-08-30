@@ -8,9 +8,39 @@ import subprocess
 import sys
 from datetime import datetime
 
-# Instalar dependências automaticamente
+
+# ============================================================
+# CONFIGURAÇÃO GLOBAL PARA OCULTAR JANELAS DE CONSOLE (CMD)
+# ============================================================
+CREATE_NO_WINDOW = 0x08000000  # Flag do Windows para não criar janela
+
+def _get_subprocess_kwargs():
+    """Retorna kwargs para subprocess que ocultam a janela do CMD no Windows."""
+    kwargs = {}
+    if platform.system() == "Windows":
+        # Configura startupinfo para ocultar janela
+        startupinfo = subprocess.STARTUPINFO()
+        startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+        startupinfo.wShowWindow = subprocess.SW_HIDE
+        kwargs['startupinfo'] = startupinfo
+        kwargs['creationflags'] = CREATE_NO_WINDOW
+    return kwargs
+
+
+def run_hidden(cmd, **kwargs):
+    """Executa subprocess sem mostrar janela do CMD."""
+    hidden_kwargs = _get_subprocess_kwargs()
+    hidden_kwargs.update(kwargs)
+    return subprocess.run(cmd, **hidden_kwargs)
+
+
+# Instalar dependências automaticamente (SEM abrir CMD)
 def install_package(package):
-    subprocess.check_call([sys.executable, "-m", "pip", "install", package])
+    hidden_kwargs = _get_subprocess_kwargs()
+    subprocess.check_call(
+        [sys.executable, "-m", "pip", "install", package],
+        **hidden_kwargs
+    )
 
 try:
     import psutil
@@ -129,7 +159,7 @@ class HardwareDetector:
         """Consulta o hardware via PowerShell/JSON e extrai APENAS as informações que realmente existem com quebra de linha."""
         try:
             cmd = 'powershell -NoProfile -Command "Get-CimInstance Win32_PhysicalMemory | Select-Object Capacity, DeviceLocator, Manufacturer, PartNumber, Speed | ConvertTo-Json"'
-            result = subprocess.run(
+            result = run_hidden(
                 cmd, capture_output=True, text=True, timeout=10, shell=True
             )
 
@@ -304,7 +334,7 @@ class HardwareDetector:
 
         if not gpus_info:
             try:
-                result = subprocess.run(
+                result = run_hidden(
                     ["wmic", "path", "win32_videocontroller", "get",
                      "Name,AdapterRAM,DriverVersion,VideoProcessor,CurrentRefreshRate,VideoModeDescription",
                      "/format:list"],
@@ -398,7 +428,7 @@ class HardwareDetector:
 
         for secao, cmd in comandos.items():
             try:
-                result = subprocess.run(cmd.split(), capture_output=True, text=True, timeout=10)
+                result = run_hidden(cmd.split(), capture_output=True, text=True, timeout=10)
                 dados = {}
                 for line in result.stdout.strip().split("\n"):
                     line = line.strip()
@@ -458,7 +488,7 @@ class HardwareDetector:
     def detectar_usb(self):
         usb_info = {}
         try:
-            result = subprocess.run(
+            result = run_hidden(
                 ["wmic", "path", "Win32_USBControllerDevice", "get", "Dependent", "/format:list"],
                 capture_output=True, text=True, timeout=15
             )
@@ -478,7 +508,7 @@ class HardwareDetector:
             usb_info["Status"] = "Erro ao detectar dispositivos USB"
 
         try:
-            result = subprocess.run(
+            result = run_hidden(
                 ["wmic", "path", "Win32_PnPEntity", "where",
                  "PNPClass='USB'", "get", "Name,Manufacturer,DeviceID", "/format:list"],
                 capture_output=True, text=True, timeout=15
@@ -508,7 +538,7 @@ class HardwareDetector:
     def detectar_audio(self):
         audio_info = {}
         try:
-            result = subprocess.run(
+            result = run_hidden(
                 ["wmic", "sounddev", "get", "Name,Manufacturer,Status,StatusInfo", "/format:list"],
                 capture_output=True, text=True, timeout=10
             )
@@ -654,7 +684,7 @@ class HardwareDetector:
     def detectar_drivers(self):
         drivers = {}
         try:
-            result = subprocess.run(
+            result = run_hidden(
                 ["driverquery", "/FO", "CSV", "/V"],
                 capture_output=True, text=True, timeout=30
             )
@@ -902,10 +932,10 @@ class App(tk.Tk):
         self.title("🖥️ Hardware Detector Pro")
 
         # Abre maximizada
-        self.state("zoomed")
-
-        # Depois de configurar tudo...
-        self.deiconify()  
+        try:
+            self.state("zoomed")
+        except:
+            pass
 
         # Configurar tamanho e posição
         w = 1100
