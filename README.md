@@ -527,6 +527,9 @@ Directory Brute Forcer
 🔍 [***Buscador de Links Textos***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Buscador%20de%20Links%20Textos)
 Buscador de Links Textos
 
+🖼️ [***Esteganografia Esconda Seus Segredos***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Esteganografia%20Esconda%20Seus%20Segredos)
+Esteganografia Esconda Seus Segredos
+
 
 
 ---
