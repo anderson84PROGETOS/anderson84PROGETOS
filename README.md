@@ -530,6 +530,8 @@ Buscador de Links Textos
 🖼️ [***Esteganografia Esconda Seus Segredos***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Esteganografia%20Esconda%20Seus%20Segredos)
 Esteganografia Esconda Seus Segredos
 
+🕵️🕵️ 🕵️ [***DNS SUB Enumeração DNS WHOIS***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/DNS%20SUB%20Enumera%C3%A7%C3%A3o%20DNS%20WHOIS)
+DNS SUB Enumeração DNS WHOIS
 
 
 ---
