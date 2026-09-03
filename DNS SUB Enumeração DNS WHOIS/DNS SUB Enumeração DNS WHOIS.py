@@ -14,6 +14,18 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
+
+def run_subprocess_hidden(cmd, **kwargs):
+    """Executa subprocessos sem abrir uma janela/console no Windows."""
+    if platform.system() == "Windows":
+        startupinfo = subprocess.STARTUPINFO()
+        startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+        startupinfo.wShowWindow = subprocess.SW_HIDE
+        kwargs["startupinfo"] = startupinfo
+        kwargs["creationflags"] = subprocess.CREATE_NO_WINDOW
+
+    return subprocess.run(cmd, **kwargs)
+
 ctk.set_appearance_mode("Dark")
 ctk.set_default_color_theme("blue")
 
@@ -315,7 +327,7 @@ class DNSSUBGUI(ctk.CTk):
         ns_servers = []
         try:
             if platform.system() == "Windows":
-                res = subprocess.run(
+                res = run_subprocess_hidden(
                     ["nslookup", "-type=NS", domain],
                     capture_output=True, text=True,
                     timeout=10, errors="ignore"
@@ -329,7 +341,7 @@ class DNSSUBGUI(ctk.CTk):
                             if ns and ns not in ns_servers:
                                 ns_servers.append(ns)
             else:
-                res = subprocess.run(
+                res = run_subprocess_hidden(
                     ["dig", "NS", domain, "+short"],
                     capture_output=True, text=True,
                     timeout=10, errors="ignore"
@@ -362,7 +374,7 @@ class DNSSUBGUI(ctk.CTk):
                 0,
                 lambda c=" ".join(cmd): self.log(f"$ {c}", "white")
             )
-            res = subprocess.run(
+            res = run_subprocess_hidden(
                 cmd, capture_output=True, text=True,
                 timeout=15, errors="ignore"
             )
@@ -457,7 +469,7 @@ class DNSSUBGUI(ctk.CTk):
                     else:
                         cmd = ["dig", domain, rtype, "+short"]
 
-                res = subprocess.run(
+                res = run_subprocess_hidden(
                     cmd, capture_output=True, text=True,
                     timeout=8, errors="ignore"
                 )
@@ -911,7 +923,7 @@ class DNSSUBGUI(ctk.CTk):
                         "AXFR", "+noall", "+answer"
                     ]
 
-                res = subprocess.run(
+                res = run_subprocess_hidden(
                     cmd, capture_output=True, text=True,
                     timeout=15, errors="ignore"
                 )
