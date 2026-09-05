@@ -533,6 +533,10 @@ Esteganografia Esconda Seus Segredos
 🕵️🕵️ 🕵️ [***DNS SUB Enumeração DNS WHOIS***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/DNS%20SUB%20Enumera%C3%A7%C3%A3o%20DNS%20WHOIS)
 DNS SUB Enumeração DNS WHOIS
 
+📶 [***WIFI SCAN SENHA***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/WIFI%20SCAN%20SENHA)
+WIFI SCAN SENHA
+
+
 
 ---
 
