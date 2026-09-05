@@ -536,6 +536,9 @@ DNS SUB Enumeração DNS WHOIS
 📶 [***WIFI SCAN SENHA***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/WIFI%20SCAN%20SENHA)
 WIFI SCAN SENHA
 
+🔒 [***🔒 Scanner de Vulnerabilidades***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/%F0%9F%94%92%20Scanner%20de%20Vulnerabilidades%20Windows%2010)
+🔒 Scanner de Vulnerabilidades
+
 
 
 ---
