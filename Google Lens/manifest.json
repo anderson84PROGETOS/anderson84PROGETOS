@@ -1,0 +1,37 @@
+{
+  "manifest_version": 3,
+  "name": "Google Lens - Botão Direito",
+  "version": "5.0",
+  "description": "Extraia e copie texto de qualquer imagem ou vídeo.",
+  "permissions": [
+    "contextMenus",
+    "activeTab",
+    "scripting",
+    "offscreen"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "icons": {
+    "16": "icon.png",
+    "32": "icon.png",
+    "48": "icon.png",
+    "128": "icon.png"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "css": [
+        "style.css"
+      ]
+    }
+  ]
+}
