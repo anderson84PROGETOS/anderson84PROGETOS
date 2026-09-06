@@ -1,0 +1,6 @@
+#lens-overlay { position: fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.5); z-index:2147483646; cursor:crosshair; user-select:none; }
+#lens-selecao { position: absolute; border: 2px solid #00f2fe; background: rgba(0,242,254,0.2); box-shadow: 0 0 15px rgba(0,242,254,0.6); border-radius: 4px; display: none; pointer-events: none; }
+#lens-toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); padding: 14px 28px; border-radius: 30px; font-family: 'Segoe UI', sans-serif; font-size: 14px; font-weight: bold; z-index: 2147483647; box-shadow: 0 4px 20px rgba(0,0,0,0.5); transition: opacity 0.3s ease; }
+#lens-toast.info { background: #1e1e2e; color: #00f2fe; border: 1px solid #00f2fe; }
+#lens-toast.sucesso { background: #1e1e2e; color: #00ff88; border: 1px solid #00ff88; }
+#lens-toast.erro { background: #1e1e2e; color: #ff4444; border: 1px solid #ff4444; }
