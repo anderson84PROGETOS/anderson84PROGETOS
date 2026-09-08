@@ -542,6 +542,9 @@ WIFI SCAN SENHA
 🕵️ [***VulnScan Pro***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/VulnScan%20Pro)
 VulnScan Pro
 
+🔍🔍 [***Recon Sublister HTTPX***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Recon%20Sublister%20HTTPX)
+Recon Sublister HTTPX
+
 
 ---
 
