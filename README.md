@@ -545,6 +545,10 @@ VulnScan Pro
 🔍🔍 [***Recon Sublister HTTPX***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Recon%20Sublister%20HTTPX)
 Recon Sublister HTTPX
 
+🕵️ [***Auditoria Defensiva***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Auditoria%20Defensiva)
+Auditoria Defensiva
+
+
 
 ---
 
