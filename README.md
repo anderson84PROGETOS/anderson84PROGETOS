@@ -548,6 +548,9 @@ Recon Sublister HTTPX
 🕵️ [***Auditoria Defensiva***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Auditoria%20Defensiva)
 Auditoria Defensiva
 
+🔍 [***SubFinder Enumeração de Subdomínios***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/SubFinder%20Enumera%C3%A7%C3%A3o%20de%20Subdom%C3%ADnios)
+SubFinder Enumeração de Subdomínios
+
 
 
 ---
