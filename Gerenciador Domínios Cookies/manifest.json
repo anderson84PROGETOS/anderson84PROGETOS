@@ -1,0 +1,32 @@
+{
+  "manifest_version": 3,
+  "name": "Gerenciador de Domínios e Cookies",
+  "version": "2.0.0",
+  "description": "Gerenciador de domínios e cookies com janela redimensionável pelas bordas.",
+  "permissions": [
+    "cookies",
+    "storage",
+    "tabs"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "icons": {
+    "16": "incone.png",
+    "32": "incone.png",
+    "48": "incone.png",
+    "128": "incone.png"
+  },
+  "action": {
+    "default_title": "Abrir Gerenciador de Domínios e Cookies",
+    "default_icon": {
+      "16": "incone.png",
+      "32": "incone.png",
+      "48": "incone.png",
+      "128": "incone.png"
+    }
+  }
+}

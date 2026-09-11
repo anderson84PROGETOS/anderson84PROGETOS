@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Gerenciador de Domínios</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <div>
+    <h1>🌐 GERENCIADOR DE DOMÍNIOS</h1>
+    <p>Visualize domínios, cookies e detalhes armazenados pelo Chrome.</p>
+  </div>
+  <div class="header-actions">
+    <button id="refresh" title="Atualizar">↻</button>
+  </div>
+</header>
+
+<div class="toolbar">
+  <input id="search" type="search" placeholder="🔎 Pesquisar domínio...">
+  <span id="count">0 domínios</span>
+  <button id="saveTxt">Salvar TXT</button>
+  <button id="saveHtml">Salvar HTML</button>
+  <button id="saveDomainsHtml">Salvar apenas domínios</button>
+</div>
+
+<div class="notice">
+  <b>ATENÇÃO:</b> apagar cookies pode encerrar sua sessão no site.
+</div>
+
+<div class="workspace">
+        <div class="resizer-vertical" id="resizer" title="Arraste para aumentar ou diminuir a área de cookies"></div>
+  <section class="domain-section">
+    <div class="section-title">DOMÍNIOS</div>
+    <main id="domains"><div class="loading">Carregando...</div></main>
+  </section>
+
+  <section id="cookiePanel" class="cookie-panel hidden">
+    <div class="cookie-head">
+      <div>
+        <h2 id="cookieTitle">COOKIES</h2>
+        <p id="cookieCount">0 cookies</p>
+      </div>
+      <button id="closeCookies" title="Fechar">✕</button>
+    </div>
+    <div id="cookies" class="cookies">
+      <div class="empty">Selecione um domínio.</div>
+    </div>
+  </section>
+</div>
+
+<footer>
+  <span>Gerenciador de Domínios • Visualizador de Cookies</span>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
