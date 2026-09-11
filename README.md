@@ -557,6 +557,10 @@ SubFinder Enumeração Vulnerabilidades
 🕵️ [***ExifTool Forense Segurança***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/ExifTool%20Forense%20Seguran%C3%A7a)
 ExifTool Forense Segurança
 
+🍪 [***Gerenciador Domínios Cookies***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Gerenciador%20Dom%C3%ADnios%20Cookies)
+Gerenciador Domínios Cookies
+
+
 
 ---
 
