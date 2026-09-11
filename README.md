@@ -554,6 +554,8 @@ SubFinder Enumeração de Subdomínios
 🕵️ [***SubFinder Enumeração Vulnerabilidades***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/SubFinder%20Enumera%C3%A7%C3%A3o%20Vulnerabilidades)
 SubFinder Enumeração Vulnerabilidades
 
+🕵️ [***ExifTool Forense Segurança***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/ExifTool%20Forense%20Seguran%C3%A7a)
+ExifTool Forense Segurança
 
 
 ---
