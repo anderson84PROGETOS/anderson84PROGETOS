@@ -1,0 +1,1640 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ExifTool Forense</title>
+<style>
+  :root {
+    --bg-primary: #0d0d0d;
+    --bg-secondary: #161616;
+    --bg-card: #1f1f1f;
+    --accent: #00FF66;
+    --accent-hover: #00cc52;
+    --text-primary: #e0e0e0;
+    --text-secondary: #a0a0a0;
+    --border: #2a2a2a;
+    --info: #00bfff;
+    --warning: #ffaa00;
+    --danger: #ff5555;
+    --purple: #ff00ff;
+    --row-eq-bg: rgba(0, 255, 102, 0.08);
+    --row-diff-bg: rgba(255, 170, 0, 0.15);
+    --row-only-bg: rgba(0, 191, 255, 0.1);
+  }
+
+  body.light-theme {
+    --bg-primary: #f4f6f8;
+    --bg-secondary: #ffffff;
+    --bg-card: #ffffff;
+    --accent: #00aa44;
+    --accent-hover: #008833;
+    --text-primary: #1a1a1a;
+    --text-secondary: #666666;
+    --border: #e0e0e0;
+    --info: #0077cc;
+    --warning: #d97700;
+    --danger: #cc2222;
+    --purple: #aa00aa;
+    --row-eq-bg: rgba(0, 170, 68, 0.1);
+    --row-diff-bg: rgba(217, 119, 0, 0.15);
+    --row-only-bg: rgba(0, 119, 204, 0.1);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+  body { background-color: var(--bg-primary); color: var(--text-primary); transition: background-color 0.3s, color 0.3s; padding: 15px; }
+
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 15px;
+  }
+  .brand { display: flex; align-items: center; gap: 12px; }
+  .brand h1 { font-size: 1.4rem; color: var(--accent); font-weight: 700; letter-spacing: 0.5px; }
+
+  .toolbar { display: flex; flex-wrap: wrap; gap: 8px; }
+  .btn {
+    background-color: var(--bg-card);
+    color: var(--text-primary);
+    border: 1px solid var(--border);
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s;
+    text-decoration: none;
+  }
+  .btn:hover { background-color: var(--border); border-color: var(--accent); color: var(--accent); }
+  .btn-accent { background-color: var(--accent); color: #000; border: none; }
+  .btn-accent:hover { background-color: var(--accent-hover); color: #000; }
+
+  .dropzone {
+    border: 2px dashed var(--border);
+    border-radius: 8px;
+    padding: 25px;
+    text-align: center;
+    background-color: var(--bg-secondary);
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-bottom: 15px;
+  }
+  .dropzone:hover, .dropzone.dragover { border-color: var(--accent); background-color: rgba(0,255,102,0.03); }
+  .dropzone p { color: var(--text-secondary); font-size: 0.95rem; margin-top: 5px; }
+
+  .file-status-bar {
+    display: none;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px 18px;
+    margin-bottom: 15px;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9rem;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .file-status-bar .info-item { display: flex; align-items: center; gap: 8px; }
+  .file-status-bar .tag-count { background-color: var(--accent); color: #000; padding: 2px 8px; border-radius: 10px; font-weight: bold; font-size: 0.8rem; }
+
+  .tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--border); margin-bottom: 15px; overflow-x: auto; }
+  .tab-btn {
+    padding: 10px 18px;
+    background: transparent;
+    border: none;
+    border-bottom: 3px solid transparent;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    white-space: nowrap;
+    transition: all 0.2s;
+  }
+  .tab-btn:hover { color: var(--text-primary); }
+  .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); background-color: rgba(0,255,102,0.05); }
+
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 15px; }
+  .card {
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 15px;
+  }
+  .card h3 { font-size: 1rem; color: var(--accent); margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); padding-bottom: 8px; gap: 10px; }
+  .card-list { list-style: none; }
+  .card-list li { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px dashed rgba(255,255,255,0.05); font-size: 0.85rem; }
+  .card-list .lbl { color: var(--text-secondary); font-weight: 500; }
+  .card-list .val { font-weight: 600; color: var(--text-primary); text-align: right; word-break: break-all; max-width: 60%; }
+
+  .search-box { width: 100%; padding: 10px 14px; background-color: var(--bg-card); border: 1px solid var(--border); border-radius: 6px; color: var(--text-primary); margin-bottom: 15px; font-size: 0.9rem; outline: none; }
+  .search-box:focus { border-color: var(--accent); }
+
+  .table-container { overflow-x: auto; border: 1px solid var(--border); border-radius: 8px; background-color: var(--bg-secondary); }
+  table { width: 100%; border-collapse: collapse; font-size: 0.85rem; text-align: left; }
+  th, td { padding: 10px 14px; border-bottom: 1px solid var(--border); }
+  th { background-color: var(--bg-card); color: var(--accent); font-weight: 700; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.5px; }
+  tr:hover { background-color: rgba(255,255,255,0.02); }
+
+  .gps-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 15px; }
+  .gps-info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 12px; font-size: 0.9rem; }
+  .gps-info-grid div { background-color: var(--bg-card); padding: 10px 14px; border-radius: 6px; border: 1px solid var(--border); }
+
+  .preview-box { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 15px; background-color: var(--bg-secondary); padding: 20px; border-radius: 8px; border: 1px solid var(--border); }
+  .preview-img { max-width: 100%; max-height: 500px; border-radius: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.5); object-fit: contain; }
+
+  .editor-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; background-color: var(--bg-secondary); padding: 20px; border-radius: 8px; border: 1px solid var(--border); }
+  .form-group { display: flex; flex-direction: column; gap: 6px; }
+  .form-group label { font-size: 0.85rem; color: var(--text-secondary); font-weight: 600; }
+  .form-group input { padding: 8px 12px; background-color: var(--bg-card); border: 1px solid var(--border); border-radius: 4px; color: var(--text-primary); font-size: 0.85rem; }
+  .form-group input:focus { border-color: var(--accent); outline: none; }
+
+  .compare-container { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+  .compare-pane { background-color: var(--bg-secondary); border: 1px solid var(--border); border-radius: 8px; padding: 15px; }
+  .compare-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--border); gap: 10px; }
+  .compare-header h3 { font-size: 1rem; color: var(--accent); word-break: break-all; }
+  .row-eq { background-color: var(--row-eq-bg) !important; }
+  .row-diff { background-color: var(--row-diff-bg) !important; }
+  .row-only { background-color: var(--row-only-bg) !important; }
+  .badge-diff { background-color: var(--warning); color: #000; padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; font-weight: bold; }
+  .badge-eq { background-color: var(--accent); color: #000; padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; font-weight: bold; }
+  .badge-only { background-color: var(--info); color: #0a0a0a; padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; font-weight: bold; white-space: nowrap; }
+
+  .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.85); display: none; justify-content: center; align-items: center; z-index: 9999; }
+  .modal-overlay.active { display: flex; }
+  .modal { background-color: var(--bg-secondary); border: 1px solid var(--border); border-radius: 8px; width: 90%; max-width: 750px; max-height: 85vh; display: flex; flex-direction: column; overflow: hidden; }
+  .modal-header { padding: 15px 20px; background-color: var(--bg-card); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+  .modal-header h2 { font-size: 1.1rem; color: var(--accent); }
+  .modal-body { padding: 20px; overflow-y: auto; font-size: 0.85rem; line-height: 1.5; color: var(--text-primary); }
+  .modal-footer { padding: 12px 20px; background-color: var(--bg-card); border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 10px; }
+  .close-modal { cursor: pointer; background: transparent; border: none; color: var(--text-secondary); font-size: 1.2rem; }
+  .close-modal:hover { color: var(--danger); }
+
+  pre { background-color: var(--bg-primary); padding: 12px; border-radius: 6px; border: 1px solid var(--border); font-family: monospace; white-space: pre-wrap; word-break: break-all; max-height: 350px; overflow-y: auto; color: var(--accent); }
+
+  .alert-banner { background-color: rgba(0,255,102,0.1); border: 1px solid var(--accent); color: var(--accent); padding: 10px 15px; border-radius: 6px; margin-bottom: 15px; font-size: 0.85rem; display: none; }
+
+  .compare-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 10px;
+    margin-bottom: 15px;
+  }
+  .stat-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    text-align: center;
+  }
+  .stat-card .stat-num {
+    font-size: 1.8rem;
+    font-weight: 800;
+    display: block;
+    margin-bottom: 4px;
+  }
+  .stat-card .stat-label {
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  @media(max-width: 850px) {
+    .compare-container { grid-template-columns: 1fr; }
+    header { flex-direction: column; align-items: flex-start; gap: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <h1>ExifTool Forense</h1>
+  </div>
+  <div class="toolbar">
+    <button class="btn btn-accent" onclick="document.getElementById('fileInput').click()">📂 Abrir Arquivo</button>
+    <button class="btn" onclick="iniciarComparacao()">🔀 Comparar</button>
+    <button class="btn" onclick="copiarVisao()">📋 Copiar Visão</button>
+    <button class="btn" onclick="abrirModalHashes()">🔐 Hash</button>
+    <button class="btn" onclick="abrirVirusTotal()">🦠 VirusTotal</button>
+    <button class="btn" onclick="gerarRelatorio()">📝 Relatório</button>
+    <button class="btn btn-accent" onclick="salvarRelatorioHTML()">🌐 Salvar HTML</button>
+    <button class="btn" onclick="abrirStrings()">🕵️ Strings</button>
+    <button class="btn" onclick="alternarTema()">🌓 Tema</button>
+    <button class="btn" onclick="abrirModalSobre()">ℹ️ Sobre</button>
+  </div>
+</header>
+
+<input type="file" id="fileInput" style="display:none" onchange="aoSelecionarArquivo(event)">
+<input type="file" id="cmpInputA" style="display:none" onchange="aoSelecionarCmpA(event)">
+<input type="file" id="cmpInputB" style="display:none" onchange="aoSelecionarCmpB(event)">
+
+<div id="alertBanner" class="alert-banner"></div>
+
+<div class="dropzone" id="dropZone" onclick="document.getElementById('fileInput').click()">
+  <h2 style="font-size: 1.1rem; color: var(--text-primary); margin-bottom: 5px;">Arraste e solte o arquivo aqui para análise forense</h2>
+  <p>Suporta imagens PNG, JPG/JPEG, TIFF, WebP e qualquer formato binário.</p>
+</div>
+
+<div class="file-status-bar" id="fileStatusBar">
+  <div class="info-item">
+    <span>📁 Arquivo Carregado:</span>
+    <strong id="statusFileName" style="color: var(--accent);">--</strong>
+  </div>
+  <div class="info-item">
+    <span>Tamanho: <strong id="statusFileSize">--</strong></span>
+  </div>
+  <div class="info-item">
+    <span>Metadados Extraídos:</span>
+    <span class="tag-count" id="statusTagCount">0 tags</span>
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab-btn active" onclick="abrirAba('visaoGeral', this)">📋 Visão Geral</button>
+  <button class="tab-btn" onclick="abrirAba('metadadosCompletos', this)">📊 Metadados Completos</button>
+  <button class="tab-btn" onclick="abrirAba('tabGPS', this)">📍 GPS</button>
+  <button class="tab-btn" onclick="abrirAba('tabPreview', this)">👁️ Preview</button>
+  <button class="tab-btn" onclick="abrirAba('tabEditor', this)">✏️ Editor EXIF</button>
+  <button class="tab-btn" onclick="abrirAba('tabComparar', this)">🔀 Comparar Lado a Lado</button>
+</div>
+
+<!-- ABA 1: VISÃO GERAL -->
+<div id="visaoGeral" class="tab-content active">
+  <div class="card-grid" id="visaoGeralCards">
+    <div class="card"><p style="color: var(--text-secondary);">Nenhum arquivo analisado no momento. Abra ou arraste um arquivo acima.</p></div>
+  </div>
+</div>
+
+<!-- ABA 2: METADADOS COMPLETOS -->
+<div id="metadadosCompletos" class="tab-content">
+  <input type="text" id="searchMeta" class="search-box" placeholder="🔍 Filtrar metadados por ID da tag, nome ou valor..." onkeyup="filtrarTabelaMetadados()">
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>ID Tag</th>
+          <th>Nome do Campo (PT-BR)</th>
+          <th>Valor Extraído</th>
+        </tr>
+      </thead>
+      <tbody id="tblMetadadosCorpo">
+        <tr><td colspan="3" style="text-align: center; color: var(--text-secondary);">Aguardando arquivo...</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ABA 3: GPS -->
+<div id="tabGPS" class="tab-content">
+  <div class="card" style="margin-bottom: 15px;">
+    <h3>📍 Informações de Geolocalização GPS <span id="gpsStatusBadge" class="badge-only">Aguardando arquivo</span></h3>
+    <div class="gps-info-grid">
+      <div>Latitude: <strong id="gpsLatVal" style="color: var(--accent);">--</strong></div>
+      <div>Longitude: <strong id="gpsLonVal" style="color: var(--accent);">--</strong></div>
+      <div>Altitude: <strong id="gpsAltVal">--</strong></div>
+      <div>Coordenada DMS: <strong id="gpsDmsVal">--</strong></div>
+    </div>
+    <div class="gps-actions" id="gpsActions">
+      <span style="color: var(--text-secondary); font-size: 0.85rem;">Nenhuma coordenada GPS disponível neste arquivo.</span>
+    </div>
+  </div>
+  <div class="card">
+    <h3>🛰️ Tags GPS Brutas Extraídas <span class="badge-only" id="gpsTagCount">0 tags</span></h3>
+    <div class="table-container" style="margin-top: 10px;">
+      <table>
+        <thead><tr><th>ID Tag</th><th>Nome do Campo (PT-BR)</th><th>Valor</th></tr></thead>
+        <tbody id="tblGPSCorpo">
+          <tr><td colspan="3" style="text-align: center; color: var(--text-secondary);">Nenhuma tag GPS encontrada.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ABA 4: PREVIEW -->
+<div id="tabPreview" class="tab-content">
+  <div class="preview-box">
+    <img id="previewImg" class="preview-img" src="" alt="Preview da Imagem" style="display:none;">
+    <p id="previewMsg" style="color: var(--text-secondary);">Nenhuma imagem disponível para visualização.</p>
+  </div>
+</div>
+
+<!-- ABA 5: EDITOR EXIF -->
+<div id="tabEditor" class="tab-content">
+  <div class="card" style="margin-bottom: 15px;">
+    <h3>✏️ Edição de Metadados EXIF &amp; Injeção de Chunks (PNG / JPEG)</h3>
+    <p style="font-size: 0.85rem; color: var(--text-secondary);">Altere as informações abaixo e clique em Salvar. O aplicativo recompõe a estrutura binária dos chunks EXIF/tEXt e reescreve os dados diretamente no arquivo PNG final.</p>
+  </div>
+  <div class="editor-grid">
+    <div class="form-group">
+      <label>Título / Descrição da Imagem:</label>
+      <input type="text" id="editDesc" placeholder="Ex: Foto Forense de Evidência">
+    </div>
+    <div class="form-group">
+      <label>Autor / Artista:</label>
+      <input type="text" id="editArtist" placeholder="Ex: Perito Criminal Santos">
+    </div>
+    <div class="form-group">
+      <label>Direitos Autorais (Copyright):</label>
+      <input type="text" id="editCopyright" placeholder="Ex: © 2023 Todos os direitos reservados">
+    </div>
+    <div class="form-group">
+      <label>Software / Aplicação:</label>
+      <input type="text" id="editSoftware" placeholder="Ex: ExifTool Forense Segurança">
+    </div>
+    <div class="form-group">
+      <label>Fabricante da Câmera (Make):</label>
+      <input type="text" id="editMake" placeholder="Ex: Canon / Sony / Apple">
+    </div>
+    <div class="form-group">
+      <label>Modelo da Câmera (Model):</label>
+      <input type="text" id="editModel" placeholder="Ex: EOS 80D / iPhone 13">
+    </div>
+    <div class="form-group">
+      <label>Data e Hora Original (DD/MM/AAAA HH:MM:SS):</label>
+      <input type="text" id="editDateTime" placeholder="25/12/2023 14:30:00">
+    </div>
+    <div class="form-group">
+      <label>Sensibilidade ISO:</label>
+      <input type="number" id="editISO" placeholder="Ex: 100, 400, 800">
+    </div>
+    <div class="form-group">
+      <label>Abertura do Diafragma (FNumber):</label>
+      <input type="text" id="editAperture" placeholder="Ex: 2.8, 1.8, 5.6">
+    </div>
+    <div class="form-group">
+      <label>Tempo de Exposição (Segundos):</label>
+      <input type="text" id="editExposure" placeholder="Ex: 0.01 ou 1/100">
+    </div>
+    <div class="form-group">
+      <label>Distância Focal (mm):</label>
+      <input type="text" id="editFocal" placeholder="Ex: 50">
+    </div>
+    <div class="form-group">
+      <label>Latitude GPS (Decimal):</label>
+      <input type="number" step="any" id="editLat" placeholder="Ex: -23.550520">
+    </div>
+    <div class="form-group">
+      <label>Longitude GPS (Decimal):</label>
+      <input type="number" step="any" id="editLon" placeholder="Ex: -46.633308">
+    </div>
+  </div>
+  <div style="margin-top: 15px; display: flex; gap: 10px; justify-content: flex-end;">
+    <button class="btn btn-accent" style="padding: 12px 20px;" onclick="salvarAlteracoesEXIF()">💾 Salvar e Exportar Imagem</button>
+  </div>
+</div>
+
+<!-- ABA 6: COMPARAR LADO A LADO -->
+<div id="tabComparar" class="tab-content">
+  <div style="margin-bottom: 15px; display: flex; gap: 10px; flex-wrap: wrap; align-items: center; justify-content: space-between;">
+    <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+      <span class="badge-eq">🟢 Iguais</span>
+      <span class="badge-diff">🟠 Diferentes</span>
+      <span class="badge-only">🔵 Único em um arquivo</span>
+      <button class="btn btn-accent" onclick="salvarComparacaoHTML()" title="Exportar comparação completa em HTML">🌐 Salvar Comparação HTML</button>
+    </div>
+    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+      <button class="btn" onclick="document.getElementById('cmpInputA').click()">📂 Escolher Arquivo A</button>
+      <button class="btn" onclick="document.getElementById('cmpInputB').click()">📂 Escolher Arquivo B</button>
+      <button class="btn" onclick="trocarComparacao()">⇄ Inverter A / B</button>
+    </div>
+  </div>
+
+  <!-- ESTATÍSTICAS DA COMPARAÇÃO -->
+  <div class="compare-stats" id="cmpStats" style="display:none;">
+    <div class="stat-card">
+      <span class="stat-num" style="color: var(--accent);" id="statIguais">0</span>
+      <span class="stat-label">🟢 Tags Iguais</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-num" style="color: var(--warning);" id="statDiferentes">0</span>
+      <span class="stat-label">🟠 Tags Diferentes</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-num" style="color: var(--info);" id="statUnicoA">0</span>
+      <span class="stat-label">🔵 Único em A</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-num" style="color: var(--info);" id="statUnicoB">0</span>
+      <span class="stat-label">🔵 Único em B</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-num" style="color: var(--text-primary);" id="statTotal">0</span>
+      <span class="stat-label">📊 Total de Tags</span>
+    </div>
+  </div>
+
+  <div class="compare-container">
+    <div class="compare-pane" id="cmpPaneA">
+      <div class="compare-header">
+        <h3 id="cmpTitleA">Painel A: NENHUM</h3>
+        <span class="badge-only" id="cmpBadgeA">0 tags</span>
+      </div>
+      <div class="table-container">
+        <table>
+          <thead><tr><th>Campo</th><th>Valor (A)</th></tr></thead>
+          <tbody id="cmpTbodyA"><tr><td colspan="2" style="text-align: center;">Carregue o Arquivo A</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="compare-pane" id="cmpPaneB">
+      <div class="compare-header">
+        <h3 id="cmpTitleB">Painel B: NENHUM</h3>
+        <span class="badge-only" id="cmpBadgeB">0 tags</span>
+      </div>
+      <div class="table-container">
+        <table>
+          <thead><tr><th>Campo</th><th>Valor (B)</th></tr></thead>
+          <tbody id="cmpTbodyB"><tr><td colspan="2" style="text-align: center;">Carregue o Arquivo B</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAIS -->
+<div id="modalGenerico" class="modal-overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 id="modalTitulo">Título do Modal</h2>
+      <button class="close-modal" onclick="fecharModal('modalGenerico')">✖</button>
+    </div>
+    <div class="modal-body" id="modalCorpo"></div>
+    <div class="modal-footer">
+      <button class="btn" onclick="fecharModal('modalGenerico')">Fechar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ==========================================================================
+   ESTADO GLOBAL DA APLICAÇÃO
+   ========================================================================== */
+var APP = {
+  arquivo: null,
+  nomeArquivo: '',
+  metadados: {},
+  coordenadasGPS: null,
+  dadosBrutos: null,
+  modoEscuro: true
+};
+
+var CMP = {
+  metaA: null,
+  metaB: null,
+  nomeA: '',
+  nomeB: ''
+};
+
+/* ==========================================================================
+   DICIONÁRIOS E MAPEAMENTO DE TAGS EXIF
+   ========================================================================== */
+var EXIF_TAGS = {
+  0x0100: "ImageWidth", 0x0101: "ImageLength", 0x0102: "BitsPerSample", 0x0103: "Compression",
+  0x0106: "PhotometricInterpretation", 0x010E: "ImageDescription", 0x010F: "Make", 0x0110: "Model",
+  0x0111: "StripOffsets", 0x0112: "Orientation", 0x0115: "SamplesPerPixel", 0x0116: "RowsPerStrip",
+  0x0117: "StripByteCounts", 0x011A: "XResolution", 0x011B: "YResolution", 0x011C: "PlanarConfiguration",
+  0x0128: "ResolutionUnit", 0x012D: "TransferFunction", 0x0131: "Software", 0x0132: "DateTime",
+  0x013B: "Artist", 0x013E: "WhitePoint", 0x013F: "PrimaryChromaticities", 0x0201: "JPEGInterchangeFormat",
+  0x0202: "JPEGInterchangeFormatLength", 0x0211: "YCbCrCoefficients", 0x0212: "YCbCrSubSampling",
+  0x0213: "YCbCrPositioning", 0x0214: "ReferenceBlackWhite", 0x8298: "Copyright", 0x829A: "ExposureTime",
+  0x829D: "FNumber", 0x8769: "ExifOffset", 0x8822: "ExposureProgram", 0x8824: "SpectralSensitivity",
+  0x8825: "GPSInfo", 0x8827: "ISOSpeedRatings", 0x8828: "OECF", 0x8830: "SensitivityType",
+  0x8832: "RecommendedExposureIndex", 0x9000: "ExifVersion", 0x9003: "DateTimeOriginal",
+  0x9004: "DateTimeDigitized", 0x9101: "ComponentsConfiguration", 0x9102: "CompressedBitsPerPixel",
+  0x9201: "ShutterSpeedValue", 0x9202: "ApertureValue", 0x9203: "BrightnessValue",
+  0x9204: "ExposureBiasValue", 0x9205: "MaxApertureValue", 0x9206: "SubjectDistance",
+  0x9207: "MeteringMode", 0x9208: "LightSource", 0x9209: "Flash", 0x920A: "FocalLength",
+  0x927C: "MakerNote", 0x9286: "UserComment", 0x9290: "SubsecTime", 0x9291: "SubsecTimeOriginal",
+  0x9292: "SubsecTimeDigitized", 0xA000: "FlashpixVersion", 0xA001: "ColorSpace",
+  0xA002: "PixelXDimension", 0xA003: "PixelYDimension", 0xA004: "RelatedSoundFile",
+  0xA005: "InteroperabilityOffset", 0xA20B: "FlashEnergy", 0xA20E: "FocalPlaneXResolution",
+  0xA20F: "FocalPlaneYResolution", 0xA210: "FocalPlaneResolutionUnit", 0xA214: "SubjectLocation",
+  0xA215: "ExposureIndex", 0xA217: "SensingMethod", 0xA300: "FileSource", 0xA301: "SceneType",
+  0xA302: "CFAPattern", 0xA401: "CustomRendered", 0xA402: "ExposureMode", 0xA403: "WhiteBalance",
+  0xA404: "DigitalZoomRatio", 0xA405: "FocalLengthIn35mmFilm", 0xA406: "SceneCaptureType",
+  0xA407: "GainControl", 0xA408: "Contrast", 0xA409: "Saturation", 0xA40A: "Sharpness",
+  0xA40C: "SubjectDistanceRange", 0xA420: "ImageUniqueID", 0xA430: "CameraOwnerName",
+  0xA431: "BodySerialNumber", 0xA432: "LensSpecification", 0xA433: "LensMake", 0xA434: "LensModel",
+  0xA435: "LensSerialNumber", 0xA500: "Gamma"
+};
+
+var GPS_TAGS = {
+  0: "Versão do GPS (GPSVersionID)",
+  1: "Referência da Latitude (N/S)",
+  2: "Latitude (Graus/Min/Seg)",
+  3: "Referência da Longitude (L/O)",
+  4: "Longitude (Graus/Min/Seg)",
+  5: "Referência da Altitude",
+  6: "Altitude (Metros)",
+  7: "Horário GPS (UTC)",
+  8: "Satélites Utilizados",
+  9: "Status do Receptor GPS",
+  10: "Modo de Medição (2D/3D)",
+  11: "Precisão DOP",
+  12: "Unidade de Velocidade",
+  13: "Velocidade do Movimento",
+  14: "Referência da Direção do Movimento",
+  15: "Direção do Movimento",
+  16: "Referência da Direção da Imagem",
+  17: "Direção da Imagem (Bússola)",
+  18: "Datum do Mapa",
+  19: "Referência Latitude de Destino",
+  20: "Latitude de Destino",
+  21: "Referência Longitude de Destino",
+  22: "Longitude de Destino",
+  23: "Referência do Rumo de Destino",
+  24: "Rumo de Destino",
+  25: "Unidade de Distância ao Destino",
+  26: "Distância até o Destino",
+  27: "Método de Processamento GPS",
+  28: "Nome da Área GPS",
+  29: "Data GPS (UTC)",
+  30: "Diferencial GPS",
+  31: "Erro de Posicionamento Horizontal"
+};
+
+var TRADUCAO = {
+  "FILE_Name": "Nome do Arquivo",
+  "FILE_Size": "Tamanho do Arquivo",
+  "FILE_Type": "Tipo Mime / Formato",
+  "FILE_LastModified": "Última Modificação",
+  "FILE_FileType": "Formato Detectado (Assinatura)",
+  "FILE_MimeType": "Mime Type Real",
+  "HASH_MD5": "Hash MD5",
+  "HASH_SHA256": "Hash SHA-256",
+  "0x0100": "Largura da Imagem (Pixels)",
+  "0x0101": "Altura da Imagem (Pixels)",
+  "0x0102": "Bits por Amostra",
+  "0x0103": "Compressão",
+  "0x010E": "Descrição / Título da Imagem",
+  "0x010F": "Fabricante da Câmera",
+  "0x0110": "Modelo da Câmera",
+  "0x0112": "Orientação do Sensor",
+  "0x011A": "Resolução Horizontal (X)",
+  "0x011B": "Resolução Vertical (Y)",
+  "0x0128": "Unidade de Resolução",
+  "0x0131": "Software / Aplicação Utilizada",
+  "0x0132": "Data e Hora da Modificação",
+  "0x013B": "Autor / Artista Forense",
+  "0x8298": "Direitos Autorais (Copyright)",
+  "0x829A": "Tempo de Exposição (Obturador)",
+  "0x829D": "Abertura do Diafragma (F-Number)",
+  "0x8822": "Programa de Exposição",
+  "0x8827": "Sensibilidade ISO",
+  "0x9000": "Versão EXIF Suportada",
+  "0x9003": "Data e Hora Original da Foto",
+  "0x9004": "Data e Hora da Digitalização",
+  "0x9201": "Velocidade do Obturador (EV)",
+  "0x9202": "Abertura do Diafragma (EV)",
+  "0x9203": "Brilho (EV)",
+  "0x9204": "Compensação de Exposição (EV)",
+  "0x9205": "Abertura Máxima da Lente",
+  "0x9206": "Distância do Objeto",
+  "0x9207": "Modo de Medição de Luz",
+  "0x9208": "Fonte de Luz / Iluminação",
+  "0x9209": "Status do Flash",
+  "0x920A": "Distância Focal (mm)",
+  "0x927C": "MakerNote (Dados do Fabricante)",
+  "0x9286": "Comentários do Usuário",
+  "0xA001": "Espaço de Cores",
+  "0xA002": "Largura Válida de Pixels",
+  "0xA003": "Altura Válida de Pixels",
+  "0xA402": "Modo de Exposição",
+  "0xA403": "Balanço de Branco",
+  "0xA404": "Taxa de Zoom Digital",
+  "0xA405": "Distância Focal Equivalente 35mm",
+  "0xA406": "Tipo de Captura de Cena",
+  "0xA420": "ID Único da Imagem (UUID)",
+  "0xA430": "Proprietário da Câmera",
+  "0xA431": "Número de Série do Corpo da Câmera",
+  "0xA433": "Fabricante da Lente",
+  "0xA434": "Modelo da Lente Utilizada",
+  "0xA435": "Número de Série da Lente",
+  "0xA500": "Gama",
+  "GPS_Lat": "Latitude GPS (Decimal)",
+  "GPS_Lon": "Longitude GPS (Decimal)",
+  "GPS_Alt": "Altitude GPS (Metros)",
+  "IMAGE_Width": "Largura da Imagem",
+  "IMAGE_Height": "Altura da Imagem",
+  "IMAGE_BitDepth": "Profundidade de Bits",
+  "IMAGE_ColorType": "Modo de Cor PNG",
+  "IMAGE_Compression": "Método de Compressão",
+  "IMAGE_Filter": "Filtro Adaptativo PNG",
+  "IMAGE_Interlace": "Interlaçamento PNG",
+  "IMAGE_ResolutionUnit": "Densidade / Resolução DPI"
+};
+
+/* ==========================================================================
+   FUNÇÕES AUXILIARES & FORMATADORES (DD/MM/AAAA)
+   ========================================================================== */
+function escaparHTML(txt) {
+  return String(txt)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function formatarDataBR(data) {
+  if (!data) return "--";
+  if (typeof data === "string") {
+    var match = data.match(/^(\d{4})[:\/-](\d{2})[:\/-](\d{2})\s*(.*)$/);
+    if (match) return match[3] + "/" + match[2] + "/" + match[1] + (match[4] ? " " + match[4] : "");
+  }
+  if (data instanceof Date && !isNaN(data)) {
+    var dia = String(data.getDate()).padStart(2, '0');
+    var mes = String(data.getMonth() + 1).padStart(2, '0');
+    var ano = data.getFullYear();
+    var hora = String(data.getHours()).padStart(2, '0');
+    var min = String(data.getMinutes()).padStart(2, '0');
+    var seg = String(data.getSeconds()).padStart(2, '0');
+    return dia + "/" + mes + "/" + ano + " " + hora + ":" + min + ":" + seg;
+  }
+  return String(data);
+}
+
+function converterDataParaEXIF(strBR) {
+  if (!strBR) return "";
+  var parts = strBR.trim().split(' ');
+  if (parts.length > 0 && parts[0].indexOf('/') !== -1) {
+    var d = parts[0].split('/');
+    if (d.length === 3) {
+      return d[2] + ":" + d[1].padStart(2, '0') + ":" + d[0].padStart(2, '0') + (parts[1] ? " " + parts[1] : " 00:00:00");
+    }
+  }
+  return strBR;
+}
+
+function traduzirTag(chave) {
+  if (TRADUCAO[chave]) return TRADUCAO[chave];
+  if (/^GPS_\d+$/.test(chave)) {
+    var n = parseInt(chave.split('_')[1], 10);
+    if (GPS_TAGS[n] !== undefined) return "GPS: " + GPS_TAGS[n];
+    return "GPS: Tag " + n;
+  }
+  if (/^PNG_Text_/.test(chave)) return "Texto PNG: " + chave.replace('PNG_Text_', '');
+  var num = parseInt(chave, 16);
+  if (!isNaN(num) && EXIF_TAGS[num]) return EXIF_TAGS[num];
+  return chave;
+}
+
+function formatarValorTag(chave, val) {
+  if (val === null || val === undefined) return "--";
+  if (Array.isArray(val)) return val.join(', ');
+  var strVal = String(val);
+  if (chave === "0x0132" || chave === "0x9003" || chave === "0x9004" || chave === "FILE_LastModified") {
+    return formatarDataBR(strVal);
+  }
+  if (chave === "0x829A") {
+    var num = parseFloat(strVal);
+    if (!isNaN(num) && num > 0 && num < 1) return "1/" + Math.round(1 / num) + " s";
+    return strVal + " s";
+  }
+  if (chave === "0x829D") return "f/" + strVal;
+  if (chave === "0x920A") return strVal + " mm";
+  if (chave === "GPS_6" || chave === "GPS_Alt") return parseFloat(strVal).toFixed(2) + " m";
+  return strVal;
+}
+
+function converterParaDMS(dec, ehLatitude) {
+  if (dec === null || isNaN(dec)) return "--";
+  var ref = ehLatitude ? (dec >= 0 ? "N" : "S") : (dec >= 0 ? "L" : "O");
+  var abs = Math.abs(dec);
+  var g = Math.floor(abs);
+  var mFloat = (abs - g) * 60;
+  var m = Math.floor(mFloat);
+  var s = ((mFloat - m) * 60).toFixed(2);
+  return g + "° " + m + "' " + s + '" ' + ref;
+}
+
+/* ==========================================================================
+   PROCESSAMENTO DE ARQUIVO & LEITURA DE CHUNKS (PNG & JPEG)
+   ========================================================================== */
+function aoSelecionarArquivo(evt) {
+  var file = evt.target.files[0];
+  if (file) processarArquivo(file);
+  evt.target.value = '';
+}
+
+function processarArquivo(file) {
+  APP.arquivo = file;
+  APP.nomeArquivo = file.name;
+  document.getElementById('statusFileName').innerText = file.name;
+  document.getElementById('statusFileSize').innerText = (file.size / 1024).toFixed(2) + " KB";
+  document.getElementById('fileStatusBar').style.display = 'flex';
+
+  extrairMeta(file, function(resultado) {
+    APP.metadados = resultado.meta;
+    APP.coordenadasGPS = resultado.gps;
+    APP.dadosBrutos = resultado.buffer;
+    atualizarTudoUI();
+    if (!CMP.metaA) {
+      CMP.metaA = resultado.meta;
+      CMP.nomeA = file.name;
+      renderizarPainelCmp('A');
+    }
+  });
+}
+
+function extrairMeta(file, callback) {
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    var buffer = e.target.result;
+    var dataView = new DataView(buffer);
+    var meta = {};
+    meta["FILE_Name"] = file.name;
+    meta["FILE_Size"] = (file.size / 1024).toFixed(2) + " KB (" + file.size + " bytes)";
+    meta["FILE_Type"] = file.type || "desconhecido";
+    meta["FILE_LastModified"] = formatarDataBR(new Date(file.lastModified));
+    meta["HASH_MD5"] = calcMD5(new Uint8Array(buffer));
+    meta["HASH_SHA256"] = "Calculando...";
+    try {
+      if (buffer.byteLength > 4 && dataView.getUint16(0) === 0xFFD8) {
+        extrairEXIFJPEG(dataView, meta);
+      } else if (buffer.byteLength > 8 && dataView.getUint32(0) === 0x89504E47) {
+        extrairPNGCompleto(dataView, meta);
+      }
+    } catch (err) { console.warn("Erro na extração:", err); }
+    calcSHA256(buffer).then(function(sha) {
+      meta["HASH_SHA256"] = sha;
+      var gps = extrairGPSDecimal(meta);
+      callback({ meta: meta, buffer: buffer, gps: gps });
+    });
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+function extrairPNGCompleto(dataView, meta) {
+  meta["FILE_FileType"] = "PNG";
+  meta["FILE_MimeType"] = "image/png";
+  var offset = 8;
+  while (offset < dataView.byteLength - 12) {
+    var length = dataView.getUint32(offset, false);
+    if (length < 0 || offset + 12 + length > dataView.byteLength) break;
+    var typeStr = "";
+    for (var c = 0; c < 4; c++) typeStr += String.fromCharCode(dataView.getUint8(offset + 4 + c));
+    var dataOffset = offset + 8;
+    if (typeStr === "IHDR" && length >= 13) {
+      var w = dataView.getUint32(dataOffset, false);
+      var h = dataView.getUint32(dataOffset + 4, false);
+      var bitDepth = dataView.getUint8(dataOffset + 8);
+      var colorType = dataView.getUint8(dataOffset + 9);
+      var compr = dataView.getUint8(dataOffset + 10);
+      var filtro = dataView.getUint8(dataOffset + 11);
+      var interlace = dataView.getUint8(dataOffset + 12);
+      meta["0x0100"] = w; meta["0x0101"] = h;
+      meta["IMAGE_Width"] = w + " px"; meta["IMAGE_Height"] = h + " px";
+      meta["IMAGE_BitDepth"] = bitDepth + " bits/canal";
+      meta["IMAGE_ColorType"] = colorType === 6 ? "RGBA (Colorido + Alfa)" : (colorType === 2 ? "RGB (Truecolor)" : (colorType === 4 ? "Escala de Cinza + Alfa" : (colorType === 3 ? "Paleta Indexada" : (colorType === 0 ? "Escala de Cinza" : "Tipo " + colorType))));
+      meta["IMAGE_Compression"] = compr === 0 ? "Deflate/Inflate (Padrão PNG)" : "Método " + compr;
+      meta["IMAGE_Filter"] = filtro === 0 ? "Filtro Adaptativo Padrão" : "Método " + filtro;
+      meta["IMAGE_Interlace"] = interlace === 1 ? "Adam7 (Entrelaçado)" : "Nenhum (Progressivo)";
+    } else if (typeStr === "tEXt" || typeStr === "iTXt" || typeStr === "zTXt") {
+      var str = "";
+      for (var k = 0; k < Math.min(length, 2048); k++) { var ch = dataView.getUint8(dataOffset + k); str += (ch !== 0) ? String.fromCharCode(ch) : "\0"; }
+      var parts = str.split("\0").filter(function(p) { return p.length > 0; });
+      if (parts.length >= 2) mapearTextoPNG(parts[0].trim(), parts[parts.length - 1].trim(), meta);
+    } else if (typeStr === "eXIf") {
+      try {
+        var bigEndian = (dataView.getUint16(dataOffset) === 0x4D4D);
+        var tiffMagic = dataView.getUint16(dataOffset + 2, !bigEndian);
+        if (tiffMagic === 0x002A) { var firstIFD = dataView.getUint32(dataOffset + 4, !bigEndian); lerIFD(dataView, dataOffset + firstIFD, dataOffset, bigEndian, meta); }
+      } catch (e) { console.warn("Erro chunk eXIf:", e); }
+    } else if (typeStr === "pHYs" && length >= 9) {
+      var ppuX = dataView.getUint32(dataOffset, false); var ppuY = dataView.getUint32(dataOffset + 4, false); var unit = dataView.getUint8(dataOffset + 8);
+      if (unit === 1) { var dpiX = Math.round(ppuX * 0.0254); var dpiY = Math.round(ppuY * 0.0254); meta["IMAGE_ResolutionUnit"] = dpiX + " x " + dpiY + " DPI"; meta["0x011A"] = dpiX; meta["0x011B"] = dpiY; }
+      else { meta["IMAGE_ResolutionUnit"] = ppuX + " x " + ppuY + " px/unidade"; }
+    } else if (typeStr === "gAMA" && length >= 4) {
+      meta["0xA500"] = (dataView.getUint32(dataOffset, false) / 100000).toFixed(5);
+    } else if (typeStr === "tIME" && length >= 7) {
+      var y = dataView.getUint16(dataOffset, false);
+      var mo = String(dataView.getUint8(dataOffset + 2)).padStart(2, '0');
+      var dd = String(dataView.getUint8(dataOffset + 3)).padStart(2, '0');
+      var hh = String(dataView.getUint8(dataOffset + 4)).padStart(2, '0');
+      var mi = String(dataView.getUint8(dataOffset + 5)).padStart(2, '0');
+      var ss = String(dataView.getUint8(dataOffset + 6)).padStart(2, '0');
+      meta["0x0132"] = dd + "/" + mo + "/" + y + " " + hh + ":" + mi + ":" + ss;
+    } else if (typeStr === "IEND") { break; }
+    offset += 12 + length;
+  }
+}
+
+function mapearTextoPNG(key, val, meta) {
+  if (!val) return;
+  var kLower = key.toLowerCase();
+  if (kLower === "title" || kLower === "description") meta["0x010E"] = val;
+  else if (kLower === "author" || kLower === "artist") meta["0x013B"] = val;
+  else if (kLower === "copyright") meta["0x8298"] = val;
+  else if (kLower === "software") meta["0x0131"] = val;
+  else if (kLower === "creation time" || kLower === "date") meta["0x9003"] = val;
+  else if (kLower === "comment") meta["0x9286"] = val;
+  else meta["PNG_Text_" + key] = val;
+}
+
+function extrairEXIFJPEG(dataView, meta) {
+  meta["FILE_FileType"] = "JPEG"; meta["FILE_MimeType"] = "image/jpeg";
+  var offset = 2;
+  while (offset < dataView.byteLength - 4) {
+    var marker = dataView.getUint16(offset);
+    if (marker === 0xFFE1) {
+      if (dataView.getUint32(offset + 4) === 0x45786966) {
+        var tiffHeaderOffset = offset + 10;
+        var bigEndian = (dataView.getUint16(tiffHeaderOffset) === 0x4D4D);
+        var firstIFD = dataView.getUint32(tiffHeaderOffset + 4, !bigEndian);
+        lerIFD(dataView, tiffHeaderOffset + firstIFD, tiffHeaderOffset, bigEndian, meta);
+      }
+      break;
+    }
+    if ((marker & 0xFF00) !== 0xFF00) break;
+    offset += 2 + dataView.getUint16(offset + 2);
+  }
+}
+
+function lerIFD(dataView, ifdOffset, tiffStart, bigEndian, meta) {
+  try {
+    var numEntries = dataView.getUint16(ifdOffset, !bigEndian);
+    if (numEntries > 512) return;
+    for (var i = 0; i < numEntries; i++) {
+      var entryOffset = ifdOffset + 2 + (i * 12);
+      var tag = dataView.getUint16(entryOffset, !bigEndian);
+      var type = dataView.getUint16(entryOffset + 2, !bigEndian);
+      var count = dataView.getUint32(entryOffset + 4, !bigEndian);
+      var valOffset = entryOffset + 8;
+      if (tag === 0x8769 || tag === 0xA005) { var sub = tiffStart + dataView.getUint32(valOffset, !bigEndian); lerIFD(dataView, sub, tiffStart, bigEndian, meta); }
+      else if (tag === 0x8825) { var gsub = tiffStart + dataView.getUint32(valOffset, !bigEndian); lerGPSIFD(dataView, gsub, tiffStart, bigEndian, meta); }
+      else { var hexTag = "0x" + tag.toString(16).padStart(4, '0').toUpperCase(); meta[hexTag] = lerValorTag(dataView, type, count, valOffset, tiffStart, bigEndian); }
+    }
+  } catch (e) { console.warn("Erro ao ler IFD:", e); }
+}
+
+function lerGPSIFD(dataView, gpsOffset, tiffStart, bigEndian, meta) {
+  try {
+    var numEntries = dataView.getUint16(gpsOffset, !bigEndian);
+    if (numEntries > 128) return;
+    for (var i = 0; i < numEntries; i++) {
+      var entryOffset = gpsOffset + 2 + (i * 12);
+      var tag = dataView.getUint16(entryOffset, !bigEndian);
+      var type = dataView.getUint16(entryOffset + 2, !bigEndian);
+      var count = dataView.getUint32(entryOffset + 4, !bigEndian);
+      var valOffset = entryOffset + 8;
+      meta["GPS_" + tag] = lerValorTag(dataView, type, count, valOffset, tiffStart, bigEndian);
+    }
+  } catch (e) { console.warn("Erro GPS IFD:", e); }
+}
+
+function lerValorTag(dataView, type, count, valOffset, tiffStart, bigEndian) {
+  if (type === 2) {
+    var p = count > 4 ? tiffStart + dataView.getUint32(valOffset, !bigEndian) : valOffset;
+    var str = "";
+    for (var i = 0; i < count - 1; i++) { var c = dataView.getUint8(p + i); if (c === 0) break; str += String.fromCharCode(c); }
+    return str.trim();
+  }
+  if (type === 1 || type === 6 || type === 7) {
+    if (count === 1) return dataView.getUint8(valOffset);
+    var bytes = []; var pb = count > 4 ? tiffStart + dataView.getUint32(valOffset, !bigEndian) : valOffset;
+    for (var b = 0; b < Math.min(count, 40); b++) bytes.push(dataView.getUint8(pb + b));
+    return bytes.join(' ');
+  }
+  if (type === 3) {
+    if (count === 1) return dataView.getUint16(valOffset, !bigEndian);
+    var arrS = []; var ps = count > 2 ? tiffStart + dataView.getUint32(valOffset, !bigEndian) : valOffset;
+    for (var s = 0; s < Math.min(count, 20); s++) arrS.push(dataView.getUint16(ps + s * 2, !bigEndian));
+    return arrS;
+  }
+  if (type === 4) return dataView.getUint32(valOffset, !bigEndian);
+  if (type === 5 || type === 10) {
+    var p5 = tiffStart + dataView.getUint32(valOffset, !bigEndian);
+    if (count === 1) {
+      var num = (type === 10) ? dataView.getInt32(p5, !bigEndian) : dataView.getUint32(p5, !bigEndian);
+      var den = (type === 10) ? dataView.getInt32(p5 + 4, !bigEndian) : dataView.getUint32(p5 + 4, !bigEndian);
+      return den !== 0 ? parseFloat((num / den).toFixed(6)) : 0;
+    }
+    var arr = [];
+    for (var k = 0; k < Math.min(count, 20); k++) {
+      var n = (type === 10) ? dataView.getInt32(p5 + k * 8, !bigEndian) : dataView.getUint32(p5 + k * 8, !bigEndian);
+      var d = (type === 10) ? dataView.getInt32(p5 + k * 8 + 4, !bigEndian) : dataView.getUint32(p5 + k * 8 + 4, !bigEndian);
+      arr.push(d !== 0 ? n / d : 0);
+    }
+    return arr;
+  }
+  if (type === 9) return dataView.getInt32(valOffset, !bigEndian);
+  return dataView.getUint32(valOffset, !bigEndian);
+}
+
+function extrairGPSDecimal(meta) {
+  var lat = meta["GPS_2"]; var latRef = meta["GPS_1"] || "N";
+  var lon = meta["GPS_4"]; var lonRef = meta["GPS_3"] || "E";
+  var alt = meta["GPS_6"];
+  if (lat === undefined || lon === undefined) return null;
+  var decLat, decLon;
+  if (Array.isArray(lat)) decLat = lat[0] + (lat[1] / 60) + (lat[2] / 3600); else decLat = parseFloat(lat);
+  if (Array.isArray(lon)) decLon = lon[0] + (lon[1] / 60) + (lon[2] / 3600); else decLon = parseFloat(lon);
+  if (isNaN(decLat) || isNaN(decLon)) return null;
+  if (String(latRef).toUpperCase() === "S") decLat = -decLat;
+  if (String(lonRef).toUpperCase() === "W") decLon = -decLon;
+  decLat = parseFloat(decLat.toFixed(6)); decLon = parseFloat(decLon.toFixed(6));
+  meta["GPS_Lat"] = decLat.toFixed(6); meta["GPS_Lon"] = decLon.toFixed(6);
+  if (alt !== undefined) meta["GPS_Alt"] = parseFloat(alt).toFixed(2);
+  return { lat: decLat, lon: decLon, alt: (alt !== undefined ? parseFloat(alt).toFixed(2) : null) };
+}
+
+/* ==========================================================================
+   CONSTRUTOR BINÁRIO DE EXIF & INJETOR DE CHUNKS PNG
+   ========================================================================== */
+function encodeEXIFBuffer(edits) {
+  var buf = new ArrayBuffer(4096); var view = new DataView(buf); var u8 = new Uint8Array(buf);
+  u8[0] = 0x49; u8[1] = 0x49; view.setUint16(2, 0x002A, true); view.setUint32(4, 8, true);
+  var offset = 800;
+  function addString(str) { var p = offset; str = (str || "") + "\0"; for (var i = 0; i < str.length; i++) u8[p + i] = str.charCodeAt(i) & 0xFF; offset += str.length; if (offset % 2 !== 0) offset++; return p; }
+  var entries = [];
+  function addTexto(tag, valor) { if (valor) entries.push({ tag: tag, type: 2, count: valor.length + 1, val: addString(valor) }); }
+  addTexto(0x010E, edits.desc); addTexto(0x010F, edits.make); addTexto(0x0110, edits.model);
+  addTexto(0x0131, edits.software); addTexto(0x0132, edits.datetime); addTexto(0x013B, edits.artist); addTexto(0x8298, edits.copyright);
+  var pos = 8; view.setUint16(pos, entries.length, true); pos += 2;
+  for (var i = 0; i < entries.length; i++) {
+    var e = entries[i]; view.setUint16(pos, e.tag, true); view.setUint16(pos + 2, e.type, true);
+    view.setUint32(pos + 4, e.count, true); view.setUint32(pos + 8, e.val, true); pos += 12;
+  }
+  view.setUint32(pos, 0, true);
+  return u8.slice(0, offset);
+}
+
+function criarChunkPNG(tipo, payload) {
+  var len = payload.length; var chunk = new Uint8Array(12 + len); var view = new DataView(chunk.buffer);
+  view.setUint32(0, len, false);
+  for (var i = 0; i < 4; i++) chunk[4 + i] = tipo.charCodeAt(i) & 0xFF;
+  chunk.set(payload, 8);
+  var crc = calcCRC32(chunk, 4, 4 + len); view.setUint32(8 + len, crc, false);
+  return chunk;
+}
+
+function criarChunkPNGText(chave, valor) {
+  if (!valor) return null;
+  var str = chave + "\0" + valor; var u8 = new Uint8Array(str.length);
+  for (var i = 0; i < str.length; i++) u8[i] = str.charCodeAt(i) & 0xFF;
+  return criarChunkPNG("tEXt", u8);
+}
+
+function injetarMetadataPNG(basePngU8, edits) {
+  var exifBuf = encodeEXIFBuffer(edits); var novos = [];
+  if (exifBuf && exifBuf.length > 0) novos.push(criarChunkPNG("eXIf", exifBuf));
+  novos.push(criarChunkPNGText("Title", edits.desc)); novos.push(criarChunkPNGText("Description", edits.desc));
+  novos.push(criarChunkPNGText("Author", edits.artist)); novos.push(criarChunkPNGText("Copyright", edits.copyright));
+  novos.push(criarChunkPNGText("Software", edits.software)); novos.push(criarChunkPNGText("Make", edits.make));
+  novos.push(criarChunkPNGText("Model", edits.model)); novos.push(criarChunkPNGText("Creation Time", edits.datetime));
+  var insertPos = 33; var totalNovo = 0;
+  for (var i = 0; i < novos.length; i++) if (novos[i]) totalNovo += novos[i].length;
+  var resultado = new Uint8Array(basePngU8.length + totalNovo);
+  resultado.set(basePngU8.subarray(0, insertPos), 0);
+  var curr = insertPos;
+  for (var j = 0; j < novos.length; j++) { if (novos[j]) { resultado.set(novos[j], curr); curr += novos[j].length; } }
+  resultado.set(basePngU8.subarray(insertPos), curr);
+  return resultado;
+}
+
+function salvarAlteracoesEXIF() {
+  if (!APP.dadosBrutos) { alert("Carregue uma imagem antes de salvar!"); return; }
+  var edits = {
+    desc: document.getElementById('editDesc').value.trim(), artist: document.getElementById('editArtist').value.trim(),
+    copyright: document.getElementById('editCopyright').value.trim(), software: document.getElementById('editSoftware').value.trim(),
+    make: document.getElementById('editMake').value.trim(), model: document.getElementById('editModel').value.trim(),
+    datetime: converterDataParaEXIF(document.getElementById('editDateTime').value.trim())
+  };
+  var baseU8 = new Uint8Array(APP.dadosBrutos); var finalU8 = baseU8;
+  var nomeSaida = (APP.nomeArquivo || "imagem").replace(/\.[^.]+$/, "") + "_editado.png";
+  if (baseU8[0] === 0x89 && baseU8[1] === 0x50) { finalU8 = injetarMetadataPNG(baseU8, edits); }
+  else { nomeSaida = (APP.nomeArquivo || "imagem").replace(/\.[^.]+$/, "") + "_editado.jpg"; }
+  var blob = new Blob([finalU8], { type: APP.arquivo ? APP.arquivo.type : "image/png" });
+  var url = URL.createObjectURL(blob); var a = document.createElement('a');
+  a.href = url; a.download = nomeSaida; document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(function() { URL.revokeObjectURL(url); }, 3000);
+  var fileMock = new File([finalU8], nomeSaida, { type: blob.type, lastModified: Date.now() });
+  processarArquivo(fileMock);
+  exibirAlerta("✅ Metadados injetados e arquivo '" + nomeSaida + "' exportado com sucesso!");
+}
+
+/* ==========================================================================
+   ATUALIZAÇÃO DA INTERFACE DA APLICAÇÃO (UI)
+   ========================================================================== */
+function atualizarTudoUI() {
+  document.getElementById('statusTagCount').innerText = Object.keys(APP.metadados).length + " tags";
+  renderizarVisaoGeral(); renderizarTabelaMetadados(); renderizarGPS(); renderizarPreview(); preencherEditor();
+}
+
+function renderizarVisaoGeral() {
+  var meta = APP.metadados; var gps = APP.coordenadasGPS;
+  var container = document.getElementById('visaoGeralCards'); var html = '';
+  html += '<div class="card"><h3>📄 Informações do Arquivo</h3><ul class="card-list">' + linhaCard('Nome', meta["FILE_Name"]) + linhaCard('Tamanho', meta["FILE_Size"]) + linhaCard('Tipo MIME', meta["FILE_Type"]) + linhaCard('Formato Real', meta["FILE_FileType"]) + linhaCard('Modificado em', meta["FILE_LastModified"]) + '</ul></div>';
+  html += '<div class="card"><h3>🖼️ Propriedades da Imagem</h3><ul class="card-list">' + linhaCard('Largura', meta["IMAGE_Width"] || meta["0x0100"]) + linhaCard('Altura', meta["IMAGE_Height"] || meta["0x0101"]) + linhaCard('Profundidade', meta["IMAGE_BitDepth"]) + linhaCard('Modo de Cor', meta["IMAGE_ColorType"]) + linhaCard('Compressão', meta["IMAGE_Compression"]) + linhaCard('Entrelaçamento', meta["IMAGE_Interlace"]) + linhaCard('Resolução / DPI', meta["IMAGE_ResolutionUnit"]) + '</ul></div>';
+  html += '<div class="card"><h3>📷 Dispositivo &amp; Câmera</h3><ul class="card-list">' + linhaCard('Fabricante', meta["0x010F"]) + linhaCard('Modelo', meta["0x0110"]) + linhaCard('Software', meta["0x0131"]) + linhaCard('Fabricante da Lente', meta["0xA433"]) + linhaCard('Modelo da Lente', meta["0xA434"]) + linhaCard('Nº Série Câmera', meta["0xA431"]) + '</ul></div>';
+  html += '<div class="card"><h3>📅 Datas Registradas</h3><ul class="card-list">' + linhaCard('Data Original', formatarDataBR(meta["0x9003"])) + linhaCard('Digitalização', formatarDataBR(meta["0x9004"])) + linhaCard('Modificação', formatarDataBR(meta["0x0132"])) + linhaCard('Data do Sistema', meta["FILE_LastModified"]) + '</ul></div>';
+  html += '<div class="card"><h3>⚙️ Parâmetros de Exposição</h3><ul class="card-list">' + linhaCard('Tempo Exposição', meta["0x829A"] !== undefined ? formatarValorTag("0x829A", meta["0x829A"]) : null) + linhaCard('Abertura', meta["0x829D"] !== undefined ? formatarValorTag("0x829D", meta["0x829D"]) : null) + linhaCard('ISO', meta["0x8827"]) + linhaCard('Distância Focal', meta["0x920A"] !== undefined ? formatarValorTag("0x920A", meta["0x920A"]) : null) + linhaCard('Flash', meta["0x9209"]) + linhaCard('Balanço de Branco', meta["0xA403"]) + '</ul></div>';
+  html += '<div class="card"><h3>📝 Autoria &amp; Descrição</h3><ul class="card-list">' + linhaCard('Título / Descrição', meta["0x010E"]) + linhaCard('Autor / Artista', meta["0x013B"]) + linhaCard('Copyright', meta["0x8298"]) + linhaCard('Comentário', meta["0x9286"]) + '</ul></div>';
+  html += '<div class="card"><h3>📍 Geolocalização</h3><ul class="card-list">' + linhaCard('Latitude', gps ? gps.lat : null) + linhaCard('Longitude', gps ? gps.lon : null) + linhaCard('Altitude', gps && gps.alt ? gps.alt + ' m' : null) + linhaCard('Coordenada DMS', gps ? converterParaDMS(gps.lat, true) + ' / ' + converterParaDMS(gps.lon, false) : null) + '</ul></div>';
+  html += '<div class="card"><h3>🔐 Integridade Forense (Hashes)</h3><ul class="card-list">' + '<li><span class="lbl">MD5:</span><span class="val" style="font-family:monospace;font-size:0.72rem;">' + escaparHTML(meta["HASH_MD5"] || '--') + '</span></li>' + '<li><span class="lbl">SHA-256:</span><span class="val" style="font-family:monospace;font-size:0.72rem;">' + escaparHTML(meta["HASH_SHA256"] || '--') + '</span></li>' + '</ul></div>';
+  container.innerHTML = html;
+}
+
+function linhaCard(rotulo, valor) {
+  var v = (valor === undefined || valor === null || valor === '') ? '--' : valor;
+  return '<li><span class="lbl">' + escaparHTML(rotulo) + ':</span><span class="val">' + escaparHTML(v) + '</span></li>';
+}
+
+function renderizarTabelaMetadados() {
+  var tbody = document.getElementById('tblMetadadosCorpo'); var meta = APP.metadados; var keys = Object.keys(meta);
+  if (keys.length === 0) { tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;">Nenhum metadado encontrado.</td></tr>'; return; }
+  var html = '';
+  keys.forEach(function(k) { html += '<tr><td style="font-family:monospace;color:var(--accent);">' + escaparHTML(k) + '</td><td><strong>' + escaparHTML(traduzirTag(k)) + '</strong></td><td>' + escaparHTML(formatarValorTag(k, meta[k])) + '</td></tr>'; });
+  tbody.innerHTML = html;
+}
+
+function filtrarTabelaMetadados() {
+  var termo = document.getElementById('searchMeta').value.toLowerCase();
+  var rows = document.querySelectorAll('#tblMetadadosCorpo tr');
+  for (var i = 0; i < rows.length; i++) rows[i].style.display = rows[i].innerText.toLowerCase().indexOf(termo) !== -1 ? '' : 'none';
+}
+
+function renderizarGPS() {
+  var gps = APP.coordenadasGPS; var meta = APP.metadados;
+  var badge = document.getElementById('gpsStatusBadge'); var acoes = document.getElementById('gpsActions');
+  if (gps) {
+    badge.innerText = "GPS Encontrado"; badge.className = "badge-eq";
+    document.getElementById('gpsLatVal').innerText = gps.lat; document.getElementById('gpsLonVal').innerText = gps.lon;
+    document.getElementById('gpsAltVal').innerText = gps.alt ? gps.alt + " m" : "--";
+    document.getElementById('gpsDmsVal').innerText = converterParaDMS(gps.lat, true) + " / " + converterParaDMS(gps.lon, false);
+    var coord = gps.lat + "," + gps.lon;
+    acoes.innerHTML = '<a class="btn btn-accent" target="_blank" rel="noopener" href="https://www.google.com/maps?q=' + coord + '">🌐 Abrir no Google Maps</a>' + '<a class="btn" target="_blank" rel="noopener" href="https://www.google.com/maps?q=&layer=c&cbll=' + coord + '">👁️ Google Street View</a>' + '<a class="btn" target="_blank" rel="noopener" href="https://earth.google.com/web/search/' + coord + '">🌍 Google Earth</a>' + '<a class="btn" target="_blank" rel="noopener" href="https://www.google.com/maps/@' + gps.lat + ',' + gps.lon + ',18z/data=!3m1!1e3">🛰️ Vista de Satélite</a>' + '<button class="btn" onclick="copiarCoordenadas()">📋 Copiar Coordenadas</button>';
+  } else {
+    badge.innerText = "Sem GPS"; badge.className = "badge-only";
+    document.getElementById('gpsLatVal').innerText = "--"; document.getElementById('gpsLonVal').innerText = "--";
+    document.getElementById('gpsAltVal').innerText = "--"; document.getElementById('gpsDmsVal').innerText = "--";
+    acoes.innerHTML = '<span style="color: var(--text-secondary); font-size: 0.85rem;">Nenhuma coordenada GPS disponível neste arquivo.</span>';
+  }
+  var tbodyGPS = document.getElementById('tblGPSCorpo');
+  var gpsKeys = Object.keys(meta).filter(function(k) { return k.indexOf('GPS_') === 0; });
+  document.getElementById('gpsTagCount').innerText = gpsKeys.length + " tags";
+  if (gpsKeys.length === 0) { tbodyGPS.innerHTML = '<tr><td colspan="3" style="text-align:center;color:var(--text-secondary);">Nenhuma tag GPS encontrada.</td></tr>'; return; }
+  var h = '';
+  gpsKeys.forEach(function(k) { h += '<tr><td style="font-family:monospace;color:var(--accent);">' + escaparHTML(k) + '</td><td><strong>' + escaparHTML(traduzirTag(k)) + '</strong></td><td>' + escaparHTML(formatarValorTag(k, meta[k])) + '</td></tr>'; });
+  tbodyGPS.innerHTML = h;
+}
+
+function copiarCoordenadas() {
+  if (!APP.coordenadasGPS) return;
+  var txt = APP.coordenadasGPS.lat + ", " + APP.coordenadasGPS.lon;
+  navigator.clipboard.writeText(txt).then(function() { exibirAlerta("📋 Coordenadas copiadas: " + txt); });
+}
+
+function renderizarPreview() {
+  var imgEl = document.getElementById('previewImg'); var msgEl = document.getElementById('previewMsg');
+  if (APP.arquivo && APP.arquivo.type && APP.arquivo.type.indexOf('image/') === 0) { imgEl.src = URL.createObjectURL(APP.arquivo); imgEl.style.display = 'block'; msgEl.style.display = 'none'; }
+  else { imgEl.style.display = 'none'; msgEl.style.display = 'block'; }
+}
+
+function preencherEditor() {
+  var meta = APP.metadados;
+  document.getElementById('editDesc').value = meta["0x010E"] || '';
+  document.getElementById('editArtist').value = meta["0x013B"] || '';
+  document.getElementById('editCopyright').value = meta["0x8298"] || '';
+  document.getElementById('editSoftware').value = meta["0x0131"] || '';
+  document.getElementById('editMake').value = meta["0x010F"] || '';
+  document.getElementById('editModel').value = meta["0x0110"] || '';
+  document.getElementById('editDateTime').value = formatarDataBR(meta["0x9003"] || meta["0x0132"] || '');
+  document.getElementById('editISO').value = meta["0x8827"] || '';
+  document.getElementById('editAperture').value = meta["0x829D"] || '';
+  document.getElementById('editExposure').value = meta["0x829A"] || '';
+  document.getElementById('editFocal').value = meta["0x920A"] || '';
+  document.getElementById('editLat').value = meta["GPS_Lat"] || '';
+  document.getElementById('editLon').value = meta["GPS_Lon"] || '';
+}
+
+/* ==========================================================================
+   MÓDULO DE COMPARAÇÃO LADO A LADO
+   ========================================================================== */
+function iniciarComparacao() {
+  abrirAbaPorId('tabComparar');
+  if (!CMP.metaA && APP.metadados && Object.keys(APP.metadados).length > 0) {
+    CMP.metaA = APP.metadados; CMP.nomeA = APP.nomeArquivo; renderizarPainelCmp('A');
+  }
+  if (!CMP.metaB) document.getElementById('cmpInputB').click();
+}
+
+function aoSelecionarCmpA(evt) {
+  var file = evt.target.files[0];
+  if (file) { extrairMeta(file, function(res) { CMP.metaA = res.meta; CMP.nomeA = file.name; renderizarPainelCmp('A'); colorirComparacao(); }); }
+  evt.target.value = '';
+}
+
+function aoSelecionarCmpB(evt) {
+  var file = evt.target.files[0];
+  if (file) { extrairMeta(file, function(res) { CMP.metaB = res.meta; CMP.nomeB = file.name; renderizarPainelCmp('B'); colorirComparacao(); }); }
+  evt.target.value = '';
+}
+
+function renderizarPainelCmp(painel) {
+  var meta = painel === 'A' ? CMP.metaA : CMP.metaB;
+  var nome = painel === 'A' ? CMP.nomeA : CMP.nomeB;
+  var tbody = document.getElementById(painel === 'A' ? 'cmpTbodyA' : 'cmpTbodyB');
+  document.getElementById(painel === 'A' ? 'cmpTitleA' : 'cmpTitleB').innerText = "Painel " + painel + ": " + (nome || 'NENHUM');
+  if (!meta) return;
+  var keys = Object.keys(meta);
+  document.getElementById(painel === 'A' ? 'cmpBadgeA' : 'cmpBadgeB').innerText = keys.length + " tags";
+  var html = '';
+  keys.forEach(function(k) { html += '<tr data-key="' + escaparHTML(k) + '"><td><strong>' + escaparHTML(traduzirTag(k)) + '</strong></td><td>' + escaparHTML(formatarValorTag(k, meta[k])) + '</td></tr>'; });
+  tbody.innerHTML = html;
+}
+
+function colorirComparacao() {
+  if (!CMP.metaA || !CMP.metaB) return;
+  var stats = calcularEstatisticas();
+  aplicarCores(document.querySelectorAll('#cmpTbodyA tr'), CMP.metaA, CMP.metaB);
+  aplicarCores(document.querySelectorAll('#cmpTbodyB tr'), CMP.metaB, CMP.metaA);
+  mostrarEstatisticas(stats);
+}
+
+function calcularEstatisticas() {
+  if (!CMP.metaA || !CMP.metaB) return { iguais: 0, diferentes: 0, unicoA: 0, unicoB: 0, total: 0 };
+  var keysA = Object.keys(CMP.metaA); var keysB = Object.keys(CMP.metaB);
+  var todas = {}; var iguais = 0, diferentes = 0, unicoA = 0, unicoB = 0;
+  keysA.forEach(function(k) { todas[k] = true; });
+  keysB.forEach(function(k) { todas[k] = true; });
+  var todasKeys = Object.keys(todas);
+  todasKeys.forEach(function(k) {
+    var emA = CMP.metaA[k] !== undefined; var emB = CMP.metaB[k] !== undefined;
+    if (emA && emB) { if (String(CMP.metaA[k]) === String(CMP.metaB[k])) iguais++; else diferentes++; }
+    else if (emA) unicoA++;
+    else unicoB++;
+  });
+  return { iguais: iguais, diferentes: diferentes, unicoA: unicoA, unicoB: unicoB, total: todasKeys.length };
+}
+
+function mostrarEstatisticas(stats) {
+  document.getElementById('cmpStats').style.display = 'grid';
+  document.getElementById('statIguais').innerText = stats.iguais;
+  document.getElementById('statDiferentes').innerText = stats.diferentes;
+  document.getElementById('statUnicoA').innerText = stats.unicoA;
+  document.getElementById('statUnicoB').innerText = stats.unicoB;
+  document.getElementById('statTotal').innerText = stats.total;
+}
+
+function aplicarCores(rows, metaPropria, metaOutra) {
+  for (var i = 0; i < rows.length; i++) {
+    var k = rows[i].getAttribute('data-key');
+    if (k && metaOutra[k] !== undefined) { rows[i].className = (String(metaPropria[k]) === String(metaOutra[k])) ? "row-eq" : "row-diff"; }
+    else { rows[i].className = "row-only"; }
+  }
+}
+
+function trocarComparacao() {
+  var tm = CMP.metaA; CMP.metaA = CMP.metaB; CMP.metaB = tm;
+  var tn = CMP.nomeA; CMP.nomeA = CMP.nomeB; CMP.nomeB = tn;
+  renderizarPainelCmp('A'); renderizarPainelCmp('B'); colorirComparacao();
+}
+
+/* ==========================================================================
+   SALVAR COMPARAÇÃO EM HTML
+   ========================================================================== */
+function salvarComparacaoHTML() {
+  if (!CMP.metaA || !CMP.metaB) {
+    alert("Carregue dois arquivos para comparar antes de salvar o relatório HTML!");
+    return;
+  }
+
+  var stats = calcularEstatisticas();
+  var agora = formatarDataBR(new Date());
+
+  var keysA = Object.keys(CMP.metaA);
+  var keysB = Object.keys(CMP.metaB);
+  var todasKeys = {};
+  keysA.forEach(function(k) { todasKeys[k] = true; });
+  keysB.forEach(function(k) { todasKeys[k] = true; });
+  var allKeys = Object.keys(todasKeys);
+
+  var css =
+    'body{margin:0;padding:28px;background:#0d0d0d;color:#e0e0e0;font-family:Segoe UI,Tahoma,Verdana,sans-serif;}' +
+    '.wrap{max-width:1400px;margin:0 auto;}' +
+    '.top{background:#161616;border:1px solid #2a2a2a;border-left:6px solid #00FF66;border-radius:10px;padding:22px 26px;margin-bottom:22px;}' +
+    '.top h1{margin:0 0 6px 0;font-size:1.6rem;color:#00FF66;letter-spacing:.5px;}' +
+    '.top p{margin:3px 0;color:#a0a0a0;font-size:.9rem;}' +
+    '.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:22px;}' +
+    '.stat{background:#161616;border:1px solid #2a2a2a;border-radius:10px;padding:16px;text-align:center;}' +
+    '.stat .num{font-size:2rem;font-weight:800;display:block;margin-bottom:4px;}' +
+    '.stat .lbl{font-size:.75rem;color:#a0a0a0;text-transform:uppercase;letter-spacing:.6px;}' +
+    '.legend{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:18px;font-size:.85rem;}' +
+    '.legend span{display:inline-flex;align-items:center;gap:6px;}' +
+    '.dot{width:14px;height:14px;border-radius:3px;display:inline-block;}' +
+    '.dot-eq{background:rgba(0,255,102,0.35);}' +
+    '.dot-diff{background:rgba(255,170,0,0.45);}' +
+    '.dot-only{background:rgba(0,191,255,0.35);}' +
+    'h2.sec{color:#00FF66;font-size:1.15rem;margin:26px 0 12px 0;border-left:4px solid #00FF66;padding-left:10px;}' +
+    '.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:22px;}' +
+    '@media(max-width:850px){.grid{grid-template-columns:1fr;}}' +
+    '.pane{background:#161616;border:1px solid #2a2a2a;border-radius:10px;padding:16px;overflow:hidden;}' +
+    '.pane h3{margin:0 0 12px 0;font-size:1rem;color:#00FF66;border-bottom:1px solid #2a2a2a;padding-bottom:8px;}' +
+    'table{width:100%;border-collapse:collapse;font-size:.83rem;}' +
+    'th{background:#1f1f1f;color:#00FF66;text-transform:uppercase;font-size:.72rem;letter-spacing:.6px;text-align:left;padding:10px 14px;}' +
+    'td{padding:9px 14px;border-bottom:1px solid #222;vertical-align:top;word-break:break-all;}' +
+    '.row-eq{background:rgba(0,255,102,0.08);}' +
+    '.row-diff{background:rgba(255,170,0,0.15);}' +
+    '.row-only{background:rgba(0,191,255,0.1);}' +
+    '.badge{padding:2px 8px;border-radius:4px;font-size:.7rem;font-weight:bold;display:inline-block;}' +
+    '.b-eq{background:#00FF66;color:#000;}' +
+    '.b-diff{background:#ffaa00;color:#000;}' +
+    '.b-only{background:#00bfff;color:#0a0a0a;}' +
+    '.unified{background:#161616;border:1px solid #2a2a2a;border-radius:10px;overflow:hidden;margin-bottom:22px;}' +
+    'footer{margin-top:32px;padding-top:16px;border-top:1px solid #2a2a2a;color:#666;font-size:.78rem;text-align:center;}';
+
+  var doc = '';
+  doc += '<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8">';
+  doc += '<meta name="viewport" content="width=device-width, initial-scale=1.0">';
+  doc += '<title>Comparação Forense — ' + escaparHTML(CMP.nomeA) + ' vs ' + escaparHTML(CMP.nomeB) + '</title>';
+  doc += '<style>' + css + '</style></head><body><div class="wrap">';
+
+  /* CABEÇALHO */
+  doc += '<div class="top"><h1>🔀 Relatório de Comparação Forense de Metadados</h1>';
+  doc += '<p><strong>Arquivo A:</strong> ' + escaparHTML(CMP.nomeA) + '</p>';
+  doc += '<p><strong>Arquivo B:</strong> ' + escaparHTML(CMP.nomeB) + '</p>';
+  doc += '<p><strong>Data da análise:</strong> ' + escaparHTML(agora) + '</p>';
+  doc += '<p><strong>Gerado por:</strong> ExifTool Forense Segurança</p></div>';
+
+  /* ESTATÍSTICAS */
+  doc += '<div class="stats">';
+  doc += '<div class="stat"><span class="num" style="color:#00FF66;">' + stats.iguais + '</span><span class="lbl">🟢 Tags Iguais</span></div>';
+  doc += '<div class="stat"><span class="num" style="color:#ffaa00;">' + stats.diferentes + '</span><span class="lbl">🟠 Tags Diferentes</span></div>';
+  doc += '<div class="stat"><span class="num" style="color:#00bfff;">' + stats.unicoA + '</span><span class="lbl">🔵 Único em A</span></div>';
+  doc += '<div class="stat"><span class="num" style="color:#00bfff;">' + stats.unicoB + '</span><span class="lbl">🔵 Único em B</span></div>';
+  doc += '<div class="stat"><span class="num" style="color:#e0e0e0;">' + stats.total + '</span><span class="lbl">📊 Total de Tags</span></div>';
+  doc += '</div>';
+
+  /* LEGENDA */
+  doc += '<div class="legend">';
+  doc += '<span><span class="dot dot-eq"></span> Iguais</span>';
+  doc += '<span><span class="dot dot-diff"></span> Diferentes</span>';
+  doc += '<span><span class="dot dot-only"></span> Único em um arquivo</span>';
+  doc += '</div>';
+
+  /* TABELA UNIFICADA */
+  doc += '<h2 class="sec">📊 Comparação Unificada — Todas as Tags (' + allKeys.length + ')</h2>';
+  doc += '<div class="unified"><table>';
+  doc += '<thead><tr><th>Status</th><th>Campo (PT-BR)</th><th>ID Tag</th><th>Valor (A)</th><th>Valor (B)</th></tr></thead><tbody>';
+
+  allKeys.forEach(function(k) {
+    var emA = CMP.metaA[k] !== undefined;
+    var emB = CMP.metaB[k] !== undefined;
+    var valA = emA ? formatarValorTag(k, CMP.metaA[k]) : '--';
+    var valB = emB ? formatarValorTag(k, CMP.metaB[k]) : '--';
+    var rowClass = '', badge = '';
+
+    if (emA && emB) {
+      if (String(CMP.metaA[k]) === String(CMP.metaB[k])) {
+        rowClass = 'row-eq'; badge = '<span class="badge b-eq">IGUAL</span>';
+      } else {
+        rowClass = 'row-diff'; badge = '<span class="badge b-diff">DIFERENTE</span>';
+      }
+    } else if (emA) {
+      rowClass = 'row-only'; badge = '<span class="badge b-only">ÚNICO EM A</span>';
+    } else {
+      rowClass = 'row-only'; badge = '<span class="badge b-only">ÚNICO EM B</span>';
+    }
+
+    doc += '<tr class="' + rowClass + '">';
+    doc += '<td>' + badge + '</td>';
+    doc += '<td><strong>' + escaparHTML(traduzirTag(k)) + '</strong></td>';
+    doc += '<td style="font-family:monospace;color:#00FF66;font-size:.78rem;">' + escaparHTML(k) + '</td>';
+    doc += '<td>' + escaparHTML(valA) + '</td>';
+    doc += '<td>' + escaparHTML(valB) + '</td>';
+    doc += '</tr>';
+  });
+
+  doc += '</tbody></table></div>';
+
+  /* PAINÉIS LADO A LADO */
+  doc += '<h2 class="sec">📋 Painéis Lado a Lado</h2>';
+  doc += '<div class="grid">';
+
+  /* Painel A */
+  doc += '<div class="pane"><h3>📂 Painel A: ' + escaparHTML(CMP.nomeA) + ' <span class="badge b-eq">' + keysA.length + ' tags</span></h3>';
+  doc += '<table><thead><tr><th>Campo</th><th>Valor (A)</th></tr></thead><tbody>';
+  keysA.forEach(function(k) {
+    var cls = '';
+    if (CMP.metaB[k] !== undefined) { cls = (String(CMP.metaA[k]) === String(CMP.metaB[k])) ? 'row-eq' : 'row-diff'; }
+    else { cls = 'row-only'; }
+    doc += '<tr class="' + cls + '"><td><strong>' + escaparHTML(traduzirTag(k)) + '</strong></td><td>' + escaparHTML(formatarValorTag(k, CMP.metaA[k])) + '</td></tr>';
+  });
+  doc += '</tbody></table></div>';
+
+  /* Painel B */
+  doc += '<div class="pane"><h3>📂 Painel B: ' + escaparHTML(CMP.nomeB) + ' <span class="badge b-eq">' + keysB.length + ' tags</span></h3>';
+  doc += '<table><thead><tr><th>Campo</th><th>Valor (B)</th></tr></thead><tbody>';
+  keysB.forEach(function(k) {
+    var cls = '';
+    if (CMP.metaA[k] !== undefined) { cls = (String(CMP.metaB[k]) === String(CMP.metaA[k])) ? 'row-eq' : 'row-diff'; }
+    else { cls = 'row-only'; }
+    doc += '<tr class="' + cls + '"><td><strong>' + escaparHTML(traduzirTag(k)) + '</strong></td><td>' + escaparHTML(formatarValorTag(k, CMP.metaB[k])) + '</td></tr>';
+  });
+  doc += '</tbody></table></div>';
+
+  doc += '</div>';
+
+  /* SOMENTE DIFERENÇAS */
+  var diffs = allKeys.filter(function(k) {
+    var emA = CMP.metaA[k] !== undefined; var emB = CMP.metaB[k] !== undefined;
+    if (emA && emB) return String(CMP.metaA[k]) !== String(CMP.metaB[k]);
+    return true;
+  });
+
+  if (diffs.length > 0) {
+    doc += '<h2 class="sec">⚠️ Somente Diferenças e Tags Únicas (' + diffs.length + ')</h2>';
+    doc += '<div class="unified"><table>';
+    doc += '<thead><tr><th>Status</th><th>Campo</th><th>Valor (A)</th><th>Valor (B)</th></tr></thead><tbody>';
+
+    diffs.forEach(function(k) {
+      var emA = CMP.metaA[k] !== undefined; var emB = CMP.metaB[k] !== undefined;
+      var valA = emA ? formatarValorTag(k, CMP.metaA[k]) : '--';
+      var valB = emB ? formatarValorTag(k, CMP.metaB[k]) : '--';
+      var rowClass = '', badge = '';
+
+      if (emA && emB) { rowClass = 'row-diff'; badge = '<span class="badge b-diff">DIFERENTE</span>'; }
+      else if (emA) { rowClass = 'row-only'; badge = '<span class="badge b-only">ÚNICO EM A</span>'; }
+      else { rowClass = 'row-only'; badge = '<span class="badge b-only">ÚNICO EM B</span>'; }
+
+      doc += '<tr class="' + rowClass + '"><td>' + badge + '</td><td><strong>' + escaparHTML(traduzirTag(k)) + '</strong></td><td>' + escaparHTML(valA) + '</td><td>' + escaparHTML(valB) + '</td></tr>';
+    });
+
+    doc += '</tbody></table></div>';
+  }
+
+  doc += '<footer>Relatório de comparação gerado por <strong style="color:#00FF66;">ExifTool Forense Segurança</strong> em ' + escaparHTML(agora) + '<br>Documento para fins de perícia digital e análise OSINT.</footer>';
+  doc += '</div></body></html>';
+
+  var blob = new Blob([doc], { type: 'text/html;charset=utf-8' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  var nomeFile = 'comparacao_forense_' + (CMP.nomeA || 'A').replace(/[^a-zA-Z0-9_\-]/g, '_') + '_vs_' + (CMP.nomeB || 'B').replace(/[^a-zA-Z0-9_\-]/g, '_') + '.html';
+  a.download = nomeFile;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(function() { URL.revokeObjectURL(url); }, 4000);
+
+  exibirAlerta("🌐 Relatório HTML de comparação gerado e baixado com sucesso!");
+}
+
+/* ==========================================================================
+   EXPORTAÇÃO DE RELATÓRIO COMPLETO EM HTML
+   ========================================================================== */
+function bufferParaBase64(buffer) {
+  var bytes = new Uint8Array(buffer); var bin = ''; var chunk = 0x8000;
+  for (var i = 0; i < bytes.length; i += chunk) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + chunk));
+  return btoa(bin);
+}
+
+function salvarRelatorioHTML() {
+  var meta = APP.metadados;
+  if (!meta || Object.keys(meta).length === 0) { alert("Carregue um arquivo antes de gerar o relatório HTML!"); return; }
+  var gps = APP.coordenadasGPS; var agora = formatarDataBR(new Date());
+  var css =
+    'body{margin:0;padding:28px;background:#0d0d0d;color:#e0e0e0;font-family:Segoe UI,Tahoma,Verdana,sans-serif;}' +
+    '.wrap{max-width:1200px;margin:0 auto;}' +
+    '.top{background:#161616;border:1px solid #2a2a2a;border-left:6px solid #00FF66;border-radius:10px;padding:22px 26px;margin-bottom:22px;}' +
+    '.top h1{margin:0 0 6px 0;font-size:1.6rem;color:#00FF66;letter-spacing:.5px;}' +
+    '.top p{margin:3px 0;color:#a0a0a0;font-size:.9rem;}' +
+    '.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:16px;margin-bottom:22px;}' +
+    '.card{background:#161616;border:1px solid #2a2a2a;border-radius:10px;padding:16px 18px;}' +
+    '.card h3{margin:0 0 12px 0;font-size:1rem;color:#00FF66;border-bottom:1px solid #2a2a2a;padding-bottom:8px;}' +
+    'ul{list-style:none;margin:0;padding:0;}' +
+    'li{display:flex;justify-content:space-between;gap:12px;padding:6px 0;border-bottom:1px dashed rgba(255,255,255,.06);font-size:.85rem;}' +
+    'li .l{color:#a0a0a0;}li .v{font-weight:600;text-align:right;word-break:break-all;max-width:62%;}' +
+    'h2.sec{color:#00FF66;font-size:1.15rem;margin:26px 0 12px 0;border-left:4px solid #00FF66;padding-left:10px;}' +
+    'table{width:100%;border-collapse:collapse;font-size:.83rem;background:#161616;border:1px solid #2a2a2a;border-radius:10px;overflow:hidden;}' +
+    'th{background:#1f1f1f;color:#00FF66;text-transform:uppercase;font-size:.72rem;letter-spacing:.6px;text-align:left;padding:11px 14px;}' +
+    'td{padding:9px 14px;border-bottom:1px solid #222;vertical-align:top;}' +
+    'tr:nth-child(even) td{background:rgba(255,255,255,.015);}' +
+    'td.tag{font-family:monospace;color:#00FF66;white-space:nowrap;}' +
+    '.links{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px;}' +
+    '.links a{background:#1f1f1f;border:1px solid #2a2a2a;color:#e0e0e0;padding:9px 15px;border-radius:6px;text-decoration:none;font-size:.85rem;font-weight:600;}' +
+    '.links a:hover{border-color:#00FF66;color:#00FF66;}' +
+    '.links a.main{background:#00FF66;color:#000;border:none;}' +
+    '.hash{font-family:monospace;font-size:.76rem;color:#00bfff;word-break:break-all;}' +
+    '.shot{text-align:center;margin:18px 0;}' +
+    '.shot img{max-width:100%;max-height:560px;border-radius:10px;border:1px solid #2a2a2a;box-shadow:0 6px 24px rgba(0,0,0,.6);}' +
+    'footer{margin-top:32px;padding-top:16px;border-top:1px solid #2a2a2a;color:#666;font-size:.78rem;text-align:center;}';
+
+  function li(l, v) { return '<li><span class="l">' + escaparHTML(l) + '</span><span class="v">' + escaparHTML((v === undefined || v === null || v === '') ? '--' : v) + '</span></li>'; }
+
+  var doc = '';
+  doc += '<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8">';
+  doc += '<meta name="viewport" content="width=device-width, initial-scale=1.0">';
+  doc += '<title>Relatório Forense — ' + escaparHTML(meta["FILE_Name"] || 'arquivo') + '</title>';
+  doc += '<style>' + css + '</style></head><body><div class="wrap">';
+
+  doc += '<div class="top"><h1>🔎 Relatório Forense de Metadados</h1>';
+  doc += '<p><strong>Arquivo analisado:</strong> ' + escaparHTML(meta["FILE_Name"] || '--') + '</p>';
+  doc += '<p><strong>Data da análise:</strong> ' + escaparHTML(agora) + '</p>';
+  doc += '<p><strong>Total de metadados extraídos:</strong> ' + Object.keys(meta).length + ' tags</p>';
+  doc += '<p><strong>Gerado por:</strong> ExifTool Forense Segurança</p></div>';
+
+  if (APP.dadosBrutos && APP.arquivo && APP.arquivo.type && APP.arquivo.type.indexOf('image/') === 0 && APP.dadosBrutos.byteLength < 12000000) {
+    try { var b64 = bufferParaBase64(APP.dadosBrutos); doc += '<h2 class="sec">🖼️ Visualização da Evidência</h2>'; doc += '<div class="shot"><img src="data:' + APP.arquivo.type + ';base64,' + b64 + '" alt="Evidência"></div>'; } catch (e) {}
+  }
+
+  doc += '<h2 class="sec">📌 Resumo Categorizado</h2><div class="grid">';
+  doc += '<div class="card"><h3>📄 Informações do Arquivo</h3><ul>' + li('Nome', meta["FILE_Name"]) + li('Tamanho', meta["FILE_Size"]) + li('Tipo MIME', meta["FILE_Type"]) + li('Formato Real', meta["FILE_FileType"]) + li('Modificado em', meta["FILE_LastModified"]) + '</ul></div>';
+  doc += '<div class="card"><h3>🖼️ Propriedades da Imagem</h3><ul>' + li('Largura', meta["IMAGE_Width"] || meta["0x0100"]) + li('Altura', meta["IMAGE_Height"] || meta["0x0101"]) + li('Profundidade de Bits', meta["IMAGE_BitDepth"]) + li('Modo de Cor', meta["IMAGE_ColorType"]) + li('Compressão', meta["IMAGE_Compression"]) + li('Entrelaçamento', meta["IMAGE_Interlace"]) + li('Resolução / DPI', meta["IMAGE_ResolutionUnit"]) + '</ul></div>';
+  doc += '<div class="card"><h3>📷 Dispositivo &amp; Câmera</h3><ul>' + li('Fabricante', meta["0x010F"]) + li('Modelo', meta["0x0110"]) + li('Software', meta["0x0131"]) + li('Lente', meta["0xA434"]) + li('Nº Série da Câmera', meta["0xA431"]) + '</ul></div>';
+  doc += '<div class="card"><h3>📅 Datas Registradas</h3><ul>' + li('Data Original', formatarDataBR(meta["0x9003"])) + li('Digitalização', formatarDataBR(meta["0x9004"])) + li('Modificação EXIF', formatarDataBR(meta["0x0132"])) + li('Sistema de Arquivos', meta["FILE_LastModified"]) + '</ul></div>';
+  doc += '<div class="card"><h3>⚙️ Parâmetros de Exposição</h3><ul>' + li('Tempo de Exposição', meta["0x829A"] !== undefined ? formatarValorTag("0x829A", meta["0x829A"]) : null) + li('Abertura', meta["0x829D"] !== undefined ? formatarValorTag("0x829D", meta["0x829D"]) : null) + li('ISO', meta["0x8827"]) + li('Distância Focal', meta["0x920A"] !== undefined ? formatarValorTag("0x920A", meta["0x920A"]) : null) + li('Flash', meta["0x9209"]) + '</ul></div>';
+  doc += '<div class="card"><h3>📝 Autoria &amp; Descrição</h3><ul>' + li('Título / Descrição', meta["0x010E"]) + li('Autor / Artista', meta["0x013B"]) + li('Copyright', meta["0x8298"]) + li('Comentário', meta["0x9286"]) + '</ul></div>';
+  doc += '</div>';
+
+  doc += '<h2 class="sec">🔐 Integridade Forense (Hashes)</h2>';
+  doc += '<table><tbody><tr><td class="tag">MD5</td><td class="hash">' + escaparHTML(meta["HASH_MD5"] || '--') + '</td></tr><tr><td class="tag">SHA-256</td><td class="hash">' + escaparHTML(meta["HASH_SHA256"] || '--') + '</td></tr><tr><td class="tag">VirusTotal</td><td><a style="color:#00FF66;" target="_blank" href="https://www.virustotal.com/gui/file/' + escaparHTML(meta["HASH_SHA256"] || '') + '">Consultar hash no VirusTotal</a></td></tr></tbody></table>';
+
+  doc += '<h2 class="sec">📍 Geolocalização GPS</h2>';
+  if (gps) {
+    var coordR = gps.lat + ',' + gps.lon;
+    doc += '<div class="card"><ul>' + li('Latitude (Decimal)', gps.lat) + li('Longitude (Decimal)', gps.lon) + li('Altitude', gps.alt ? gps.alt + ' m' : '--') + li('Coordenada DMS', converterParaDMS(gps.lat, true) + ' / ' + converterParaDMS(gps.lon, false)) + '</ul><div class="links">' + '<a class="main" target="_blank" href="https://www.google.com/maps?q=' + coordR + '">🌐 Abrir no Google Maps</a>' + '<a target="_blank" href="https://www.google.com/maps?q=&layer=c&cbll=' + coordR + '">👁️ Google Street View</a>' + '<a target="_blank" href="https://earth.google.com/web/search/' + coordR + '">🌍 Google Earth</a>' + '<a target="_blank" href="https://www.google.com/maps/@' + gps.lat + ',' + gps.lon + ',18z/data=!3m1!1e3">🛰️ Vista de Satélite</a></div></div>';
+    var gpsK = Object.keys(meta).filter(function(k) { return k.indexOf('GPS_') === 0; });
+    if (gpsK.length) {
+      doc += '<table style="margin-top:14px;"><thead><tr><th>ID Tag</th><th>Campo (PT-BR)</th><th>Valor</th></tr></thead><tbody>';
+      gpsK.forEach(function(k) { doc += '<tr><td class="tag">' + escaparHTML(k) + '</td><td>' + escaparHTML(traduzirTag(k)) + '</td><td>' + escaparHTML(formatarValorTag(k, meta[k])) + '</td></tr>'; });
+      doc += '</tbody></table>';
+    }
+  } else {
+    doc += '<div class="card"><p style="color:#a0a0a0;font-size:.9rem;margin:0;">Nenhuma coordenada GPS foi localizada neste arquivo.</p></div>';
+  }
+
+  doc += '<h2 class="sec">📊 Todos os Metadados Extraídos (' + Object.keys(meta).length + ' tags)</h2>';
+  doc += '<table><thead><tr><th>ID Tag</th><th>Nome do Campo (PT-BR)</th><th>Valor Extraído</th></tr></thead><tbody>';
+  Object.keys(meta).forEach(function(k) { doc += '<tr><td class="tag">' + escaparHTML(k) + '</td><td><strong>' + escaparHTML(traduzirTag(k)) + '</strong></td><td>' + escaparHTML(formatarValorTag(k, meta[k])) + '</td></tr>'; });
+  doc += '</tbody></table>';
+
+  doc += '<footer>Relatório gerado automaticamente por <strong style="color:#00FF66;">ExifTool Forense Segurança</strong> em ' + escaparHTML(agora) + '<br>Documento para fins de perícia digital e análise OSINT.</footer>';
+  doc += '</div></body></html>';
+
+  var blob = new Blob([doc], { type: 'text/html;charset=utf-8' });
+  var url = URL.createObjectURL(blob); var a = document.createElement('a');
+  a.href = url; a.download = 'relatorio_forense_' + (meta["FILE_Name"] || 'arquivo').replace(/[^a-zA-Z0-9_\-]/g, '_') + '.html';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(function() { URL.revokeObjectURL(url); }, 4000);
+  exibirAlerta("🌐 Relatório HTML completo gerado e baixado com sucesso!");
+}
+
+/* ==========================================================================
+   FERRAMENTAS FORENSES & NAVEGAÇÃO
+   ========================================================================== */
+function abrirAba(abaId, btn) {
+  var conteudos = document.querySelectorAll('.tab-content');
+  for (var i = 0; i < conteudos.length; i++) conteudos[i].classList.remove('active');
+  var botoes = document.querySelectorAll('.tab-btn');
+  for (var j = 0; j < botoes.length; j++) botoes[j].classList.remove('active');
+  document.getElementById(abaId).classList.add('active');
+  if (btn) btn.classList.add('active');
+}
+
+function abrirAbaPorId(abaId) {
+  var botoes = document.querySelectorAll('.tab-btn');
+  for (var i = 0; i < botoes.length; i++) {
+    if (botoes[i].getAttribute('onclick').indexOf("'" + abaId + "'") !== -1) { abrirAba(abaId, botoes[i]); return; }
+  }
+  abrirAba(abaId, null);
+}
+
+function abrirModalHashes() {
+  var m = APP.metadados;
+  var html = '<p><strong>MD5:</strong></p><pre>' + escaparHTML(m["HASH_MD5"] || 'Não calculado') + '</pre><br><p><strong>SHA-256:</strong></p><pre>' + escaparHTML(m["HASH_SHA256"] || 'Não calculado') + '</pre>';
+  abrirModal("🔐 Hashes de Integridade Forense", html);
+}
+
+function abrirVirusTotal() {
+  var sha = APP.metadados["HASH_SHA256"];
+  if (sha && sha !== "Calculando..." && sha !== "Indisponível") window.open("https://www.virustotal.com/gui/file/" + sha, "_blank");
+  else alert("Hash SHA-256 não disponível no momento.");
+}
+
+function gerarRelatorio() {
+  var meta = APP.metadados;
+  if (Object.keys(meta).length === 0) { alert("Carregue um arquivo primeiro!"); return; }
+  var txt = "=== RELATORIO FORENSE DE METADADOS ===\n";
+  txt += "Gerado por ExifTool Forense Seguranca\n";
+  txt += "Data da Analise: " + formatarDataBR(new Date()) + "\n\n";
+  Object.keys(meta).forEach(function(k) { txt += traduzirTag(k) + " (" + k + "): " + formatarValorTag(k, meta[k]) + "\n"; });
+  var html = '<pre>' + escaparHTML(txt) + '</pre><br><div style="display:flex;gap:10px;flex-wrap:wrap;"><button class="btn btn-accent" onclick="baixarTexto(\'' + encodeURIComponent(txt) + '\', \'relatorio_forense.txt\')">💾 Baixar TXT</button><button class="btn" onclick="salvarRelatorioHTML()">🌐 Baixar Relatório HTML</button></div>';
+  abrirModal("📝 Relatório Forense Detalhado", html);
+}
+
+function abrirStrings() {
+  if (!APP.dadosBrutos) { alert("Carregue um arquivo primeiro!"); return; }
+  var u8 = new Uint8Array(APP.dadosBrutos); var str = ""; var achadas = [];
+  var limite = Math.min(u8.length, 5000000);
+  for (var i = 0; i < limite; i++) { var c = u8[i]; if (c >= 32 && c <= 126) str += String.fromCharCode(c); else { if (str.length >= 6) achadas.push(str); str = ""; } }
+  if (str.length >= 6) achadas.push(str);
+  var texto = achadas.slice(0, 400).join('\n');
+  var html = '<p>Sequências imprimíveis encontradas (mínimo 6 caracteres) — exibindo ' + Math.min(achadas.length, 400) + ' de ' + achadas.length + ':</p><br><pre>' + escaparHTML(texto) + '</pre>';
+  abrirModal("🕵️ Análise de Strings Binárias", html);
+}
+
+function copiarVisao() {
+  if (Object.keys(APP.metadados).length === 0) { alert("Carregue um arquivo primeiro!"); return; }
+  var linhas = [];
+  Object.keys(APP.metadados).forEach(function(k) { linhas.push(traduzirTag(k) + " (" + k + "): " + formatarValorTag(k, APP.metadados[k])); });
+  navigator.clipboard.writeText(linhas.join('\n')).then(function() { exibirAlerta("📋 Metadados copiados para a área de transferência!"); });
+}
+
+function alternarTema() { APP.modoEscuro = !APP.modoEscuro; document.body.classList.toggle('light-theme'); }
+
+function abrirModalSobre() {
+  var html = '<p><strong>ExifTool Forense Segurança</strong></p><br><p>Ferramenta completa para extração, análise, comparação e injeção de metadados em imagens e arquivos binários, executada 100% no navegador.</p><br><p>• Leitura total de EXIF/TIFF e chunks PNG (IHDR, pHYs, tIME, gAMA, eXIf, tEXt, iTXt, zTXt).</p><p>• Geolocalização com Google Maps, Street View, Earth e Satélite.</p><p>• Exportação de relatório completo em HTML estilizado.</p><p>• Hashes MD5 e SHA-256 com consulta direta ao VirusTotal.</p><p>• Comparação lado a lado com destaque colorido de diferenças.</p><p>• Datas no padrão brasileiro DD/MM/AAAA HH:MM:SS.</p>';
+  abrirModal("ℹ️ Sobre o Aplicativo", html);
+}
+
+function abrirModal(titulo, htmlCorpo) {
+  document.getElementById('modalTitulo').innerText = titulo;
+  document.getElementById('modalCorpo').innerHTML = htmlCorpo;
+  document.getElementById('modalGenerico').classList.add('active');
+}
+
+function fecharModal(id) { document.getElementById(id).classList.remove('active'); }
+
+function exibirAlerta(msg) {
+  var el = document.getElementById('alertBanner'); el.innerText = msg; el.style.display = 'block';
+  setTimeout(function() { el.style.display = 'none'; }, 4500);
+}
+
+function baixarTexto(conteudoURI, nomeArquivo) {
+  var a = document.createElement('a'); a.href = "data:text/plain;charset=utf-8," + conteudoURI;
+  a.download = nomeArquivo; document.body.appendChild(a); a.click(); document.body.removeChild(a);
+}
+
+/* ==========================================================================
+   ALGORITMOS CRIPTOGRÁFICOS (MD5, SHA-256, CRC32)
+   ========================================================================== */
+function calcSHA256(buffer) {
+  if (window.crypto && window.crypto.subtle) {
+    return window.crypto.subtle.digest("SHA-256", buffer).then(function(b) { var arr = new Uint8Array(b); var out = ''; for (var i = 0; i < arr.length; i++) out += arr[i].toString(16).padStart(2, '0'); return out; }).catch(function() { return "Indisponível"; });
+  }
+  return Promise.resolve("Indisponível");
+}
+
+function calcMD5(bytes) {
+  function cmn(q, a, b, x, s, t) { a = (a + q + x + t) & 0xFFFFFFFF; return (((a << s) | (a >>> (32 - s))) + b) & 0xFFFFFFFF; }
+  function ff(a,b,c,d,x,s,t) { return cmn((b & c) | ((~b) & d), a, b, x, s, t); }
+  function gg(a,b,c,d,x,s,t) { return cmn((b & d) | (c & (~d)), a, b, x, s, t); }
+  function hh(a,b,c,d,x,s,t) { return cmn(b ^ c ^ d, a, b, x, s, t); }
+  function ii(a,b,c,d,x,s,t) { return cmn(c ^ (b | (~d)), a, b, x, s, t); }
+  var n = bytes.length; var state = [1732584193, -271733879, -1732584194, 271733878]; var i; var blocks = [];
+  for (i = 0; i < n; i++) blocks[i >> 2] = (blocks[i >> 2] || 0) | (bytes[i] << ((i % 4) * 8));
+  blocks[n >> 2] = (blocks[n >> 2] || 0) | (0x80 << ((n % 4) * 8));
+  var len = ((n + 8) >> 6) + 1;
+  for (i = 0; i < len * 16; i++) if (!blocks[i]) blocks[i] = 0;
+  blocks[len * 16 - 2] = n * 8;
+  for (i = 0; i < len * 16; i += 16) {
+    var a = state[0], b = state[1], c = state[2], d = state[3];
+    var k = blocks.slice(i, i + 16); for (var j = 0; j < 16; j++) if (!k[j]) k[j] = 0;
+    a=ff(a,b,c,d,k[0],7,-680876936);d=ff(d,a,b,c,k[1],12,-389564586);c=ff(c,d,a,b,k[2],17,606105819);b=ff(b,c,d,a,k[3],22,-1044525330);a=ff(a,b,c,d,k[4],7,-176418897);d=ff(d,a,b,c,k[5],12,1200080426);c=ff(c,d,a,b,k[6],17,-1473231341);b=ff(b,c,d,a,k[7],22,-45705983);a=ff(a,b,c,d,k[8],7,1770035416);d=ff(d,a,b,c,k[9],12,-1958414417);c=ff(c,d,a,b,k[10],17,-42063);b=ff(b,c,d,a,k[11],22,-1990404162);a=ff(a,b,c,d,k[12],7,1804603682);d=ff(d,a,b,c,k[13],12,-40341101);c=ff(c,d,a,b,k[14],17,-1502002290);b=ff(b,c,d,a,k[15],22,1236535329);
+    a=gg(a,b,c,d,k[1],5,-165796510);d=gg(d,a,b,c,k[6],9,-1069501632);c=gg(c,d,a,b,k[11],14,643717713);b=gg(b,c,d,a,k[0],20,-373897302);a=gg(a,b,c,d,k[5],5,-701558691);d=gg(d,a,b,c,k[10],9,38016083);c=gg(c,d,a,b,k[15],14,-660478335);b=gg(b,c,d,a,k[4],20,-405537848);a=gg(a,b,c,d,k[9],5,568446438);d=gg(d,a,b,c,k[14],9,-1019803690);c=gg(c,d,a,b,k[3],14,-187363961);b=gg(b,c,d,a,k[8],20,1163531501);a=gg(a,b,c,d,k[13],5,-1444681467);d=gg(d,a,b,c,k[2],9,-51403784);c=gg(c,d,a,b,k[7],14,1735328473);b=gg(b,c,d,a,k[12],20,-1926607734);
+    a=hh(a,b,c,d,k[5],4,-378558);d=hh(d,a,b,c,k[8],11,-2022574463);c=hh(c,d,a,b,k[11],16,1839030562);b=hh(b,c,d,a,k[14],23,-35309556);a=hh(a,b,c,d,k[1],4,-1530992060);d=hh(d,a,b,c,k[4],11,1272893353);c=hh(c,d,a,b,k[7],16,-155497632);b=hh(b,c,d,a,k[10],23,-1094730640);a=hh(a,b,c,d,k[13],4,681279174);d=hh(d,a,b,c,k[0],11,-358537222);c=hh(c,d,a,b,k[3],16,-722521979);b=hh(b,c,d,a,k[6],23,76029189);a=hh(a,b,c,d,k[9],4,-640364487);d=hh(d,a,b,c,k[12],11,-421815835);c=hh(c,d,a,b,k[15],16,530742520);b=hh(b,c,d,a,k[2],23,-995338651);
+    a=ii(a,b,c,d,k[0],6,-198630844);d=ii(d,a,b,c,k[7],10,1126891415);c=ii(c,d,a,b,k[14],15,-1416354905);b=ii(b,c,d,a,k[5],21,-57434055);a=ii(a,b,c,d,k[12],6,1700485571);d=ii(d,a,b,c,k[3],10,-1894986606);c=ii(c,d,a,b,k[10],15,-1051523);b=ii(b,c,d,a,k[1],21,-2054922799);a=ii(a,b,c,d,k[8],6,1873313359);d=ii(d,a,b,c,k[15],10,-30611744);c=ii(c,d,a,b,k[6],15,-1560198380);b=ii(b,c,d,a,k[13],21,1309151649);a=ii(a,b,c,d,k[4],6,-145523070);d=ii(d,a,b,c,k[11],10,-1120210379);c=ii(c,d,a,b,k[2],15,718787259);b=ii(b,c,d,a,k[9],21,-343485551);
+    state[0] = (state[0] + a) & 0xFFFFFFFF; state[1] = (state[1] + b) & 0xFFFFFFFF;
+    state[2] = (state[2] + c) & 0xFFFFFFFF; state[3] = (state[3] + d) & 0xFFFFFFFF;
+  }
+  var hex = '';
+  for (var s = 0; s < 4; s++) { var x = state[s]; for (var j2 = 0; j2 <= 3; j2++) hex += ((x >> (j2 * 8 + 4)) & 0x0F).toString(16) + ((x >> (j2 * 8)) & 0x0F).toString(16); }
+  return hex;
+}
+
+var crcTable = null;
+function calcCRC32(buf, offset, len) {
+  if (!crcTable) { crcTable = new Uint32Array(256); for (var n = 0; n < 256; n++) { var c = n; for (var k = 0; k < 8; k++) c = (c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1); crcTable[n] = c; } }
+  var crc = 0xFFFFFFFF;
+  for (var i = 0; i < len; i++) crc = crcTable[(crc ^ buf[offset + i]) & 0xFF] ^ (crc >>> 8);
+  return (crc ^ 0xFFFFFFFF) >>> 0;
+}
+
+/* ==========================================================================
+   EVENTOS GLOBAIS
+   ========================================================================== */
+var dropZone = document.getElementById('dropZone');
+dropZone.addEventListener('dragover', function(e) { e.preventDefault(); dropZone.classList.add('dragover'); });
+dropZone.addEventListener('dragleave', function() { dropZone.classList.remove('dragover'); });
+dropZone.addEventListener('drop', function(e) { e.preventDefault(); dropZone.classList.remove('dragover'); if (e.dataTransfer.files.length > 0) processarArquivo(e.dataTransfer.files[0]); });
+document.addEventListener('keydown', function(e) { if (e.ctrlKey && e.key.toLowerCase() === 'o') { e.preventDefault(); document.getElementById('fileInput').click(); } if (e.key === 'Escape') fecharModal('modalGenerico'); });
+</script>
+</body>
+</html>
