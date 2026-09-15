@@ -563,6 +563,9 @@ Gerenciador Domínios Cookies
 🕵️ [***ExifTool Forense***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/ExifTool%20Forense)
 ExifTool Forense
 
+🕵️ [***DNSRecon Reconhecimento DNS***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/DNSRecon%20Reconhecimento%20DNS)
+DNSRecon Reconhecimento DNS
+
 
 
 ---
