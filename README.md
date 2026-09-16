@@ -566,6 +566,9 @@ ExifTool Forense
 🕵️ [***DNSRecon Reconhecimento DNS***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/DNSRecon%20Reconhecimento%20DNS)
 DNSRecon Reconhecimento DNS
 
+🤳 [***GOOGLE FACE SEARCH***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/GOOGLE%20FACE%20SEARCH)
+GOOGLE FACE SEARCH
+
 
 
 ---
