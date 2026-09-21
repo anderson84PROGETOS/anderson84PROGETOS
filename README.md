@@ -581,6 +581,10 @@ Brute Force Login
 📝 [***Monitor de Consumo de RAM***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Monitor%20de%20Consumo%20de%20RAM)
 Monitor de Consumo de RAM
 
+🕵️ [***DOMAIN NETWORK DIAGNOSTIC***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/DOMAIN%20NETWORK%20DIAGNOSTIC)
+DOMAIN NETWORK DIAGNOSTIC
+
+
 
 
 ---
