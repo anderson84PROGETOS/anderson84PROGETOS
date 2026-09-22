@@ -587,6 +587,9 @@ DOMAIN NETWORK DIAGNOSTIC
 🧿 [***Browser Scope***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Browser%20Scope)
 Browser Scope
 
+🔐 [***Advanced Cracker Analyzer Pro***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Advanced%20Cracker%20Analyzer%20Pro)
+Advanced Cracker Analyzer Pro
+
 
 
 ---
