@@ -584,6 +584,8 @@ Monitor de Consumo de RAM
 🕵️ [***DOMAIN NETWORK DIAGNOSTIC***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/DOMAIN%20NETWORK%20DIAGNOSTIC)
 DOMAIN NETWORK DIAGNOSTIC
 
+🧿 [***Browser Scope***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Browser%20Scope)
+Browser Scope
 
 
 
