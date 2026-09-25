@@ -6,7 +6,7 @@ Mostra TODOS os tipos de módulos na busca (exploit, auxiliary, post, etc.)
 Painel de configuração completo com Canvas + Scrollbar, em 4 grupos,
 e auto-preenchimento das opções a partir do 'show options'.
 Console redimensionável com o mouse.
-Uso: sudo python3 MetasploitGrafico.py
+Uso: sudo python3 Metasploit_Grafico.py
 """
 
 import tkinter as tk
