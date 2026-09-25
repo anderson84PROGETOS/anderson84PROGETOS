@@ -5,7 +5,7 @@ msfconsole interativo em modo gráfico (Kali Linux)
 Mostra TODOS os tipos de módulos na busca (exploit, auxiliary, post, etc.)
 Painel de configuração com todos os campos comuns (RHOSTS, LHOST, RPORT,
 USERNAME, PASSWORD, PATH, THREADS, etc.)
-Uso: sudo python3 MetasploitGráfico.py 
+Uso: sudo python3 MetasploitGráfico.py
 
 """
 
@@ -64,6 +64,13 @@ CAMPOS = [
     ("SRVPORT",  "SRVPORT (porta srv):",  ""),
     ("SESSION",  "SESSION:",              ""),
     ("TIMEOUT",  "TIMEOUT:",              ""),
+    ("FTPPASS",  "FTPPASS:",              ""),
+    ("STORE_LOOT",  "STORE_LOOT:",        ""),
+    ("VERBOSE",  "VERBOSE:",              ""),
+    ("USERPASS_FILE",  "USERPASS_FILE:",  ""),
+    
+    
+    
 ]
 
 
