@@ -593,6 +593,9 @@ Advanced Cracker Analyzer Pro
 🚰 [***Bettercap Kali Linux***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Bettercap%20Kali%20Linux)
 Bettercap Kali Linux
 
+🔑🔑 [***SQLMap_Laboratório_Autorizado***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/SQLMap_Laborat%C3%B3rio_Autorizado)
+SQLMap_Laboratório_Autorizado
+
 
 
 ---
