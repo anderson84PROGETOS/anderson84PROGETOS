@@ -599,6 +599,8 @@ SQLMap_Laboratório_Autorizado
 🔑 [***MetasploitGráfico***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/MetasploitGr%C3%A1fico)
 MetasploitGráfico
 
+🔑 🔐 🕵️ [***DVWA Brute Force SQLi Scanner***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/DVWA%20Brute%20Force%20SQLi%20Scanner)
+DVWA Brute Force SQLi Scanner
 
 
 
