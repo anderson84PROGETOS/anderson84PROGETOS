@@ -605,6 +605,8 @@ DVWA Brute Force SQLi Scanner
 🔍🛡️ [***CVE Scanner de Vulnerabilidades***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/CVE%20Scanner%20de%20Vulnerabilidades)
 CVE Scanner de Vulnerabilidades
 
+🕵️ [***HACKER TOOLKIT DVWA Brute Force***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/HACKER%20TOOLKIT%20DVWA%20Brute%20Force)
+HACKER TOOLKIT DVWA Brute Force
 
 
 ---
