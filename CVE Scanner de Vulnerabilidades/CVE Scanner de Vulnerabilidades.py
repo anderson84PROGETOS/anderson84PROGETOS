@@ -19,7 +19,7 @@ class CVEInfoApp:
             if platform.system() == "Windows":
                 self.root.after(100, lambda: self.root.state("zoomed"))
             else:
-                self.root.after(200, lambda: self.root.attributes("-zoomed", True))
+                self.root.after(200, lambda: self.root.attributes("-zoomed", True)) 
         except Exception:
             pass
 
