@@ -3,7 +3,7 @@
 """
 DVWA Tester - Brute Force + LFI File Checker (versão corrigida)
 Uso autorizado apenas (laboratório / pentest com permissão).
-Dependências: pip install requests
+Dependências: pip install requests 
 """
 
 import threading
