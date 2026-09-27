@@ -608,6 +608,9 @@ CVE Scanner de Vulnerabilidades
 🕵️ [***HACKER TOOLKIT DVWA Brute Force***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/HACKER%20TOOLKIT%20DVWA%20Brute%20Force)
 HACKER TOOLKIT DVWA Brute Force
 
+🕵️ 🕵️ [***Hacker Toolkit DVWA BF LFI SQLi Scanner***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Hacker%20Toolkit%20DVWA%20BF%20LFI%20SQLi%20Scanner)
+Hacker Toolkit DVWA BF LFI SQLi Scanner
+
 
 ---
 
