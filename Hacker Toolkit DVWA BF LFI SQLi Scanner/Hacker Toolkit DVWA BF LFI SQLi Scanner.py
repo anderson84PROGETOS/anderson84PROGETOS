@@ -5,6 +5,9 @@ HackerAI Toolkit — DVWA Brute Force + LFI  |  SQLi Scanner
 Interface única com duas abas, tema verde hacker + senhas em laranja-abóbora.
 Uso autorizado apenas (laboratório / pentest com permissão).
 Dependências: pip install requests
+
+' OR '1'='1
+
 """
 
 import threading
