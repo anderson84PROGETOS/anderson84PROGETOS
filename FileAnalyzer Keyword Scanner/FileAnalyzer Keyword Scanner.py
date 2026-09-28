@@ -14,7 +14,7 @@
  - Scrollbar horizontal para navegar nos resultados
  - ABAS (Notebook): "Wordlist" e "Resultados" (area grande)
  - Janela de AJUDA integrada (botao "Ajuda")
- Requisitos: apenas Python 3 (Tkinter ja vem incluso)
+ Requisitos: apenas Python 3 (Tkinter ja vem incluso) 
 =====================================================================
 """
 
