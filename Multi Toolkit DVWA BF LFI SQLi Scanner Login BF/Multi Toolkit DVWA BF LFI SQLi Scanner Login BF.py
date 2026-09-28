@@ -6,6 +6,9 @@ Interface única com 3 abas, tema verde hacker + senhas em laranja-abóbora.
 [VULN] em laranja-abóbora  |  [ OK ] em azul.
 Uso autorizado apenas (laboratório / pentest com permissão).
 Dependências: pip install requests beautifulsoup4
+
+' OR '1'='1
+
 """
 
 import threading
