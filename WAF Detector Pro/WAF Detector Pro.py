@@ -5,7 +5,7 @@ WAF Detector Pro v1.4 - Identificação de Web Application Firewall
 Estilo WAFW00F com interface gráfica + User-Agents customizados + opção de cript
 Rotação automática de User-Agents do .txt (um por alvo, em ciclo)
 Exportação de resultados em TXT e HTML
-Uso educacional / testes autorizados somente.
+Uso educacional / testes autorizados somente. 
 """
 
 import tkinter as tk
