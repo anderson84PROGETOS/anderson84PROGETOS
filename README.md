@@ -617,6 +617,10 @@ Multi Toolkit DVWA BF LFI SQLi Scanner Login BF
 📝 📂 [***FileAnalyzer Keyword Scanner***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/FileAnalyzer%20Keyword%20Scanner)
 FileAnalyzer Keyword Scanner
 
+🛡️ [***WAF Detector Pro***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/WAF%20Detector%20Pro)
+WAF Detector Pro
+
+
 
 
 ---
