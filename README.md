@@ -623,6 +623,9 @@ WAF Detector Pro
 🕵️ [***WEB SITE ANALYZER PRO***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/WEB%20SITE%20ANALYZER%20PRO)
 WEB SITE ANALYZER PRO
 
+🛡️🕵️ [***CVE-2011-2523 - vsftpd 2.3.4 Backdoor Command Execution***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/CVE-2011-2523%20-%20vsftpd%202.3.4%20Backdoor%20Command%20Execution)
+CVE-2011-2523 - vsftpd 2.3.4 Backdoor Command Execution
+
 
 
 ---
