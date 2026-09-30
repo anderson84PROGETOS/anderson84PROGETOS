@@ -620,6 +620,8 @@ FileAnalyzer Keyword Scanner
 🛡️ [***WAF Detector Pro***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/WAF%20Detector%20Pro)
 WAF Detector Pro
 
+🕵️ [***WEB SITE ANALYZER PRO***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/WEB%20SITE%20ANALYZER%20PRO)
+WEB SITE ANALYZER PRO
 
 
 
