@@ -197,21 +197,11 @@ def formatar_tempo_funcionamento(horas_total):
 
 
 # ============================================================
-# POWERSHELL OTIMIZADO PARA RODAR EM BACKGROUND SEM JANELA
+# POWERSHELL
 # ============================================================
 
 def executar_powershell(comando, timeout=30):
     try:
-        # Configura as informações de inicialização do processo para ocultar a janela no Windows
-        startupinfo = None
-        creationflags = 0
-        
-        if os.name == 'nt':
-            startupinfo = subprocess.STARTUPINFO()
-            startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
-            startupinfo.wShowWindow = 0  # Equivalente a SW_HIDE (Ocultar Janela)
-            creationflags = subprocess.CREATE_NO_WINDOW  # Impede a criação de console do CMD/PowerShell
-
         resultado = subprocess.run(
             [
                 "powershell.exe",
@@ -225,9 +215,7 @@ def executar_powershell(comando, timeout=30):
             text=True,
             encoding="utf-8",
             errors="replace",
-            timeout=timeout,
-            startupinfo=startupinfo,
-            creationflags=creationflags
+            timeout=timeout
         )
 
         if resultado.returncode != 0:
@@ -349,7 +337,7 @@ catch {
 
 
 # ============================================================
-# SMART VIA WMI
+# SMART VIA WMI (CORRIGIDO PARA OBTER LIMIAR)
 # ============================================================
 
 def obter_dados_smart():
@@ -357,20 +345,35 @@ def obter_dados_smart():
 $lista = @()
 
 try {
-
+    # Obtém os dados atuais (Atual, Pior, Bruto)
     $dados = Get-CimInstance `
         -Namespace root\wmi `
         -ClassName MSStorageDriver_FailurePredictData `
         -ErrorAction SilentlyContinue
 
+    # Obtém os dados de Limiar (Threshold)
+    $limiares = Get-CimInstance `
+        -Namespace root\wmi `
+        -ClassName MSStorageDriver_FailurePredictThresholds `
+        -ErrorAction SilentlyContinue
+
     foreach ($item in $dados) {
+        
+        # Encontra o limiar correspondente ao mesmo disco (InstanceName)
+        $limiarItem = $limiares | Where-Object { $_.InstanceName -eq $item.InstanceName } | Select-Object -First 1
 
-        $bytes = @($item.VendorSpecific)
+        $bytesData = @($item.VendorSpecific)
+        $bytesThreshold = @()
+        
+        if ($limiarItem) {
+            $bytesThreshold = @($limiarItem.VendorSpecific)
+        }
 
-        if ($bytes.Count -gt 2) {
+        if ($bytesData.Count -gt 2) {
             $obj = [ordered]@{
                 Instancia = $item.InstanceName
-                Bytes = $bytes
+                Bytes = $bytesData
+                BytesThreshold = $bytesThreshold
             }
             $lista += $obj
         }
@@ -402,9 +405,19 @@ catch {
     for item in dados:
         try:
             bytes_smart = item.get("Bytes", [])
+            bytes_threshold = item.get("BytesThreshold", [])
 
             if len(bytes_smart) < 3:
                 continue
+                
+            # Mapeia os limiares num dicionário para busca rápida
+            dicionario_limiares = {}
+            if len(bytes_threshold) > 2:
+                for pos_t in range(2, len(bytes_threshold) - 11, 12):
+                    t_id = int(bytes_threshold[pos_t])
+                    if t_id != 0:
+                        t_valor = int(bytes_threshold[pos_t + 1])
+                        dicionario_limiares[t_id] = t_valor
 
             atributos = []
 
@@ -421,6 +434,9 @@ catch {
 
                 valor_atual = int(bytes_smart[pos + 3])
                 pior_valor = int(bytes_smart[pos + 4])
+                
+                # Busca o limiar no dicionário (se não achar, retorna 0)
+                limiar_valor = dicionario_limiares.get(attr_id, 0)
 
                 raw_bytes = bytes_smart[pos + 5:pos + 11]
 
@@ -437,7 +453,7 @@ catch {
                     ),
                     "atual": valor_atual,
                     "pior": pior_valor,
-                    "limiar": 0,
+                    "limiar": limiar_valor, # <- LIMIAR CORRIGIDO AQUI
                     "bruto": bruto,
                     "bruto_hex": "".join(
                         f"{int(x):02X}" for x in reversed(raw_bytes)
@@ -626,11 +642,14 @@ style.map("Treeview.Heading", background=[('active', '#102610')])
 # MAXIMIZAR
 # ============================================================
 
-try:
-    app.state("zoomed")
+try:app.state("zoomed")
+
 except:
+
     try:
+
         app.attributes("-zoomed", True)
+
     except:
         pass
 
