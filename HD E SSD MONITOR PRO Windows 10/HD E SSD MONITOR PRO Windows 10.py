@@ -197,11 +197,21 @@ def formatar_tempo_funcionamento(horas_total):
 
 
 # ============================================================
-# POWERSHELL
+# POWERSHELL OTIMIZADO PARA RODAR EM BACKGROUND SEM JANELA
 # ============================================================
 
 def executar_powershell(comando, timeout=30):
     try:
+        # Configura as informações de inicialização do processo para ocultar a janela no Windows
+        startupinfo = None
+        creationflags = 0
+        
+        if os.name == 'nt':
+            startupinfo = subprocess.STARTUPINFO()
+            startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+            startupinfo.wShowWindow = 0  # Equivalente a SW_HIDE (Ocultar Janela)
+            creationflags = subprocess.CREATE_NO_WINDOW  # Impede a criação de console do CMD/PowerShell
+
         resultado = subprocess.run(
             [
                 "powershell.exe",
@@ -215,7 +225,9 @@ def executar_powershell(comando, timeout=30):
             text=True,
             encoding="utf-8",
             errors="replace",
-            timeout=timeout
+            timeout=timeout,
+            startupinfo=startupinfo,
+            creationflags=creationflags
         )
 
         if resultado.returncode != 0:
@@ -614,14 +626,11 @@ style.map("Treeview.Heading", background=[('active', '#102610')])
 # MAXIMIZAR
 # ============================================================
 
-try:app.state("zoomed")
-
+try:
+    app.state("zoomed")
 except:
-
     try:
-
         app.attributes("-zoomed", True)
-
     except:
         pass
 
