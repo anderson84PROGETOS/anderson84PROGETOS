@@ -197,11 +197,16 @@ def formatar_tempo_funcionamento(horas_total):
 
 
 # ============================================================
-# POWERSHELL
+# POWERSHELL (CORRIGIDO PARA OCULTAR JANELA NO WINDOWS .EXE)
 # ============================================================
 
 def executar_powershell(comando, timeout=30):
     try:
+        # Configura as flags de criação para ocultar totalmente a janela do PowerShell
+        creation_flags = 0
+        if os.name == 'nt':
+            creation_flags = subprocess.CREATE_NO_WINDOW  # Impede a abertura do prompt
+
         resultado = subprocess.run(
             [
                 "powershell.exe",
@@ -215,7 +220,8 @@ def executar_powershell(comando, timeout=30):
             text=True,
             encoding="utf-8",
             errors="replace",
-            timeout=timeout
+            timeout=timeout,
+            creationflags=creation_flags # Flag adicionada aqui
         )
 
         if resultado.returncode != 0:
