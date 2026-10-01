@@ -3,7 +3,7 @@
 # Toolkit GUI - Metasploitable 2
 # Aba 1: HTTP (WebDAV PUT + Brute-force + Shell)
 # Aba 2: vsftpd 2.3.4 Backdoor RCE (CVE-2011-2523)
-# Uso educacional / testes autorizados.
+# Uso educacional / testes autorizados. 
 
 import urllib.request, urllib.error, urllib.parse, threading
 import tkinter as tk
