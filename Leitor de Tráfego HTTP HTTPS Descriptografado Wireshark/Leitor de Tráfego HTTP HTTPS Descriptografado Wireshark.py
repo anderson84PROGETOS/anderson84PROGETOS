@@ -3,7 +3,7 @@
 """
 Leitor de Tráfego HTTP + HTTPS (descriptografado com sslkeylog + tshark)
 - Oculta janelas pretas do tshark/CMD sem quebrar o asyncio/PyShark
-- Relatório completo e exportação HTML
+- Relatório completo e exportação HTML 
 """
 
 import sys
