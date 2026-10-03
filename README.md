@@ -635,6 +635,10 @@ Toolkit Metasploitable 2 HTTP + vsftpd
 🔎 [***WPS Scanner***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/WPS%20Scanner)
 WPS Scanner
 
+🦈🦈 [***Leitor de Tráfego HTTP HTTPS Descriptografado Wireshark***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Leitor%20de%20Tr%C3%A1fego%20HTTP%20HTTPS%20Descriptografado%20Wireshark)
+Leitor de Tráfego HTTP HTTPS Descriptografado Wireshark
+
+
 
 
 ---
