@@ -627,7 +627,7 @@ def analise_profunda(pcap_path, keylog_path, filtro_regex="",
 class App(tk.Tk):
     def __init__(self):
         super().__init__()
-        self.title("Wireshark Leitor de Tráfego HTTP + HTTPS Descriptografado")
+        self.title("🦈 Wireshark Leitor de Tráfego HTTP + HTTPS Descriptografado 🦈")
         self.geometry("1280x760")
         self.state("zoomed")
 
