@@ -687,15 +687,15 @@ class App(tk.Tk):
         # ============================================================
         # CORES DOS BOTÕES DAS ABAS (FUNDOS COLORIDOS)
         # ============================================================
-        self.COR_LETRA_PADRAO = "#050505"  # Cor escura padrão quando NÃO está clicado
-        self.COR_LETRA_ATIVA  = "#ffffff"  # Cor BRANCA quando o botão for CLICADO
+        self.COR_LETRA_PADRAO = "#FAFAFA"  # Cor escura padrão quando NÃO está clicado
+        self.COR_LETRA_ATIVA  = "#000000"  # Cor BRANCA quando o botão for CLICADO
 
         self.config_abas = [
             {"texto": "🌐 HTTP + HTTPS Descriptografado", "bg": "#27ae60"},   # 1ª ABA (Verde)
             {"texto": "HTTP Texto Claro",               "bg": "#da8b15"},     # 2ª ABA (Laranja)
-            {"texto": "Sites HTTPS (SNI)",              "bg": "#16c5e4"},     # 3ª ABA (Azul)
+            {"texto": "Sites HTTPS (SNI)",              "bg": "#0aa0bb"},     # 3ª ABA (Azul)
             {"texto": "Chaves TLS",                     "bg": "#8e44ad"},     # 4ª ABA (Roxo)
-            {"texto": "📄 Relatório / Todos Resultados", "bg": "#13f5c8"}     # 5ª ABA (Verde Água)
+            {"texto": "📄 Relatório / Todos Resultados", "bg": "#089679"}     # 5ª ABA (Verde Água)
         ]
 
         # Estilo para ocultar os botões cinzas padrão do Windows
