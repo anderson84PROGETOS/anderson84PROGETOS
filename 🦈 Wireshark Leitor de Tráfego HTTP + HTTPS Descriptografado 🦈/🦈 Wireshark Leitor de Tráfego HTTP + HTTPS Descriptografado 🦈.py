@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 Leitor de Tráfego HTTP + HTTPS (descriptografado com sslkeylog + tshark)
-- Modo Claro / Escuro (Dark Mode)
+- Modo Escuro (Dark Mode) Corrigido para Windows (Textos Verdes, Fundos Escuros)
 - Coloração de Sintaxe (Corpo = Vermelho, Headers = Azul)
 - Display Filter e Regex GLOBAIS
 - Filtros padronizados (POST, GET, TCP, UDP...) em todas as abas
@@ -601,6 +601,7 @@ class App(tk.Tk):
         self.geometry("1280x760")
         self.state("zoomed")
 
+        # ATIVA MODO ESCURO POR PADRÃO
         self.is_dark_mode = True
         self.text_widgets = []
 
@@ -631,30 +632,32 @@ class App(tk.Tk):
         style.configure("TButton", font=("Arial", 10))
         style.configure("Prog.Horizontal.TProgressbar", thickness=15)
 
-        frame_botoes = tk.Frame(self.topo)
-        frame_botoes.pack(fill="x", pady=(0, 5))
+        self.frame_botoes = tk.Frame(self.topo)
+        self.frame_botoes.pack(fill="x", pady=(0, 5))
 
-        ttk.Button(frame_botoes, text="1. Abrir sslkeylog.log (Manual)", command=self.abrir_keylog).pack(side="left", padx=5)
-        ttk.Button(frame_botoes, text="2. Abrir .pcap / .pcapng", command=self.abrir_pcap).pack(side="left", padx=5)
-        ttk.Button(frame_botoes, text="Analisar resultados.pcapng", command=self.analisar_resultados).pack(side="left", padx=5)
+        ttk.Button(self.frame_botoes, text="1. Abrir sslkeylog.log (Manual)", command=self.abrir_keylog).pack(side="left", padx=5)
+        ttk.Button(self.frame_botoes, text="2. Abrir .pcap / .pcapng", command=self.abrir_pcap).pack(side="left", padx=5)
+        ttk.Button(self.frame_botoes, text="Analisar resultados.pcapng", command=self.analisar_resultados).pack(side="left", padx=5)
 
-        btn_deep = tk.Button(frame_botoes, text="▶ DESCRIPTOGRAFAR", bg="#2980b9", fg="white", font=("Arial", 10, "bold"), command=self.rodar_analise_profunda)
+        btn_deep = tk.Button(self.frame_botoes, text="▶ DESCRIPTOGRAFAR", bg="#2980b9", fg="white", font=("Arial", 10, "bold"), command=self.rodar_analise_profunda)
         btn_deep.pack(side="left", padx=10)
 
-        ttk.Label(frame_botoes, text="Regex:", font=("Arial", 9, "bold")).pack(side="left", padx=(10, 2))
-        self.ent_regex = ttk.Entry(frame_botoes, width=10)
+        self.lbl_regex = ttk.Label(self.frame_botoes, text="Regex:", font=("Arial", 9, "bold"))
+        self.lbl_regex.pack(side="left", padx=(15, 2))
+        self.ent_regex = ttk.Entry(self.frame_botoes, width=12)
         self.ent_regex.insert(0, "http|tls")
         self.ent_regex.pack(side="left")
 
-        ttk.Label(frame_botoes, text="Display Filter:", font=("Arial", 9, "bold")).pack(side="left", padx=(15, 2))
-        self.ent_df = ttk.Entry(frame_botoes, width=35)
+        self.lbl_df = ttk.Label(self.frame_botoes, text="Display Filter:", font=("Arial", 9, "bold"))
+        self.lbl_df.pack(side="left", padx=(15, 2))
+        self.ent_df = ttk.Entry(self.frame_botoes, width=35)
         self.ent_df.insert(0, "http or http2 or tls.handshake.type == 1")
         self.ent_df.pack(side="left")
 
-        self.btn_theme = tk.Button(frame_botoes, text="🌙 Modo Escuro", bg="#34495e", fg="white", font=("Arial", 9, "bold"), command=self._toggle_theme)
+        self.btn_theme = tk.Button(self.frame_botoes, text="☀️ Modo Claro", bg="#f1c40f", fg="black", font=("Arial", 9, "bold"), command=self._toggle_theme)
         self.btn_theme.pack(side="right", padx=10)
 
-        self.lbl_status = ttk.Label(frame_botoes, text="Carregue a chave (sslkeylog) e depois a captura (pcap)", font=("Arial", 10, "bold"), foreground="#2c3e50")
+        self.lbl_status = ttk.Label(self.frame_botoes, text="Carregue a chave (sslkeylog) e depois a captura (pcap)", font=("Arial", 10, "bold"))
         self.lbl_status.pack(side="right", padx=8)
 
         # ---- Progresso ----
@@ -662,16 +665,16 @@ class App(tk.Tk):
         self.frame_progresso.pack(fill="x")
         self.frame_progresso.pack_propagate(False)
 
-        self.lbl_prog_msg = tk.Label(self.frame_progresso, text="", font=("Arial", 9, "bold"), bg="#ecf0f1", fg="#34495e", width=35, anchor="e")
+        self.lbl_prog_msg = tk.Label(self.frame_progresso, text="", font=("Arial", 9, "bold"), bg="#ecf0f1", width=35, anchor="e")
         self.lbl_prog_msg.pack(side="left", padx=10)
 
         self.barra_progresso = ttk.Progressbar(self.frame_progresso, orient="horizontal", mode="determinate", style="Prog.Horizontal.TProgressbar")
         self.barra_progresso.pack(side="left", fill="x", expand=True, padx=5, pady=6)
 
-        self.lbl_prog_pct = tk.Label(self.frame_progresso, text="", font=("Arial", 10, "bold"), bg="#ecf0f1", fg="#27ae60", width=5)
+        self.lbl_prog_pct = tk.Label(self.frame_progresso, text="", font=("Arial", 10, "bold"), bg="#ecf0f1", width=5)
         self.lbl_prog_pct.pack(side="left", padx=5)
 
-        self.lbl_prog_detalhe = tk.Label(self.frame_progresso, text="", font=("Consolas", 8), bg="#ecf0f1", fg="#7f8c8d", width=30, anchor="w")
+        self.lbl_prog_detalhe = tk.Label(self.frame_progresso, text="", font=("Consolas", 8), bg="#ecf0f1", width=30, anchor="w")
         self.lbl_prog_detalhe.pack(side="left", padx=5)
 
         # ---- Abas ----
@@ -936,10 +939,13 @@ class App(tk.Tk):
         self.status_bar.pack(fill="x", side="bottom")
 
         self.paned_windows = [pw_deep, pw_http, pw_tls, pw_keys, pw_todos]
+        
+        # APLICA O TEMA ESCURO LOGO NA INICIALIZAÇÃO
         self._apply_theme()
         self.selecionar_aba_custom(0)
 
-    # ================= TEMA =================
+
+    # ================= TEMA (CLARO/ESCURO) =================
 
     def _config_text_tags(self, txt):
         fg_general = "#00ff00" if self.is_dark_mode else "#000000"
@@ -954,50 +960,87 @@ class App(tk.Tk):
 
     def _apply_theme(self):
         style = ttk.Style()
+        
+        # O clam corrige o bug do fundo branco no Windows para elementos TTK
+        if "clam" in style.theme_names():
+            style.theme_use("clam")
+
         if self.is_dark_mode:
             self.btn_theme.config(text="☀️ Modo Claro", bg="#f1c40f", fg="black")
-            bg_main = "#1e1e1e"
+            bg_main = "#1a1a1a"
             fg_main = "#00ff00"
-            bg_text = "#0c0c0c"
+            bg_text = "#0a0a0a"
             bg_paned = "#333333"
+            bg_head = "#2c3e50"
+            
             self.configure(bg=bg_main)
             style.configure("TFrame", background=bg_main)
             style.configure("TLabel", background=bg_main, foreground=fg_main)
-            style.configure("Treeview", background="#121212", foreground="#00ff00", fieldbackground="#121212")
+            
+            style.configure("Treeview", background=bg_text, foreground=fg_main, fieldbackground=bg_text, borderwidth=0)
             style.map("Treeview", background=[('selected', '#005500')], foreground=[('selected', 'white')])
-            style.configure("Treeview.Heading", background="#333", foreground="white")
+            style.configure("Treeview.Heading", background=bg_head, foreground="white", font=("Arial", 9, "bold"))
+            
             self.tree_todos.tag_configure("tcp", background="#1a1a2e", foreground="#00ff00")
             self.tree_todos.tag_configure("udp", background="#16213e", foreground="#00aaff")
             self.tree_todos.tag_configure("tls", background="#2a1b38", foreground="#ff00ff")
             self.tree_todos.tag_configure("http", background="#1e3d2f", foreground="#00ff00")
             self.tree_todos.tag_configure("dns", background="#0f3443", foreground="#00ffff")
             self.tree_todos.tag_configure("icmp", background="#3e1f3b", foreground="#ff0055")
+            self.tree_todos.tag_configure("padrao", background=bg_text, foreground=fg_main)
+
+            bg_prog = "#222222"
+            self.frame_progresso.config(bg=bg_prog)
+            self.lbl_prog_msg.config(bg=bg_prog, fg=fg_main)
+            self.lbl_prog_pct.config(bg=bg_prog, fg=fg_main)
+            self.lbl_prog_detalhe.config(bg=bg_prog, fg="#888888")
+            
         else:
             self.btn_theme.config(text="🌙 Modo Escuro", bg="#34495e", fg="white")
             bg_main = "#f0f0f0"
             fg_main = "#000000"
-            bg_text = "#f8f9fa"
+            bg_text = "#ffffff"
             bg_paned = "#bdc3c7"
+            bg_head = "#e1e1e1"
+            
             self.configure(bg=bg_main)
             style.configure("TFrame", background=bg_main)
             style.configure("TLabel", background=bg_main, foreground=fg_main)
-            style.configure("Treeview", background="white", foreground="black", fieldbackground="white")
+            
+            style.configure("Treeview", background=bg_text, foreground=fg_main, fieldbackground=bg_text)
             style.map("Treeview", background=[('selected', '#0078D7')], foreground=[('selected', 'white')])
-            style.configure("Treeview.Heading", background="#e1e1e1", foreground="black")
+            style.configure("Treeview.Heading", background=bg_head, foreground="black", font=("Arial", 9, "bold"))
+            
             self.tree_todos.tag_configure("tcp", background="#e7e6eb", foreground="black")
             self.tree_todos.tag_configure("udp", background="#daeeff", foreground="black")
             self.tree_todos.tag_configure("tls", background="#d5c8e3", foreground="black")
             self.tree_todos.tag_configure("http", background="#e4ffc7", foreground="black")
             self.tree_todos.tag_configure("dns", background="#ccffff", foreground="black")
             self.tree_todos.tag_configure("icmp", background="#fce0ff", foreground="black")
+            self.tree_todos.tag_configure("padrao", background=bg_text, foreground="black")
 
+            bg_prog = "#ecf0f1"
+            self.frame_progresso.config(bg=bg_prog)
+            self.lbl_prog_msg.config(bg=bg_prog, fg="#34495e")
+            self.lbl_prog_pct.config(bg=bg_prog, fg="#27ae60")
+            self.lbl_prog_detalhe.config(bg=bg_prog, fg="#7f8c8d")
+
+        # Atualiza os frames base que não são TTK
+        self.frame_botoes.config(bg=bg_main)
+        self.frame_botoes_abas.config(bg=bg_main)
+
+        # Atualiza o interior das caixas de texto e recolore as tags
         for txt in self.text_widgets:
             txt.config(bg=bg_text, fg=fg_main, insertbackground=fg_main)
             self._config_text_tags(txt)
+            
         for pw in self.paned_windows:
             pw.config(bg=bg_paned)
-        self.lbl_status_todos.config(foreground=fg_main)
-        self.lbl_deep.config(foreground=fg_main)
+            
+        self.lbl_status.config(foreground=fg_main, background=bg_main)
+        self.lbl_regex.config(foreground=fg_main, background=bg_main)
+        self.lbl_df.config(foreground=fg_main, background=bg_main)
+
 
     # ================= MENU CONTEXTO =================
 
@@ -1241,6 +1284,7 @@ class App(tk.Tk):
         self.keylog_path = path
         self.atualizar_keys()
         self.progresso_finalizar(f"✅ {len(self.keylog)} chaves carregadas!")
+        # Atualiza label e garante que a cor no modo dark permaneça certa
         self.lbl_status.config(text=f"Chaves TLS: {len(self.keylog)} | Agora carregue o .pcap")
         if self.pcap_path:
             self.after(900, self.rodar_analise_profunda)
@@ -1944,7 +1988,6 @@ tr:hover{{background:#f1f2f6}}
                 bc_color = "#8e44ad" if is_tls else "#27ae60"
                 bc = badge(p.get("metodo") or "TLS")
                 mt = html.escape(str(p.get("metodo") or "TLS Handshake"))
-                # CORREÇÃO AQUI (aspas simples internas)
                 ut = html.escape(f"{p.get('host', '')}{p.get('uri', '')}")
                 num = html.escape(str(p.get("num", "")))
                 src = html.escape(str(p.get("src", "")))
