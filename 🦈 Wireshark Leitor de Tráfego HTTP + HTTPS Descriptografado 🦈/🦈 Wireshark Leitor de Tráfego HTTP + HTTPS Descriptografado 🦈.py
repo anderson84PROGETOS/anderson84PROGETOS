@@ -6,7 +6,7 @@ Leitor de Tráfego HTTP + HTTPS (descriptografado com sslkeylog + tshark)
 - Coloração de Sintaxe (Corpo = Vermelho, Headers = Azul)
 - Display Filter e Regex GLOBAIS
 - Filtros padronizados (POST, GET, TCP, UDP...) em todas as abas
-- Seguir Fluxo TLS/HTTP (Botão Direito)
+- Seguir Fluxo TLS/HTTP (Botão Direito) 
 - Sem erros de sintaxe
 """
 
