@@ -644,8 +644,10 @@ Wireshark Leitor de Tráfego HTTP HTTPS Descriptografado
 Ⓜ [***VSFTPD 2.3.4 Backdoor Metasploit***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/VSFTPD%202.3.4%20Backdoor%20Metasploit)
 VSFTPD 2.3.4 Backdoor Metasploit
 
-🦈 [***🦈 Wireshark Leitor de Tráfego HTTP + HTTPS Descriptografado 🦈***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/blob/meu-progetos/%F0%9F%A6%88%20Wireshark%20Leitor%20de%20Tr%C3%A1fego%20HTTP%20+%20HTTPS%20Descriptografado%20%F0%9F%A6%88/%F0%9F%A6%88%20Wireshark%20Leitor%20de%20Tr%C3%A1fego%20HTTP%20+%20HTTPS%20Descriptografado%20%F0%9F%A6%88.py)
+🦈 [***🦈 Wireshark Leitor de Tráfego HTTP + HTTPS Descriptografado 🦈***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/blob/meu-progetos/%F0%9F%A6%88%20Wireshark%20Leitor%20de%20Tr%C3%A1fego%20HTTP%20%2B%20HTTPS%20Descriptografado%20%F0%9F%A6%88/%F0%9F%A6%88%20Wireshark%20Leitor%20de%20Tr%C3%A1fego%20HTTP%20%2B%20HTTPS%20Descriptografado%20%F0%9F%A6%88.py)
 🦈 Wireshark Leitor de Tráfego HTTP + HTTPS Descriptografado 🦈
+
+
 
 ---
 
