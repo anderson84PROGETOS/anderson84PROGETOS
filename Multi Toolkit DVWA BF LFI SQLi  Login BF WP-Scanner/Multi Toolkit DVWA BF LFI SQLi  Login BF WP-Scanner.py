@@ -3,7 +3,7 @@
 """
 HackerAI Toolkit — Multi Abas
   Aba 1: DVWA Brute Force + LFI
-  Aba 2: SQLi Scanner (+ hash cracking + recon)  ' OR '1'='1
+  Aba 2: SQLi Scanner (+ hash cracking + recon)  ' OR '1'='1 
   Aba 3: Login Brute Force Multi-Endpoint
   Aba 4: WP-Scanner (scan de arquivos + brute force wp-login/xmlrpc)
 
