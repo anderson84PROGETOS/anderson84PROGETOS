@@ -653,8 +653,8 @@ Multi Toolkit DVWA BF LFI SQLi  Login BF WP-Scanner
 🧿[***WebFinger***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/WebFinger)
 WebFinger
 
-
-
+🔍[***WebFuzzer***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/WebFuzzer)
+WebFuzzer
 
 ---
 
