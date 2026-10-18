@@ -165,6 +165,10 @@ class ZenmapClone:
 
             "Telnet Encryption": "nmap -p 23 --script telnet-encryption",
 
+            # EternalBlue
+            "☣ EternalBlue MS17-010 (CVE-2017-0144)": "nmap -Pn -sV -p445 --script smb-vuln-ms17-010",
+            "☣ EternalBlue + decoys": "nmap -Pn -D RND:20 -sV -p445 --script smb-vuln-ms17-010",
+
         }
 
         self.load_profiles()
@@ -1972,19 +1976,18 @@ Relatório Completo de Scan Nmap
             # ==================== LER OUTPUT ====================
 
             while True:
-
                 if self.stop_flag:
+                    break
 
+                if process.stdout is None:
                     break
 
                 line = process.stdout.readline()
 
                 if not line:
-
                     if process.poll() is not None:
                         break
-
-                    continue
+                    continue    
 
                 # Ignorar algumas linhas
 
