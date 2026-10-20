@@ -9,7 +9,7 @@ import html as html_escape
 from datetime import datetime
 import threading
 
-# ── Forçar PowerShell a usar UTF-8 em TODAS as chamadas ──
+# ── Forçar PowerShell a usar UTF-8 em TODAS as chamadas ── 
 PS_UTF8 = "[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;$OutputEncoding=[System.Text.Encoding]::UTF8;"
 
 # ============================================================
