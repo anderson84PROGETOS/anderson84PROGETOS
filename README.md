@@ -664,6 +664,9 @@ Network Sniffer
 🚾 [***Analisador Logs Windows***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Analisador%20Logs%20Windows)
 Analisador Logs Windows
 
+🏬 [***DLL Análise Forense***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/DLL%20An%C3%A1lise%20Forense)
+DLL Análise Forense
+
 
 
 ---
