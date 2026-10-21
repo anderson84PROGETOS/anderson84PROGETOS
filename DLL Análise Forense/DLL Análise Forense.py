@@ -13,7 +13,7 @@ from pathlib import Path
 import hashlib
 import webbrowser
 
-# ═══════════════════════════════════════════════════════════════
+# ═══════════════════════════════════════════════════════════════ 
 # BASE DE CONHECIMENTO - API DO WINDOWS
 # ═══════════════════════════════════════════════════════════════
 API_KNOWLEDGE_BASE = {
