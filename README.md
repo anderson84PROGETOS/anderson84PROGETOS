@@ -667,6 +667,9 @@ Analisador Logs Windows
 🏬 [***DLL Análise Forense***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/DLL%20An%C3%A1lise%20Forense)
 DLL Análise Forense
 
+📩 [***Email Header Analyzer • IP Trace • SPF/DMARC • ASN Intelligence***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Email%20Header%20Analyzer%20%E2%80%A2%20IP%20Trace%20%E2%80%A2%20SPF)
+Email Header Analyzer • IP Trace • SPF/DMARC • ASN Intelligence
+
 
 
 ---
