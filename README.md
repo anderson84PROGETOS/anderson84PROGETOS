@@ -670,6 +670,8 @@ DLL Análise Forense
 📩 [***Email Header Analyzer • IP Trace • SPF/DMARC • ASN Intelligence***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Email%20Header%20Analyzer%20%E2%80%A2%20IP%20Trace%20%E2%80%A2%20SPF)
 Email Header Analyzer • IP Trace • SPF/DMARC • ASN Intelligence
 
+🐍 [***Python Vulnerabilidades Segurança Dependências***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Python%20Vulnerabilidades%20Seguran%C3%A7a%20Depend%C3%AAncias)
+Python Vulnerabilidades Segurança Dependências
 
 
 ---
