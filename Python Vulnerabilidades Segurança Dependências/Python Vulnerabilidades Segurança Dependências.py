@@ -7,6 +7,7 @@ import tkinter as tk
 from tkinter import ttk, messagebox, filedialog
 from datetime import datetime
 
+
 class PackageUpdater:
     def __init__(self, root):
         self.root = root
