@@ -8,12 +8,66 @@ from tkinter import ttk, messagebox, filedialog
 from datetime import datetime
 
 
+# ============================================================
+# CONFIGURAÇÃO PARA OCULTAR JANELAS DE CONSOLE NO WINDOWS
+# ============================================================
+if sys.platform == "win32":
+    CREATE_NO_WINDOW = 0x08000000
+    SUBPROCESS_FLAGS = CREATE_NO_WINDOW
+    STARTUP_INFO = subprocess.STARTUPINFO()
+    STARTUP_INFO.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+    STARTUP_INFO.wShowWindow = subprocess.SW_HIDE
+else:
+    SUBPROCESS_FLAGS = 0
+    STARTUP_INFO = None
+
+
+def run_subprocess(args, **kwargs):
+    """Wrapper de subprocess.run que oculta janelas no Windows."""
+    kwargs.setdefault("creationflags", SUBPROCESS_FLAGS)
+    kwargs.setdefault("startupinfo", STARTUP_INFO)
+    return subprocess.run(args, **kwargs)
+
+
+def popen_subprocess(args, **kwargs):
+    """Wrapper de subprocess.Popen que oculta janelas no Windows."""
+    kwargs.setdefault("creationflags", SUBPROCESS_FLAGS)
+    kwargs.setdefault("startupinfo", STARTUP_INFO)
+    return subprocess.Popen(args, **kwargs)
+
+
+def get_python_executable():
+    """
+    Retorna o Python correto a ser usado.
+    Quando empacotado com PyInstaller, sys.executable aponta pro .exe,
+    então precisamos encontrar o Python real do sistema.
+    """
+    # Se está rodando como .exe (PyInstaller)
+    if getattr(sys, 'frozen', False):
+        # Tenta usar o Python do sistema
+        import shutil
+        for candidate in ["python", "python3", "py"]:
+            path = shutil.which(candidate)
+            if path:
+                return path
+        # fallback (pode falhar, mas evita crash)
+        return "python"
+    # Rodando como script normal
+    return sys.executable
+
+
+PYTHON_EXE = get_python_executable()
+
+
 class PackageUpdater:
     def __init__(self, root):
         self.root = root
         self.root.title("Python Vulnerabilidades — Segurança e Dependências")
         self.root.geometry("950x700")
-        self.root.state("zoomed") # Windows
+        try:
+            self.root.state("zoomed")  # Windows
+        except Exception:
+            pass
         self.root.minsize(750, 550)
         self.root.configure(bg="#0a0a0a")
 
@@ -84,7 +138,9 @@ class PackageUpdater:
 
         self.root.protocol("WM_DELETE_WINDOW", self.close)
         self.root.after(100, self.process_messages)
-        self.write_log(f"Python: {sys.executable}")
+        self.write_log(f"Python: {PYTHON_EXE}")
+        if getattr(sys, 'frozen', False):
+            self.write_log("Rodando como executável (.exe)", "yellow")
         self.write_log("Pronto. Selecione uma aba para começar.")
 
     def apply_dark_theme(self):
@@ -131,7 +187,6 @@ class PackageUpdater:
         return text
 
     def make_progress_frame(self, parent):
-        """Cria frame com barra de progresso + label de porcentagem."""
         pf = tk.Frame(parent, bg=self.bg)
         bar = ttk.Progressbar(pf, mode="determinate", maximum=100,
                                style="green.Horizontal.TProgressbar")
@@ -451,18 +506,6 @@ class PackageUpdater:
         add(".\n\n", "body")
 
         add("─────────────────────────────────────────────\n", "separator")
-        add("Exemplo de problema encontrado:\n\n", "subtitle")
-        add("  pip_audit encontrou vulnerabilidade no ", "body")
-        add("Pillow\n", "warning")
-        add("  Versão corrigida: ", "body")
-        add("13.0.0\n", "success")
-        add("  Conflito causado por: ", "body")
-        add("instagrapi\n\n", "warning")
-        add("  Após remover o pacote problemático:\n", "body")
-        add("  ✅ No known vulnerabilities found\n", "success")
-        add("  ✅ No broken requirements found\n\n", "success")
-
-        add("─────────────────────────────────────────────\n", "separator")
         add("Objetivo principal:\n\n", "subtitle")
         add("Facilitar a ", "body")
         add("manutenção preventiva do Python", "highlight")
@@ -472,13 +515,6 @@ class PackageUpdater:
         add("vulneráveis", "warning")
         add("\nou com ", "body")
         add("dependências incompatíveis", "warning")
-        add(".\n\n", "body")
-        add("Funciona como ferramenta de manutenção, ajudando a\nmanter os programas mais ", "body")
-        add("organizados", "success")
-        add(", ", "body")
-        add("seguros", "success")
-        add(" e ", "body")
-        add("estáveis", "success")
         add(".\n\n", "body")
 
         add("─────────────────────────────────────────────\n", "separator")
@@ -496,7 +532,7 @@ class PackageUpdater:
 
         add("╔══════════════════════════════════════════════════════╗\n", "separator")
         add("  Python: ", "body")
-        add(f"{sys.executable}\n", "highlight")
+        add(f"{PYTHON_EXE}\n", "highlight")
         add("╚══════════════════════════════════════════════════════╝\n", "separator")
 
         t.configure(state="disabled")
@@ -562,20 +598,13 @@ class PackageUpdater:
     # ===================== ANIMAÇÃO DE PROGRESSO =====================
 
     def animate_progress(self, bar, lbl, flag_attr, duration_ms=8000, steps=100):
-        """
-        Anima a barra de 0% a 90% suavemente durante a operação.
-        Quando a operação termina, pula para 100%.
-        flag_attr: nome do atributo bool que indica se ainda está rodando.
-        """
         interval = duration_ms // steps
         self._animate_step(bar, lbl, flag_attr, 0, steps, interval)
 
     def _animate_step(self, bar, lbl, flag_attr, step, total_steps, interval):
         if not getattr(self, flag_attr, False):
-            # operação terminou → 100%
             self.update_bar(bar, lbl, 100)
             return
-        # vai de 0 a 90 suavemente
         progress = min(90, (step / total_steps) * 90)
         self.update_bar(bar, lbl, progress)
         next_step = step + 1 if step < total_steps else total_steps
@@ -649,7 +678,7 @@ class PackageUpdater:
             return 1, ""
         self.emit("status", label)
         try:
-            process = subprocess.Popen(
+            process = popen_subprocess(
                 args, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
                 text=True, encoding="utf-8", errors="replace", bufsize=1
             )
@@ -675,7 +704,7 @@ class PackageUpdater:
     def run_updates(self):
         try:
             code, output = self.run_command(
-                [sys.executable, "-m", "pip", "list", "--outdated", "--format=json"],
+                [PYTHON_EXE, "-m", "pip", "list", "--outdated", "--format=json"],
                 "Consultando pacotes desatualizados..."
             )
             if self.cancel_requested:
@@ -706,7 +735,7 @@ class PackageUpdater:
                 self.emit("status", f"Atualizando {index}/{total}: {name}")
                 self.emit("log", f"\n[{index}/{total}] {name}: {current} → {latest}")
                 result, _ = self.run_command(
-                    [sys.executable, "-m", "pip", "install", "--upgrade", name],
+                    [PYTHON_EXE, "-m", "pip", "install", "--upgrade", name],
                     f"Instalando {name}..."
                 )
                 if result != 0:
@@ -722,7 +751,7 @@ class PackageUpdater:
             self.emit("update_progress", 85)
             self.emit("log", "\nVerificando dependências...")
             check_code, _ = self.run_command(
-                [sys.executable, "-m", "pip", "check"],
+                [PYTHON_EXE, "-m", "pip", "check"],
                 "Verificando conflitos..."
             )
             if self.cancel_requested:
@@ -732,7 +761,7 @@ class PackageUpdater:
             self.emit("update_progress", 92)
             self.emit("log", "\nExecutando pip-audit...")
             audit_code, _ = self.run_command(
-                [sys.executable, "-m", "pip_audit"],
+                [PYTHON_EXE, "-m", "pip_audit"],
                 "Verificando vulnerabilidades..."
             )
             self.emit("update_progress", 100)
@@ -767,9 +796,9 @@ class PackageUpdater:
         threading.Thread(target=self.run_audit, args=(path,), daemon=True).start()
 
     def run_audit(self, path):
-        command = [sys.executable, "-m", "pip_audit"]
+        command = [PYTHON_EXE, "-m", "pip_audit"]
         try:
-            result = subprocess.run(
+            result = run_subprocess(
                 command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
                 text=True, encoding="utf-8", errors="replace", check=False
             )
@@ -812,7 +841,7 @@ class PackageUpdater:
         self.update_bar(self.audit2_progress, self.audit2_progress_lbl, 0)
         self.write_audit2_output("=" * 65, "cyan")
         self.write_audit2_output("Início: " + datetime.now().strftime("%d/%m/%Y %H:%M:%S"), "cyan")
-        self.write_audit2_output(f"Comando: {sys.executable} -m pip_audit", "cyan")
+        self.write_audit2_output(f"Comando: {PYTHON_EXE} -m pip_audit", "cyan")
         self.write_audit2_output("=" * 65, "cyan")
         self.animate_progress(self.audit2_progress, self.audit2_progress_lbl,
                               "audit2_running", duration_ms=15000)
@@ -820,9 +849,9 @@ class PackageUpdater:
         threading.Thread(target=self.run_audit2, args=(path,), daemon=True).start()
 
     def run_audit2(self, path):
-        command = [sys.executable, "-m", "pip_audit"]
+        command = [PYTHON_EXE, "-m", "pip_audit"]
         try:
-            process = subprocess.Popen(
+            process = popen_subprocess(
                 command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
                 text=True, encoding="utf-8", errors="replace", bufsize=1
             )
@@ -877,9 +906,9 @@ class PackageUpdater:
         threading.Thread(target=self.run_check, daemon=True).start()
 
     def run_check(self):
-        command = [sys.executable, "-m", "pip", "check"]
+        command = [PYTHON_EXE, "-m", "pip", "check"]
         try:
-            result = subprocess.run(
+            result = run_subprocess(
                 command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
                 text=True, encoding="utf-8", errors="replace", check=False
             )
@@ -919,9 +948,9 @@ class PackageUpdater:
         threading.Thread(target=self.run_freeze, args=(path,), daemon=True).start()
 
     def run_freeze(self, path):
-        command = [sys.executable, "-m", "pip", "freeze"]
+        command = [PYTHON_EXE, "-m", "pip", "freeze"]
         try:
-            result = subprocess.run(
+            result = run_subprocess(
                 command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
                 text=True, encoding="utf-8", errors="replace", check=False
             )
@@ -953,9 +982,9 @@ class PackageUpdater:
         threading.Thread(target=self.run_install_pipaudit, daemon=True).start()
 
     def run_install_pipaudit(self):
-        command = [sys.executable, "-m", "pip", "install", "pip-audit"]
+        command = [PYTHON_EXE, "-m", "pip", "install", "pip-audit"]
         try:
-            result = subprocess.run(
+            result = run_subprocess(
                 command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
                 text=True, encoding="utf-8", errors="replace", check=False
             )
@@ -976,8 +1005,8 @@ class PackageUpdater:
     def verify_pipaudit(self):
         self.write_install_output("\nVerificando pip-audit...", "yellow")
         try:
-            result = subprocess.run(
-                [sys.executable, "-m", "pip_audit", "--version"],
+            result = run_subprocess(
+                [PYTHON_EXE, "-m", "pip_audit", "--version"],
                 stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
                 text=True, encoding="utf-8", errors="replace", check=False
             )
@@ -1002,7 +1031,6 @@ class PackageUpdater:
             while True:
                 kind, data = self.messages.get_nowait()
 
-                # --- update tab ---
                 if kind == "log":
                     self.write_log(data)
                 elif kind == "log_red":
@@ -1012,7 +1040,6 @@ class PackageUpdater:
                 elif kind == "update_progress":
                     self.update_bar(self.progress, self.progress_lbl, data)
 
-                # --- audit tab (vulnerabilidades) ---
                 elif kind == "audit_output":
                     self.write_audit_output(data)
                 elif kind == "audit_output_red":
@@ -1035,7 +1062,6 @@ class PackageUpdater:
                                 "\n✅ Nenhuma vulnerabilidade Encontrada!", "green")
                         messagebox.showinfo("Relatório", f"Salvo em:\n{path}")
 
-                # --- audit2 tab (pip_audit) ---
                 elif kind == "audit2_output":
                     self.write_audit2_output(data)
                 elif kind == "audit2_output_red":
@@ -1054,7 +1080,6 @@ class PackageUpdater:
                         self.write_audit2_output(
                             "\n⚠ VULNERABILIDADES OU ERROS DETECTADOS! Veja acima.", "red")
 
-                # --- check tab ---
                 elif kind == "check_output":
                     self.write_check_output(data)
                 elif kind == "check_output_red":
@@ -1071,7 +1096,6 @@ class PackageUpdater:
                         self.write_check_output(
                             "\n⚠ CONFLITOS DETECTADOS! Verifique linhas vermelhas.", "red")
 
-                # --- freeze tab ---
                 elif kind == "freeze_output":
                     self.write_freeze_output(data)
                 elif kind == "freeze_output_red":
@@ -1087,7 +1111,6 @@ class PackageUpdater:
                     else:
                         self.freeze_status.set("⚠ Houve erro. Veja acima.")
 
-                # --- install tab ---
                 elif kind == "install_output":
                     self.write_install_output(data)
                 elif kind == "install_output_red":
@@ -1105,7 +1128,6 @@ class PackageUpdater:
                         self.install_status.set("⚠ Falha na instalação. Veja acima.")
                         self.write_install_output("\n❌ Falha na instalação.", "red")
 
-                # --- finished (update tab) ---
                 elif kind == "finished":
                     self.running = False
                     self.current_process = None
