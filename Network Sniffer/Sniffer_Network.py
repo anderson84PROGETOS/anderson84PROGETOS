@@ -2070,7 +2070,7 @@ def main():
     if os.geteuid() != 0:
         print("\n" + "=" * 60)
         print("⚠️  AVISO: Este programa precisa ser executado como ROOT!")
-        print("   Execute: sudo Sniffer_Network.py")
+        print("   Execute: sudo Sniffer_Network.py ")
         print("=" * 60 + "\n")
 
     try:
