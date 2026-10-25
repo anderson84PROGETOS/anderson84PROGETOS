@@ -154,7 +154,7 @@ class NetworkSnifferGUI:
         header_frame = tk.Frame(self.root, bg=self.colors['bg_dark'], pady=8)
         header_frame.pack(fill=tk.X)
 
-        tk.Label(header_frame, text="🔍 NETWORK SNIFFER",
+        tk.Label(header_frame, text="🔍 SNIFFER NETWORK ",
                  font=('Consolas', 20, 'bold'), fg=self.colors['accent'],
                  bg=self.colors['bg_dark']).pack(side=tk.LEFT, padx=15)
 
@@ -2070,7 +2070,7 @@ def main():
     if os.geteuid() != 0:
         print("\n" + "=" * 60)
         print("⚠️  AVISO: Este programa precisa ser executado como ROOT!")
-        print("   Execute: sudo Sniffer_Network.py ")
+        print("   Execute: sudo Sniffer_Network.py")
         print("=" * 60 + "\n")
 
     try:
