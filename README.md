@@ -673,6 +673,10 @@ Email Header Analyzer • IP Trace • SPF/DMARC • ASN Intelligence
 🐍 [***Python Vulnerabilidades Segurança Dependências***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Python%20Vulnerabilidades%20Seguran%C3%A7a%20Depend%C3%AAncias)
 Python Vulnerabilidades Segurança Dependências
 
+🔍 [***Detector de URL Falsas Homograph Attack***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Detector%20de%20URL%20Falsas%20Homograph%20Attack)
+Detector de URL Falsas Homograph Attack
+
+
 
 ---
 
