@@ -676,6 +676,9 @@ Python Vulnerabilidades Segurança Dependências
 🔍 [***Detector de URL Falsas Homograph Attack***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Detector%20de%20URL%20Falsas%20Homograph%20Attack)
 Detector de URL Falsas Homograph Attack
 
+🔍 [***DNS Zone Transfer AXFR***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/DNS%20Zone%20Transfer%20AXFR)
+DNS Zone Transfer AXFR
+
 
 
 ---
