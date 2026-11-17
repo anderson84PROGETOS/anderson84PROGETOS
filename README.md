@@ -679,6 +679,9 @@ Detector de URL Falsas Homograph Attack
 🔍 [***DNS Zone Transfer AXFR***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/DNS%20Zone%20Transfer%20AXFR)
 DNS Zone Transfer AXFR
 
+[***Gerenciador de Inicialização Avançado***](https://github.com/anderson84PROGETOS/anderson84PROGETOS/tree/meu-progetos/Gerenciador%20de%20Inicializa%C3%A7%C3%A3o%20Avan%C3%A7ado)
+Gerenciador de Inicialização Avançado
+
 
 
 ---
